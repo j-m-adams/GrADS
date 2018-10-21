@@ -1,0 +1,188 @@
+>>> start of message
+0 63 000  (numeric) BYTCNT                                                          
+3 51 001  (sequence)
+  3 01 011  (sequence)
+    0 04 001  (numeric) YEAR     YEAR                                                   
+    0 04 002  (numeric) MNTH     MONTH                                                  
+    0 04 003  (numeric) DAYS     DAY                                                    
+  3 01 012  (sequence)
+    0 04 004  (numeric) HOUR     HOUR                                                   
+    0 04 005  (numeric) MINU     MINUTES                                                
+  0 01 198  (text) RPID     REPORT IDENTIFIER                                      
+  0 01 001  (numeric) WMOB     WMO BLOCK NUMBER                                       
+  0 01 002  (numeric) WMOS     WMO STATION NUMBER                                     
+  3 01 024  (sequence)
+    0 05 002  (numeric) CLAT     LATITUDE (COARSE ACCURACY)                             
+    0 06 002  (numeric) CLON     LONGITUDE (COARSE ACCURACY)                            
+    0 07 001  (numeric) SELV     HEIGHT OF STATION                                      
+  0 33 215  (numeric) CORN     CORRECTED REPORT INDICATOR                             
+  0 35 200  (numeric) RSRD     RESTRICTIONS ON REDISTRIBUTION                         
+  0 35 201  (numeric) EXPRSRD  EXPIRATION OF RESTRICTIONS ON REDISTRIBUTION           
+  3 63 001  (sequence)
+    0 35 195  (text) SEQNUM   CHANNEL SEQUENCE NUMBER                                
+    0 35 021  (text) BUHD     BULLETIN BEING MONITORED (TTAAii)                      
+    0 35 023  (text) BORG     BULLETIN BEING MONITORED (CCCC)                        
+    0 35 022  (text) BULTIM   BULLETIN BEING MONITORED (YYGGgg)                      
+    0 35 194  (text) BBB      BULLETIN BEING MONITORED (BBB)                         
+  3 63 003  (sequence)
+    0 08 202  (numeric) RCTS     RECEIPT TIME SIGNIFICANCE                              
+    0 04 200  (numeric) RCYR     YEAR   - TIME OF RECEIPT                               
+    0 04 201  (numeric) RCMO     MONTH  - TIME OF RECEIPT                               
+    0 04 202  (numeric) RCDY     DAY    - TIME OF RECEIPT                               
+    0 04 203  (numeric) RCHR     HOUR   - TIME OF RECEIPT                               
+    0 04 204  (numeric) RCMI     MINUTE - TIME OF RECEIPT                               
+  3 61 036  (sequence)
+    0 02 193  (numeric) ITSO     IND TYPE OF STN OPERATION PAST/P                       
+    0 02 001  (numeric) TOST     TYPE OF STATION                                        
+    0 13 194  (numeric) INPC     INDIC INCLUSION/OMISSION OF PREC                       
+    0 20 001  (numeric) HOVI     HORIZONTAL VISIBILITY                                  
+  3 61 042  (sequence)
+    0 02 002  (numeric) TIWM     TYPE OF INSTRUMENTATION FOR WIND MEASUREMENT           
+    0 33 195  (numeric) QMWN     SDMEDIT QUALITY MARK FOR WIND                          
+    0 11 001  (numeric) WDIR     WIND DIRECTION                                         
+    0 11 002  (numeric) WSPD     WIND SPEED                                             
+    3 60 004  (sequence)
+      1 01 000  (replicate next 1, not including replication count)
+      0 31 000  (replication count)
+    3 61 043  (sequence)
+      0 04 032  (numeric) .DTM.... DUR OF TIME IN MINS RELATED TO FOLLOWING VALUE         
+      0 11 041  (numeric) MXGS     MAX WIND SPEED (GUSTS)                                 
+  3 61 037  (sequence)
+    0 33 193  (numeric) QMAT     SDMEDIT QUALITY MARK FOR TEMPERATURE                   
+    0 12 101  (numeric) TMDB     TEMPERATURE/DRY BULB TEMPERATURE                       
+    0 33 194  (numeric) QMDD     SDMEDIT QUALITY MARK FOR MOISTURE                      
+    0 12 103  (numeric) TMDP     DEW POINT TEMPERATURE                                  
+    0 02 038  (numeric) MSST     METHOD OF SEA SURFACE TEMPERATURE MEASUREMENT          
+    0 33 218  (numeric) QMST     SDMEDIT QUALITY MARK FOR SEA SURFACE TEMPERATURE       
+    0 22 043  (numeric) SST1     SEA TEMPERATURE                                        
+    3 60 004  (sequence)
+      1 01 000  (replicate next 1, not including replication count)
+      0 31 000  (replication count)
+    3 61 038  (sequence)
+      0 02 039  (numeric) MWBT     METHOD OF WET BULB TEMPERATURE MEASUREMENT             
+      0 12 102  (numeric) TMWB     WET BULB TEMPERATURE                                   
+      0 13 003  (numeric) REHU     RELATIVE HUMIDITY                                      
+    3 60 004  (sequence)
+      1 01 000  (replicate next 1, not including replication count)
+      0 31 000  (replication count)
+    3 61 039  (sequence)
+      0 04 031  (numeric) .DTH.... DUR OF TIME IN HOURS RELATED TO FOLLOWING VALUE        
+      0 12 111  (numeric) MXTM     MAXIMUM TEMPERATURE                                    
+      0 04 031  (numeric) .DTH.... DUR OF TIME IN HOURS RELATED TO FOLLOWING VALUE        
+      0 12 112  (numeric) MITM     MINIMUM TEMPERATURE                                    
+  3 61 045  (sequence)
+    0 33 207  (numeric) QMPR     SDMEDIT QUALITY MARK FOR PRESSURE                      
+    0 10 004  (numeric) PRES     PRESSURE                                               
+    0 10 051  (numeric) PMSL     PRESSURE REDUCED TO MSL                                
+    0 10 063  (numeric) CHPT     CHARACTERISTIC OF PRESSURE TENDE                       
+    0 10 061  (numeric) 3HPC     3 HOUR PRESSURE CHANGE                                 
+  3 60 004  (sequence)
+    1 01 000  (replicate next 1, not including replication count)
+    0 31 000  (replication count)
+  3 61 046  (sequence)
+    0 07 004  (numeric) PRLC     PRESSURE                                               
+    0 10 008  (numeric) GP10     GEOPOTENTIAL                                           
+  3 60 004  (sequence)
+    1 01 000  (replicate next 1, not including replication count)
+    0 31 000  (replication count)
+  3 61 047  (sequence)
+    0 10 062  (numeric) 24PC     24 HOUR PRESSURE CHANGE                                
+  3 61 048  (sequence)
+    0 13 021  (numeric) TP06     TOTAL PRECIPITATION PAST 6 HOURS                       
+    3 60 004  (sequence)
+      1 01 000  (replicate next 1, not including replication count)
+      0 31 000  (replication count)
+    3 61 049  (sequence)
+      0 13 019  (numeric) TP01     TOTAL PRECIPITATION PAST 1 HOUR                        
+      0 13 020  (numeric) TP03     TOTAL PRECIPITATION PAST 3 HOURS                       
+      0 13 022  (numeric) TP12     TOTAL PRECIPITATION PAST 12 HOURS                      
+      0 13 023  (numeric) TP24     TOTAL PRECIPITATION PAST 24 HOURS                      
+    3 60 004  (sequence)
+      1 01 000  (replicate next 1, not including replication count)
+      0 31 000  (replication count)
+    3 61 050  (sequence)
+      0 04 031  (numeric) .DTH.... DUR OF TIME IN HOURS RELATED TO FOLLOWING VALUE        
+      0 13 011  (numeric) TOPC     TOTAL PRECIPITATION/TOTAL WATER EQUIVALENT             
+  0 20 010  (numeric) TOCC     CLOUD COVER (TOTAL)                                    
+  0 20 201  (numeric) HBLCS    HEIGHT ABOVE SURFACE OF BASE OF LOWEST CLOUD SEEN      
+  3 60 002  (sequence)
+    1 01 000  (replicate next 1, not including replication count)
+    0 31 001  (replication count)
+  3 61 041  (sequence)
+    0 08 002  (numeric) VSSO     VERT. SIGNIFICANCE (SFC OBSERVATION)                   
+    0 20 011  (numeric) CLAM     CLOUD AMOUNT                                           
+    0 20 012  (numeric) CLTP     CLOUD TYPE                                             
+    0 20 013  (numeric) HOCB     HEIGHT OF BASE OF CLOUD                                
+    3 60 004  (sequence)
+      1 01 000  (replicate next 1, not including replication count)
+      0 31 000  (replication count)
+    3 61 092  (sequence)
+      0 20 014  (numeric) HOCT     HEIGHT OF TOP OF CLOUD                                 
+      0 20 017  (numeric) CTDS     CLOUD TOP DESCRIPTION                                  
+  3 60 004  (sequence)
+    1 01 000  (replicate next 1, not including replication count)
+    0 31 000  (replication count)
+  3 61 054  (sequence)
+    0 20 003  (numeric) PRWE     PRESENT WEATHER                                        
+    0 20 004  (numeric) PSW1     PAST WEATHER (1)                                       
+    0 20 005  (numeric) PSW2     PAST WEATHER (2)                                       
+  3 60 004  (sequence)
+    1 01 000  (replicate next 1, not including replication count)
+    0 31 000  (replication count)
+  3 61 051  (sequence)
+    0 22 011  (numeric) POWV     PERIOD OF WAVES                                        
+    0 22 021  (numeric) HOWV     HEIGHT OF WAVES                                        
+  3 60 004  (sequence)
+    1 01 000  (replicate next 1, not including replication count)
+    0 31 000  (replication count)
+  3 61 052  (sequence)
+    0 22 012  (numeric) POWW     PERIOD OF WIND WAVES                                   
+    0 22 022  (numeric) HOWW     HEIGHT OF WIND WAVES                                   
+  3 60 002  (sequence)
+    1 01 000  (replicate next 1, not including replication count)
+    0 31 001  (replication count)
+  3 61 053  (sequence)
+    0 22 003  (numeric) DOSW     DIRECTION OF SWELL WAVES                               
+    0 22 013  (numeric) POSW     PERIOD OF SWELL WAVES                                  
+    0 22 023  (numeric) HOSW     HEIGHT OF SWELL WAVES                                  
+  3 60 004  (sequence)
+    1 01 000  (replicate next 1, not including replication count)
+    0 31 000  (replication count)
+  3 61 055  (sequence)
+    0 04 031  (numeric) .DTH.... DUR OF TIME IN HOURS RELATED TO FOLLOWING VALUE        
+    0 13 012  (numeric) DOFS     DEPTH OF FRESH SNOW                                    
+    0 13 013  (numeric) TOSD     TOTAL SNOW DEPTH                                       
+  3 60 004  (sequence)
+    1 01 000  (replicate next 1, not including replication count)
+    0 31 000  (replication count)
+  3 61 057  (sequence)
+    0 20 033  (numeric) COIA     CAUSE OF ICE ACCRETION                                 
+    0 20 031  (numeric) IDTH     ICE DEPOSIT (THICKNESS)                                
+    0 20 032  (numeric) ROIA     RATE OF ICE ACCRETION                                  
+  3 60 004  (sequence)
+    1 01 000  (replicate next 1, not including replication count)
+    0 31 000  (replication count)
+  3 61 056  (sequence)
+    0 20 062  (numeric) SOGR     STATE OF THE GROUND                                    
+  3 60 004  (sequence)
+    1 01 000  (replicate next 1, not including replication count)
+    0 31 000  (replication count)
+  3 61 040  (sequence)
+    0 12 193  (numeric) CTTP     CITY TEMPERATURE                                       
+    0 12 194  (numeric) CTMX     CITY MAXIMUM TEMPERATURE                               
+    0 12 195  (numeric) CTMN     CITY MINIMUM TEMPERATURE                               
+  3 60 004  (sequence)
+    1 01 000  (replicate next 1, not including replication count)
+    0 31 000  (replication count)
+  3 61 089  (sequence)
+    0 20 002  (numeric) VTVI     VERTICAL VISIBILITY                                    
+  3 60 002  (sequence)
+    1 01 000  (replicate next 1, not including replication count)
+    0 31 001  (replication count)
+  3 63 002  (sequence)
+    0 58 008  (text) RRSTG    RAW REPORT STRING                                      
+1 02 000  (replicate next 2, not including replication count)
+0 31 001  (replication count)
+2 06 001  (operator)
+0 63 255  (numeric) BITPAD                                                          
+<<< end of message

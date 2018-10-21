@@ -1,0 +1,247 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Utilities: gribscan</title>
+</head>
+<body text="#000000" bgcolor="e0f0ff">
+
+<h2><b>gribscan</b></h2>
+
+<p>
+The <code>gribscan</code> utility is used for extracting grid info
+from GRIB data files. Its features include grid/product information,
+gridded output in ASCII, binary, and/or grib format, plus automatic
+"scanning" for GRIB records so that you don't have to know the
+physical layout of the data to scan it.
+
+<p>
+The command sytax is: 
+
+<p>
+<ul>
+<code>gribscan [-i <i>ifname</i>] [-o <i>ofname</i>] [-<i>file options</i>] [-<i>processing options</i>] [-<i>display options</i>]</code>
+</ul>
+<p>
+Where:
+<p>
+<ul>
+<code><i>ifname</i></code>
+<ul>
+This is the input grib file name. If <code>-i <i>ifname</i> </code> is
+omitted, <code>gribscan</code> will prompt the user for a file name.
+</ul>
+<p>
+<code><i>ofname</i></code>
+<ul>
+This is the output file name WITHOUT an extension. If <code>-o <i>ofname</i></code>
+is omitted, a default file name of
+<code>zy0x1w2.<i>type</i></code> is created where
+<code><i>type</i></code> is:<br>
+<code>asc</code> - ascii <br>
+<code>grb</code> - GRIB <br>
+<code>dat</code> - a stream of floats (GrADS format)
+</ul>
+</ul>
+<p>
+File Options:
+<p>
+<ul>
+<code>-og</code>
+<ul>
+<code>gribscan</code> will return output in GRIB format
+</ul>
+<p>
+<code>-oa</code>
+<ul>
+<code>gribscan</code> will return output in ASCII format (%8g in C-language syntax)
+</ul>
+<p>
+<code>-of</code>
+<ul>
+<code>gribscan</code> will return output as a stream of floats. This
+is machine dependent and is 64-bit on Crays and 32-bit elsewhere.
+</ul>
+</ul>
+
+<p>
+Processing Options:
+<p>
+<ul>
+<code>-s<i>NNN</i></code>
+<ul>
+Specifies the max number <code><i>NNN</i></code> of bytes between GRIB
+messages in the file. The default is 500 and it is assumed that you
+want to ignore junk (e.g., comm stuff) between data.
+</ul>
+<p>
+<code>-sp<i>NNN</i></code>
+<ul>
+Selects parameter # <code><i>NNN</i></code> 
+(e.g.,<code>-sp11</code> for temperature)
+</ul>
+<p>
+<code>-sl<i>NNN</i></code>
+<ul>
+Selects level # <code><i>NNN</i></code> 
+(e.g., <code>-sp500</code> to get 500 mb fields)
+</ul>
+<p>
+<code>-st<i>NNN</i></code>
+<ul>
+Selects tau # <code><i>NNN</i></code> 
+(e.g., <code>-st12</code> to get t=12 forecasts)
+</ul>
+<p>
+<code><i>-h<i>NNN</i></i></code>
+<ul>
+Specifies a fixed file header of <code><i>NNN</i></code>
+bytes. If omitted, the default is to seek the first GRIB
+message automatically, but if you know <code><i>NNN</i></code>, it is more
+efficient to specify it.
+</ul>
+
+<p>
+<i>Special note to NMC users:</i> The once "standard" 81-byte header
+in an NMC GRIB file contained the string "GRIB". Unfortunately, the
+same string is part of the GRIB indicator section itself!  Thus, an
+automatic scan for GRIB to demark the start of the data will fail if
+the 81-byte header is present! When in doubt (or failure) try using
+the <code>-h81</code> option.
+
+<p>
+<i>Note:</i> These processing options can be used simultaneously 
+to output a very narrow set of fields. 
+</ul>
+
+<p>
+Display options:
+<p>
+<ul>
+<code>-q&nbsp&nbsp&nbsp&nbsp</code>
+Quick output to extract stuff GrADS gribmap cares about<br>
+<code>-q1&nbsp&nbsp&nbsp</code>
+One-line quick output<br>
+<code>-d&nbsp&nbsp&nbsp&nbsp</code>
+Comma delimited mode<br>
+<code>-v&nbsp&nbsp&nbsp&nbsp</code>
+Verbose mode for diagnostics<br>
+<code>-bd&nbsp&nbsp&nbsp</code>
+Binary data section info<br>
+<code>-gv&nbsp&nbsp&nbsp</code>
+Uses the NMC GRIB variable table to output mnemonic, title, and units<br>
+<code>-gd&nbsp&nbsp&nbsp</code>
+Output info from the grid defn sec<br>
+<code>-S&nbsp&nbsp&nbsp&nbsp</code>
+Silent mode; NO standard output<br>
+</ul>
+
+<p>
+<h3>Examples</h3>
+<p>
+<ol>
+<li>A "quick" scan to get the info GrADS cares about:<p>
+<dd><code>gribscan -q -i eta.T12Z.PGrbF48 | grep 184</code>
+<p>
+Gives the result: 
+<p>
+<dd><code>184,F,135,108,100,0,100,0,1e+09,T,1994,8,29,12,0,1,48,0,G,104,BDTG,94082912</code>
+<p>
+Where:
+<p>
+<ul>
+<code>184&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+field # in the file <br>
+<code>F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+field data <br>
+<code>135&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+param #<br>
+<code>108&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+level indicator <br>
+<code>100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+level <br>
+<code>0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+l1 byte 1 of level <br>
+<code>100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+l2 byte 2 of level <br>
+<code>0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+time range indicator <br>
+<code>1e+09&nbsp;&nbsp;&nbsp;</code> 
+decimal scale factor <br>
+<code>T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+time data follows <br>
+<code>1994&nbsp;&nbsp;&nbsp;&nbsp;</code>
+year <br>
+<code>8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+month <br>
+<code>29&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+day <br>
+<code>12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+hour <br>
+<code>0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+min <br>
+<code>1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+forecast time unit (hour) <br>
+<code>48&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+t=48 h forecast<br>
+<code>G&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+grid param follows <br>
+<code>104&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+NMC grid #104 <br>
+<code>BDTG&nbsp;&nbsp;&nbsp;&nbsp;</code>
+Base date-time-group (yymmddhh) follows
+</ul>
+<p>
+<li>Comma delimited output:<p>
+<dd><code>gribscan -d -i eta.T12Z.PGrbF48  | grep 184 </code>
+<p>
+Gives the same results as the previous example but arranged differently:
+<p>
+<dd><code>PDS,184,104,135,108,100,0,100,1994,8,29,12,0,1,48,0,0,1e+09</code>
+<p>
+
+<li>A full listing:
+<p>
+<dd><code>gribscan -d -gv -bd -gd -i eta.T12Z.PGrbF48 | grep 184 </code>
+<p>
+Gives the following results:
+<p>
+<ul><code>
+PDS,184,104,135,108,100,0,100,1994,8,29,12,0,1,48,0,0,1e+09,mconv,Horizontal moisture divergence,[kg/kg/s],GDS,5,147,110,-139.475,90.755,0.354,-0.268,-105.000,33536.000,0,1,0,BDS,12,-646.844,16170,4825059,26366
+</code></ul>
+<p>
+Where:
+<p>
+<code>104&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+grid id <br>
+<code>param #135&nbsp;&nbsp; </code>
+mconv,Horizontal moisture divergence,[kg/kg/s] <br>
+<code>BDS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+binary data section <br>
+<code>646.844&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+ref value 16170 - # of points <br>
+<code>4825059&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+starting byte of the data <br>
+<code>26366&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+length of the grib message<br>
+<p>
+Note that eliminating the <code>-d</code> option would result in 
+a fixed-column type output.
+<p>
+
+<li>Output a selected few fields in GRIB:
+<p>
+<dd><code>gribscan -og -sp135 -q -i eta.T12Z.PGrbF48 -o eta.135</code>
+<p>
+Writes out all GRIB message containing the 135 parameter to the
+file <code>eta.135.grb</code>. A subsequent execution of <code>gribscan</code> on
+<code>eta.135.grb</code> would return:
+<p>
+<code>1, F ,135,108,100,0,100,0,1e+09, T,1994,8,29,12,0,1,48,0, G ,104, BDTG, 94082912 
+2, F,135,108,21860,85,100,0,1e+09, T ,1994,8,29,12,0,1,48,0, G ,104, BDTG, 
+94082912</code>
+</ol>
+
+
+</body>
+</html>

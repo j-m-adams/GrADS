@@ -1,0 +1,1313 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<title>GrADS Scripting Language</title>
+<style type="text/css">
+.red {
+	color: #900;
+}
+</style>
+<body bgcolor="e0f0ff" text="#000000">
+<h1>GrADS Scripting Language</h1>
+<p>
+<a href="#intro">Introduction to GrADS scripts</a><br>
+<a href="#elements">Elements of the Language:</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#comment">comment</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#statement">statement</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#assignment">assignment</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#standardio">say / prompt / pull</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#ifendif">if / else / endif</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#while">while / endwhile</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#variables">variables</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#operators">operators</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#expressions">expressions</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#functions">Functions</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#intrinsic">Intrinsic Functions</a><br>
+<a href="#commands">Commands that complement the scripting language</a><br>
+<a href="#widgets">Widgets</a> (N.B. The Cairo graphics display inteface in <span class="red">version 2.1+</span> does not support widgets) <br>
+<a href="library.html">Script Library</a><br>
+<a href="reference_card_scl.pdf">Scripting Language Reference Card</a>
+<font size=-1>
+(Requires <a href="http://www.adobe.com/products/acrobat/readstep.html">
+Adobe Acrobat Reader</a>)</font>
+
+<p>
+<hr>
+<p>
+
+<h2><a name="intro"><u>Introduction to GrADS Scripts</u></a></h2>
+
+<p>
+Scripts offer users the facility to program GrADS operations.
+Although it is relatively easy for users to produce sophisticated
+GrADS graphics without ever writing a script, there are occasions
+where the programming capability makes things even easier. This
+section explains the general capabilities of scripts, how to run them,
+and suggests a strategy for users who may wish to write their own.
+
+<p>
+<i><b>What scripts can do</b></i>
+
+<p>
+The GrADS scripting language, used via the GrADS <code><a
+href="gradcomdrun.html">run</a></code> command, provides a similar
+capability to the <code><a href="gradcomdexec.html">exec</a></code>
+command, except that scripts also have flow control, defined
+variables, and access to GrADS command output. Scripts may be written
+to perform a variety of functions, such as allowing a user to interact
+with Grads via point and click interface, animating any desired
+quantities, and annotating plots with information obtained from GrADS
+query commands.
+
+<p>
+The scripting language is similar to REXX in implementation. All
+variables are of type STRING. Mathematical operations are supported on
+script variables. Flow control is achieved via
+<code>if/else/endif</code> and <code>while/endwhile</code>
+constructs. Loop flow may be modified by the <code>continue</code> or
+<code>break</code> commands. Strings contained in variables or
+generated via an expression may be issued to GrADS as commands. The
+output from those commands (i.e., the text that GrADS would have
+output to the terminal) is put into a variable and made available to
+the script. The language includes support for functions.
+
+<p>
+Before writing your own scripts, it is recommended that you read the
+rest of this section and then try to run some of the scripts in the <a
+href="library.html">library</a>. Study these example
+scripts, referring to this page for information on syntax etc., and
+you will soon be equipped to write scripts of your own.<p>
+
+<p>
+<i><b>Running scripts</b></i>
+
+<p>
+The command to execute a script is the 
+<code><a href="gradcomdrun.html">run</a></code> command:
+
+<p>
+<ul><code>
+<a href="gradcomdrun.html">run</a> <i>filename &ltarguments&gt</i>
+</code></ul>
+
+<p>
+This command runs the script contained in the named file, which
+generally has a <code>".gs"</code> tag at the end. Optional
+<code><i>arguments</i></code> are passed to the script as a string
+variable. You may issue any GrADS command from a script, including the
+<code>run</code> command. When calling scripts recursively, be sure
+that you can back out of the recursion and return to your main script.
+
+
+<p>
+<i><b>Automatic script execution</b></i>
+
+<p>
+You may have a simple script automatically executed before every
+<code><a href="gradcomddisplay.html">display</a></code> command:
+
+<p>
+<ul><code>
+<a href="gradcomdsetimprun.html">set imprun</a> <i>script-name</i>
+</code></ul>
+
+<p>
+This script would typically be used to set an option that by
+default gets reset after each <code><a href="gradcomddisplay.html">display</a></code> 
+command, for example:
+
+<p>
+<ul><code><a href="gradcomdsetgrads.html">set grads</a> off</code></ul>
+
+<p>
+You can issue any GrADS command from this script, but the interactions
+are not always clear.  For example, if you issued a <code><a
+href="gradcomddisplay.html">display</a></code> command from this
+script, you could easily enter an infinite recursion loop.
+
+<p>
+The argument to the script is the expression from the <code><a
+href="gradcomddisplay.html">display</a></code>
+command.
+
+<p>
+<i><b><a name="storing">Storing GrADS scripts</a></b></i>
+
+<p>
+It is convenient to put all your GrADS "utility" scripts in one
+directory (e.g., <code>/usr/local/grads/lib/scripts</code>).
+
+<p>
+To simplify running these scripts, GrADS first looks in the
+current directory for the script and then, if it can't find it,
+appends the "<code>.gs</code>" extension and tries again.  For example,
+suppose you are working on a test script called <code>t.gs</code>.  You would
+run it in GrADS by,
+
+<p>
+<ul><code>run t</code></ul>
+
+<p>
+If after the first two tries, the script still can't be located,
+then GrADS looks in the directory defined by the environment
+variable <code>GASCRP</code>.  In the <code>t(csh)</code>, for example,
+
+<p>
+<ul><code>setenv GASCRP /home1/grads/lib</code></ul>
+
+<p>
+or in <code>ksh</code>,
+
+<p>
+<ul><code>export GASCRP=/home1/grads/lib</code></ul>
+
+<p>
+Note the if the <code>/</code> is not added to the end of the
+directory name, it is automatically added by UNIX. However, it'll
+still work if you type<p>
+
+<ul><code>setenv GASCRP /home1/grads/lib/</code></ul>
+
+<p>
+If the script cannot be found, then <code>.gs</code> is appended and GrADS
+tries yet again.  Thus,
+
+<p>
+<ul><code>d slp <br> run /home1/grads/lib/cbarn.gs</code></ul>
+
+<p>
+simplifies to,
+
+<p>
+<ul><code>d slp <br> run cbarn</code></ul>
+
+
+<hr>
+
+<h2><a name="elements"><u>Elements of the Language</u></a></h2>
+
+<p>
+A script file is made up of records. The end of a script record is
+determined by either a newline character or a semicolon (where the
+semicolon is not contained within a constant string).<p>
+
+Each script record may be one of the following types:<p>
+<ul>
+<li>comment<br>
+<li>statement<br>
+<li>assignment<br>
+<li>say / prompt / pull<br>
+<li>if / else / endif<br>
+<li>while / endwhile / break / continue<br>
+<li>function header / return<br>
+</ul>
+
+<p>
+Many of the above record types will contain expressions.  Script
+expressions are composed of operands and operators. Operands
+are strings constants, variables, or function calls; operators
+are mathematical, logical, or concatenation operations. Further
+discussion of these record types and the expressions they may
+contain is given below.
+
+<p>
+<i><b><a name="comment">Comment</a></b></i>
+
+<p>
+Comments in GrADS scripts must contain an asterisk (*) in the first column. 
+
+<p>
+<i><b><a name="statement">Statement</a></b></i>
+
+<p>
+The statement record consists only of an expression:
+<p>
+<ul><code><i>expression</i></code></ul>
+
+<p>
+The expression is evaluated, and the resulting string is then
+submitted to GrADS as a command for execution. The script variable
+<code>rc</code> will contain the return code from the GrADS command
+(this will always be an integer value). In addition, any text output
+from GrADS in response to the command is put in the variable
+<code>result</code> for examination by the script. A GrADS error
+resulting from an invalid command WILL NOT terminate execution of the
+script.
+
+<p>
+The simplest type of expression is a string constant, which is just a
+character string enclosed in single or double quotes. Here's an
+example of simple script containing a comment plus statements
+comprised of string constants:
+
+<p>
+<ul>
+<code>
+* this is a sample script <br>
+'open my_sst_dataset.ctl' <br>
+'set lat -30 30' <br>
+'set lon 90 300' <br>
+'display sst' <br>
+</code>
+</ul>
+
+
+<p>
+<i><b><a name="assignment">Assignment</a></b></i>
+
+<p>
+Assignment records are used to define variables and assign them
+values. The format of the assignment record is:
+<p>
+<ul><code>variable = <i>expression</i></code></ul>
+
+<p>
+The expression is evaluated, and the result is assigned to be the
+value of the indicated variable. The same example from above can be
+rewritten to include assignment statements. Note the use of explicit
+and implied concatenation:
+
+<p>
+<ul>
+<code>
+'open my_sst_dataset.ctl' <br>
+minlat = -30 <br>
+maxlat = minlat + 60 <br>
+minlon =  90 <br>
+maxlon = 300 <br>
+'set lat 'minlat%' '%maxlat <br>
+'set lon 'minlon' 'maxlon <br>
+'display sst' <br>
+</code>
+</ul>
+
+<p>
+<i><b><a name="standardio">say / prompt</a></b></i>
+
+<p>
+To present information or questions to the GrADS user via the terminal
+(standard output), use the <code>say</code> or <code>prompt</code>
+commands:
+<p>
+<ul><code>
+say <i>expression</i><br>
+prompt <i>expression</i><br>
+</code></ul>
+<p>
+The result of the <code><i>expression</i></code> is written to the
+terminal. The <code>prompt</code> command works the same way as the
+<code>say</code> command but does not append a carriage return. It is
+possible to combine variables and string constants when writing to
+standard output:
+<p>
+For example:<p>
+<ul><code>
+line = "Peter Pan, the flying one" <br>
+say line<br>
+say `She said it is `line<br>
+</code></ul>
+<p>
+gives:
+<p>
+<ul><code>
+Peter Pan, the flying one<br>
+She said it is Peter Pan, the flying one
+</code></ul>
+
+
+<p>
+<i><b>pull</b></i>
+
+<p>
+To retrieve information provided by the GrADS user via the terminal
+(standard input), use the <code>pull</code> command:<p>
+<ul><code>pull <i>variable</i></code></ul>
+<p>
+The script will pause for user input from the keyboard (ending with
+the carriage return), and then the string entered by the user is
+assigned to the indicated variable name. To elaborate on a
+previous example:
+
+<p>
+<ul><code>
+'open my_sst_dataset.ctl' <br>
+prompt 'Enter min and max latitudes: ' <br>
+pull minlat maxlat <br>
+prompt 'Enter min and max longitudes: ' <br>
+pull minlon maxlon <br>
+'set lat 'minlat%' '%maxlat <br>
+'set lon 'minlon' 'maxlon <br>
+'display sst' <br>
+</code></ul>
+
+
+<p>
+<i><b><a name="ifendif">if / else / endif</a></b></i>
+
+<p>
+One way to control the flow of script execution is via the <code>if/else/endif</code> 
+construct. The format is as follows:<p>
+<ul>
+<code>
+if expression<br>
+&nbsp;&nbsp;&nbsp;script record<br>
+&nbsp;&nbsp;&nbsp;script record<br>
+&nbsp;&nbsp;&nbsp;. <br>
+&nbsp;&nbsp;&nbsp;. <br>
+else<br>
+&nbsp;&nbsp;&nbsp;script record<br>
+&nbsp;&nbsp;&nbsp;. <br> 
+&nbsp;&nbsp;&nbsp;. <br>
+endif<br>
+</code>
+</ul>
+
+<p>
+The <code>else</code> block is optional, but the <code>endif</code>
+record must be present. The script records following <code>if
+expression</code> are executed if the expression evaluates to a string
+containing the character 1. If the expression evaluates to 0, then the
+script records in the <code>if</code> block are not executed and the
+script continues with the <code>else</code> block (if it is present)
+or the record following <code>endif</code>. The <code>if
+expression</code> record must be separated from the script records
+that follow it. For example, the following script record would be
+invalid:
+<p>
+<ul><code>if (i = 10) j = 20 </code></ul>
+<p>
+The correct syntax requires three separate script records. This is
+achieved by putting each record on one line:
+<p> 
+<ul><code> if (i = 10)<br> 
+&nbsp;&nbsp;&nbsp;j = 20 <br> endif<br> </code></ul>
+<p>
+Alternatively, the three records could be on the same line separated 
+by a semicolon:
+<p>
+<ul><code>if (i = 10) ; j = 20 ; endif</code></ul>
+<p>
+N.B. There is no <code>elseif</code> construct in GrADS.
+
+
+<p>
+<i><b><a name="while">while / endwhile</a></b></i>
+
+<p>
+Another method for controlling the flow of script execution is the <code>while/endwhile</code> construct. The format is as follows:
+<p>
+<ul>
+<code>
+while expression<br>
+&nbsp;&nbsp;&nbsp;script record<br>
+&nbsp;&nbsp;&nbsp;script record <br>
+&nbsp;&nbsp;&nbsp;. <br>
+&nbsp;&nbsp;&nbsp;. <br>
+endwhile<br>
+</code>
+</ul>
+
+<p>
+The script records following <code>while expression</code> are
+executed if the expression evaluates to a string containing the
+character 1. If the expression evaluates to 0, then the script records
+in the <code>while</code> block are not executed and the script continues
+with the record following <code>endwhile</code>. The <code>while
+expression</code> record must be separated from the script records
+that follow it.
+
+<p>
+Two additional script commands may be used to modify the
+<code>while</code> loop execution: <code><b>break</b></code> and
+<code><b>continue</b></code>. Inserting the <code>break</code> statement will
+immediately end execution of the loop and the script will move on to
+the records following <code>endwhile</code>. The <code>continue</code>
+statement will immediately end execution of the loop, but the script
+will then branch immediately back to the top of the loop, and the
+expression will be re-evaluated.<p>
+
+While loops are often used as counters. For example:<p>
+<ul>
+  <code> count = 1 <br>
+  while (count < 10) <br>
+  &nbsp;&nbsp;&nbsp;'set t 'count <br>
+  &nbsp;&nbsp;&nbsp;'display z' <br>
+  &nbsp;&nbsp;&nbsp;if (rc != 0) ; break ; endif <br>
+  &nbsp;&nbsp;&nbsp;count = count + 1 <br>
+  endwhile<br>
+  </code>
+</ul>
+
+
+<p>
+<i><b><a name="variables">Variables</a></b></i>
+
+<p>
+The contents of a script variable is always a character string.
+However, if the contents of a variable represent a number in the
+correct format, certain operators may perform numeric operations on
+that variable, giving a string result which will also be a number.
+<p>
+Variable names can have from 1 to 8 characters, beginning with an
+alphabetic character and containing letters or numbers only. The name
+is case sensitive. If a variable has not yet been assigned, its value
+is its name.
+<p>
+String variables or string constants are enclosed in either single or
+double quotes. An example of an assignment statement that defines a
+string variable is as follows:
+<p>
+<ul><code>name = `Peter Pan' <br> name = "Peter Pan"</code></ul>
+<p>
+Numeric variables may be entered without quotes, but are still
+considered strings.
+<p>
+<ul><code>number = -99.99</code></ul>
+
+
+<p>
+<i><b>Predefined script variables</b></i>
+<p>
+Some variable names are predefined; it is a good idea to avoid
+assigning values to these variables. The following are predefined
+script variables -- their values will change with every execution of a
+GrADS command from the script:
+<p>
+<ul><code>rc <br> result </code></ul>
+
+<p>
+<code>lat, lon, and lev </code>are also used
+as predefined internal variables in GrADS. Although using them within a script
+is okay, in order to avoid confusion it is not recommended.
+
+<p>
+<i><b>Global string variables</b></i>
+<p>
+String variables are usually local to the functions they are contained
+in. Global string variables are also available.  They are specified
+via the variable name. Any variable name starting with an
+underscore (_) will be assumed to be a global variable, and will keep
+its value throughout an entire script file. An example of an
+assignment statement that defines a global string variable is as
+follows:
+<p>
+<ul><code>_var1 = "global variable 1"</code></ul>
+<p>
+<i>N.B.</i> Global variables cannot be used in function headers. For example:
+<p>
+<ul><code>function dostuff(_var)</code></ul>
+<p>
+wouldn't make sense, since <code>_var</code> is a global variable, and would
+be invalid if it were the only argument.
+
+<p>
+<i><b>Compound string variables</b></i>
+<p>
+Compound variables are used to construct arrays in scripts. A compound
+variable has a variable name with segments separated by periods. For
+example:
+<p>
+<ul><code>varname.i.j</code></ul>
+<p>
+In this case, when the variable contents are accessed,
+<code>i</code> and <code>j</code> will be looked up to see if they are
+also variables (non-compound). If they are, the <code>i</code> and
+<code>j</code> will be replaced by the string values of <code>i</code>
+and <code>j</code>. For example:
+<p>
+<ul><code>i = 10 <br> j = 3 <br> varname.i.j = 343</code></ul>
+<p>
+In the above example, the assignment is equivalent to:
+<p>
+<ul><code>varname.10.3 = 343</code></ul>
+<p>
+Note that the string values of <code>i</code> and <code>j</code> may
+be anything, but the variable name specification in the script must
+follow the rules for variable names: letters or numbers, with a
+leading letter. The variable name after substitution may be any
+string:
+<p>
+<ul><code>i = 'a#$xx' <br> varname.i = 343</code></ul>
+<p>
+The above is valid.  However, we cannot refer to this variable
+name directly:
+<p>
+<ul><code>varname.a#$xx = 343</code></ul>
+<p>
+would be invalid.
+<p>
+Variable names may <i>not</i> be longer than 16 characters, either
+before or after substitution.
+<p>
+Note that the GrADS scripting language is not particularly
+efficient in handling large numbers of variables.  Thus compound
+variables should not be used to create large arrays:
+<p>
+<ul><code>
+i = 1 <br> 
+while (i < 10000) <br> 
+&nbsp&nbsp&nbsp;var.i = i <br>
+&nbsp&nbsp&nbsp;i = i + 1 <br>
+endwhile
+</code></ul>
+<p>
+The above loop will create 10000 distinct variable names. Such
+a large number of variables in the variable chain will slow the
+script down a lot. 
+</ul>
+
+
+<p>
+<i><b><a name="operators">Operators</a></b></i>
+
+<p>
+The following operators are implemented in the scripting language:<p>
+<ul>
+<code>|      &nbsp;&nbsp;&nbsp;&nbsp;</code> logical OR <br>
+<code>&amp;  &nbsp;&nbsp;&nbsp;&nbsp;</code> logical AND <br>
+<code>!      &nbsp;&nbsp;&nbsp;&nbsp;</code> unary NOT <br>
+<code>-      &nbsp;&nbsp;&nbsp;&nbsp;</code> unary minus <br>
+<code>=      &nbsp;&nbsp;&nbsp;&nbsp;</code> equal <br>
+<code>!=     &nbsp;&nbsp;&nbsp;</code> not equal <br>
+<code>&gt;   &nbsp;&nbsp;&nbsp;&nbsp;</code> greater than <br>
+<code>&gt;=  &nbsp;&nbsp;&nbsp;</code> greater than or equal <br>
+<code>&lt;   &nbsp;&nbsp;&nbsp;&nbsp;</code> less than <br>
+<code>&lt;=  &nbsp;&nbsp;&nbsp;</code> less than or equal <br> 
+<code>%      &nbsp;&nbsp;&nbsp;&nbsp;</code> concatenation <br>
+<code>+      &nbsp;&nbsp;&nbsp;&nbsp;</code> addition <br>
+<code>-      &nbsp;&nbsp;&nbsp;&nbsp;</code> subtraction <br>
+<code>*      &nbsp;&nbsp;&nbsp;&nbsp;</code> multiplication <br>
+<code>/      &nbsp;&nbsp;&nbsp;&nbsp;</code> division<br>
+</ul>
+
+<p>
+The following operators will perform a numeric operation if the
+operands are numeric:<p>
+
+<ul><code>=, !=, &gt;, &gt;=, &lt;, &lt;=, +, -, *, /</code></ul>
+
+<p>
+If any of the following operations are attempted with non-numeric
+operands, an error will result:<p>
+
+<ul><code>+, -, *, /</code></ul>
+
+<p>
+Arithmetical operations are done in floating point. If the result is
+integral, the result string will be an integer. Logical operations
+will give a character <code>0</code> (zero) if the result is FALSE,
+and a character <code>1</code> (one) if the result is TRUE.
+
+
+<p>
+<i><b><a name="expressions">Expressions</a></b></i>
+
+<p>
+Script expressions consist of any combination of operands, operators,
+and parentheses. Operands may be string constants, variables, 
+or function calls. The precedence of the operators is:
+<p>
+<ul><code>
+-, !  (Unary) <br>
+/, * <br>
++, - <br>
+% <br>
+=, !=, >, >=, <, <= <br>
+& <br>
+| <br>
+</code></ul>
+
+<p>
+Within the same precedence level, operations are performed left
+to right. Parentheses modify the order of operation according to
+standard convention.
+
+<p>
+All script expressions, including all function calls, etc. are
+evaluated and the resulting string is what gets executed as a
+command. For example:
+<p>
+<ul><code>
+var1 = -1 ; var2 = 10 <br>
+if (var1*var2 < 10 & var1 > 0) <br>
+&nbsp;&nbsp;&nbsp;say 'both statements are true' <br>
+else <br>
+&nbsp;&nbsp;&nbsp;say 'it is not the case that both statements are true' <br>
+endif <br>
+</code></ul>
+<p>
+For the expression following <code>if</code>, both sides of the
+logical operation must be evaluated before the entire expression can
+be simplified into a true or false result. In this case, the
+subexpression on the left is true, but the subexpression on the left
+is not, so the whole expressions resolves to 0 (zero) and the script
+will print:
+<p>
+<ul><code>it is not the case that both statements are true</code></ul>
+
+<p>
+<b><i>Concatenation</i></b>
+<p>
+In some espressions, the concatenation operator may be implied. The <code>%</code>
+operator may be omitted whenever the two operands are a string
+constant and a variable name. With implied concatentation, intervening
+blanks will be ignored.
+<p>
+For example, the following expressions have the same effect:
+<p>
+<ul>
+<code>'set lat 'minlat%' '%maxlat  &nbsp;&nbsp;&nbsp;&nbsp;</code>
+uses the concatenation operator % <br>
+<code>'set lat 'minlat' 'maxlat &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+concatenation is implied <br>
+</ul>
+
+<p>
+Assuming two previous statements, <code>minlat = -30 </code> and
+<code> maxlat = 30</code>, the resulting expression would be:
+<p>
+<ul><code>'set lat -30 30'</code></ul>
+<p>
+Keep in mind the order of precedence when using the concatenation operator.
+
+<p>
+<i><b><a name="functions">Functions</a></b></i>
+<p>
+Function calls take the form of:
+<p>
+<ul><code>name(arg,arg,arg,...)</code></ul>
+
+<p>
+where the function name follows the same rules as for variable names, and
+the arguments may be any expression.
+
+Functions may either be contained within the script file itself,
+or the may be intrinsic functions. Functions contained within
+other script files are not supported as yet (other script files
+may be executed via the GrADS run command).<p>
+
+In either case, functions are invoked as a script expression is
+being evaluated.  Script functions always have a single string
+result, but may have one or more string arguments.  Functions are
+invoked by:<p>
+
+<dd><code>name(arg,arg,arg...)</code><p>
+
+If the function has no arguments, you must still provide the
+parentheses:<p>
+
+<dd><code>name()</code><p>
+
+You may provide your own functions from within your script file
+by using the <code>function</code> definition record:<p>
+
+<dd><code>function name(variable, variable, ...)</code><p>
+
+To return from a function, use the <code>return</code> command:<p>
+
+<dd><code>return <i>expression</i></code><p>
+
+The <code><i>expression</i></code> is optional; if not provided, a NULL string will
+be returned.  (A null string is: '')  The result of the function
+is the result of the expression specified on the return command.<p>
+
+When a function is invoked, the arguments are evaluated, then
+flow of control is transferred to the function.  The variables
+contained in the list within the function definition record are
+initialized   to the values of the passed arguments.  If too few
+arguments where passed for the variables specified, the trailing
+variables are uninitialized.  If too many arguments are passed,
+the extra arguments are discarded.<p>
+
+You may modify the variables from the function definition record
+without modifying the variables from the calling routine.<p>
+
+Scope of variables is normally local to the function, but can be
+global.<p>
+
+When a script file is first invoked (via the <code>run</code> command), 
+execution starts at the beginning of the file.  A function
+definition record may optionally be provided at the beginning. 
+If it is, it should specify one variable name.  This variable
+will be initialized to any <code>run</code> command options.  If no options
+were given, the variable will be initialized to NULL.<p>
+
+<p>
+<i><b><a name="intrinsic">Intrinsic Functions</a></b></i>
+<p>
+<ul>
+<b><code>strlen (<i>string</i>)</code></b>
+<br>
+This function returns the length (number of characters) of  
+<code><i>string</i></code>.
+
+<p><b><code>sublin (<i>string, n</i>)</code></b>
+<br>
+This function gets a single line from a string containing several
+lines. The result is the <code><i>nth</i></code> line of
+<code><i>string</i></code>.  If the string has too few lines, the
+result is NULL.  <code><i>n</i></code> must be an integer.
+
+<p>
+<b><code>subwrd (<i>string, n</i>)</code></b>
+<br>
+This functions gets a single word from a string. 
+The result is the <code><i>nth</i></code> word of <code><i>string</i></code>.  
+If the string is too short, the result is NULL. 
+<code><i>n</i></code> must be an integer.
+
+<p>
+<b><code>substr (<i>string, start, length</i>)</code></b>
+<br>
+This function gets part of a string. 
+The sub-string of <code><i>string</i></code> starting at location
+<code><i>start</i></code> for length <code><i>length</i></code> will be returned.  
+If the string is too short, the result will be short or NULL. 
+<code><i>start</i></code> and <code><i>length</i></code> must be integers.
+
+<p>
+<b><code>read (<i>filename</i>)</code></b>
+<br>
+This functions reads individual records from file <code><i>filename</i></code>.
+Repeated calls must be made to read consecutive records. The result is
+a string containing two lines: the first line is the return code, the 
+2nd line is the record read from the file. The record may be a maximum 
+of 80 characters. Use the <code>sublin</code> function to separate the
+result. Return codes are:
+
+<ul>
+<code>0 - </code>ok <br>
+<code>1 - </code>open error <br>
+<code>2 - </code>end of file <br>
+<code>8 - </code>file open for write <br>
+<code>9 - </code>I/O error<br>
+<br>
+</ul>
+
+Files are opened when the first call to read is made for a 
+particular file name. Files are closed when the execution of the
+script file terminates (note that files remain open between
+function calls, etc).
+
+<p>
+<b><code>write (<i>filename, record</i> &lt;, append&gt;)</code></b>
+<br>
+This functions writes records to output file <code>filename</code>.  
+
+On the first call to write for a particular file, the file is opened
+in write mode.  This will destroy an existing file!  If you use the
+optional append flag, the file will be opened in append mode, and all
+writes will be appended to the end of the file.  Return codes are:
+<ul>
+<code>0</code> - ok <br>
+<code>1</code> - open error <br>
+<code>8</code> - file open for read</ul>
+
+<p>
+<b><code>close (<i>name</i>)</code></b>
+<br>
+This function closes the named file.  This must be done if you wish to
+read from a file you have been writing to.  This can also be used to
+rewind a file.  Return codes are:
+<ul>
+<code>0</code> - ok <br>
+<code>1</code> - file not open</ul>
+<p><b><code>sys (<i>command</i>)</code></b><br>
+  This function was added in <span class="red">version 2.1.1.b0. </span> It  submits the specified command to the shell and returns the resulting text stream that gets sent to standard output (stdout). The  command is passed to /bin/sh. There is no way to check if the command succeeded; the return code is not captured, and an empty result could mean that the command has no output or that the command failed. Any error notifications or text streams sent to standard error (stderr) will appear in the console window and not the returned text unless you explicitly include a capture of stderr in your command string. </p>
+<p>Consider the following script test_sys.gs: 
+<ul><code>
+  cmd1=&quot;ls ./foo&quot;<br>
+  cmd2=&quot;ls ./foo 2&gt;&amp;1&quot;<br>
+  cmd3='echo Hello, world!'<br>
+  res1=sys(cmd1); say 'cmd1 returned -&gt;'res1'&lt;-'<br>
+  res2=sys(cmd2); say 'cmd2 returned -&gt;'res2'&lt;-'<br>
+  res3=sys(cmd3); say 'cmd3 returned -&gt;'res3'&lt;-'<br>
+  <br>
+</code></ul>
+The session in the GrADS command window when running test_sys.gs looks like this:<br>
+<br>
+<ul>
+<code>
+  ga-> test_sys<br>    
+ls: ./foo: No such file or directory<br>
+cmd1 returned -><-<br>
+cmd2 returned ->ls: ./foo: No such file or directory<br>
+<-<br>
+cmd3 returned ->Hello, world!<br>
+<-<br>
+ga-> <br>
+</code></ul>
+</p>
+</ul>
+
+
+<h2><a name="commands"><u>Commands that complement the scripting language</u></a></h2>
+<p>
+There are some GrADS commands that, although not designed
+exclusively for scripts, are most useful in script applications. 
+These include:
+
+<p>
+<b><code><a href="gradcomdquery.html">query</a> &lt;<i>option</i>&gt;</code></b> or 
+<b><code><a href="gradcomdquery.html">q</a> &lt;<i>option</i>&gt;</code></b>
+<ul>
+<p>
+To see the list of available options, issue the <code><a
+href="gradcomdquery.html">query</a></code> command by itself. A
+description of the <code><a href="gradcomdquery.html">query</a></code>
+options that are most useful for script applications follows.
+
+<p>
+<b><code><a href="gradcomdquery.html">q</a> define</code></b> --
+Lists all defined variables
+
+<p>
+<b><code><a href="gradcomdquery.html">q</a> define <i>varname</i></code></b> --
+(Added in <span class="red">version 2.1.1b0</span>) Lists information about a specific defined variable: grid dimensions, coordinate axis definitions, calendar type, and whether it has been modified to be a climatological variable. 
+
+<p>
+<b><code><a href="gradcomdquery.html">q</a> defval <i>ival
+jval</i></code></b> -- Gives defined grid value at <i>ival, jval</i>
+<p>
+To interactively modify grid point values for a <code>defined</code>
+variable, <code><a href="gradcomdquery.html">q</a> defval</code>
+can be used in conjunction with <code><a
+href="gradcomdsetdefval.html">set defval</a></code>. For example, the
+code shown below queries the value of sst at gridpoint(i,j), then
+tests to see if the value is less than -1.6, and if it is, sets the
+sst to a bad value.
+<ul>
+<code>
+'q defval sst 'i' 'j <br>
+val = subwrd(result,3) <br>
+if (val < -1.6)  <br>
+&nbsp&nbsp'set defval sst 'i' 'j' 'bad_value <br>
+endif <br>
+</code>
+</ul>
+
+<p>
+<b><code><a href="gradcomdquery.html">q</a> dims</code></b> --
+Gives the current dimension environment
+
+<p>
+<b><code><a href="gradcomdquery.html">q</a> file
+<i>n</i></code></b> -- Gives info on file number <i>n</i>
+
+<p>
+<b><code><a href="gradcomdquery.html">q</a> files</code></b> --
+Lists open files
+
+<p>
+<b><code><a href="gradcomdquery.html">q</a> fwrite</code></b> --
+Gives the name of the file used for fwrite operations
+
+<p>
+<b><code><a href="gradcomdquery.html">q</a> gxinfo</code></b> --
+Lists graphics settings
+
+<p>
+This option is handy when trying to find the plot area. The output
+from <code><a href="gradcomdquery.html">q</a> gxinfo</code> might
+look like this:
+
+<p>
+<code>
+<ul>
+Last Graphic = Line <br>
+Page Size = 11 by 8.5 <br>
+X Limits = 2 to 10.5 <br>
+Y Limits = 0.75 to 7.75 <br>
+Xaxis = Lon  Yaxis = Val <br>
+Mproj = 2<br>
+</ul>
+</code>
+
+<p>
+The first line indicates that the output is a line plot. The second line
+gives the page dimensions -- in this case GrADS is in landscape
+mode. The third and fourth lines give the x and y boundaries of the
+plot. In this case the plot has 1-inch margins in the x direction and
+0.75-inch margins in the y direction.  The fifth line tells what kind
+of axes you have, and the sixth line identifies the map projection:
+<br>
+<ul>
+<code>1&nbsp;&nbsp;&nbsp;&nbsp;</code>Scaled (no preservation of aspect ratio)<br>
+<code>2&nbsp;&nbsp;&nbsp;&nbsp;</code>Latlon (2-D horizontal fields) <br>
+<code>3&nbsp;&nbsp;&nbsp;&nbsp;</code>Northern polar stereographic <br>
+<code>4&nbsp;&nbsp;&nbsp;&nbsp;</code>Southern polar stereographic <br>
+<code>5&nbsp;&nbsp;&nbsp;&nbsp;</code>Robinson (lon range must be -180 to
+180 and lat range must be -90 to 90)<br>
+</ul>
+
+<p>
+<b><code><a href="gradcomdqpos.html">q pos</a></code></b> -- Waits for mouse click, returns position<br>
+
+<p>
+<b><code><a href="gradcomdquery.html">q</a> shades</code></b> -- Gives colors and levels of shaded contours<br>
+
+<p>
+<b><code><a href="gradcomdquery.html">q</a> time</code></b> - gives time range of current open file<br>
+
+<p>
+<b><code><a href="gradcomdquery.html">q</a> <i>transform coord1 coord2</i></code></b> -- Coordinate transformations 
+
+<ul>
+<p>
+where <code><i>transform</i></code> is one of: <br>
+<code>xy2w &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>XY coords to world coords <br>
+<code>xy2gr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>XY coords to grid coords <br>
+<code>w2xy &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>world coords to XY coords <br>
+<code>w2gr &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>world coords to grid coords <br>
+<code>gr2w &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>grid coords to world coords <br>
+<code>gr2xy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>grid coords to XY coords <br>
+</ul>
+
+<p>
+<i>XY coords</i> are inches on the page (screen) where the page is
+11x8.5 inches or 8.5x11 inches, depending on how GrADS was started.
+
+<p>
+<i>World coords</i> are lat, lon, lev, time or val, depending on what
+the dimension environment is when the grid was displayed. Note that
+time is displayed (and must be specified) in GrADS absolute date/time
+format. val is the value coordinate for a 1-D plot (linegraph).
+
+<p>
+<i>Grid coordinates</i> are the i,j indices the grid being
+displayed. For station data sets, grid and world coordinates are
+equivalent except for the time dimension. Note that if you display a
+grid from a 'wrapped' data set, the grid numbers may be out of range
+of the actual file grid numbers. (A 'wrapped' data set is a data set
+that covers the earth in the longitude direction. Wrapping takes place
+automatically). The conversions are done consistently, but you may
+want to be sure you can handle the wrapping case if your data set is
+global.
+
+<p>
+N.B. Coordinate transform queries are only valid after something has
+been displayed, and the transformations apply only to the most recent
+item that has been displayed.
+</ul>
+
+<p>
+<b><code><a name="scriptfindstn">set gxout findstn</a></code></b>
+<p>
+When using the graphics output type <code><a href="gradcomdsetgxout.html">set gxout findstn</a></code>, three
+arguments must be provided with the <a
+href="gradcomddisplay.html"><code>display</code></a> command. The
+first argument is a station data expression. The 2nd and 3rd arguments
+are the X and Y screen coordinates of the of the desired search
+location.  GrADS will find the station closest to the specified X and
+Y position, and print its stid, lon, and lat.  This graphics output
+type should only be used when X and Y are the varying dimensions and
+AFTER a regular display command (that results in graphics output) is
+entered.
+<p>
+<b><code>set dbuff on|off</code></b>
+<p>
+This command sets double buffer mode <code>on</code> or
+<code>off</code>. This allows animation to be controlled from a
+script. The <a href="gradcomdclear.html"><code>clear</code></a>
+command also sets double buffer mode <code>off</code>.
+
+<p>
+<b><code>swap</code></b>
+
+<p>
+Swaps buffers, when double buffer mode is <code>on</code>. If double
+buffer mode is <code>off</code>, this command has no effect.
+
+<p>
+The usual usage of these commands would be:<p>
+
+<ul>
+<code>
+set dbuff on <br>
+start looping <br>
+&nbsp&nbsp&nbsp;display <i>something</i><br>
+&nbsp&nbsp&nbsp;swap <br>
+endloop <br>
+set dbuff off<br>
+</code>
+</ul>
+
+<p>
+<a name="widgets"><h2><u>Widgets</u></h2></a>
+<p>
+GrADS has the capability to implement a graphical user interface. This
+interface is used to draw widgets (buttons and pull down menus) that
+allow a "point and click" interface between the Grads user and the
+scripting language.
+
+ (N.B. The Cairo graphics display inteface in <span class="red">version 2.1+</span> does not support widgets.) 
+<p>
+<h3>Buttons</h3>
+<p>
+Here is a sample from a script illustrating how to draw a button:
+
+<p>
+<ul>
+<pre>
+set rgb 90 100 100 100
+set rgb 91  50  50  50
+set rgb 92 200 200 200
+set button 2 90 91 92 3 90 92 91 6
+draw button 1 5.5 1 2 0.5 This is a Button
+</pre>
+</ul>
+
+<p>
+The reference pages for <a href="gradcomdsetbutton.html"><code>set
+button</code></a> and <a href="gradcomddrawbutton.html"><code>draw
+button</code></a> contain information on how to specify the button
+characteristics and position.
+
+<p>
+A button's initial "state" is <code>ON</code>. If a user clicks on a
+button following a <a href="gradcomdqpos.html"><code>q pos</code></a>
+command, then the button state will switch from <code>ON (1)</code> to
+<code>OFF (0)</code>. A second <a href="gradcomdqpos.html"><code>q
+pos</code></a> followed by a mouse click on the button will return it
+to the <code>ON</code> state. The button state may also be changed
+with the <a href="gradcomdredrawbutton.html"><code>redraw
+button</code></a> command.
+
+<p>
+The output from the <a href="gradcomdqpos.html"><code>q pos</code></a> command 
+is what makes the button widgets so useful. Here is a template of what 
+<a href="gradcomdqpos.html"><code>q pos</code></a> returns after a mouse click
+on a button:
+
+<p>
+<code>
+Position = <i>xpos ypos mousebutton widgetclass buttonnumber buttonstate </i></code>
+
+<p>
+where:
+<ul>
+<code><i>xpos, ypos</i>&nbsp&nbsp&nbsp&nbsp</code>
+- coordinates of the mouse click in virtual page units <br>
+<code><i>mousebutton</i>&nbsp&nbsp&nbsp</code>
+- either 1, 2, or 3 for the left, center, or right mouse button <br>
+<code><i>widgetclass</i>&nbsp&nbsp&nbsp</code>
+- 1 is the widget class number for buttons  <br>
+<code><i>buttonnumber</i>&nbsp&nbsp</code>
+- the number assigned to the button when it was originally drawn <br>
+<code><i>buttonstate</i>&nbsp&nbsp&nbsp</code>
+- either 0 (meaning "off") or 1 (meaning "on")
+</ul>
+
+<p>
+If the user did not click on a button, then <code><i>widgetclass</i></code>
+will be 0 and there will be no output for
+<code><i>buttonnumber</i></code> or <code><i>buttonstate</i></code>.
+
+
+<p>
+<h3>Drop Menus</h3>
+<p>
+As with button widgets, dropmenus provide a "point-and-click"
+interface between scripts and the GrADS user. The reference pages for
+<a href="gradcomdsetdropmenu.html"><code>set dropmenu</code></a> and
+<a href="gradcomddrawdropmenu.html"><code>draw dropmenu</code></a>
+contain information on how to specify the dropmenu characteristics and
+position.
+<p>
+The output from <a href="gradcomdqpos.html"><code>q pos</code></a>
+after a click on a dropmenu is similar to that described above for
+buttons.  Here is a template of what is returned by <a
+href="gradcomdqpos.html"><code>q pos</code></a> after a mouse click
+on a dropmenu:
+
+<p>
+<code>Position = <i>xpos ypos mousebutton widgetclass menunumber inum</i></code>
+
+<p>
+where:
+<ul>
+<code><i>xpos, ypos</i>&nbsp&nbsp&nbsp&nbsp</code>
+- coordinates of the mouse click in the menu base in virtual page units <br>
+<code><i>mousebutton</i>&nbsp&nbsp&nbsp</code>
+- either 1, 2, or 3 for the left, center, or right mouse button <br>
+<code><i>widgetclass</i>&nbsp&nbsp&nbsp</code>
+- 3 is the widget class number for dropmenus  <br>
+<code><i>menunumber</i>&nbsp&nbsp&nbsp&nbsp</code>
+- the number assigned to the dropmenu when it was originally drawn <br>
+<code><i>inum</i>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</code>
+-  the menu item number selected from the menu list
+</ul>
+
+<p>
+If no menu item is selected, then <code><i>menunumber</i></code> and <code><i>inum</i></code> will
+both be -1.
+
+
+<p>
+Here is a script sample illustrating how to use a dropmenu:
+
+<p>
+<pre>
+'reset events'
+'set rgb 90 100 100 100'
+'set rgb 91 150 150 150'
+'set rgb 92 200 200 200'
+'set dropmenu 1 91 90 92 0 91 90 92 1 91 90 92 90 92 6'
+'draw dropmenu 1 1 8 1.5 0.5 Select a Variable | Wind | Temperature | Height | SLP '
+noselect = 1
+while (noselect)
+  'q pos'
+  menunum  = subwrd(result,7)
+  menuitem = subwrd(result,8)
+  if (menunum = 1)
+    if menuitem = 1 ; newbase = 'Variable = Wind'   ; endif
+    if menuitem = 2 ; newbase = 'Variable = Temp'   ; endif
+    if menuitem = 3 ; newbase = 'Variable = Height' ; endif
+    if menuitem = 4 ; newbase = 'Variable = SLP'    ; endif
+    'draw dropmenu 1 1 8 1.5 0.5 'newbase' | Wind | Temperature | Height | SLP '
+    noselect = 0
+  endif
+endwhile
+</pre>
+<p>
+Here is another script sample illustrating how to use cascading dropmenus:
+<p>
+<pre>
+'clear'
+'set rgb 90 100 100 100'
+'set rgb 91 150 150 150'
+'set rgb 92 200 200 200'
+'set button 1 91 -1 -1 1 91 90 92 12'
+'draw button 1 1 8 1 0.5 quit'
+'set dropmenu 1 91 -1 -1 1 91 90 92 1 91 90 92 90 92 6'
+'draw dropmenu 1 1.5 7.5 2 0.5  Menu Base | Space | Earth >05> | Sun | Moon'
+'draw dropmenu 5 cascade Ocean | Land | Atmosphere >11> | Biosphere'
+'draw dropmenu 11 cascade Snow | Rain | Mist | Tornado '
+
+while (1)
+  'q pos'
+  say result
+  ev = subwrd(result,6)
+  if (ev!=3); break; endif;
+endwhile
+</pre>
+<p>
+It is left to the GrADS script writer (that means you!) to run the demo and 
+interpret the output of <a href="gradcomdqpos.html"><code>q pos</code></a>
+when clicking on all the options in the cascade of dropmenus. 
+
+<p>
+<h3>Rubber banding</h3>
+
+<p>
+GrADS has a widget type called <code>rband</code> for rubber banding.  There
+are two <code>rband</code> modes: <code>box</code> and <code>line</code>.
+To set up the <code>rband</code> widget, use the following command:
+<p>
+<ul><code>
+<a href="gradcomdsetrband.html">set rband</a> <i>num mode x1 y1 x2 y2</i>
+</code></ul>
+
+<p>
+where:
+<p>
+<ul>
+<code><i>num</i>&nbsp;&nbsp;&nbsp;</code>
+- widget number<br>
+<code><i>mode</i>&nbsp;&nbsp;</code>
+- may be either <code>box</code> or <code>line</code><br>
+<code><i>x1</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>
+- lowest X point where the widget will be active (in virtual page units)<br>
+<code><i>y1</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>
+- lowest Y point where the widget will be active (in virtual page units)<br>
+<code><i>x2</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>
+- highest X point where the widget will be active (in virtual page units)<br> 
+<code><i>y2</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>
+- highest Y point where the widget will be active (in virtual page units)<br>
+</ul>
+
+<p>
+In <code>box</code> mode, as the user clicks and drags the mouse in
+the active rband area a box is drawn with one corner located at the
+initial click and the opposite corner located at the release point. In
+<code>line</code> mode, a line is drawn between these two points.
+
+<p>
+For example, suppose you  want to set up a
+<code>box</code> rubber band widget in the plot region only.
+
+<p>
+First, execute <a href="gradcomdquery.html"><code>q gxinfo</code></a>
+to get the X and Y limits of the plot area. The result from <a
+href="gradcomdquery.html"><code>q gxinfo</code></a> might look like
+this:
+
+<ul>
+<pre>
+Last Graphic = Line
+Page Size = 11 by 8.5
+X Limits = 2 to 10.5
+Y Limits = 0.75 to 7.75
+Xaxis = Lon  Yaxis = Val
+Mproj = 2
+</pre>
+</ul>
+
+<p>
+Second, set up the widget with <a
+href="gradcomdsetrband.html"><code>set rband</code></a> using the dimensions
+grabbed from the result of <a href="gradcomdquery.html"><code>q gxinfo</code></a>:
+<p>
+<ul>
+<pre>
+xlims = sublin(result,3)
+ylims = sublin(result,4)
+x1 = subwrd(xlims,4)
+x2 = subwrd(xlims,6)
+y1 = subwrd(ylims,4)
+y2 = subwrd(ylims,6)
+'set rband 21 box 'x1' 'y1' 'x2' 'y2
+</pre>
+</ul>
+
+<p>
+Finally, use <a href="gradcomdqpos.html"><code>q pos</code></a> 
+to activate the widget.
+
+<p>
+<ul><code>ga-> q pos</code></ul>
+
+<p>
+This freezes the system until the user clicks, drags, and 
+then releases the mouse somewhere within the active rband area. 
+Here is a template for the output you would get from GrADS after
+a mouse click and drag in the rband area:<p>
+
+<ul>
+<code>Position = <i>xpos1 ypos1 mousebutton widgetclass widgetnumber xpos2 ypos2</i></code>
+</ul>
+
+<p>
+where:
+<ul>
+<code><i>xpos1, ypos1</i>&nbsp&nbsp&nbsp</code>
+- coordinates of the initial mouse click in virtual page units <br>
+<code><i>mousebutton</i>&nbsp&nbsp&nbsp&nbsp</code>
+- either 1, 2, or 3 for the left, center, or right mouse button <br>
+<code><i>widgetclass</i>&nbsp&nbsp&nbsp&nbsp</code>
+- 2 is the widget class number for rbands  <br>
+<code><i>widgetnumber</i>&nbsp&nbsp&nbsp</code>
+- the number assigned to the
+rband widget when it was set up  <br>
+<code><i>xpos2, ypos2</i>&nbsp&nbsp&nbsp</code>
+- coordinates of the mouse release point in virtual page units <br>
+</ul>
+
+<p>
+The page coordinates can be then be used to draw a box (or a line)
+where the user specified, or parsed and used in the coordinate
+transform <a href="gradcomdquery.html"><code>q xy2w</code></a> to
+recover the lat/lon region selected by the user.
+
+</body>
+</html>

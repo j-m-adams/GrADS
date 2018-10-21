@@ -1,0 +1,33 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<H2><B>set imprun</B></H2><P>
+<code>set imprun <i>script-name</i></code>
+<p>
+
+This command sets up automatic execution of a Grads script before
+every <code><a href="gradcomddisplay.html">display</a></code>
+command.<p> <H3>Examples</H3><P>
+
+<p>
+This script is typically used to set an option that by default
+gets reset after each <code><a href="gradcomddisplay.html">display</a></code> 
+command, for example:
+<p>
+<dd><code><a href="gradcomdsetgrads.html">set grads </a>off</code>
+
+<p>
+<H3>Usage Notes</H3><P>
+
+You can issue any GrADS command from this script, but the
+interactions are not always clear. For example, if you issue a
+<code><a href="gradcomddisplay.html">display</a></code> command 
+from this script, you could enter an infinite recursion loop.
+
+<p>
+The argument to the script is the expression from the 
+<code><a href="gradcomddisplay.html">display</a></code>
+command.<p>
+
+
+
+

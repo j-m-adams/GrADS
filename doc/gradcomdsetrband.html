@@ -1,0 +1,57 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set rband</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set rband</b></h2>
+<p>
+<code>set rband <i>num mode x1 y1 x2 y2</i></code>
+<p>
+Sets the mode and defines the active region for the 'rubber band' widget. 
+<p>
+<ul>
+<code><i>num</i>&nbsp;&nbsp;&nbsp;</code>
+- widget number<br>
+<code><i>mode</i>&nbsp;&nbsp;</code>
+- may be either <code>box</code> or <code>line</code><br>
+<code><i>x1</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>
+- lowest X point where the widget will be active (in virtual page units)<br>
+<code><i>y1</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>
+- lowest Y point where the widget will be active (in virtual page units)<br>
+<code><i>x2</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>
+- highest X point where the widget will be active (in virtual page units)<br> 
+<code><i>y2</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>
+- highest Y point where the widget will be active (in virtual page units)<br>
+</ul>
+<p>
+After executing <code>set rband</code>, rubber bands are defined by
+executing <a href="gradcomdqpos.html"><code>q pos</code></a> which
+freezes the system until the user clicks, drags, and then releases the
+mouse somewhere within the active rband area. See the <a
+href="gradcomdqpos.html"><code>q pos</code></a> reference page for
+details on the returned information.
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>In <code>box</code> mode, as the user clicks and drags the mouse in
+the active rband area a box is drawn with one corner located at the
+initial click and the opposite corner located at the release point. In
+<code>line</code> mode, a line is drawn between these two points.
+</ol>
+
+<p>
+<h3>Examples </h3>
+
+See <a href="script.html#widgets">widgets</a> for more information
+and examples.
+
+
+</body>
+</html>
+
+
+

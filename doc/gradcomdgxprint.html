@@ -1,0 +1,85 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Commands: printim</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+body {
+	background-color: #e0f0ff;
+}
+.red {
+	color: #900;
+}
+</style>
+</head>
+<body text="#000000">
+
+<h2><b>gxprint</b></h2>
+<p>
+Beginning with <span class="red">GrADS version 2.1</span>, the <a href="gradcomdgxprint.html"><code>gxprint</code></a> command will produce all hardcopy output in both image and vector graphic formats. The output is based on the current contents of the metabuffer, and it works in batch mode as well as interactive mode. It replaces the <code><a href="gradcomdprint.html">print</a></code>, 
+<code><a href="gradutilgxps.html">gxps</a></code>, <code><a href="gradutilgxeps.html">gxeps</a></code>, and <code><a href="gradcomdprintim.html">printim</a></code> commands. 
+<h3>Syntax
+</h3>
+<ul>
+  <code>gxprint <i>filename options</i></code> 
+</ul>
+<p>
+where:
+<ul>
+  <code><i>filename:</i>&nbsp;&nbsp;</code>The name of the output file. If this 
+  file exists, it will be replaced. 
+  <br>
+  <code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>If the filename ends with &quot;.eps&quot;, &quot;.ps&quot;, &quot;.pdf&quot;, &quot;.svg&quot;, &quot;.png&quot;, &quot;.gif&quot;, or &quot;.jpg&quot;, then GrADS will automatically create the  output in the corresponding format.<br>
+  <br>
+  <p>
+  <code><i>options:</i></code><br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eps          &nbsp;</code>Produce output in EPS format<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ps             &nbsp;</code>Produce output in PS format<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pdf          &nbsp;</code>Produce output in PDF format<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;svg          &nbsp;</code>Produce output in SVG format<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;png        &nbsp;</code>Produce image output in PNG format <br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gif          &nbsp;</code>Produce image output in GIF  format (not available with Cairo)<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jpg          &nbsp;</code>Produce image output in JPG format (not available with Cairo)<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;black      &nbsp;</code>Use black background (default is current display setting)<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;white      &nbsp;</code>Use white background (default is current display setting)<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xNN        &nbsp;</code>Horizontal image size in <code>NN</code> pixels (for image output only)<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yNN        &nbsp;</code>Vertical image size in <code>NN</code> pixels (for image output only)<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-e NN      &nbsp;</code>The blank edge around the plot will be <code>NN</code> inches wide (for PS, EPS, and PDF output only)<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-t NN      &nbsp;</code>Color number <code>NN</code> is fully transparent<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-b <i>bgImage </i> </code>Image file <code><i>bgImage</i></code> is included in the background of the output<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-f <i>fgImage</i> &nbsp;</code>Image file <code><i>fgImage</i></code> is included in the foreground of the output<br>
+  </p>
+</ul>
+<p> One or more <code><i>options</i></code> may be given in any order.
+<p>
+<h3>Usage Notes</h3>
+
+<ol>
+<li><code>gxprint</code> works with <span class="red">GrADS version 2.1+</span>.
+<li><code><i>bgImage</i></code> and <code><i>fgImage</i></code> must be PNG format, and the file names should not contain any upper case letters. <li>The GIF and JPG image formats are not support by the Cairo library. These options will work  only when using the GD library for rendering image output.
+<li>The default width of the edge around the PS, EPS, and PDF output files is 0.15625 inches. An edge width smaller than the default may result in the plot getting cropped by the printer. 
+<li>In <span class="red">GrADS version 2.1+</span>, it is also possible to achieve color transparency (full or partial) using the <code><a href="gradcomdsetrgb.html">set rgb</a></code> command. 
+<li>Multi-page output is not yet supported with <code>gxprint</code>. 
+</ol>
+
+<p>
+<h3>Examples </h3>
+
+<p>
+The following command produces a 1024x768 PNG image into file test.png:
+<ul>
+<code>gxprint test.png x1024 y768</code>
+</ul>
+<p>This command produces a GIF image with transparent color 0 and a background 
+  image mybkg.png. This means that in test.png, the background image mybkg.png 
+  will be seen wherever the color 0 (background) appeared in the current display. 
+</p>
+<ul>
+  <p><code>gxprint test.png -b mybkg.png -t 0 </code><br>
+  
+</ul>  
+
+</body>
+</html>
+

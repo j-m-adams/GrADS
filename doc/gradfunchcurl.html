@@ -1,0 +1,48 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<h2><b>hcurl</b></h2><p> 
+
+<code>hcurl(<i>uexpr,vexpr</i>)</code><p> 
+
+Calculates the vertical component of the curl (ie, vorticity) at each grid
+point using finite differencing on the grids provided. It is assumed that
+<code><i>uexpr</i></code> gives the U Wind component, and that
+<code><i>vexpr</i></code> provides the V Wind component.<p> 
+
+<h3>Usage Notes</h3><p> 
+
+<ol>
+<li>The alghorithm used for the finite difference calculation is described
+as an Example for the <a href="gradfunccdiff.html"><code>cdiff</code></a>
+function.<p> 
+
+<li>The function assumes an X-Y varying dimension environment, and will
+not operate unless that is the case. The <a
+href="gradcomddefine.html"><code>define</code></a> command can
+be used in conjunction with the <code>hcurl</code> function to create 3 or
+4 dimensional fields of vorticity, from which
+vertical cross-sections could be displayed. <p>
+
+<li>The boundaries of the grid are set to missing. <p>
+
+<li>The radius of the earth used in the calculation is in meters; thus the
+units of the wind expressions provided would normally be m/s. <p>
+</ol>
+<h3>Examples </h3><p>
+
+<ol>
+<li>To display the vorticity: <p>
+
+<dd><code>d hcurl(u,v) </code><p>
+
+<li>If you want to display a vertical cross section of vorticity, you
+first need to calculate it over a 3-Dimensional region: <p>
+
+<dd><code>set lon 0 360 
+<dd>set lat -90 90 
+<dd>set lev 1000 100 
+<dd>define vort = hcurl(u,v) 
+<dd>set lon -90 
+<dd>display vort </code>
+</ol>
+

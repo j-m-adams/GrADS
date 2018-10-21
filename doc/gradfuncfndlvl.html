@@ -1,0 +1,57 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Function: fndlvl</title>
+</head>
+<body text="#000000" bgcolor="e0f0ff">
+
+<h2><b>fndlvl()</b></h2>
+<p>
+<code>fndlvl (<i>expr, expr_to_find, lev1, lev2</i>)</code>
+<p>
+Given two gridded variables, <code><i>expr</i></code> and
+<code><i>expr_to_find</i></code>, this function finds the first
+vertical level at which the <code><i>expr_to_find</i></code> value
+occurs in <code><i>expr</i></code>. <code><i>lev1</i></code> and 
+<code><i>lev2</i></code> specify the range of
+levels over which to search. The result is a grid of pressure values.
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>The dimensions of <code><i>expr</i></code> and
+<code><i>expr_to_find</i></code> &nbsp must match. 
+</ol>
+
+<p>
+<h3>Examples </h3>
+<p>
+<ol>
+<li>This example finds the pressure levels of the 240 degree isotherm:
+<p>
+<ul><code>d fndlvl (t, const(t,240), lev=1000, lev=100)</code></ul>
+<p>
+<li>The <code><i>expr_to_find</i></code> doesn't have to be a constant;
+it can change with location. This example returns the pressure
+level of the tropopause, given the variable <code>'ttrop'</code> that 
+contains the temperature at the tropopause: 
+<p>
+<ul><code>d fndlvl (t, ttrop, lev=1000, lev=100)</code></ul>
+<p>
+<li>This example illustrates the limitations of
+<code>fndlvl</code>. It returns the level of the surface pressure
+variable <code>psfc</code> in the coordinate system of
+<code>lev</code>, a GrADS <a href="variable.html">pre-defined variable</a>.
+<p>
+    <ul>
+      <code>d fndlvl (lev, psfc, lev=1000, lev=100)</code> 
+    </ul>
+<p>
+The display should be exactly the same as <code>psfc</code> except in 
+locations where <code>psfc</code> is greater than 1000 mb, the maximum value of 
+<code>lev<code>.
+</code></code></ol>
+
+</body>
+</html>

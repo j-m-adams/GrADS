@@ -1,0 +1,51 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<h2><b>cdiff</b></h2><p> 
+
+<code>cdiff(<i>expr,dim</i>)</code><p> 
+
+Performs a centered difference operation on <code><i>expr</i></code> in
+the direction specified by <code><i>dim</i></code>. The difference is done
+in the grid space, and no adjustment is performed for unequally spaced
+grids. The result value at each grid point is the value at the grid point
+plus one minus the value at the grid point minus one. The
+<code><i>dim</i></code> argument
+specifies the dimension over which the difference is to be taken, and is a
+single character: X, Y, Z, or T. <p>
+
+Result values at the grid boundaries are set to missing. <p>
+<H3>Usage Notes</H3><P>
+<h3>Examples</h3><p> 
+
+<ol>
+<li>The <code>cdiff</code> function may be used to duplicate the
+calculation done by the <a
+href="gradfunchcurl.html"><code>hcurl</code></a> function: <p>
+
+<dd><code>define dv = cdiff(v,x) 
+<dd>define dx = cdiff(lon,x)*3.1416/180 
+<dd>define du = cdiff(u*cos(lat*3.1416/180),y) 
+<dd>define dy = cdiff(lat,y)*3.1416/180 
+<dd>display (dv/dx-du/dy)/(6.37e6*cos(lat*3.1416/180)) </code><p>
+
+The above example assumes an X-Y varying dimension environment. Note that
+the intrinsic variables <code>lat</code> and <code>lon</code> give results
+in degrees and must be converted to radians in the calaculation. Also note
+the radius of the earth is assumed to be <code>6.37e6</code> meters thus
+the U and V winds are assumed to have units of <code>m/sec</code>.<p> 
+
+<li>Temperature advection can be calculated using the <code>cdiff</code>
+function as follows: <p>
+
+<dd><code>define dtx = cdiff(t,x) 
+<dd>define dty = cdiff(t,y) 
+<dd>define dx = cdiff(lon,x)*3.1416/180 
+<dd>define dy = cdiff(lat,y)*3.1416/180 
+<dd>display -1*( (u*dtx)/(cos(lat*3.1416/180)*dx) + v*dty/dy )/6.37e6
+</code><p>
+
+where the variable <code>t</code> is temperature, <code>u</code> is the U
+component of the wind, and <code>v</code> is the V component of the wind. 
+</ol>
+
+

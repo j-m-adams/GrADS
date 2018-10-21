@@ -1,0 +1,143 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Utilities: gribmap</title>
+<style type="text/css">
+<!--
+.style1 {color: #990000}
+-->
+</style>
+</head>
+<body text="#000000" bgcolor="e0f0ff">
+
+<h2><b>gribmap</b></h2>
+
+<p>
+The GrADS data descriptor file defines a grid structure into which
+the data will fit -- it gives "shape" to the data by identifying its
+spatial dimensions, the number of time steps, and the number of variables. 
+<p>
+If the data is in binary format, its <a
+href="aboutgriddeddata.html#structure">structure</a> has already been
+prescribed. If the data is in GRIB format, no consistent 
+relationship exists between the data and the grid structure defined in the data
+descriptor file. Hence, the need for the <code>gribmap</code> utility which "maps"
+between the GRIB data and the GrADS data description.
+<p>
+As <code>gribmap</code> reads each field in the GRIB data file, the
+parameters for that field (e.g. variable name, vertical level, time)
+are compared to the information in the data descriptor file until 
+a match is found. The process continues until all the GRIB elements have been 
+"mapped" to their location within the GrADS grid structure. Please read the documentation on <a href="grib.html">Handling GRIB in GrADS</a> for more details. 
+<h3>Syntax</h3>
+<table width="680" border="0" cellpadding="5" cellspacing="5" class="plaintext">
+  <tr bgcolor="c5d5ff">
+    <td colspan="2" bordercolor="#F4F4F4" bgcolor="#E0F0FF"><p><code>gribmap [<i>options</i>] </code></p>
+      <p>Command line <code><i>options</i></code> are:<br>
+    </p></td>
+  </tr>
+  
+  <tr bgcolor="c5d5ff">
+    <td width="100"><code>-0</code></td>
+    <td>Ignores the forecast time when setting up a match, so that the base time is the valid time.</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td width="100"><code>-b</code></td>
+    <td>Valid time for averages is set to be the beginning of the period rather than 
+        the end. Default valid time is the end of the averaging period<code>.</code>    </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-big</code></td>
+    <td>(<span class="style1">GrADS version 2.0.a8+</span>) Required option if the GRIB1 or GRIB2 files are &gt; 2 Gb. This option creates a bigger index file, which cannot be read by earlier versions of GrADS. </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-e<br>
+      -E</code></td>
+    <td>Ignores extra bytes (that are not part of the GRIB1 msg) at end of file. Some ECMWF GRIB files require this option because 
+      of blocking. 
+      Using the <code>-E</code> option ignores extra bytes in middle and/or end of GRIB file. </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td width="100"><code>-f<i> hr</i></code></td>
+    <td>Matches only those grib records whose forecast time is <code><i>hr</i></code> hours. This is used to isolate a sequence of forecasts. For example, if you 
+        wanted to sample all the 120-hour forecasts from the MRF ensemble runs, you 
+        would use <code>gribmap -f120</code>.      </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-h<i> num</i></code></td>
+    <td>Skips over <code><i>num</i></code> bytes before starting the scan process. </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-help</code></td>
+    <td>Prints out the list of options </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-i <i>fname</i></code></td>
+    <td><code><i>fname</i></code> is the name of the data descriptor file. If 
+      not specified, <code>gribmap</code> will prompt the user. </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-m</code></td>
+    <td>Use base time from descriptor file instead of GRIB header. This option only works with GRIB1.</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-min0</code></td>
+    <td>Ignores the minutes code. </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-N</code></td>
+    <td>Does NOT write out the index file. </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-new</code></td>
+    <td>(<span class="style1">GrADS version 2.1.a2+</span>) Creates a new version of an existing index file</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-old</code></td>
+    <td>(<span class="style1">GrADS version 2.1.a2+</span>) Creates an old version of an existing index file</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-q</code></td>
+    <td> Quiet mode -- suppresses all messages except for errors. Default is off.</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-s<i> num</i></code></td>
+    <td>Skips over no more than<em><code> num </code></em>bytes between records. The 
+      default is 1000. </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-t0</code></td>
+    <td>Matches only those grib records whose base time is the same as the initial 
+      time in the data descriptor file. This is used to pull out a forecast sequence 
+      (0, 12, 24, ... , 72 hours) starting a specific time. </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td width="100"><code>-u</code></td>
+    <td><p>
+    Updates existing index file when expanding the size of the T or E dimensions in a <a href="templates.html">templated</a> data set. Only one dimension may be expanded at a time. This option was temporarily disabled in GrADS version 2.0.*, but is back in <span class="style1">version 2.1.a2</span>. (See Usage Notes and Examples below.)</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-v</code></td>
+    <td> Verbose mode -- detailed output makes it easier to verify what is being mapped. 
+      Default is off. </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<h3>Usage Notes</h3>
+<p>Over the many years of GrADS development, the contents of the index file created by <code>gribmap</code> have changed only a few times. Although it is not present in the user interface, there is a version number associated with the index file. When the contents of the index are different and the version has been upgraded, you will get an error message when trying to read that file with an older version of GrADS. Index files created with <code>gribmap</code> version <span class="style1">2.1.a2+</span> have a new version number and therefore they can only be read by GrADS version <span class="style1">2.1.a2+</span>. If you need to use an older version of GrADS to open a dataset with an index file created by <code>gribmap</code> version <span class="style1">2.1.a2+</span>, you must first reformat the metadata in the index file by running <code>gribmap</code> again with the <code>-old</code> option.</p>
+<p>The <code>-old</code> option (introduced with GrADS version<span class="style1"> 2.1.a2</span>) allows you to downgrade the version of an index file so that it may be read by any version of GrADS. The <code>-old</code> option does not re-scan the GRIB files, it merely alters the metadata in the index file's header to match the old version. There are some cases when the <code>-old</code> option cannot be used: an index file that was created with the <code>-big</code> option cannot be downgraded with <code>-old</code> because that would require a change to the format of the <em>data</em> in the index file, not just the metadata in the index file's header.</p>
+<p>The <code>-u</code> option was disabled in version <span class="style1">2.0*</span> because of the introduction of the E dimension, but has been  restored in version <span class="style1">2.1.a2</span>, so that now both the T and E dimensions can be updated. The EDEF and TDEF entries must be updated separately -- only one dimension can be expanded at a time. Reviving the update feature necessitated a change to the metadata in the index file's header, so the index version  has changed with GrADS <span class="style1">2.1.a2</span>. </p>
+<p>If you have an old index file that you would like to update, first use the <code>-new</code> option to rewrite the index file with the additional metadata. The <code>-new</code> option does not re-scan the GRIB files, it merely upgrades the metadata in the index file's header.</p>
+<p>&nbsp;</p>
+<h3>Example</h3>
+<p>Suppose you have an existing GRIB dataset (a reanalysis) that needs to have its time axis extended. To use the update feature without having to re-scan all files, follow these steps:  </p>
+<p>1.  Do not alter the descriptor file (yet). Run<code> gribmap -new </code>to upgrade the metadata in the index file and change the index version.<br>
+  2. Edit the descriptor file to expand the TDEF size. Do not change the name of the file in the INDEX entry. <br>
+  3. Run<code> gribmap -u </code>with the edited descriptor file.<br>
+  4. Run<code> gribmap -old </code>to downgrade the metadata in the new index file.</p>
+<p>Step #4 is optional, but it allows older versions of GrADS to read the updated data file. Without step #4, only the newest version of GrADS (<span class="style1">2.1.a2+</span>) will be able to open the updated descriptor file. </p>
+<p>&nbsp;</p>
+</body>
+</html>
+

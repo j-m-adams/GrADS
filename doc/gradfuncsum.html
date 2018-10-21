@@ -1,0 +1,112 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+
+<head>
+
+<title>GrADS Function: sum</title>
+
+<link rel="stylesheet" href="GrADS.css" type="text/css">
+
+</head>
+
+<body bgcolor="e0f0ff" text="#000000">
+
+
+
+<h2><b>sum()</b></h2>
+
+<p> <code>sum (<i>expr, dim1, dim2, <,tinc></i> <,-b>)</code> 
+
+<p>
+
+<p> Sums the result of <code><i>expr</i></code> over the specified dimension range. 
+
+  If the summing dimension is time, an optional time increment <code><i>tincr</i></code> 
+
+  may be specified. 
+
+<p>
+
+<ul>
+
+<code><i>expr</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>- any valid GrADS expression <br>
+
+<code><i>dim1</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>- the start point for the sum<br>
+
+<code><i>dim2</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>- the end point for the sum<br>
+
+<code><i>tinc</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>- optional increment for time summing<br>
+
+<code>-b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>- use exact boundaries<br>
+
+</ul>
+
+
+
+<p>
+
+<code><i>dim1</i></code> and <code><i>dim2</i></code> are standard
+
+GrADS dimension expressions whose dimensions must match.
+
+
+
+<p>
+
+<h3>Usage Notes</h3><p>
+
+<p>
+
+<ol>
+
+  <li>The limits and intervals of the summing are set according to the grid coordinates 
+
+    of the default file. If <code><i>dim1</i></code> and <code><i>dim2</i></code> 
+
+    are specified in world coordinates, the coordinates are converted to the nearest 
+
+    integer grid coordinates based on the scaling of the default file. 
+
+    <p>
+
+<li>The end points are given normal weighting, unless the <code>-b</code>
+
+boundary flag is specified. The boundry flag indicates that the
+
+sum should be taken to the exact boundaries specified by
+
+<code><i>dim1</i></code> and <code><i>dim2</i></code>, rather than
+
+the nearest grid points. 
+
+<p>
+
+<li>In the Y dimension, when the boundary is beyond the pole, the
+
+<code>asum</code> function recognizes this and weights appropriately.
+
+To calculate an sum without any weighting, use the <code><a
+
+href="gradfuncsumg.html">sumg</a></code> function.
+
+<p>
+
+
+
+</ol>
+
+
+
+<p>
+
+<h3>Examples</h3>
+
+
+
+</body>
+
+</html>
+
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+

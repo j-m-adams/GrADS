@@ -1,0 +1,230 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+<html>
+<link href="GrADS.css" rel="stylesheet" type="text/css">
+
+<style type="text/css">
+<!--
+.style1 {color: #990000}
+body {
+	background-color: #e0f0ff;
+}
+-->
+</style>
+<body>
+<h2><b>grads | gradsdap &nbsp;&nbsp;&nbsp;<br>
+gradsc | gradsnc | gradshdf | gradsdods</b> &nbsp;&nbsp;</h2>
+<table width="700" border="0">
+  <tr>
+    <td><p class="plaintext">GrADS is an interactive desktop tool for the analysis and 
+      display of earth science data. GrADS is used worldwide and <a href="../downloads.html">freely 
+        available</a> over the internet. 
+      <p class="plaintext"> GrADS implements two data models: a 5-Dimensional gridded data model, and a station data model. In the gridded data model, the dimensions 
+        are presumed to be latitude, longitude, level, time, and <a href="ensembles.html">ensemble</a>. In the station data model, data exist at arbitrary locations in space and time. Four dimensions (longitude, latitude, level, and time) are used as a framework in the station data model to guide which station reports are to be examined. Each data set is placed within 
+        a 4- or 5-Dimensional space by the use of a data descriptor file. Both gridded 
+        and station data may be described. Gridded data may be non-linearly spaced; 
+        gaussian grids and variable resolution ocean model grids are directly supported. 
+        The internal data format in a file may be binary, GRIB1, GRIB2, BUFR, NetCDF, HDF4-SDS, or HDF5. 
+        
+      <p class="plaintext"> Operations may be performed on the data directly, and interactively, 
+        by entering expressions at the command line. The expression syntax allows complex 
+        operations that range over very large amounts of data to be performed with simple 
+        expressions. A rich set of built-in <a
+href="functions.html">functions</a> are provided. In addition, users may add their 
+        own functions as <a href="udf.html">external routines</a> written in any programming 
+        language. 
+    </td>
+  </tr>
+</table>
+<p class="plaintext">The syntax for running GrADS is: 
+
+<ul>
+  <p class="plaintext"><code><em>GrADS_executable </em>&lt;<i> options </i>&gt;</code></p>
+</ul>
+<table width="680" border="0" cellpadding="5" cellspacing="5" class="plaintext">
+  <tr bgcolor="c5d5ff">
+    <td colspan="2" bgcolor="e0f0ff">Beginning with GrADS version 2.0.a8, there is only one choice for <code><em>GrADS_executable, </em></code> a single, fully-featured build: </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td width="75" bgcolor="c5d5ff"><code>grads</code></td>
+    <td>Reads GRIB (version 1 and 2), gridded binary, BUFR, GrADS station 
+      data, NetCDF (classic and NetCDF-4), HDF4-SDS, HDF5, and OPeNDAP (grids and station data)<br>
+    Writes binary, NetCDF (classic and NetCDF-4), GeoTIFF, KML<br>
+    Draws shapefiles</td>
+  </tr>
+</table>
+<table width="680" border="0" cellpadding="5" cellspacing="5" class="plaintext">
+  <tr bgcolor="c5d5ff">
+    <td colspan="2" bgcolor="e0f0ff">For GrADS versions 2.0.a0 through 2.0.a7, the choices for <code><em>GrADS_executable</em></code> are: </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td width="75" bgcolor="c5d5ff"><code>grads</code></td>
+    <td>Reads GRIB (version 1 and 2), gridded binary, BUFR, GrADS station 
+    data, NetCDF, HDF4-SDS<br>
+    Writes binary, NetCDF,  (starting with 2.0.a5) GeoTIFF, KML</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td width="75" bgcolor="c5d5ff"><code>gradsdap</code></td>
+    <td>Reads GRIB (version 1 and 2), gridded binary, BUFR, GrADS station 
+    data, NetCDF, HDF4-SDS, OPeNDAP <br>
+    Writes binary, NetCDF,  (starting with 2.0.a5) GeoTIFF, KML</td>
+  </tr></table>
+<table width="680" border="0" cellpadding="5" cellspacing="5" class="plaintext">
+  <tr bgcolor="c5d5ff">
+    <td colspan="2" bordercolor="#F4F4F4" bgcolor="#E0F0FF">For GrADS version 1.9 and earlier, the choices for <code><em>GrADS_executable</em></code> are: </td>
+  </tr>
+  <tr bgcolor="c5d5ff"> 
+    <td width="100"><code>gradsc</code></td>
+    <td><span class="plaintext">Reads GRIB1, gridded binary, BUFR, 
+      GrADS station data <br>
+      Writes binary, GRIB1</span></td>
+  </tr>
+  <tr bgcolor="c5d5ff"> 
+    <td width="100"><code>gradsnc</code></td>
+    <td><span class="plaintext">Reads GRIB1, gridded binary, BUFR, GrADS station 
+      data, NetCDF<br>
+      Writes binary, GRIB1, NetCDF</span></td>
+  </tr>
+  <tr bgcolor="c5d5ff"> 
+    <td width="100"><code>gradshdf</code></td>
+    <td> 
+      <p><span class="plaintext">Reads GRIB1, gridded binary, BUFR, GrADS station 
+        data, NetCDF, HDF4-SDS<br>
+        Writes binary, GRIB1, HDF-SDS</span></p></td>
+  </tr>
+  <tr bgcolor="c5d5ff"> 
+    <td width="100"><code>gradsdods</code></td>
+    <td><span class="plaintext">Reads GRIB1, gridded binary, BUFR, GrADS station 
+      data, NetCDF, OPeNDAP (aka DODS) <br>
+      Writes binary, GRIB1, NetCDF</span></td>
+  </tr>
+  <tr> 
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td colspan="2">Command line <code><i>options</i></code> are:</td>
+  </tr>
+  <tr bgcolor="c5d5ff"> 
+    <td width="100"><code>-help</code></td>
+    <td>Prints the command line options.</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-a <em>ratio</em></code></td>
+    <td><p>(<span class="style1">GrADS 2.0.a9+</span>) Specifies the aspect ratio of the real page inside GrADS.  A valid <code><em>ratio</em></code>  is the X size divided by the Y size and must be greater than 0.2 and less than 5.0. Page size is scaled so the longer side will always be 11 inches. On startup, GrADS will provide the  page dimensions with the message that begins with &quot;<code>GX Package Initialization: Size = </code>&quot;</p>    </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-b</code></td>
+    <td>Runs GrADS in batch mode. No graphics output window is opened. </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-c <em>'command'</em></code></td>
+    <td>Executes the supplied <code><i>command</i></code> after GrADS has started. </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-C N</code></td>
+    <td>(<span class="style1">GrADS 2.0.a9+</span>) Enables colorization of text displayed in the GrADS command window. N can be 0, 1, or 2. If -C is invoked but N is not provided, color scheme 0 will be used. </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-d <em>gxdname</em></code></td>
+    <td>(<span class="style1">GrADS 2.2.0+</span>) Specifies the name of the <a href="plugins.html">graphics display plug-in</a> (default is &quot;Cairo&quot;)</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-E</code></td>
+    <td>Disables command line editing</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-g <em>geometry</em></code></td>
+    <td><p>Specifies the size of the graphics output window, which is a representation on your computer screen of the real page and may be any size at all. The size of the real page in GrADS is controlled by the -l or -p or -a options. The <code><em>geometry</em></code> argument has the syntax <code>W</code>x<code>H</code>+<code>X</code>+<code>Y</code> , where <code>W</code> is the width of window in pixels, <code>H</code> is the height of window in pixels, <code>X</code> is the starting pixel 
+      point in x, and <code>Y</code> is the starting pixel point in y. Note that <code>X</code> and <code>Y</code> may be negative. </p></td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-h <em>gxpname</em></code></td>
+    <td>(<span class="style1">GrADS 2.2.0+</span>) Specifies the name of the <a href="plugins.html">graphics printing plug-in</a> (default is &quot;Cairo&quot;)</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-H <em>filename</em></code></td>
+    <td>Enables command line logging to <code><em>filename</em></code>. If <code><em>filename</em></code> is not provided, command history written to file $HOME/.grads.log</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-l</code></td>
+    <td>Runs GrADS in landscape mode, sets the &quot;real&quot; page size to 11 x 8.5. </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-m NNN</code></td>
+    <td>Sets metafile buffer size to NNN, which must be an integer. Default value 
+      is 1000000.</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-p</code></td>
+    <td>Runs GrADS in portrait mode, sets the &quot;real&quot; page size to 8.5 x 11. <br>
+      If neither the <code>-l</code> or <code>-p</code> options are used, GrADS 
+      will prompt the user for a preferred mode. </td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>-u</code></td>
+    <td>Unbuffers output, needed for IPC mode</td>
+  </tr>
+  <tr bgcolor="c5d5ff"> 
+    <td width="100"><code>-x</code></td>
+    <td>Generally used with the -c option, causes GrADS to automatically quit 
+      after the supplied <code><i>command</i></code> has been executed.</td>
+  </tr>
+</table>
+<p class="plaintext">Options that do not require arguments may be concatenated. Some examples follow: </p>
+<p class="plaintext"><code>  grads -pb <br>
+  grads -lbxc &quot;myscript.gs&quot; <br>
+  grads -Ca 1.7778 <br>
+  grads -C 2 -a 1.7778 <br>
+  grads -pHm 5000000 -g 1100x850+70+0 <br>
+  grads -pH mysession.log -m 5000000 -g 1100x850+70+0 </code>
+<p>
+<p>&nbsp; 
+<h2><a name="env"></a>Environment Variables </h2>
+<table width="680" border="0" cellpadding="5" cellspacing="5" class="plaintext">
+  <tr> 
+    <td colspan="2"><span class="plaintext">Some environment variables must be 
+      set before starting  GrADS. </span></td>
+  </tr>
+  <tr bgcolor="c5d5ff"> 
+    <td width="55"><span class="plaintext"><code>GADDIR</code>&nbsp;&nbsp;</span></td>
+    <td width="590"><span class="plaintext"> Points to the directory containing 
+      the supplemental font and map files in the GrADS release package. If GADDIR is not set, GrADS will look in the default location, /usr/local/lib/grads/. </span></td>
+  </tr>
+  <tr bgcolor="c5d5ff"> 
+    <td><span class="plaintext"><code>GASCRP</code>&nbsp;</span></td>
+    <td><span class="plaintext"> Points to a list of directories containing GrADS 
+      utility scripts and user scripts. If more than one directory is specified, acceptable delimiters are a space, a semi-colon, colon, or a comma.</span></td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><code>GASHP</code></td>
+    <td>(<span class="style1">GrADS version 2.0.0+</span>) Points to a list of directories containing shapefiles. Put your shapefiles in those directories, and then it won't be necessary to use the full path when drawing or querying the shapefiles. If more than one directory is specified, acceptable delimiters are a space, a semi-colon, colon, or a comma.</td>
+  </tr>
+  <tr bgcolor="c5d5ff">
+    <td><span class="plaintext"><code>GAUDFT</code>&nbsp;</span></td>
+    <td><span class="plaintext">(<span class="style1">GrADS version 1.9 or earlier</span>) Points to the user defined function table. If 
+      this variable is not set, the function table will not be read.</span></td>
+  </tr>
+  <tr bgcolor="c5d5ff"> 
+    <td><span class="plaintext"><code>GAUDPT</code>&nbsp;</span></td>
+    <td><span class="plaintext">(<span class="style1">GrADS version 2.1.1+</span>) This variable identifies the <a href="udpt.html">user defined plug-in table</a>, and should contain a single filename with its full path. GrADS will also look in the directory named by GADDIR for a file named &quot;udpt&quot;. </span> </td>
+  </tr>
+</table>
+<p class="plaintext"> For example: 
+<p> 
+
+  <span class="plaintext"><i>C-shell</i> </span>
+  <p> <span class="plaintext"><code>example% setenv GADDIR /ford1/local/lib/grads<br>
+    example% setenv GASHP $HOME/grads/shapefiles<br>
+example% setenv GASCRP &quot;$HOME/grads/scripts /opt/local/share/grads/library&quot; <br>
+    example% setenv GAUDPT $HOME/grads/udpt<br>
+  </code></span>
+  <p> <span class="plaintext"><i>Bourne shell</i></span>
+  
+<p> <span class="plaintext"><code>example% GADDIR=/ford1/local/lib/grads; export 
+  GADDIR<br>
+  example% GASCRP=$HOME/grads/scripts; export GASCRP<br>
+  example% GAUDPT=$HOME/grads/udpt; export GAUDPT<br>
+</code></span> 
+<p>&nbsp;
+</body>
+</html>

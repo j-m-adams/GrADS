@@ -1,0 +1,25 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<H2><B>set vpage</B></H2><P>
+<code>set vpage <i>xmin xmax ymin ymax</i></code><p>
+This command defines a "virtual page" that fits within the specified
+limits of the real page. All graphics output will be drawn into this
+"virtual page" until another <code>set vpage</code> command is entered. A
+<code>clear</code> command clears the physical page (and any virtual pages
+drawn on it). <p>
+
+When GrADS is first started, it prompts for landscape or portrait mode.
+This defines the size of the real page (11x8.5 or 8.5x11), and the
+dimensions for the virtual page must fit within this real page.<p> 
+
+The <code>set vpage</code> command will define virtual page limits in
+terms of inches (virtual page inches), which are the coordinates that will
+be used in the various commands that require inches to be used. The new
+page limits are printed when the <code>set vpage</code> command completes.
+<p>
+
+To return to the default state where the real page equals the virtual
+page, enter: <p> 
+<dd><code>set vpage off </code><p>
+<H3>Usage Note</H3><P>
+<H3>Examples</H3><P>

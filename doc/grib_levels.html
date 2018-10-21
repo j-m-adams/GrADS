@@ -1,0 +1,410 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GRIB Vertical Levels</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../../assets/NewIGES.css">
+</head>
+
+<body bgcolor="#FFFFFF">
+<p class="plaintextbold">TABLE 3: VERTICAL LEVELS</p>
+<table border="1" cellspacing="0" cellpadding="3">
+  <tr>
+    <td width="48" class="plaintext" valign="top">VALUE</td>
+    <td width="220" class="plaintext" valign="top">DESCRIPTION</td>
+    <td align="center" colspan="2" class="plaintext">REQUIRED PARAMETERS</td>
+    <td width="61" class="plaintext" valign="top">ABBREV.</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">0-99</td>
+    <td width="220" class="plaintext" valign="top">Special Codes </td>
+    <td align="center" colspan="2" class="plaintext">(See Table 3a below)</td>
+    <td width="61" class="plaintext" valign="top">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">100</td>
+    <td width="220" class="plaintext" valign="top">Isobaric level</td>
+    <td align="center" colspan="2" class="plaintext">Pressure in hPa (2 octets)</td>
+    <td width="61" class="plaintext" valign="top">ISBL</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">101</td>
+    <td width="220" class="plaintext" valign="top">Layer between two isobaric 
+      levels</td>
+    <td width="167" align="center" class="plaintext">Pressure of top <br>
+      in kPa</td>
+    <td width="167" align="center" class="plaintext">Pressure of bottom <br>
+      in kPa</td>
+    <td width="61" class="plaintext" valign="top">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">102</td>
+    <td width="220" class="plaintext" valign="top">Mean sea level</td>
+    <td align="center" width="167" class="plaintext">0</td>
+    <td align="center" width="167" class="plaintext">0</td>
+    <td width="61" class="plaintext" valign="top">MSL</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">103</td>
+    <td width="220" class="plaintext" valign="top">Specified altitude above MSL</td>
+    <td align="center" colspan="2" class="plaintext">Altitude in meters</td>
+    <td width="61" class="plaintext" valign="top">GPML</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">104</td>
+    <td width="220" class="plaintext" valign="top">Layer between two specified 
+      altitudes above MSL</td>
+    <td align="center" width="167" class="plaintext">Altitude of top <br>
+      in hm</td>
+    <td align="center" width="167" class="plaintext">Altitude of bottom <br>
+      in hm</td>
+    <td width="61" class="plaintext" valign="top">GPMY</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">105</td>
+    <td width="220" class="plaintext" valign="top">Specified height level above 
+      ground</td>
+    <td align="center" colspan="2" class="plaintext">Height in meters</td>
+    <td width="61" class="plaintext" valign="top">TGL</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">106</td>
+    <td width="220" class="plaintext" valign="top">Layer between two specified 
+      height levels above ground</td>
+    <td align="center" class="plaintext" width="167">Height of top <br>
+      in hm</td>
+    <td align="center" class="plaintext" width="167">Height of bottom <br>
+      in hm</td>
+    <td width="61" class="plaintext" valign="top">HTGY</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">107</td>
+    <td width="220" class="plaintext" valign="top">Sigma level</td>
+    <td align="center" colspan="2" class="plaintext">Sigma value in 1/10000 (2 
+      octets)</td>
+    <td width="61" class="plaintext" valign="top">SIGL</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">108</td>
+    <td width="220" class="plaintext" valign="top">Layer between two sigma levels</td>
+    <td align="center" class="plaintext" width="167">Sigma value at top<br>
+      in 1/100</td>
+    <td align="center" class="plaintext" width="167">Sigma value at bottom <br>
+      in 1/100</td>
+    <td width="61" class="plaintext" valign="top">SIGY</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">109</td>
+    <td width="220" class="plaintext" valign="top">Hybrid level</td>
+    <td align="center" colspan="2" class="plaintext">Level number (2 octets)</td>
+    <td width="61" class="plaintext" valign="top">HYBL</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">110</td>
+    <td width="220" class="plaintext" valign="top">Layer between two hybrid levels</td>
+    <td align="center" class="plaintext" width="167">Level number of top</td>
+    <td align="center" class="plaintext" width="167">Level number of bottom</td>
+    <td width="61" class="plaintext" valign="top">HYBY</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">111</td>
+    <td width="220" class="plaintext" valign="top">depth below land surface</td>
+    <td align="center" colspan="2" class="plaintext">Depth in cm (2 octets)</td>
+    <td width="61" class="plaintext" valign="top">DBLL</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">112</td>
+    <td width="220" class="plaintext" valign="top">Layer between two depths below 
+      land surface</td>
+    <td align="center" class="plaintext" width="167"> 
+      <p>Depth of upper surface<br>
+        in cm</p>
+    </td>
+    <td align="center" class="plaintext" width="167"> 
+      <p>Depth of lower surface<br>
+        in cm</p>
+    </td>
+    <td width="61" class="plaintext" valign="top">DBLY</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">113</td>
+    <td width="220" class="plaintext" valign="top">Isentropic (theta) level</td>
+    <td align="center" colspan="2" class="plaintext">Potential temperature in 
+      K</td>
+    <td width="61" class="plaintext" valign="top">THEL</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">114</td>
+    <td width="220" class="plaintext" valign="top">Layer between two isentropic 
+      levels</td>
+    <td align="center" class="plaintext" width="167"> 
+      <p>475 K minus theta of top <br>
+        in K</p>
+    </td>
+    <td align="center" class="plaintext" width="167">475 K minus theta of bottom 
+      in K</td>
+    <td width="61" class="plaintext" valign="top">THEY</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">115</td>
+    <td width="220" class="plaintext" valign="top">Level at specified pressure 
+      difference from ground</td>
+    <td align="center" colspan="2" class="plaintext">Pressure difference in hPa 
+      (2 octets)</td>
+    <td width="61" class="plaintext" valign="top">SPDL</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">116</td>
+    <td width="220" class="plaintext" valign="top">Layer between two levels at 
+      specified pressure difference from ground</td>
+    <td align="center" class="plaintext" width="167">Pressure difference from 
+      ground to top in hPa</td>
+    <td align="center" class="plaintext" width="167">Pressure difference from 
+      ground to bottom in hPa</td>
+    <td width="61" class="plaintext" valign="top">SPDY</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">117</td>
+    <td width="220" class="plaintext" valign="top">Potential vorticity surface</td>
+    <td align="center" colspan="2" class="plaintext">Potential vorticity value 
+      in units of 10<sup>-6</sup> K m<sup>2</sup>/kg s</td>
+    <td width="61" class="plaintext" valign="top">PVL</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">119</td>
+    <td width="220" class="plaintext" valign="top">ETA level</td>
+    <td align="center" colspan="2" class="plaintext">ETA value in 1/1000 (2 octets)</td>
+    <td width="61" class="plaintext" valign="top">ETAL</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">120</td>
+    <td width="220" class="plaintext" valign="top">Layer between two ETA levels</td>
+    <td align="center" class="plaintext" width="167">ETA value at top<br>
+      in 1/100</td>
+    <td align="center" class="plaintext" width="167">ETA value at bottom <br>
+      in 1/100</td>
+    <td width="61" class="plaintext" valign="top">ETAY</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">121</td>
+    <td width="220" class="plaintext" valign="top">Layer between two isobaric 
+      surfaces (high precision)</td>
+    <td align="center" class="plaintext" width="167">1100 minus pressure of <br>
+      top in hPa</td>
+    <td align="center" class="plaintext" width="167">1100 minus pressure of<br>
+      bottom in hPa</td>
+    <td width="61" class="plaintext" valign="top">IBYH</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">125</td>
+    <td width="220" class="plaintext" valign="top">Specified height level above 
+      ground (high precision) <br>
+    </td>
+    <td align="center" colspan="2" class="plaintext">Height in cm (2 octets)</td>
+    <td width="61" class="plaintext" valign="top">HGLH</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">128</td>
+    <td width="220" class="plaintext" valign="top">Layer between two sigma levels 
+      (high precision) <br>
+    </td>
+    <td align="center" class="plaintext" width="167">1.1 minus sigma of top <br>
+      in 1/1000 of sigma</td>
+    <td align="center" class="plaintext" width="167">1.1 minus sigma of bottom 
+      <br>
+      in 1/1000 of sigma</td>
+    <td width="61" class="plaintext" valign="top">SGYH</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">141</td>
+    <td width="220" class="plaintext" valign="top">Layer between two isobaric 
+      surfaces (mixed precision)</td>
+    <td align="center" class="plaintext" width="167">Pressure of top in hPa</td>
+    <td align="center" class="plaintext" width="167">1100 minus pressure of bottom 
+      in hPa</td>
+    <td width="61" class="plaintext" valign="top">IBYM</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">160</td>
+    <td width="220" class="plaintext" valign="top">Depth below sea level</td>
+    <td align="center" colspan="2" class="plaintext">Depth in m (2 octets)</td>
+    <td width="61" class="plaintext" valign="top">DBSL</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">200</td>
+    <td width="220" class="plaintext" valign="top">Entire atmosphere </td>
+    <td align="center" colspan="2" class="plaintext">0 (2 octets)</td>
+    <td width="61" class="plaintext" valign="top">EATM</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">201</td>
+    <td width="220" class="plaintext" valign="top">Entire ocean</td>
+    <td align="center" colspan="2" class="plaintext">0 (2 octets)</td>
+    <td width="61" class="plaintext" valign="top">EOCN</td>
+  </tr>
+  <tr> 
+    <td width="48" class="plaintext" valign="top">204-244</td>
+    <td width="220" class="plaintext" valign="top">NCEP Special Levels & Layers</td>
+    <td align="center" colspan="2" class="plaintext">See Table 3a</td>
+    <td width="61" class="plaintext" valign="top">&nbsp;</td>
+  </tr>
+</table>
+<p class="plaintextbold">TABLE 3a: SPECIAL VERTICAL LEVELS</p>
+<table width="486" border="1" cellspacing="0" cellpadding="2">
+  <tr>
+    <td width="47" class="plaintext">VALUE</td>
+    <td width="357" class="plaintext">DESCRIPTION</td>
+    <td width="62" class="plaintext">ABBREV.</td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">00 </td>
+    <td width="357" class="plaintext">Reserved</td>
+    <td width="62" class="plaintext">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">01 </td>
+    <td width="357" class="plaintext">Ground or water surface </td>
+    <td width="62" class="plaintext">SFC </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">02 </td>
+    <td width="357" class="plaintext">Cloud base level </td>
+    <td width="62" class="plaintext">CBL</td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">03</td>
+    <td width="357" class="plaintext">Cloud top level</td>
+    <td width="62" class="plaintext"> CTL </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">04 </td>
+    <td width="357" class="plaintext">Level of 0 deg (C) isotherm </td>
+    <td width="62" class="plaintext">0DEG </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">05</td>
+    <td width="357" class="plaintext">Level of adiabatic condensation lifted from 
+      the surface </td>
+    <td width="62" class="plaintext">ADCL </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext"> 06</td>
+    <td width="357" class="plaintext">Maximum wind level </td>
+    <td width="62" class="plaintext">MWSL </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">07</td>
+    <td width="357" class="plaintext">Tropopause </td>
+    <td width="62" class="plaintext">TRO</td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext"> 08 </td>
+    <td width="357" class="plaintext">Nominal top of atmosphere </td>
+    <td width="62" class="plaintext">NTAT </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">09</td>
+    <td width="357" class="plaintext">Sea bottom </td>
+    <td width="62" class="plaintext">SEAB </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">10-19 </td>
+    <td width="357" class="plaintext">Reserved </td>
+    <td width="62" class="plaintext">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">20 </td>
+    <td width="357" class="plaintext">Isothermal level (temperature in 1/100 K 
+      in octets 11 and 12) </td>
+    <td width="62" class="plaintext">TMPL </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">21-99</td>
+    <td width="357" class="plaintext">Reserved </td>
+    <td width="62" class="plaintext">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">204</td>
+    <td width="357" class="plaintext">Highest tropospheric freezing level </td>
+    <td width="62" class="plaintext">HTFL</td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">209 </td>
+    <td width="357" class="plaintext">Boundary layer cloud bottom level </td>
+    <td width="62" class="plaintext">BCBL </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">210 </td>
+    <td width="357" class="plaintext">Boundary layer cloud top level </td>
+    <td width="62" class="plaintext">BCTL </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">211 </td>
+    <td width="357" class="plaintext">Boundary layer cloud layer </td>
+    <td width="62" class="plaintext">BCY </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">212 </td>
+    <td width="357" class="plaintext">Low cloud bottom level </td>
+    <td width="62" class="plaintext">LCBL</td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">213</td>
+    <td width="357" class="plaintext"> Low cloud top level </td>
+    <td width="62" class="plaintext">LCTL </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">214 </td>
+    <td width="357" class="plaintext">Low cloud layer</td>
+    <td width="62" class="plaintext"> LCY </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">222</td>
+    <td width="357" class="plaintext">Middle cloud bottom level </td>
+    <td width="62" class="plaintext">MCBL </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">223 </td>
+    <td width="357" class="plaintext">Middle cloud top level </td>
+    <td width="62" class="plaintext">MCTL </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">224 </td>
+    <td width="357" class="plaintext">Middle cloud layer </td>
+    <td width="62" class="plaintext">MCY</td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">232 </td>
+    <td width="357" class="plaintext">High cloud bottom level </td>
+    <td width="62" class="plaintext">HCBL</td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">233</td>
+    <td width="357" class="plaintext">High cloud top level </td>
+    <td width="62" class="plaintext">HCTL</td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">234 </td>
+    <td width="357" class="plaintext">High cloud layer </td>
+    <td width="62" class="plaintext"> HCY </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">242 </td>
+    <td width="357" class="plaintext">Convective cloud bottom level </td>
+    <td width="62" class="plaintext">CCBL </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">243 </td>
+    <td width="357" class="plaintext">Convective cloud top level </td>
+    <td width="62" class="plaintext">CCTL </td>
+  </tr>
+  <tr> 
+    <td width="47" class="plaintext">244</td>
+    <td width="357" class="plaintext">Convective cloud layer </td>
+    <td width="62" class="plaintext">CCY </td>
+  </tr>
+</table>
+<p>&nbsp;</p><p>&nbsp;</p>
+</body>
+</html>

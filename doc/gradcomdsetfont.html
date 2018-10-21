@@ -1,0 +1,68 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.--><title>GrADS command: set font</title><style type="text/css">
+<!--
+body {
+	background-color: #e0f0ff;
+}
+.style1 {color: #990000}
+.red {
+	color: #900;
+}
+.red {
+	color: #900;
+}
+.red {
+	color: #900;
+}
+.red {
+	color: #900;
+}
+.bold {
+	font-weight: bold;
+	font-style: italic;
+}
+.bold {
+	font-style: italic;
+}
+.bold {
+	font-weight: bold;
+}
+-->
+</style>
+
+<H2><B>set font</B></H2>
+<P>This command allows the user to select the font for subsequent text operations. This command was enhanced for version 2.1, when new font controls were introduced with the addition of  graphics rendering using the Cairo library. 
+<h3>Syntax
+</h3>
+<P><code>set font <i>number</i>                     </code>(<span class="red">GrADS version 2.0* and earlier</span>)<br />
+  <code>set font <i>number</i> &lt;file <i>filename</i>&gt;     </code>(<span class="red">GrADS version 2.1* and later</span>)
+<p>
+<H3>Usage Notes</H3>
+<P>Use font <code><i>number</i></code> 0 through 5 to specify which Hershey font to use. <br />
+Use font <code><i>number</i></code> 6 through 9 for customized font files. See <a href="font.html">Hershey Font Files</a> for more information on how to create these files.<br />
+For all GrADS versions 2.0 and earlier, 0-9 are the only font numbers that are available. 
+<p>Starting with <span class="red">GrADS version 2.1</span>, additional font numbers 10 through 99 are available to <span class="bold">define</span> or <span class="bold">set</span> a Cairo font based on a local font file. When <span class="bold">defining</span> a new font, use the <code>'set font <i>number</i> file <i>filename</i>'</code> syntax. Make sure you include the <code>file</code> keyword followed by the  filename of the local font file, including its full path. Spaces are allowed in  <code><i>filename</i></code>  (see examples below), but be careful that no extra whitespace is added on at the end of the <code><i>filename</i></code> argument (this can happen when using the tab key to fill out a filename instead of typing it out entirely). When <span class="bold">setting</span> a previously-defined font,  use the <code>'set font <i>number</i>'</code> syntax to draw text using that defined font -- it is not necessary to re-define the font every time you want to use it. Defining a new font number will also set the font to be that number. </p>
+<p>If<code> 'set font <i>number</i>' </code>is invoked with a <code><i>number</i></code> between 10 and 99, but that font <code><i>number</i></code> has not yet been defined, a default generic sans-serif font will be used. Similarly, if a user-specified font file cannot be opened or is in an unsupported format, then the display will default to a generic sans-serif font.</p>
+<P>Please read the documentation page on <a href="fontcontrol.html">Font Control in GrADS</a> for more information about using fonts in GrADS version 2.1. 
+<P>It is  possible to <a href="fontcontrol.html">temporarily override the  font</a>  in a string of text by using the back quote character (`) followed by a single-digit font number. To override fonts with 2-digit font numbers, use  back quote with an f (`f) followed by the font number. Examples are below.
+<P>If your build of <span class="red">GrADS version 2.1+</span> is not enabled with the Cairo graphics library, you will get an error message if you use <code><a href="gradcomdsetfont.html">set font</a></code> to try to set a font number greater than 9.
+
+<p>&nbsp;</p>
+<h3>Examples</h3>
+<pre>
+  set font 10 file /Library/Fonts/AmericanTypewriter.ttc<br />  set font 11 file /Library/Fonts/Kannada MN.ttc
+  set font 12 file /System/Library/Fonts/AppleGothic.ttf
+  set font 13 file /usr/share/fonts/default/Type1/a010013l.pfb
+  set font 14 file /usr/share/msttcorefonts/tahoma.ttf
+  set font 15 file /usr/share/X11/fonts/TTF/luximbi.ttf
+
+  set font 20 file /usr/share/fonts/default/ghsostcript/bchr.pfa
+  set font 21 file /usr/share/fonts/default/ghsostcript/bchri.pfa
+  set font 22 file /usr/share/fonts/default/ghsostcript/bchb.pfa
+  set font 23 file /usr/share/fonts/default/ghsostcript/bchbi.pfa
+
+  set font 20
+  draw string 1 1 For emphasizing text, use `f22bold, `f21italic, `f20or `f23both
+
+  set font 0
+  draw string 1 1 `1Use Hershey font 2 to `2emphasize `1a particular word 
+  </pre>

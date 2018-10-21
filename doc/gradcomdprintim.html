@@ -1,0 +1,99 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Commands: printim</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+body {
+	background-color: #e0f0ff;
+}
+</style>
+</head>
+<body text="#000000">
+
+<h2><b>printim</b></h2>
+<p>Beginning with GrADS version 2.1, the <code>printim</code> command has been deprecated and is  an alias for <code><a href="gradcomdgxprint.html">gxprint</a></code>.  </p>
+<p>
+The <code>printim</code> command will produce a PNG, GIF, or JPG formatted
+image file based on the current contents of the metabuffer, which is
+usually the stuff displayed on the screen, minus any widgets.  The
+syntax is:
+
+<p>
+<ul>
+  <code>printim <i>filename options</i></code> 
+</ul>
+
+<p>
+where: 
+<p>
+<ul>
+  <code><i>filename:</i>&nbsp;&nbsp;</code>The name of the output file. If this 
+  file exists, it will be replaced. 
+  <br>
+  <code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>If the filename ends with &quot;.png&quot; or &quot;.PNG&quot; then GrADS will automatically create the image in PNG format<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>If the filename ends with &quot;.gif&quot; or &quot;.GIF&quot; then GrADS will automatically create the image in GIF format<br>
+  <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>If the filename ends with &quot;.jpg&quot; or &quot;.JPG&quot; then GrADS will automatically create the image in JPEG format<br>
+  <p> <code><i>options:</i>&nbsp;&nbsp;&nbsp;png </code> 
+    - produce PNG output (default)<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gif </code>
+     - produce GIF output <br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jpg </code>
+     - produce JPEG output <br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;black </code>
+     - use black background (default is current display setting)<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;white </code>
+     - use white background (default is current display setting)<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xNNN </code> 
+    - horizontal size in NNN pixels<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yNNN </code> 
+    - vertical size in NNN pixels<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-t NN </code> 
+    - color number NN is transparent<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-b <i>bgImage</i> </code> 
+    - Image file <code><i>bgImage</i></code> s included in the background of the output. <br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-f <i>fgImage</i> </code> 
+    - Image file <code><i>fgImage</i></code> is included in the foreground of the output.<br>
+  </p>
+</ul>
+<p> One or more <code><i>options</i></code> may be given in any order. <code><i>bgImage</i></code> 
+  and <code><i>fgImage</i></code> must be PNG format. 
+<p>
+<h3>Usage Notes</h3>
+
+<ol>
+<li><code>printim</code> works with GrADS version 1.8 (or higher). Beginning with version 2.1, printim is an alias for <code><a href="gradcomdgxprint.html">gxprint</a></code>. 
+<li><code>printim</code> can be used while in batch mode. 
+<li>The option for JPEG formatted output became 'official' with version 2.0.a5. 
+<li>The file names for <code><i>bgImage</i></code> and <code><i>fgImage</i></code> should not contain any upper case letters. 
+</ol>
+
+<p>
+<h3>Examples </h3>
+
+<p>
+The following command produces a 1000x800 PNG image into file out.png:
+<p>
+<ul><code>printim out.png x1000 y800</code></ul>
+
+<p>
+This command produces a 800x600 GIF image, with a white background, 
+into file gifimage.out:
+<p>
+<ul>
+  <p><code>printim gifimage.out gif x800 y600 white</code></p>
+</ul>
+  
+<p>This command produces a GIF image with transparent color 0 and a background 
+  image mybkg.png. This means that in image.gif, the background image mybkg.png 
+  will be seen wherever the color 0 (background) appeared in the current display. 
+</p>
+<ul>
+  <p><code>printim image.gif -b mybkg.png -t 0 </code><br>
+  
+</ul>  
+
+</body>
+</html>
+

@@ -1,0 +1,1595 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GRIB Parameter Table</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="../../assets/NewIGES.css">
+</head>
+
+<body bgcolor="#FFFFFF">
+<p class="plaintextbold">TABLE 2: PARAMETERS &amp; UNITS (Version 2) (PDS Octet 
+  9)</p>
+<table border="1" cellspacing="0" cellpadding="2">
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">VALUE</td>
+    <td width="385" class="plaintext">PARAMETER (<b><a href="#notes">*</a></b> 
+      means see <a href="#notes">Notes</a> at bottom of table)</td>
+    <td width="92" class="plaintext" valign="top">UNITS</td>
+    <td width="77" class="plaintext" valign="top">ABBREV</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">000</td>
+    <td width="385" class="plaintext">Reserved</td>
+    <td width="92" class="plaintext" valign="top">&nbsp;</td>
+    <td width="77" class="plaintext" valign="top">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">001</td>
+    <td width="385" class="plaintext">Pressure</td>
+    <td width="92" class="plaintext" valign="top">Pa</td>
+    <td width="77" class="plaintext" valign="top">PRES</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">002</td>
+    <td width="385" class="plaintext">Pressure Reduced to Mean Sea Level</td>
+    <td width="92" class="plaintext" valign="top">Pa</td>
+    <td width="77" class="plaintext" valign="top">PRMSL</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">003</td>
+    <td width="385" class="plaintext">Pressure Tendency</td>
+    <td width="92" class="plaintext" valign="top">Pa/s</td>
+    <td width="77" class="plaintext" valign="top">PTEND</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">004</td>
+    <td width="385" class="plaintext">Potential Vorticity</td>
+    <td width="92" class="plaintext" valign="top">K m<sup>2</sup>/kg s</td>
+    <td width="77" class="plaintext" valign="top">PVORT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">005</td>
+    <td width="385" class="plaintext">ICAO Standard Atmosphere Reference Height</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">ICAHT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">006</td>
+    <td width="385" class="plaintext">Geopotential</td>
+    <td width="92" class="plaintext" valign="top">m<sup>2</sup>/s<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">GP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">007</td>
+    <td width="385" class="plaintext">Geopotential Height</td>
+    <td width="92" class="plaintext" valign="top">gpm</td>
+    <td width="77" class="plaintext" valign="top">HGT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">008</td>
+    <td width="385" class="plaintext">Geometric Height</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">DIST</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">009</td>
+    <td width="385" class="plaintext">Standard Deviation of Height</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">HSTDV </td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">010</td>
+    <td width="385" class="plaintext">Total Ozone </td>
+    <td width="92" class="plaintext" valign="top">Dobson </td>
+    <td width="77" class="plaintext" valign="top">TOZNE </td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">011</td>
+    <td width="385" class="plaintext">Temperature</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">TMP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">012</td>
+    <td width="385" class="plaintext">Virtual Temperature</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">VTMP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">013</td>
+    <td width="385" class="plaintext">Potential Temperature</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">POT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">014</td>
+    <td width="385" class="plaintext">Pseudo-Adiabatic Potential Temperature or 
+      <br>
+      Equivalent Potential Temperature </td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">EPOT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">015</td>
+    <td width="385" class="plaintext">Maximum Temperature</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">TMAX</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">016</td>
+    <td width="385" class="plaintext">Minimum Temperature</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">TMIN</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">017</td>
+    <td width="385" class="plaintext">Dew Point Temperature</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">DPT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">018</td>
+    <td width="385" class="plaintext">Dew Point Depression (or Deficit)</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">DEPR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">019</td>
+    <td width="385" class="plaintext">Lapse Rate</td>
+    <td width="92" class="plaintext" valign="top">K/m</td>
+    <td width="77" class="plaintext" valign="top">LAPR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">020</td>
+    <td width="385" class="plaintext">Visibility</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">VIS</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">021</td>
+    <td width="385" class="plaintext">Radar Spectra (1) <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">RDSP1</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">022</td>
+    <td width="385" class="plaintext">Radar Spectra (2) <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">RDSP2</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">023</td>
+    <td width="385" class="plaintext">Radar Spectra (3) <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">RDSP3</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">024</td>
+    <td width="385" class="plaintext">Parcel Lifted Index (to 500 hPa)</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">PLI</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">025</td>
+    <td width="385" class="plaintext">Temperature Anomaly</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">TMPA</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">026</td>
+    <td width="385" class="plaintext">Pressure Anomaly</td>
+    <td width="92" class="plaintext" valign="top">Pa</td>
+    <td width="77" class="plaintext" valign="top">PRESA</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">027</td>
+    <td width="385" class="plaintext">Geopotential Height Anomaly</td>
+    <td width="92" class="plaintext" valign="top">gpm</td>
+    <td width="77" class="plaintext" valign="top">GPA</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">028</td>
+    <td width="385" class="plaintext">Wave Spectra (1) <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">WVSP1</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">029</td>
+    <td width="385" class="plaintext">Wave Spectra (2) <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">WVSP2</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">030</td>
+    <td width="385" class="plaintext">Wave Spectra (3) <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">WVSP3</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">031</td>
+    <td width="385" class="plaintext">Wind Direction (from which blowing)</td>
+    <td width="92" class="plaintext" valign="top">deg true</td>
+    <td width="77" class="plaintext" valign="top">WDIR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">032</td>
+    <td width="385" class="plaintext">Wind Speed</td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">WIND</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">033</td>
+    <td width="385" class="plaintext">U-Component of Wind <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">UGRD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">034</td>
+    <td width="385" class="plaintext">V-Component of Wind <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">VGRD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">035</td>
+    <td width="385" class="plaintext">Stream Function <b><a href="#notes">*</a></b> 
+    </td>
+    <td width="92" class="plaintext" valign="top">m<sup>2</sup>/s</td>
+    <td width="77" class="plaintext" valign="top">STRM</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">036</td>
+    <td width="385" class="plaintext">Velocity Potential</td>
+    <td width="92" class="plaintext" valign="top">m<sup>2</sup>/s</td>
+    <td width="77" class="plaintext" valign="top">VPOT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">037</td>
+    <td width="385" class="plaintext">Montgomery Stream Function</td>
+    <td width="92" class="plaintext" valign="top">m<sup>2</sup>/s<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">MNTSF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">038</td>
+    <td width="385" class="plaintext">Sigma Coordinate Vertical Velocity</td>
+    <td width="92" class="plaintext" valign="top">/s</td>
+    <td width="77" class="plaintext" valign="top">SGCVV</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">039</td>
+    <td width="385" class="plaintext">Vertical Velocity (pressure)</td>
+    <td width="92" class="plaintext" valign="top">Pa/s</td>
+    <td width="77" class="plaintext" valign="top">VVEL</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">040</td>
+    <td width="385" class="plaintext">Vertical Velocity (geometric</td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">DZDT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">041</td>
+    <td width="385" class="plaintext">Absolute Vorticity</td>
+    <td width="92" class="plaintext" valign="top">/s</td>
+    <td width="77" class="plaintext" valign="top">ABSV</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">042</td>
+    <td width="385" class="plaintext">Absolute Divergence</td>
+    <td width="92" class="plaintext" valign="top">/s</td>
+    <td width="77" class="plaintext" valign="top">ABSD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">043</td>
+    <td width="385" class="plaintext">Relative Vorticity</td>
+    <td width="92" class="plaintext" valign="top">/s</td>
+    <td width="77" class="plaintext" valign="top">RELV</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">044</td>
+    <td width="385" class="plaintext">Relative Divergence</td>
+    <td width="92" class="plaintext" valign="top">/s</td>
+    <td width="77" class="plaintext" valign="top">RELD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">045</td>
+    <td width="385" class="plaintext">U-Component of Vertical Shear <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">/s</td>
+    <td width="77" class="plaintext" valign="top"> 
+      <p>VUCSH</p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">046</td>
+    <td width="385" class="plaintext">V-Component of Vertical Shear <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">/s</td>
+    <td width="77" class="plaintext" valign="top">VVCSH</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">047</td>
+    <td width="385" class="plaintext">Direction of Current</td>
+    <td width="92" class="plaintext" valign="top">deg true</td>
+    <td width="77" class="plaintext" valign="top">DIRC</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">048</td>
+    <td width="385" class="plaintext">Speed of Current</td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">SPC</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">049</td>
+    <td width="385" class="plaintext">U-Component of Current <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">UOGRD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">050</td>
+    <td width="385" class="plaintext">V-Component of Current <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">VOGRD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">051</td>
+    <td width="385" class="plaintext">Specific Humidity</td>
+    <td width="92" class="plaintext" valign="top">kg/kg</td>
+    <td width="77" class="plaintext" valign="top">SPFH</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">052</td>
+    <td width="385" class="plaintext">Relative Humidity</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">RH</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">053</td>
+    <td width="385" class="plaintext">Humidity Mixing Ration</td>
+    <td width="92" class="plaintext" valign="top">kg/kg</td>
+    <td width="77" class="plaintext" valign="top">MIXR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">054</td>
+    <td width="385" class="plaintext">Precipitable Water</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">PWAT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">055</td>
+    <td width="385" class="plaintext">Vapor Pressure</td>
+    <td width="92" class="plaintext" valign="top">Pa</td>
+    <td width="77" class="plaintext" valign="top">VAPP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">056</td>
+    <td width="385" class="plaintext">Saturation Deficit</td>
+    <td width="92" class="plaintext" valign="top">Pa</td>
+    <td width="77" class="plaintext" valign="top">SATD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">057</td>
+    <td width="385" class="plaintext">Evaporation</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">EVP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">058</td>
+    <td width="385" class="plaintext">Cloud Ice</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">CICE</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">059</td>
+    <td width="385" class="plaintext">Precipitation Rate</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup>/s</td>
+    <td width="77" class="plaintext" valign="top">PRATE</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">060</td>
+    <td width="385" class="plaintext">Thunderstorm Probability</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">TSTM</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">061</td>
+    <td width="385" class="plaintext">Total Precipitation</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">APCP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">062</td>
+    <td width="385" class="plaintext">Largs Scale Precipitation (non-convective)</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">NCPCP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">063</td>
+    <td width="385" class="plaintext">Convective Precipitation</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">ACPCP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">064</td>
+    <td width="385" class="plaintext">Snowfall Rate Water Equivalent</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup>/s</td>
+    <td width="77" class="plaintext" valign="top">SRWEQ</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">065</td>
+    <td width="385" class="plaintext">Water Equivalent Accumulated Snow Depth</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">WEASD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">066</td>
+    <td width="385" class="plaintext">Snow Depth</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">SNOD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">067</td>
+    <td width="385" class="plaintext">Mixed Layer Depth</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">MIXHT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">068</td>
+    <td width="385" class="plaintext">Transient Thermocline Depth</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">TTHDP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">069</td>
+    <td width="385" class="plaintext">Main Thermocline Depth</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">MTHD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">070</td>
+    <td width="385" class="plaintext">Main Thermocline Anomaly</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">MTHA</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">071</td>
+    <td width="385" class="plaintext">Total Cloud Cover</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">TCDC</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">072</td>
+    <td width="385" class="plaintext">Convective Cloud Cover</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">CDCON</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">073</td>
+    <td width="385" class="plaintext">Low Cloud Cover</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">LCDC</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">074</td>
+    <td width="385" class="plaintext">Medium Cloud Cover</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">MCDC</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">075</td>
+    <td width="385" class="plaintext">Hight Cloud Cover</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">HCDC</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">076</td>
+    <td width="385" class="plaintext">Cloud Water</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">CWAT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">077</td>
+    <td width="385" class="plaintext">Best Lifted Index (to 500 hPa)</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">BLI</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">078</td>
+    <td width="385" class="plaintext">Convective Snow</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">SNOC</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">079</td>
+    <td width="385" class="plaintext">Large Scale Snow (non-convective)</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">SNOL</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">080</td>
+    <td width="385" class="plaintext">Water Temperature</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">WTMP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">081</td>
+    <td width="385" class="plaintext">Land Cover (land=1, Sea=0) <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">fraction</td>
+    <td width="77" class="plaintext" valign="top">LAND</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">082</td>
+    <td width="385" class="plaintext">Deviation of Sea Level From Mean</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">DSLM</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">083</td>
+    <td width="385" class="plaintext">Surface Roughness</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">SFCR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">084</td>
+    <td width="385" class="plaintext">Albedo</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">ALBDO</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">085</td>
+    <td width="385" class="plaintext">Soil Temperature</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">TSOIL</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">086</td>
+    <td width="385" class="plaintext">Soil Moisture Content</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">SOILM</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">087</td>
+    <td width="385" class="plaintext">Vegetation</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">VEG</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">088</td>
+    <td width="385" class="plaintext">Salinity</td>
+    <td width="92" class="plaintext" valign="top">kg/kg</td>
+    <td width="77" class="plaintext" valign="top">SALTY</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">089</td>
+    <td width="385" class="plaintext">Density</td>
+    <td width="92" class="plaintext" valign="top">kg/m3</td>
+    <td width="77" class="plaintext" valign="top">DEN</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">090</td>
+    <td width="385" class="plaintext">Water Runoff</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">WATR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">091</td>
+    <td width="385" class="plaintext">Ice Cover (ice=1, no ice=0) <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">fraction</td>
+    <td width="77" class="plaintext" valign="top">ICEC</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">092</td>
+    <td width="385" class="plaintext">Ice Thickness</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">ICETK</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">093</td>
+    <td width="385" class="plaintext">Direction of Ice Drift</td>
+    <td width="92" class="plaintext" valign="top">deg true</td>
+    <td width="77" class="plaintext" valign="top">DICED</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">094</td>
+    <td width="385" class="plaintext">Speed of Ice Drift</td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">SICED</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">095</td>
+    <td width="385" class="plaintext">U-Component of Ice Drift <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">UICE</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">096</td>
+    <td width="385" class="plaintext">V-Component of Ice Drift <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">VICE</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">097</td>
+    <td width="385" class="plaintext">Ice Growth Rate</td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">ICEG</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">098</td>
+    <td width="385" class="plaintext">Ice Divergence</td>
+    <td width="92" class="plaintext" valign="top">/s</td>
+    <td width="77" class="plaintext" valign="top">ICED</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">099</td>
+    <td width="385" class="plaintext">Snow Melt</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">SNOM</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">100</td>
+    <td width="385" class="plaintext">Significant Height of Combined Wind Waves 
+      and Swell</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup>m</td>
+    <td width="77" class="plaintext" valign="top">HTSGW</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">101</td>
+    <td width="385" class="plaintext">Direction of Wind Waves (from which)</td>
+    <td width="92" class="plaintext" valign="top">deg true</td>
+    <td width="77" class="plaintext" valign="top">WVDIR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">102</td>
+    <td width="385" class="plaintext">Significant Height of Wind Waves</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">WVHGT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">103</td>
+    <td width="385" class="plaintext">Mean Period of Wind Waves</td>
+    <td width="92" class="plaintext" valign="top">s</td>
+    <td width="77" class="plaintext" valign="top">WVPER</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">104</td>
+    <td width="385" class="plaintext">Direction of Swell Waves</td>
+    <td width="92" class="plaintext" valign="top">deg true</td>
+    <td width="77" class="plaintext" valign="top">SWDIR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">105</td>
+    <td width="385" class="plaintext">Significant Height of Swell Waves</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">SWELL</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">106</td>
+    <td width="385" class="plaintext">Mean Period of Swell Waves</td>
+    <td width="92" class="plaintext" valign="top">s</td>
+    <td width="77" class="plaintext" valign="top">SWPER</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">107</td>
+    <td width="385" class="plaintext">Primary Wave Direction</td>
+    <td width="92" class="plaintext" valign="top">deg true</td>
+    <td width="77" class="plaintext" valign="top">DIRPW</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">108</td>
+    <td width="385" class="plaintext">Primary Wave Mean Period</td>
+    <td width="92" class="plaintext" valign="top">s</td>
+    <td width="77" class="plaintext" valign="top">PERPW</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">109</td>
+    <td width="385" class="plaintext">Secondary Wave Direction</td>
+    <td width="92" class="plaintext" valign="top">deg true</td>
+    <td width="77" class="plaintext" valign="top">DIRSW</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">110</td>
+    <td width="385" class="plaintext">Secondary Wave Mean Period</td>
+    <td width="92" class="plaintext" valign="top">s</td>
+    <td width="77" class="plaintext" valign="top">PERSW</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">111</td>
+    <td width="385" class="plaintext">Net Short Wave Radiation at Surface <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">NSWRS</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">112</td>
+    <td width="385" class="plaintext">Net Long Wave Radiation at Surface <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m2</td>
+    <td width="77" class="plaintext" valign="top">NLWRS</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">113</td>
+    <td width="385" class="plaintext">Net Short Wave Radiation at Top of Atmosphere 
+      <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">NSWRT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">114</td>
+    <td width="385" class="plaintext">Net Long Wave Radiation at Top of Atmosphere 
+      <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">NLWRT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">115</td>
+    <td width="385" class="plaintext">Long Wave Radiation Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">LWAVR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">116</td>
+    <td width="385" class="plaintext">Short Wave Radiation Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">SWAVR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">117</td>
+    <td width="385" class="plaintext">Global Radiation Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">GRAD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">118</td>
+    <td width="385" class="plaintext">Brightness Temperature</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">BRTMP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">119</td>
+    <td width="385" class="plaintext">Radiance (with respect to Wave Number)</td>
+    <td width="92" class="plaintext" valign="top">W/m/sr</td>
+    <td width="77" class="plaintext" valign="top">LWRAD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">120</td>
+    <td width="385" class="plaintext">Radiance (with respect to Wave Length)</td>
+    <td width="92" class="plaintext" valign="top">W/m3/sr</td>
+    <td width="77" class="plaintext" valign="top">SWRAD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">121</td>
+    <td width="385" class="plaintext">Latent Heat Net Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">LHTFL</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">122</td>
+    <td width="385" class="plaintext">Sensible Heat Net Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">SHTFL</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">123</td>
+    <td width="385" class="plaintext">Boundary Layer Dissipation</td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">BLYDP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">124</td>
+    <td width="385" class="plaintext">U-Component of Momentum Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">N/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">UFLX</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">125</td>
+    <td width="385" class="plaintext">V-Component of Momentum Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">N/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">VFLX</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">126</td>
+    <td width="385" class="plaintext">Wind Mixing Energy</td>
+    <td width="92" class="plaintext" valign="top">J</td>
+    <td width="77" class="plaintext" valign="top">WMIXE</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">127</td>
+    <td width="385" class="plaintext">Image Data</td>
+    <td width="92" class="plaintext" valign="top">&nbsp;</td>
+    <td width="77" class="plaintext" valign="top">IMGD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">128</td>
+    <td width="385" class="plaintext">Mean Sea Level Pressure <br>
+      (Standard Atmosphere Reduction)</td>
+    <td width="92" class="plaintext" valign="top">Pa</td>
+    <td width="77" class="plaintext" valign="top">MSLSA</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">129</td>
+    <td width="385" class="plaintext">Mean Sea Level Pressure<br>
+      (MAPS System Reduction)<br>
+    </td>
+    <td width="92" class="plaintext" valign="top">Pa</td>
+    <td width="77" class="plaintext" valign="top">MSLMA</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">130</td>
+    <td width="385" class="plaintext">Mean Sea Level Pressure<br>
+      (ETA Model Reduction)</td>
+    <td width="92" class="plaintext" valign="top">Pa</td>
+    <td width="77" class="plaintext" valign="top">MSLET</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">131</td>
+    <td width="385" class="plaintext">Surface Lifted Index</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">LFTX</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">132</td>
+    <td width="385" class="plaintext">Best (4-Layer) Lifted Index</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">4LFTX</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">133</td>
+    <td width="385" class="plaintext">K Index</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">KX</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">134</td>
+    <td width="385" class="plaintext">SWEAT Index</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">SX</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">135</td>
+    <td width="385" class="plaintext">Horizontal Moisture Divergence</td>
+    <td width="92" class="plaintext" valign="top">kg/kg/s</td>
+    <td width="77" class="plaintext" valign="top">MCONV</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">136</td>
+    <td width="385" class="plaintext">Vertical Speed Shear</td>
+    <td width="92" class="plaintext" valign="top">/s</td>
+    <td width="77" class="plaintext" valign="top">VWSH</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">137</td>
+    <td width="385" class="plaintext">3-hr Pressure Tendency<br>
+      (Standard Atmosphere Reduction)</td>
+    <td width="92" class="plaintext" valign="top">Pa/s</td>
+    <td width="77" class="plaintext" valign="top">TSLSA</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">138</td>
+    <td width="385" class="plaintext">Brunt-Vaisala Frequency (squared)</td>
+    <td width="92" class="plaintext" valign="top">/s<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">BVF2</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">139</td>
+    <td width="385" class="plaintext">Potential Vorticity (density weighted)</td>
+    <td width="92" class="plaintext" valign="top">/s/m</td>
+    <td width="77" class="plaintext" valign="top">PVMW</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">140</td>
+    <td width="385" class="plaintext">Categorical Rain (yes=1, no=0)</td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">CRAIN</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">141</td>
+    <td width="385" class="plaintext">Categorical Freezing Rain (yes=1, no=0)</td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">CFRZR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">142</td>
+    <td width="385" class="plaintext">Categorical Ice Pellets (yes=1, no=0)</td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">CICEP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">143</td>
+    <td width="385" class="plaintext">Categorical Snow (yes=1, no=0)</td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">CSNOW</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">144</td>
+    <td width="385" class="plaintext">Volumetric Soil Moisture Content</td>
+    <td width="92" class="plaintext" valign="top">fraction</td>
+    <td width="77" class="plaintext" valign="top">SOILW</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">145</td>
+    <td width="385" class="plaintext">Potential Evaporation Rate</td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">PEVPR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">146</td>
+    <td width="385" class="plaintext">Cloud Workfunction</td>
+    <td width="92" class="plaintext" valign="top">J/kg</td>
+    <td width="77" class="plaintext" valign="top">CWORK</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">147</td>
+    <td width="385" class="plaintext">Zonal Flux of Gravity Wave Stress</td>
+    <td width="92" class="plaintext" valign="top">N/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">UGWD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">148</td>
+    <td width="385" class="plaintext">Meridional Flux of Gravity Wave Stress</td>
+    <td width="92" class="plaintext" valign="top">N/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top"> VGWD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">149</td>
+    <td width="385" class="plaintext">Potential Vorticity</td>
+    <td width="92" class="plaintext" valign="top">m<sup>2</sup>/s/kg</td>
+    <td width="77" class="plaintext" valign="top">PV</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">150</td>
+    <td width="385" class="plaintext">Covariance Between Meridional and Zonal 
+      Wind.<br>
+      Defined as [uv]-[u][v], where "[]" indicates the mean over the indicated 
+      time span. </td>
+    <td width="92" class="plaintext" valign="top">m<sup>2</sup>/s<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">COVMZ</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">151</td>
+    <td width="385" class="plaintext">Covariance Between Temperature and Zonal 
+      Wind.<br>
+      Defined as [uT]-[u][T], <br>
+      where "[]" indicates the mean over the indicated time span. </td>
+    <td width="92" class="plaintext" valign="top">K m/s</td>
+    <td width="77" class="plaintext" valign="top">COVTZ</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">152</td>
+    <td width="385" class="plaintext">Covariance Between Temperature and Meridional 
+      Wind.<br>
+      Defined as [vT]-[v][T], <br>
+      where "[]" indicates the mean over the indicated time span. </td>
+    <td width="92" class="plaintext" valign="top">K m/s</td>
+    <td width="77" class="plaintext" valign="top">COVTM</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">153</td>
+    <td width="385" class="plaintext">Cloud Water</td>
+    <td width="92" class="plaintext" valign="top">kg/kg</td>
+    <td width="77" class="plaintext" valign="top">CLWMR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">154</td>
+    <td width="385" class="plaintext">Ozone Mixing Ratio</td>
+    <td width="92" class="plaintext" valign="top">kg/kg</td>
+    <td width="77" class="plaintext" valign="top">O3MR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">155</td>
+    <td width="385" class="plaintext">Ground Heat Flux</td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">GFLUX</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">156</td>
+    <td width="385" class="plaintext">Convective Inhibition</td>
+    <td width="92" class="plaintext" valign="top">J/kg</td>
+    <td width="77" class="plaintext" valign="top">CIN</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">157</td>
+    <td width="385" class="plaintext">Convective Available Potential Energy</td>
+    <td width="92" class="plaintext" valign="top">J/kg</td>
+    <td width="77" class="plaintext" valign="top">CAPE</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">158</td>
+    <td width="385" class="plaintext">Turbulent Kinetic Energy</td>
+    <td width="92" class="plaintext" valign="top">J/kg</td>
+    <td width="77" class="plaintext" valign="top">TKE</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">159</td>
+    <td width="385" class="plaintext">Condensation Pressure of Parcel Lifted from 
+      Indicated Surface</td>
+    <td width="92" class="plaintext" valign="top">Pa</td>
+    <td width="77" class="plaintext" valign="top">CONDP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">160</td>
+    <td width="385" class="plaintext">Clear Sky Upward Short Wave Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">CSUSF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">161</td>
+    <td width="385" class="plaintext">Clear Sky Downward Short Wave Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">CSDSF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">162</td>
+    <td width="385" class="plaintext">Clear Sky Upward Long Wave Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">CSULF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">163</td>
+    <td width="385" class="plaintext">Clear Sky Downward Long Wave Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">CSDLF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">164</td>
+    <td width="385" class="plaintext">Cloud Forcing Net Short Wave Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">CFNSF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">165</td>
+    <td width="385" class="plaintext">Cloud Forcing Net Long Wave Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">CFNLF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">166</td>
+    <td width="385" class="plaintext">Visible Beam Downward Short Wave Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">VBDSF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">167</td>
+    <td width="385" class="plaintext">Visible Diffuse Downward Short Wave Flux 
+      <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">VDDSF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">168</td>
+    <td width="385" class="plaintext">Near IR Beam Downward Short Wave Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">NBDSF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">169</td>
+    <td width="385" class="plaintext">Near IR Diffuse Downward Short Wave Flux 
+      <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">NDDSF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">170</td>
+    <td width="385" class="plaintext">Rain Water Mixing Ratio</td>
+    <td width="92" class="plaintext" valign="top">kg/kg</td>
+    <td width="77" class="plaintext" valign="top">RWMR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">171</td>
+    <td width="385" class="plaintext">Snow Mixing Ratio</td>
+    <td width="92" class="plaintext" valign="top">kg/kg</td>
+    <td width="77" class="plaintext" valign="top">SNMR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">172</td>
+    <td width="385" class="plaintext">Momentum Flux</td>
+    <td width="92" class="plaintext" valign="top">N/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">MFLX</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">173</td>
+    <td width="385" class="plaintext">Mass Point Model Surface</td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">LMH</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">174</td>
+    <td width="385" class="plaintext">Velocity Point Model Surface</td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">LMV</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">175</td>
+    <td width="385" class="plaintext">Model Layer Number (from bottom up)</td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">MLYNO</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">176</td>
+    <td width="385" class="plaintext">Latitude (-90 to +90)</td>
+    <td width="92" class="plaintext" valign="top">deg</td>
+    <td width="77" class="plaintext" valign="top">NLAT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">177</td>
+    <td width="385" class="plaintext">East Longitude (0 to 360)</td>
+    <td width="92" class="plaintext" valign="top">deg</td>
+    <td width="77" class="plaintext" valign="top">ELON</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">178</td>
+    <td width="385" class="plaintext">Ice Mixing Ratio</td>
+    <td width="92" class="plaintext" valign="top">kg/kg</td>
+    <td width="77" class="plaintext" valign="top">ICMR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">179</td>
+    <td width="385" class="plaintext">Graupel Mixing Ratio</td>
+    <td width="92" class="plaintext" valign="top">kg/kg</td>
+    <td width="77" class="plaintext" valign="top">GRMR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">181</td>
+    <td width="385" class="plaintext">X-Gradient of Log Pressure</td>
+    <td width="92" class="plaintext" valign="top">/m</td>
+    <td width="77" class="plaintext" valign="top">LPSX</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">182</td>
+    <td width="385" class="plaintext">Y-Gradient of Log Pressure</td>
+    <td width="92" class="plaintext" valign="top">/m</td>
+    <td width="77" class="plaintext" valign="top">LPSY</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">183</td>
+    <td width="385" class="plaintext">X-Gradient of Height</td>
+    <td width="92" class="plaintext" valign="top">m/m</td>
+    <td width="77" class="plaintext" valign="top">HGTX</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">184</td>
+    <td width="385" class="plaintext">Y-Gradient of Height</td>
+    <td width="92" class="plaintext" valign="top">m/m</td>
+    <td width="77" class="plaintext" valign="top">HGTY</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">185</td>
+    <td width="385" class="plaintext">Turbulence SIGMET/AIRMET</td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">TURB</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">186</td>
+    <td width="385" class="plaintext">Icing SIGMET/AIRMET</td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">ICNG</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">187</td>
+    <td width="385" class="plaintext">Lightning</td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">LTNG</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">189</td>
+    <td width="385" class="plaintext">Virtual Potential Temperature</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">VPTMP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">190</td>
+    <td width="385" class="plaintext">Storm Relative Helicity</td>
+    <td width="92" class="plaintext" valign="top">m<sup>2</sup>/s<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">HLCY</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">191</td>
+    <td width="385" class="plaintext">Probability from Ensemble</td>
+    <td width="92" class="plaintext" valign="top">&nbsp;</td>
+    <td width="77" class="plaintext" valign="top">PROB</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">192</td>
+    <td width="385" class="plaintext">Probability from Ensemble <br>
+      (Normalized w.r.t. Climate Expectancy)</td>
+    <td width="92" class="plaintext" valign="top">&nbsp;</td>
+    <td width="77" class="plaintext" valign="top">PROBN</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">193</td>
+    <td width="385" class="plaintext">Probability of Precipitation</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">POP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">194</td>
+    <td width="385" class="plaintext">Probability of Frozen Precipitation</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">CPOFP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">195</td>
+    <td width="385" class="plaintext">Probability of Freezing Precipitation</td>
+    <td width="92" class="plaintext" valign="top"> 
+      <p>%</p>
+    </td>
+    <td width="77" class="plaintext" valign="top">CPOZP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">196</td>
+    <td width="385" class="plaintext">U-Component of Storm Motion <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">USTM</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">197</td>
+    <td width="385" class="plaintext">V-Component of Storm Motion <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">VSTM</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">198</td>
+    <td width="385" class="plaintext">Number Concentration for Ice Particles</td>
+    <td width="92" class="plaintext" valign="top">&nbsp;</td>
+    <td width="77" class="plaintext" valign="top">NCIP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">199</td>
+    <td width="385" class="plaintext">Direct Evaporation from Bare Soil</td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">EVBS</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">200</td>
+    <td width="385" class="plaintext">Canopy Water Evaporation</td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">EVCW</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">201</td>
+    <td width="385" class="plaintext">Ice-Free Water Surface</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">ICWAT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">204</td>
+    <td width="385" class="plaintext">Downward Short Wave Radiation Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">DSWRF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">205</td>
+    <td width="385" class="plaintext">Downward Long Wave Radiation Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">DLWRF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">206</td>
+    <td width="385" class="plaintext">Ultra Violet Index <br>
+      (1-hr integration centered at solar noon)</td>
+    <td width="92" class="plaintext" valign="top">J/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">UVI</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">207</td>
+    <td width="385" class="plaintext">Moisture Availability</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">MSTAV</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">208</td>
+    <td width="385" class="plaintext">Exchange Coefficient</td>
+    <td width="92" class="plaintext" valign="top">(kg/m3)(m/s)</td>
+    <td width="77" class="plaintext" valign="top">SEEXC</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">209</td>
+    <td width="385" class="plaintext">Number of Mixed Layers Next to Surface</td>
+    <td width="92" class="plaintext" valign="top">&nbsp;</td>
+    <td width="77" class="plaintext" valign="top">MIXLY</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">210</td>
+    <td width="385" class="plaintext">Transpiration</td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">TRANS</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">211</td>
+    <td width="385" class="plaintext">Upward Short Wave Radiation Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">USWRF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">212</td>
+    <td width="385" class="plaintext">Upward Long Wave Radiation Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">ULWRF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">213</td>
+    <td width="385" class="plaintext">Amount of Non-Convective Cloud</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">CDLYR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">214</td>
+    <td width="385" class="plaintext">Convective Precipitation Rate</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup>/s</td>
+    <td width="77" class="plaintext" valign="top">CPRAT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">215</td>
+    <td width="385" class="plaintext">Temperature Tendency by all Physics</td>
+    <td width="92" class="plaintext" valign="top">K/s</td>
+    <td width="77" class="plaintext" valign="top">TTDIA</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">216</td>
+    <td width="385" class="plaintext">Temperature Tendency by all Radiation</td>
+    <td width="92" class="plaintext" valign="top">K/s</td>
+    <td width="77" class="plaintext" valign="top">TTRAD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">217</td>
+    <td width="385" class="plaintext">Temperature Tendency by Non-Radiation Physics</td>
+    <td width="92" class="plaintext" valign="top">K/s</td>
+    <td width="77" class="plaintext" valign="top">TTPHY</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">218</td>
+    <td width="385" class="plaintext">Precipitaion Index (0 to 1) <b><a href="#notes">*</a></b><a href="#notes"> 
+      </a></td>
+    <td width="92" class="plaintext" valign="top">&nbsp;</td>
+    <td width="77" class="plaintext" valign="top">PREIX</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">219</td>
+    <td width="385" class="plaintext">Standard Deviation of IR T over 1x1 Degree 
+      Area</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">TSD1D</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">220</td>
+    <td width="385" class="plaintext">Natural Log of Surface Pressure</td>
+    <td width="92" class="plaintext" valign="top">ln(kPa)</td>
+    <td width="77" class="plaintext" valign="top">NLGSP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">221</td>
+    <td width="385" class="plaintext">Planetary Bounday Layer Height</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">HPBL</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">222</td>
+    <td width="385" class="plaintext">5-Wave Geopotential height</td>
+    <td width="92" class="plaintext" valign="top">gpm</td>
+    <td width="77" class="plaintext" valign="top">5WAVH</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">223</td>
+    <td width="385" class="plaintext">Plant Canopy Surface Water</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">CNWAT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">224</td>
+    <td width="385" class="plaintext">Soil Type (Zobler) (0 to 9)</td>
+    <td width="92" class="plaintext" valign="top">&nbsp;</td>
+    <td width="77" class="plaintext" valign="top">SOTYP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">225</td>
+    <td width="385" class="plaintext">Vegetation Type (SiB) (0 to 13)</td>
+    <td width="92" class="plaintext" valign="top">&nbsp;</td>
+    <td width="77" class="plaintext" valign="top">VGTYP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">226</td>
+    <td width="385" class="plaintext">Blackadar's Mixing Length Scale</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">BMIXL</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">227</td>
+    <td width="385" class="plaintext">Asymptotic Mixing Length Scale</td>
+    <td width="92" class="plaintext" valign="top">m</td>
+    <td width="77" class="plaintext" valign="top">AMIXL</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">228</td>
+    <td width="385" class="plaintext">Potential Evaporation</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">PEVAP</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">229</td>
+    <td width="385" class="plaintext">Snow Phase-Change Heat Flux</td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">SNOHF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">230</td>
+    <td width="385" class="plaintext">5-Wave Geopotential Height Anomaly</td>
+    <td width="92" class="plaintext" valign="top">gpm</td>
+    <td width="77" class="plaintext" valign="top">5WAVA</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">231</td>
+    <td width="385" class="plaintext">Convective Cloud Mass Flux</td>
+    <td width="92" class="plaintext" valign="top">Pa/s</td>
+    <td width="77" class="plaintext" valign="top">MFLUX</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">232</td>
+    <td width="385" class="plaintext">Downward Total Radiation Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">DTRF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">233</td>
+    <td width="385" class="plaintext">Upward Total Radiation Flux <b><a href="#notes">*</a></b></td>
+    <td width="92" class="plaintext" valign="top">W/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">UTRF</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">234</td>
+    <td width="385" class="plaintext">Baseflow-Groundwater Runoff</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">BGRUN</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">235</td>
+    <td width="385" class="plaintext">Storm Surface Runoff</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">SSRUN</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">237</td>
+    <td width="385" class="plaintext">Total Ozone</td>
+    <td width="92" class="plaintext" valign="top">kg/m<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">O3TOT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">238</td>
+    <td width="385" class="plaintext">Snow Cover</td>
+    <td width="92" class="plaintext" valign="top">%</td>
+    <td width="77" class="plaintext" valign="top">SNOWC</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">239</td>
+    <td width="385" class="plaintext">Snow Temperature</td>
+    <td width="92" class="plaintext" valign="top">K</td>
+    <td width="77" class="plaintext" valign="top">SNOT</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">241</td>
+    <td width="385" class="plaintext">Large Scale Condensation Heating Rate</td>
+    <td width="92" class="plaintext" valign="top">K/s</td>
+    <td width="77" class="plaintext" valign="top">LRGHR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">242</td>
+    <td width="385" class="plaintext">Deep Convective Heating Rate</td>
+    <td width="92" class="plaintext" valign="top">K/s</td>
+    <td width="77" class="plaintext" valign="top">CNVHR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">243</td>
+    <td width="385" class="plaintext">Deep Convective Moistening Rate</td>
+    <td width="92" class="plaintext" valign="top">kg/kg/s</td>
+    <td width="77" class="plaintext" valign="top">CNVMR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">244</td>
+    <td width="385" class="plaintext">Shallow Convective Heating Rate</td>
+    <td width="92" class="plaintext" valign="top">K/s</td>
+    <td width="77" class="plaintext" valign="top">SHAHR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">245</td>
+    <td width="385" class="plaintext">Shallow Convective Moistening Rate</td>
+    <td width="92" class="plaintext" valign="top">kg/kg/s</td>
+    <td width="77" class="plaintext" valign="top">SHAMR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">246</td>
+    <td width="385" class="plaintext">Vertical Diffusion Heating Rate</td>
+    <td width="92" class="plaintext" valign="top">K/s</td>
+    <td width="77" class="plaintext" valign="top">VDFHR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">247</td>
+    <td width="385" class="plaintext">Vertical Diffusion Zonal Acceleration</td>
+    <td width="92" class="plaintext" valign="top">m/s<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">VDFUA</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">248</td>
+    <td width="385" class="plaintext">Vertical Diffusion Meridional Acceleration</td>
+    <td width="92" class="plaintext" valign="top">m/s<sup>2</sup></td>
+    <td width="77" class="plaintext" valign="top">VDFVA</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">249</td>
+    <td width="385" class="plaintext">Vertical Diffusion Moistening Rate</td>
+    <td width="92" class="plaintext" valign="top">kg/kg/s</td>
+    <td width="77" class="plaintext" valign="top">VDFMR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">250</td>
+    <td width="385" class="plaintext"> 
+      <p>Short Wave Radiative Heating Rate</p>
+    </td>
+    <td width="92" class="plaintext" valign="top">K/s</td>
+    <td width="77" class="plaintext" valign="top">SWHR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">251</td>
+    <td width="385" class="plaintext">Long Wave Radiative Heating Rate</td>
+    <td width="92" class="plaintext" valign="top">K/s</td>
+    <td width="77" class="plaintext" valign="top">LWHR</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">252</td>
+    <td width="385" class="plaintext">Drag Coefficient</td>
+    <td width="92" class="plaintext" valign="top">-</td>
+    <td width="77" class="plaintext" valign="top">CD</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">253</td>
+    <td width="385" class="plaintext">Friction Velocity</td>
+    <td width="92" class="plaintext" valign="top">m/s</td>
+    <td width="77" class="plaintext" valign="top">FRICV</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">254</td>
+    <td width="385" class="plaintext">Richardson Number</td>
+    <td width="92" class="plaintext" valign="top">&nbsp;</td>
+    <td width="77" class="plaintext" valign="top">RI</td>
+  </tr>
+  <tr> 
+    <td width="49" class="plaintext" align="left" valign="top">255</td>
+    <td width="385" class="plaintext">Missing</td>
+    <td width="92" class="plaintext" valign="top">&nbsp;</td>
+    <td width="77" class="plaintext" valign="top">&nbsp;</td>
+  </tr>
+</table>
+
+<br>
+<table width="625" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>
+      <p><span class="plaintext"><a name="notes"></a>Notes:</span></p>
+      <ol>
+        <li><span class="plaintext">By convention, downward net fluxes of radiation 
+          or other quantities are assigned negative values; upward net fluxes 
+          of radiation or other quantities are assigned positive values.</span></li>
+        <li><span class="plaintext">Unidirectional flux values, where the direction 
+          of flow is indicated in the name of the parameter <br>
+          (e.g., 204, 205, 211, and 212), shall all have positive values irrespective 
+          of the direction of flow. <br>
+          Net (vertical) fluxes shall be calculated by subtracting the downward 
+          flux values from the upward flux values.</span></li>
+        <li><span class="plaintext">The u and v components of vector quantities 
+          are defined with reference to GDS Octet 17 and Table 7. However, if 
+          the GDS is not included in a message, then any wind components are assumed 
+          to be resolved relative to the grid specified in the PDS with u and 
+          v defined as positive in the direction of increasing x and y (or i and 
+          j) coordinates respectively.</span></li>
+        <li><span class="plaintext">Provision is made for three types of spectra: 
+          <br>
+          1) Direction and Frequency <br>
+          2) Direction and radial number <br>
+          3) Radial number and radial number </span></li>
+        <li><span class="plaintext">Parameters 81 and 91 show the units as "fraction", 
+          thus allowing for a range of coverage. It is up to the user to employ 
+          the scaling (power of ten) to assure that the necessary precision is 
+          retained in the numeric values.</span></li>
+        <li><span class="plaintext">Precipitation index (parameter 218) is defined 
+          as the fraction of satellite observed pixels with temperatures < 235K 
+          over a 1x1 box, centered at the gridpoint.</span></li>
+      </ol>
+</td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+</body>
+</html>

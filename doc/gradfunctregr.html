@@ -1,0 +1,109 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Function: tregr</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>tregr()</b></h2>
+<p>
+<code>tregr (<i>expr1, expr2, tdim1, tdim2</i>)</code>
+
+<p>
+This function calculates the least-squares regression between two
+time-dependent variables. 
+
+<p>
+<ul>
+<code><i>expr1</i>&nbsp;&nbsp;&nbsp;</code>- 
+a valid GrADS expression that varies in time<br>
+<code><i>expr2</i>&nbsp;&nbsp;&nbsp;</code>- 
+a valid GrADS expression that varies in time and may also vary in X and Y<br>
+<code><i>tdim1</i>&nbsp;&nbsp;&nbsp;</code>- 
+starting time dimension expression <br>
+<code><i>tdim2</i>&nbsp;&nbsp;&nbsp;</code>- 
+ending time dimension expression <br>
+</ul>
+<p>
+The result is a grid that matches the X and Y dimensions of
+<code><i>expr2</i></code> where each grid point is the temporal
+regression of <code><i>expr2</i></code> (the dependent variable) onto
+<code><i>expr1</i></code> (the independent variable). 
+<code>tregr</code> gives the expected value of
+the <code><i>expr2</i></code> departure given a 1 unit departure in
+<code><i>expr1</i></code>. 
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>If both <code><i>expr1</i></code> and <code><i>expr2</i></code>
+vary only in time, the output is a single value.
+<p>
+<li>The regression is sensitive to the units of the input expressions. 
+In the examples below, the variable SLP is in units of mb and 
+the variable elnino is in units of K, so the regression coefficient 
+of SLP upon elnino is in units of mb per K.
+<p>
+<li>The result of the least squares regression of Y on X is often
+expressed as a linear equation: 
+<p>
+<ul><code>Y = slope * X + intercept</code></ul>
+<p>
+where X is the independent variable, Y is the dependent variable, and
+the slope and intercept are calculated using complicated algebraic
+formulas. The calculation is simplified if the time means are
+removed. If we define x and y to be the departures from the time
+averages of X and Y:
+<p>
+<ul><code>x = X - Xave</code><br><code>y = Y - Yave</code></ul>
+<p>
+then the regression equation becomes:
+<p>
+<ul><code>y = <i>coefficient</i> * x</code></ul>
+<p>
+Where
+<p>
+<ul><code><i>coefficient</i> = (sum of x*y over time)/(sum of x*x over time)</code></ul>
+<p>
+This <code><i>coefficient</i></code> is the output from the <code>tregr</code> function.
+The second example below shows how to construct the regression estimate of Y based on X.
+<p>
+<li>Use the <a href="gradfuncsregr.html"><code>sregr</code></a>
+function to do regression over the spatial domain.
+<p>
+</ol>
+
+<p>
+<h3>Example</h3>
+<ol>
+<li>This example calculates the expected departure from the 
+slp mean given a unit departure in the defined variable elnino.
+<p>
+<pre>
+set y 1
+set z 1
+set t 1 100
+define elnino = aave(ts, lon=-160, lon=-80, lat=-20, lat=10)
+set lon 0 360
+set lat -90 90
+set z 1
+set t 1
+d tregr(elnino, slp, t=1, t=100)
+</pre>
+<p>
+<li>This example builds on the previous example by 
+calculating the regression estimate of slp based on the
+defined variable elnino. 
+<p>
+<pre>
+define coeff = tregr(elnino, slp, t=1, t=100)
+define slpave = ave(slp, t=1, t=100)
+define ninoave = ave(elnino, t=1, t=100)
+d coeff * (elnino - ninoave) + slpave
+</pre>
+</ol>
+
+
+</body>
+</html>

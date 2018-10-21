@@ -1,0 +1,71 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Commands: printim</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+body {
+	background-color: #e0f0ff;
+}
+.red {
+	color: #900;
+}
+</style>
+</head>
+<body text="#000000">
+
+<h2><b>pdefwrite</b></h2>
+<p>
+
+  <p>When GrADS opens a descriptor with a <code><a href="pdef.html">PDEF</a></code> entry that  contains options such as <code>lcc</code>, <code>lccr</code>, <code>nps</code>, <code>sps</code>, et. al, it calculates the interpolation weights internally and stores them in memory for later use. These calculations can take some time for high resolution grids. There is a significant performance advantage gained from reading in the interpolation weights from an external file instead of calculating them every time you open the descriptor. Introduced in <span class="red">GrADS version 2.1.0</span>, the <code>pdefwrite</code> command  will write out the interpolation weights that have been calculated internally for these special types of <code><a href="pdef.html">PDEF</a></code> entries. The file it creates can be used with a ‘<code><a href="pdef.html">PDEF</a> bilin</code>’ entry instead. </p>
+
+<h3>Syntax
+</h3>
+<ul>
+  <code>pdefwrite  <i>filename </i></code> 
+</ul>
+<p>
+where:
+<ul>
+  <code><i>filename</i>&nbsp;&nbsp;</code>The name of the output file. If this 
+  file exists, it will be replaced. 
+  <br>
+  <code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><br>
+  <br>
+</ul>
+<h3>Usage Notes</h3>
+
+<ol>
+<li><code>pdefwrite</code> works with <span class="red">GrADS version 2.1.0+</span>.
+<li>The <code>pdefwrite</code> command will return an error message if you use it with a default file that does not use <code><a href="pdef.html">PDEF</a></code> or already has an external <code><a href="pdef.html">PDEF</a></code> file. If there are no errors, <code>pdefwrite</code>  will return a complete <code><a href="pdef.html">PDEF</a></code> entry that points to the file it just created. 
+</ol>
+
+<p>
+<h3>Example </h3>
+
+<ol>
+  <li>Suppose you have a descriptor that contains the following three entries:
+<ul><code>pdef 4736 3000 lcc 23.00 -120 1 1 40.0 40.0 -100 1016.2360 1016.150<br>
+    xdef 6650 linear -130.0 0.01<br>
+    ydef 3500 linear   20.0 0.01
+</code></ul></li>
+   <li>Open this descriptor, then invoke pdefwrite with a file name as an argument. 
+     <ul> <code>ga-> pdefwrite myfile.pdef<br>
+    </code></ul>
+  <li>GrADS will return the syntax for the new <code><a href="pdef.html">PDEF</a></code> entry:
+<ul>
+<code>pdef 4736 3000 bilin stream binary-little ^myfile.pdef
+</code>
+</ul></li>   
+    <li>Rewrite your descriptor to use this new <code><a href="pdef.html">PDEF</a></code> entry instead. Don’t change the <code><a href="descriptorfile.html#XDEF">XDEF</a></code> and <code><a href="descriptorfile.html#YDEF">YDEF</a></code> statements — those match the <code><a href="pdef.html">PDEF</a></code> file you created. </li>
+    <li>Keep the <code><a href="pdef.html">PDEF</a></code> file (<code>myflile.pdef</code>) and the descriptor file together in the same directory -- this is important because of the ^ before the <code><a href="pdef.html">PDEF</a></code> file's name in the <code><a href="pdef.html">PDEF</a></code> entry. If you want to put the descriptor and <code><a href="pdef.html">PDEF</a></code> files in separate locations, change the ^ in the entry to the <code><a href="pdef.html">PDEF</a></code> file's full path, like this:
+<ul>
+<code>pdef 4736 3000 bilin stream binary-little /your/path/to/myfile.pdef</code>
+</ul>    
+</ol>
+  
+
+</body>
+</html>
+

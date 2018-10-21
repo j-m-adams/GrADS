@@ -1,0 +1,211 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: query</title>
+<link rel="stylesheet" href="GrADS.css">
+<style type="text/css">
+<!--
+.style1 {color: #990000}
+-->
+</style>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>query</b></h2>
+<p class="plaintext"> The <code class="code">query</code> command allows the user 
+  to get information about a variety of aspects of the current GrADS session. 
+  Configuration, plot characteristics, graphics specifics, and file structure 
+  are some examples. The use of <code class="code">query pos</code> combined with 
+  the coordinate transformations is the basis of many interactive applications 
+  with buttons and drop menus. The <code class="code">query</code> command may 
+  be shortened to simply <code class="code">q</code>. The syntax is: 
+<p>
+<ul>
+  <code class="code">query <i>&lt;option&gt;</i></code><br>
+  or<br>
+  <code class="code">q <i>&lt;option&gt;</i></code> 
+</ul>
+<p class="plaintext"> When given without an <code><i class="codeitalic">option</i></code>, 
+  the <code class="code">query</code> command returns a list of the possible options. 
+  These are: 
+<blockquote>
+
+
+  <table width="609" border="0" cellspacing="0" cellpadding="0">
+    <tr> 
+      <td class="code"><a href="gradcomdqattr.html">attr</a> <span class="codeitalic">n</span></td>
+      <td class="plaintext">Returns all attributes for file n (or default file 
+        if n is omitted)</td>
+    </tr>
+    <tr>
+      <td class="code">cache n</td>
+      <td class="plaintext">Returns netcdf4/hdf5 cache size  for file n (or default file 
+      if n is omitted) (<span class="style1">2.0.a8+</span>)</td>
+    </tr>
+    <tr>
+      <td class="code">cachesf</td>
+      <td class="plaintext">Returns netcdf4/hdf5 cache scale factor (<span class="style1">2.0.a8+</span>)</td>
+    </tr>
+    <tr>
+      <td class="code">calendar</td>
+      <td class="plaintext">Returns calendar mode: unset, 365-day, or standard</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">config</td>
+      <td class="plaintext" width="490">Returns GrADS configuration information</td>
+    </tr>
+    <tr>
+      <td class="code">contours</td>
+      <td class="plaintext">Returns colors and levels of a line contours (<span class="style1">2.0.a8+</span>)</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">ctlinfo</td>
+      <td class="plaintext" width="490">Returns contents of data descriptor file</td>
+    </tr>
+    <tr>
+      <td class="code"><a href="gradcomdqdbf.html">dbf</a></td>
+      <td class="plaintext">Lists the contents of a shapefile attribute database (<span class="style1">2.0.a8+</span>)</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">define</td>
+      <td class="plaintext" width="490">Lists currently defined variables</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">defval <span class="codeitalic">v1 i j</span></td>
+      <td class="plaintext" width="490">Returns the value of defined variable 
+        <code><i class="codeitalic">v1</i></code> at point <code><i class="codeitalic">i,j</i></code></td>
+    </tr>
+    <tr> 
+      <td class="code" width="119"><a href="gradcomdqdialog.html">dialog</a> <span class="codeitalic">args</span></td>
+      <td class="plaintext" width="490">Launches a dialog box that prompts for 
+        text or numeric data entry</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">dims</td>
+      <td class="plaintext" width="490">Returns current dimension environment</td>
+    </tr>
+    <tr>
+      <td class="code"><a href="gradcomdqens.html">ens</a></td>
+      <td class="plaintext">Returns ensemble metadata</td>
+    </tr>
+    <tr>
+      <td class="code">fgvals</td>
+      <td class="plaintext">Returns values and colors specified for gxout fgrid (<span class="style1">2.1.a2+</span>)</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">file <span class="codeitalic">n</span></td>
+      <td class="plaintext" width="490">Returns info on file number <code><i>n</i></code>.  Uses the default file if <code><i>n</i></code> is not given.</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">files</td>
+      <td class="plaintext" width="490">Lists open files</td>
+    </tr>
+    <tr>
+      <td class="code">font <span class="codeitalic">n</span></td>
+      <td class="plaintext">Returns info on font number <code><i>n</i></code>.  Uses the default font if <code><i>n</i></code> is not given. (<span class="style1">2.2.0</span>)</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119"><a href="gradcomdqfwrite.html">fwrite</a></td>
+      <td class="plaintext" width="490">Returns status and characteristics of 
+        fwrite ouput file</td>
+    </tr>
+    <tr>
+      <td class="code">gxconfig</td>
+      <td class="plaintext">Returns configuration information about the graphics plug-ins (<span class="style1">2.2.0</span>)</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">gxinfo</td>
+      <td class="plaintext" width="490">Returns graphics environment info</td>
+    </tr>
+    <tr>
+      <td class="code">gxout</td>
+      <td class="plaintext">Returns current gxout settings</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">lats</td>
+      <td class="plaintext" width="490">Returns the status of the GrADS-LATS interface</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119"><a href="gradcomdqpos.html">pos</a></td>
+      <td class="plaintext" width="490">Waits for mouse click, then returns position 
+        plus additional widget information</td>
+    </tr>
+    <tr>
+      <td class="code"><a href="gradcomdqsdfwrite.html">sdfwrite</a></td>
+      <td class="plaintext">Returns the status of the sdfwrite options </td>
+    </tr>
+    <tr> 
+      <td class="code" width="119"><a href="gradcomdqshades.html">shades</a></td>
+      <td class="plaintext" width="490">Lists colors and levels of shaded contours</td>
+    </tr>
+    <tr>
+      <td class="code"><a href="gradcomdqshp.html">shp</a></td>
+      <td class="plaintext">Lists the contents of a shapefile (<span class="style1">2.0.a8+</span>)</td>
+    </tr>
+    <tr>
+      <td class="code"><a href="gradcomdqshpopts.html">shpopts</a></td>
+      <td class="plaintext">Returns  settings for drawing and writing shapefiles (<span class="style1">2.0.a9+</span>)</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">string str</td>
+      <td class="plaintext" width="490">Returns the width of string <code><i>str</i></code> in virtual page inches</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">time</td>
+      <td class="plaintext" width="490">Returns info about time settings</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">udft</td>
+      <td class="plaintext" width="490">Returns the user defined function table </td>
+    </tr>
+    <tr>
+      <td class="code">undef</td>
+      <td class="plaintext">Returns the output undefined value</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">xinfo</td>
+      <td class="plaintext" width="490">Returns characteristics of the graphics 
+        display window</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">xy2w<span class="codeitalic"> &nbsp;v1 v2</span></td>
+      <td class="plaintext" width="490">Converts XY coords to world coords</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">xy2gr <span class="codeitalic">v1 v2</span></td>
+      <td class="plaintext" width="490">Converts XY coords to grid coords</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">w2xy&nbsp; <span class="codeitalic">v1 v2</span></td>
+      <td class="plaintext" width="490">Converts world coords to XY coords</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">w2gr&nbsp; <span class="codeitalic">v1 v2</span></td>
+      <td class="plaintext" width="490">Converts world coords to grid coords</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">gr2w&nbsp; <span class="codeitalic">v1 v2</span></td>
+      <td class="plaintext" width="490">Converts grid coords to world coords</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">gr2xy <span class="codeitalic">v1 v2</span></td>
+      <td class="plaintext" width="490">Converts grid coords to XY coords</td>
+    </tr>
+    <tr> 
+      <td class="code" width="119">pp2xy <span class="codeitalic">v1 v2</span></td>
+      <td class="plaintext" width="490">Converts virtual page XY coords to real 
+        page XY coords</td>
+    </tr>
+  </table>
+</blockquote>
+  <p> <code>&nbsp;</code> <br>
+  <p> 
+  <h3 class="item12bold">Usage Notes</h3>
+  <p class="plaintext"> For more information on the use of the <code>query</code> 
+    command, see the section of the User's Guide on <a
+href="script.html#commands">commands that complement the scripting language</a>. 
+  <p> 
+  <h3 class="item12bold">Examples</h3>
+</body>
+</html>

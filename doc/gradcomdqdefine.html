@@ -1,0 +1,50 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: q define</title>
+<link href="/assets/NewIGES.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.style2 {color: #990000}
+.style3 {color: #009933}
+body {
+        background-color: #e0f0ff;
+}
+.red {
+        color: #900;
+}
+.italic {
+        font-style: italic;
+}
+-->
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>q define</b></h2>
+<p><code>q define <i>varname</i></code>
+<p>This command returns information about a defined variable, <code><i>varname</i></code>. The <code>'q define'</code> command without the variable name will return a list of defined variables. When a variable name is added, the printout includes the type, the sizes of each dimension, axis definitions for each dimension, the calendar, and whether the variable has been <a href="gradcomdmodify.html"><code>'modified'</code></a>. 
+<h3>Usage Notes</h3>
+<p>This command is  available in GrADS <span class="red">version 2.1.1.b0</span>.</p>
+<h3>Example</h3>
+<code>
+<p>ga-&gt;define ps=ps<br>
+  Define memory allocation size = 8311688 bytes<br>
+  ga-&gt; q define ps<br>
+  Gridded Defined Variable: ps <br>
+Xsize = 1441  Ysize = 721  Zsize = 1  Tsize = 1  Esize = 1<br>
+XDEF 1441 linear 0 0.25<br>
+YDEF 721 linear -90 0.25<br>
+ZDEF 1 levels 1000<br>
+TDEF 1 linear 12Z02FEB2017 180mn<br>
+Calendar: Gregorian q ens<br>
+</p>
+</code>
+<h3>&nbsp;</h3>
+
+
+</body>
+</html>
+

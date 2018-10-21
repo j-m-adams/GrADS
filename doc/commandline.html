@@ -1,0 +1,103 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>Command Line Editing</title>
+</head>
+<body text="#000000">
+
+
+<h2>Command line editing and history</h2>
+
+<p>
+If the <code>readline</code> library compiles on your system then the
+default prompt will be <code>ga-&gt;</code> as opposed to
+<code>ga&gt;</code>.  This indicates that command line editing is
+active. The library defaults to <code>emacs</code> mode but can be
+set up to run using <code>vi</code> syntax.
+
+<p>
+Here's a list of the commands which may typically be used:
+
+<p>
+<ul>
+<code>ctrl-a&nbsp;&nbsp;&nbsp;</code>go to beginning of line <br>
+<code>ctrl-e&nbsp;&nbsp;&nbsp;</code>go to end of line <br>
+<code>ctrl-f&nbsp;&nbsp;&nbsp;</code>go forward one char <br>
+<code>ctrl-b&nbsp;&nbsp;&nbsp;</code>go backward one char <br>
+<code>ctrl-d&nbsp;&nbsp;&nbsp;</code>delete the char <br>
+<code>ctrl-p&nbsp;&nbsp;&nbsp;</code>recall previous line<br>
+<code>ctrl-n&nbsp;&nbsp;&nbsp;</code>recall next line<br>
+<code>ctrl-r&nbsp;&nbsp;&nbsp;</code>reverse search<br>
+</ul>
+
+<p>
+You also get <code>file name completion</code> using the
+<code>tab</code> key. If there is more than one option, then
+<code>double tab</code> will list the available completions.
+
+<p>
+For example, suppose you are running grads on div40-2 at FNMOC
+and want to start looking for files to open...<p>
+
+Type <code>open /h</code> and get,<p>
+
+<dd><code>ga-> open /h</code>
+
+and hit two <code>tabs</code> and get:
+
+<dd><code>h      home   home1  home2</code><p>
+
+then type <code>ome1</code> and <code>tab tab</code> and get,<p>
+
+<ul>
+<code>
+ga-> open /home1/ <br>
+GCC         bogus603    gnu         iqpops      nmcobs      roesserd <br>
+GRIB cstrey grads      lost+found  pacek       tsai <br>
+Mosaic      dh          hamilton   
+mendhall    picardr     witt <br>
+NEWDBS      dolan       hout       
+nicholso    qcops</code></ul><p>
+
+then type <code>GR</code>, <code>tab</code> to go to GRIB dir, followed by <code>d</code>,
+<code>tab</code> to go
+to the dat dir and then <code>n</code>, <code>tab tab</code> gives,<p>
+
+<ul>
+<code>
+ga-> open /home1/GRIB/dat/nogaps.25. <br>
+nogaps.25.95021600.grb&nbsp;&nbsp;&nbsp;      nogaps.25.95021912.grb <br>
+nogaps.25.95021600.gribmap&nbsp;&nbsp;&nbsp;  nogaps.25.95021912.gribmap <br>
+nogaps.25.95021612.anal.grb&nbsp;&nbsp;&nbsp; nogaps.25.anal.ctl <br>
+nogaps.25.95021612.ctl&nbsp;&nbsp;&nbsp;      nogaps.25.anal.gribmap <br>
+nogaps.25.95021612.grb&nbsp;&nbsp;&nbsp;      nogaps.25.ls.mask.ctl <br>
+nogaps.25.95021612.gribmap&nbsp;&nbsp;&nbsp;  nogaps.25.ls.mask.dat <br>
+nogaps.25.95021700.anal.grb&nbsp;&nbsp;&nbsp; nogaps.25.95021700.ctl</code></ul><p>
+
+and type <code>950217</code> to get<p>
+
+<ul>
+<code>
+ga-> open /home1/GRIB/dat/nogaps.25.950217<br>
+nogaps.25.95021700.anal.grb&nbsp;&nbsp;&nbsp;  nogaps.25.95021712.ctl<br>
+nogaps.25.95021700.ctl&nbsp;&nbsp;&nbsp;       nogaps.25.95021712.grb<br>
+nogaps.25.95021700.grb&nbsp;&nbsp;&nbsp;       nogaps.25.95021712.gribmap<br>
+nogaps.25.95021700.gribmap&nbsp;&nbsp;&nbsp; nogaps.25.95021712.anal.grb</code></ul><p>
+
+and finally open the <code>12Z</code> data with </code>12.c</code>, <code>tab</code>,
+return to open the
+file<p>
+
+<dd><code>nogaps.25.95021712.ctl</code>
+
+<p>
+<h3>WARNING</h3>
+<p>
+There is no guarantee that these <code>readline</code> routines will always
+work, so the <code>-h</code> option has been added to the invocation of GrADS
+to turn them off. 
+
+</body>
+</html>
+

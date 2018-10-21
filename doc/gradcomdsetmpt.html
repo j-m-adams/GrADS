@@ -1,0 +1,50 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<h2>set mpt</h2>
+<code>set mpt <i>type off |
+&lt;&lt;col&gt;&lt;style&gt;&lt;thick&gt;&gt;</i></code><p>
+command to control map background behavior. <code><i>type</i></code> is
+the map type; it can be a number from <code>0</code> to <code>255</code>,
+or it can be an asterick(*) to indicate this command applies to all the
+type values.  The <code>color</code> can be set to <code>-1</code>, which
+indicates to GrADS to use the <a href="gradcomdsetmap.html"><code>set
+map</code></a> settings for this map type, rather than the settings
+specified by the <code>set mpt</code> command.<p>
+<h3>Usage Notes</h3>
+<h3>Examples</h3>
+<ol>
+<li>Lets say you want to use the hires data set and plot political 
+boundaries, but not state boundaries:<p>
+
+<ul>
+<code>
+set mpt * off<br>
+set mpt 0 -1<br>
+set mpt 1 -1</code></ul><p>
+
+<li>
+
+
+Lets say you want to use the hires data set, and have coastlines
+be thicker, and a different color, than political boundaries:<p>
+<ul>
+<code>
+set mpt * off<br>
+set mpt 0 1 1 6<br>
+set mpt 1 15 1 1</code></ul><p>
+
+<li>
+The <a href="gradcomdsetmpdraw.html"><code>set mpdraw</code></a> and
+<a href="gradcomddrawmap.html"><code>draw map</code></a> commands work as
+before; you can do some interesting line types by overlaying:<p>
+<ul>
+<code>
+set mpt 51 7 1 12<br>
+draw map<br>
+set mpt 51 0 1 1<br> 
+draw map</code></ul>
+<p>
+
+This would produce two yellow lines parallel and close together for 
+map type 51.  </ol>
+

@@ -1,0 +1,47 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: open</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>open</b></h2>
+<p>
+<code>open <i>filename</i></code>
+<p>
+Opens <code><i>filename</i></code>, which should be the name of a
+GrADS data descriptor file, also called a control file.
+<p>
+<h3>Usage Notes</h3>
+<p>
+<ol>
+<li>The standard file extension for Grads data descriptor files is
+<code>.ctl</code>. Provided you adhere to this standard, there is no
+need to type the extension <code>.ctl</code> when issuing the
+<code>open</code> command.
+<p>
+<li>You will need to open at least one data-descriptor file before
+you can enter other GrADS commands.
+<p>
+<li>You can open more than one data-descriptor file.   Each file is
+numbered according to the order in which it was opened.
+</ol>
+
+<p>
+<h3>Examples </h3>
+
+<p>
+<code>
+open jandata.1966<br>
+open jandata.1966.ctl
+</code>
+</ul><p>
+
+<p>
+Both of these commands will have the same effect -- opening the GrADS
+data descriptor file <code>"jandata.1966.ctl"</code>.
+
+
+</body>
+</html>

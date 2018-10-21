@@ -1,0 +1,122 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>GrADS Command: query attr</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="e0f0ff">
+<h2><b>q attr</b></h2>
+<p>
+<code>q attr <i>&lt;fnum&gt;</i></code>
+<p>
+<p class="plaintext"> This command returns all the attribute metadata associated 
+  with file number <code><i>fnum</i></code> in a formatted manner. If no value 
+  for <code><i>fnum</i></code> is given, then the attributes for the default file 
+  are returned. The output of 'q attr' may be read by the user in the command 
+  window, or parsed by a script for the purpose of capturing the metadata and 
+  including it in the analysis or display. There are three categories of attributes: 
+  (1) global, which means the attribute is relevant for all the data in the file, 
+  (2) coordinate, which means the attribute describes one of the four dimensions 
+  (lon, lat, lev, or time), or (3) variable, which means the attribute is assoicated 
+  with a particular variable in the file. The formatting of the attribute listing 
+  is as follows: 
+<p class="plaintext">global | <em>&lt;dimension&gt;</em> | <em>&lt;varname&gt;&nbsp;&nbsp;&nbsp;&lt;attribute_type&gt;&nbsp;&nbsp; 
+  &lt;attribute_name&gt;&nbsp;&nbsp; &lt;attribute_value&gt;</em> 
+<p class="plaintext"><em>&lt;dimension&gt;</em> is &quot;lon&quot;, &quot;lat&quot;, 
+  &quot;lev&quot;, or &quot;time&quot;<br>
+  <em>&lt;varname&gt; </em>is one of the variables in the data set<br>
+  <br>
+  <em>&lt;attribute_type&gt;</em> is one of the following case-sensitive types: 
+  String, Byte, Int16, UInt16, Int32, UInt32, Float32, Float64.<em><br>
+  &lt;attribute_name&gt;</em> is any single word or string with no spaces<br>
+  <em>&lt;attribute_value&gt;</em> is be any string up to 512 characters. 
+<h3>Usage Notes</h3>
+<p class="plaintext">Attributes may be native to the data file (as with some HDF 
+  and NetCDF files), but they may be also be added manually in the GrADS <a href="descriptorfile.html#ATTR">descriptor 
+  file</a>. The output from 'q attr' will print all the attributes taken from 
+  the descriptor file followed by all the native attributes. Within these two 
+  categories (descriptor and native), attributes are listed in the following order:<br>
+  1. Global <br>
+  2. Coordinate -- these will have names &quot;lon&quot;, &quot;lat&quot;, &quot;lev&quot;, 
+  or &quot;time&quot;<br>
+  3. Variable -- these will have names taken from the list of variables in the 
+  data file 
+<p class="plaintext">This command has been fully implemented starting with version 
+  1.9b4. 
+<h3>Examples</h3>
+<p>Here's a sample descriptor file (note the attributes added after the ENDVARS 
+  statement): </p>
+<p>dset ^hgt.%y4.nc<br>
+  dtype netcdf <br>
+  options template yrev<br>
+  title NCEP Reanalysis<br>
+  undef -999 missing_value<br>
+  unpack scale_factor add_offset<br>
+  xdef 144 linear 0 2.5<br>
+  ydef 73 linear -90 2.5<br>
+  zdef 17 levels 1000 925 850 700 600 500 400 300 250 200 150 100 70 50 30 20 
+  10<br>
+  tdef 730 linear 00Z01JAN1989 1dy<br>
+  vars 1<br>
+  hgt 17 t,z,y,x Mean Daily Geopotential height [m]<br>
+  ENDVARS<br>
+  @ global String comment This is an all-purpose test file<br>
+  @ hgt String comment This describes variable hgt<br>
+  @ lev String units millibar<br>
+  @ lat String units degrees_north<br>
+  @ lon String units degrees_east<br>
+  @ time String units hours since 1-1-1 00:00:0.0<br>
+  @ lev Float32 actual_range 1000. 10.<br>
+  @ lat Float32 actual_range 90. -90.<br>
+  @ lon Float32 actual_range 0. 357.5<br>
+  @ time Int32 actual_range 17426496. 17435232.<br>
+</p>
+<p>Here's the output from 'q attr' when the above descriptor file is opened: </p>
+<p class="plaintext">ga-&gt; q attr<br>
+  Descriptor Attributes for File 1 : NCEP Reanalysis <br>
+  global String comment This is an all-purpose test file <br>
+  lon String units degrees_east <br>
+  lon Float32 actual_range 0. 357.5 <br>
+  lat String units degrees_north <br>
+  lat Float32 actual_range 90. -90. <br>
+  lev String units millibar <br>
+  lev Float32 actual_range 1000. 10. <br>
+  time String units hours since 1-1-1 00:00:0.0 <br>
+  time Int32 actual_range 17426496. 17435232. <br>
+  hgt String comment This describes variable hgt 
+<p class="plaintext">Native Attributes for File 1 : NCEP Reanalysis <br>
+  global String title mean daily NMC reanalysis<br>
+  global Int16 base_date 1989 1 1 <br>
+  global String history /home/hoop/crdc/cpreanjuke2farm/cpreanjuke2farm Wed Oct 
+  18 03:10:49 1995 from hgt.89.nc <br>
+  global String history created 95/02/06 by Hoop (netCDF2.3)<br>
+  global String description Data is from NMC initialized reanalysis <br>
+  global String description (4x/day). It consists of most variables interpolated 
+  to <br>
+  global String description pressure surfaces from model (sigma) surfaces.<br>
+  global String platform Model<br>
+  global String Conventions COARDS<br>
+  hgt String long_name mean Daily Geopotential height<br>
+  hgt Float32 actual_range -522 32306 <br>
+  hgt Float32 valid_range -700 35000 <br>
+  hgt String units m<br>
+  hgt Float32 add_offset 32066 <br>
+  hgt Float32 scale_factor 1 <br>
+  hgt Int16 missing_value 32766 <br>
+  hgt Int16 precision 0 <br>
+  hgt Int16 least_significant_digit 0 <br>
+  hgt Int16 GRIB_id 7 <br>
+  hgt String GRIB_name HGT<br>
+  hgt String var_desc Geopotential height <br>
+  hgt String var_desc H<br>
+  hgt String dataset NCEP Reanalysis Daily Averages <br>
+  hgt String dataset AJ<br>
+  hgt String level_desc Multiple levels <br>
+  hgt String level_desc F<br>
+  hgt String statistic Mean 
+<p class="plaintext">&nbsp;
+</body>
+</html>

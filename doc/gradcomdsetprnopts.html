@@ -1,0 +1,59 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set prnopts</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set prnopts</b></h2>
+<p>
+<code>set prnopts <i>format numl numb</i> &lt;u&gt;</code>
+<p>
+Controls the way values are printed when <a href="gradcomdsetgxout.html"><code>set gxout print</code></a> is used. 
+<p>
+<ul>
+<code><i>format</i>&nbsp&nbsp</code>
+a C language template for formatting ascii output. Default is <code>%g</code>.<br>
+<code><i>numl</i>&nbsp&nbsp&nbsp&nbsp</code>
+number of values to print per record. Default is 8.<br>
+<code><i>numb</i>&nbsp&nbsp&nbsp&nbsp</code>
+number of blanks to insert between values. Default is 1.<br>
+<code>u&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</code>
+print 'Undef' instead of the numerical value for missing data.<br>
+</ul>
+
+<h3>Usage Notes</h3>
+<ol>
+The first line of the ascii output will tell the user how many data
+values are being printed as well as the missing data value.
+</ol>
+
+<p>
+<h3>Examples </h3>
+<ol>
+<li>This example will print all the values in exponential notation:
+<p>
+<ul><pre>
+set gxout print
+set prnopts %10.3e 5 1
+d t
+</code>
+</ul>
+<p>
+The output might look like this: 
+<ul>
+<pre>
+Printing Grid -- 30 Values -- Undef = -2.56e+33
+-2.560e+33 -2.560e+33  3.014e+02  3.011e+02  3.001e+02 
+-2.560e+33 -2.560e+33  3.010e+02 -2.560e+33 -2.560e+33 
+-2.560e+33 -2.560e+33 -2.560e+33 -2.560e+33 -2.560e+33 
+-2.560e+33 -2.560e+33 -2.560e+33  2.993e+02  2.995e+02 
+-2.560e+33 -2.560e+33  3.004e+02  3.008e+02  3.010e+02 
+-2.560e+33 -2.560e+33  2.999e+02  3.010e+02  3.012e+02 
+</pre>
+</ul>
+
+</body>
+</html>
+

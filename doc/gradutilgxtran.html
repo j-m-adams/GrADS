@@ -1,0 +1,51 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<title>GrADS Utilities: gxtran</title>
+<body>
+
+<h2><a name="gxtran">gxtran</a></h2>
+
+<code>gxtran [ -<i>airg &lt;infile&gt;</i> ]</code>
+
+<p>
+This utility is used to display GrADS meta files containing
+single frames or animations (multi frames). 
+
+<p>
+The options are:
+<ul>
+<code>-i <i>fname</i>&nbsp;&nbsp;&nbsp;&nbsp</code>
+identifies input GrADS metacode file <br>
+<code>-a &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</code>
+animates the frames without user hitting return in the command window<br>
+<code>-r &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</code>
+reverses background/foreground colors<br>
+<code>-g <i>geom</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</code>
+sets the geometry of the X window as in any other X
+application. <br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+<code><i>geom</i></code> has the form WWWxHHH+X+Y, giving a display window<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+WWW pixels wide and HHH pixels tall starting at point X,Y on the screen.<br>
+</ul>
+
+<p>
+<b>Usage Notes</b> 
+<p>
+Without any options, <code>gxtran</code> prompts the user for the name
+of the GrADS meta file. To quit </code>gxtran</code>, hit
+return in the command window.
+
+<p> 
+<b>Examples</b>
+<p>
+<code>gxtran -a -g 800x600+0 -i mytest.mf</code>
+
+<p>
+This command would open a window of size 800x600 starting at the upper
+left corner of the screen and animate all frames (plots) in the file
+<code>mytest.mf</code>.
+
+</body>
+</html>

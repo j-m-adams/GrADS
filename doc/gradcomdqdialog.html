@@ -1,0 +1,80 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: q dialog</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>q dialog</b></h2>
+<p>
+<code>q dialog <i>&lt;x y w h&gt; dialog_text</i></code>
+<p>
+Launches a dialog box widget that prompts for text or numeric data entry and also
+provides editing of an input text or value. Returns the text entered by the user.
+<p>
+<ul>
+<code><i>x</i>&nbsp&nbsp&nbsp&nbsp</code>X-coordinate of diaglog box center <br>
+<code><i>y</i>&nbsp&nbsp&nbsp&nbsp</code>Y-coordinate of diaglog box center <br>
+<code><i>w</i>&nbsp&nbsp&nbsp&nbsp</code>width of diaglog box <br>
+<code><i>h</i>&nbsp&nbsp&nbsp&nbsp</code>width of diaglog box <br>
+</ul>
+<p>
+There are two options for the formatting of <code><i>dialog_text</i></code>:
+<p>
+<ul>
+<code><i>prompt</i></code>
+<ul>
+The prompt string provides an instruction to the user (e.g.,
+"<code>Enter value for PI:</code>"). If
+<code><i>dialog_text</i></code> contains only a prompt, then the
+dialog box appears with the prompt and an empty entry point.
+</ul>
+<code><i>prompt</i> | <i>initial_string</i></code> <br>
+<code><i>prompt</i> / <i>initial_string</i></code>
+<ul>
+It is possible to give the user a head start or a suggestion as to
+what to type in the dialog box. For this option, 
+<code><i>dialog_text</i></code> contains a prompt and an initial
+string separated by a vertical bar or a backslash (e.g., "<code>Enter
+value for PI: | 3.14159</code>" or "<code>Enter value for PI: /
+3.14159</code>"). The dialog box appears with the prompt and the
+editable initial string at the entry point.
+</ul>
+</ul>
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>The string input by the user is returned when the Enter/Return key is pressed. 
+Null text entries are accepted.  
+<p>
+<li>The x,y,w, and h arguments are optional. GrADS will use the default
+settings if they are omitted entirely or set to -1. If w and h are set
+to 0, a minimum sized window is drawn to contain just the 
+<code><i>dialog_text</i></code>.
+<p>
+<li>The cursor must be inside the dialog box to allow text entry or editing
+to occur. 
+<p>
+<li>All text is centered in the dialog box. If
+the new text exceeds the window size, the text will be right
+justified in the window; the left and right arrow keys can be used to
+scroll the text back and forth. 
+<p>
+<li>See the <a href="gradcomdsetdialog.html"><code>set
+dialog</code></a> refrence page for details on controlling the
+color properties of the dialog box widget.
+</ol>
+
+<p>
+<h3>Examples </h3>
+<p>
+<pre>
+set dialog 1 0 5 1 6
+q dialog Hello World
+say result
+</pre>
+
+</body>
+</html>

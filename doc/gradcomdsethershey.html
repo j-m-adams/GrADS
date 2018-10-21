@@ -1,0 +1,29 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+<style type="text/css">
+.style1 {color: #990000}
+.red {	color: #900;
+}
+.red {	color: #900;
+}
+.red {	color: #900;
+}
+.red {	color: #900;
+}
+body {
+	background-color: #e0f0ff;
+}
+</style>
+
+
+<H2><B>set hershey</B></H2>
+<P>
+  <code>set hershey on</code> | <code>off</code>
+<p>This command, which is available beginning with <span class="red">GrADS version 2.1</span>, is a quick shortcut for users who would like to take advantage of Cairo fonts but do not know anything about  font files on their system or do not want to bother editing the font controls in existing scripts.
+Invoking <code>'set hershey off'</code> will tell GrADS to use generic Cairo fonts that are reasonable approximations of Hershey fonts 0, 1, 2, 4, and 5. Font 3 is the Greek (symbol) font, and cannot be  duplicated with generic controls. <code>'set hershey on'</code> will return GrADS to the use of traditional   Hershey fonts. 
+<p>
+<h3>Usage Notes</h3>
+<p>This command 'sticks' until the user issues another<code> <a href="gradcomdsethershey.html">set hershey</a> </code>command, or a<code> <a href="gradcomdreset.html">reset</a> </code> or<code> <a href="gradcomdreinit.html">reinit</a> </code>command is issued. </p>
+<p>Please read the documentation page on <a href="fontcontrol.html">Font Control in GrADS</a> for more information about using fonts in GrADS version 2.1. 
+<p>If your build is not enabled with the Cairo graphics library, <code>'set hershey off'</code> will have no effect. 
+<p>
+<H3>&nbsp;</H3>

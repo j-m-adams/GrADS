@@ -1,0 +1,47 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set wxopt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+body {
+	background-color: #e0f0ff;
+}
+</style>
+</head>
+<body text="#000000">
+
+<h2><b>screen</b></h2>
+<p>
+<code>screen save|show|free <em>num</em></code>
+<p>
+This command allows the user to save the contents of the display window into a buffer in memory, and also to restore a saved buffer to the current display at any time. This command will work in double buffer mode and was written to facilitate animations when working interactively with GrADS. The options are as follows:
+<p>
+<ul>
+<code>save</code>
+<ul>
+  Saves the contents of the display screen into  memory as buffer # 
+  <code><em>num</em></code>.
+</ul>
+<p>
+<code>show</code>
+<ul>
+  Draws the contents of buffer # 
+  <code><em>num</em></code> to the screen.
+</ul> 
+<p>
+<code>free</code>
+<ul>
+  Releases the contents of buffer # 
+  <code><em>num</em></code> from memory. 
+</ul> 
+</ul>
+
+<p>
+<h3>Usage Notes</h3>
+<p>This command does not work in batch mode, or in version 2.1+ when Cairo is enabled. 
+</body>
+</html>
+
+

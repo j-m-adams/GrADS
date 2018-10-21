@@ -1,0 +1,54 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set xlint</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set xlint</b></h2>
+
+<p>
+<code>set xlint <i>interval</i></code>
+
+<p>
+Specifies the <code><i>interval</i></code> between labeled tick marks
+on the X-axis.
+
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>If <code><i>interval</i></code> is a positive value, the labeled tick marks will
+'start' at <code>0</code>, regardless of the current dimension environment. 
+For example, if you set the <code><i>interval</i></code> to
+<code>3</code>, the labeled tick marks will be at <code>0, 3, 6, 9</code> ...
+<p>
+<li>If <code><i>interval</i></code> is a negative value, the labeled tick marks
+will 'start' at the axis start value, which is usually the lower limit
+of the X dimension environment. If this were <code>30</code> (with an
+<code><i>interval</i></code> of <code>10</code>), then the labeled tick marks would
+be at <code>30, 40, 50, 60</code>...
+<p>
+<li>This command is overridden by the <a href="gradcomdsetxlevs.html">
+<code>set xlevs</code></a> command. 
+<p>
+<li>This command will override the X-axis tick mark interval specified with the
+<a href="gradcomdsetxaxis.html"><code>set xaxis</code></a> command. 
+<p>
+<li>Reset by <a href="gradcomdclear.html">clear</a>, but not <a
+href="gradcomddisplay.html">display</a>.
+<p>
+<li>This command does not apply to a date/time axis. 
+<p>
+<li><code>set xlint</code> and <a href="gradcomdsetylint.html"><code>set ylint</code></a> 
+may not work as described when used to
+control grid lines for polar stereographic projections.
+</ol>
+
+<p>
+<h3>Examples </h3>
+
+
+</body>
+</html>

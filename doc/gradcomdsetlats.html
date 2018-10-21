@@ -1,0 +1,64 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set lats</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set lats</b></h2>
+<p>
+<code>set lats <i>arguments</i></code>
+<p>
+Valid <code><i>arguments</i></code> are: 
+<p>
+<pre>
+parmtab    <i>filename</i> 
+convention [ grads_grib | grib_only | coards ]
+calendar   [ standard | noleap | clim | climleap ]
+frequency  [ yearly | monthly | monthly_table_comp | weekly | daily | hourly | forecast_hourlyfixed] 
+delatat    <i>n</i>  
+fhour      <i>n</i>
+model      <i>model_name</i>
+center     <i>center_name</i>
+create     <i>filename</i>
+comment    <i>string</i>
+gridtype   [ linear | gaussian | generic ]
+vertdim    DIMNAME <i>val1 val2 ... valN</i> 
+var        VARNAME [ average | accum | instant ] LEVEL_ID
+timeoption [ grid | dim_env ]
+write      VAR_ID <i>level</i> 
+close 
+</pre>
+
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+</ol>
+
+<p>
+<h3>Examples </h3>
+<p>
+<pre>
+set lats parmtab lats.ncep.MRFtable
+set lats convention coards
+set lats calendar standard
+set lats frequency hourly
+set lats deltat 6
+set lats fhour 120
+set lats model MRF
+set lats center NCEP
+set lats create MRF.EXP1
+set lats comment "Latest MRF forecast with convection update"
+set lats gridtype gaussian
+set lats vertdim plev 1000 850 500 200
+set lats var u instant 1
+set lats v timeoption dim_env (use the GrADS dimension environment)
+set lats write 1 500 (return from t lats var)
+set lats close
+</pre>
+
+</body>
+</html>
+

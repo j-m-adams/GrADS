@@ -1,0 +1,48 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<h1>Graphics Primitives</h1>
+
+Various commands are provided to allow control and display of
+various graphics primitives:  These enable you to enhance your
+data plot by adding customised "artwork".  Alternatively, you can
+use these commands to create, for example, a map-based diagram
+with no data plot involved.<p>
+
+<h2><u>Drawing Commands</u></h2>
+<ul>
+<a href="gradcomddrawmap.html">draw map</a><br>
+<a href="gradcomddrawxlab.html">draw xlab</a><br>
+<a href="gradcomddrawylab.html">draw ylab</a><br>
+<a href="gradcomddrawstring.html">draw string</a><br>
+<a href="gradcomddrawline.html">draw line</a><br>  
+<a href="gradcomddrawrec.html">draw rec</a><br>  
+<a href="gradcomddrawrecf.html">draw recf</a><br>
+<a href="gradcomddrawmark.html">draw mark</a><br>  
+<a href="gradcomddrawpolyf.html">draw polyf</a><br>
+<a href="gradcomddrawwxsym.html">draw wxsym</a><br></ul>
+<br>
+<h2><u>Controlling drawing commands</u></h2>
+<ul>
+<a href="gradcomdsetfont.html">set font</a><br> 
+<a href="gradcomdsetline.html">set line</a><br> 
+<a href="gradcomdsetstring.html">set string</a><br> 
+<a href="gradcomdsetstrsiz.html">set strsiz</a><br> 
+<a href="gradcomdsetrgb.html">set rgb</a><br></ul><br>
+
+<h2><u>Plot clipping</u></h2>
+<ul>
+You may specify a clipping area for drawing graphics primitives
+such as lines and strings.  When you do a <a
+href="gradcomddisplay.html"><code>display</code></a> command, GrADS
+sets the clipping region to the parea, draws the graphic, then
+sets the clipping region to the entire page.  Even if you have
+set the clipping region, a display command will reset it to the
+entire page.  To clip the display of the various draw commands:<p>
+
+<dd><code><a href="gradcomdsetclip.html">set clip</a> xlo xhi ylo yhi</code><p>
+
+where <code>xlo,xhi,ylo,yhi</code> are the clipping coordinates in real page
+inches.
+</ul>
+
+

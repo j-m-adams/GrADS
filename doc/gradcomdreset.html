@@ -1,0 +1,55 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: reset</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<p>
+<h2><b>reset</b></h2>
+<p>
+<code>reset <i>&lt;qualifiers&gt;</i></code>
+<p>
+This command returns GrADS to its initial state with the following exceptions:
+
+<p>
+<ol>
+<li>No files are closed
+<li>No defined variables are released
+<li>The <a href="gradcomdsetdisplay.html"><code>set display</code></a> settings
+are not modified
+</ol>
+
+<p>
+If files are open, the default file is set to 1, and the
+dimension environment is set to X,Y varying and Z and T set to 1
+(as though file 1 were just opened).
+
+<p>
+The <code>reset</code> command may be qualified so that only certain
+aspects of GrADS are returned to their initial state.
+
+<p>
+The optional <code><i>qualifiers</i></code> are as follows:
+
+<p>
+<ul>
+<code>reset events&nbsp;&nbsp;&nbsp;&nbsp;</code>
+resets the events buffer (e.g., mouse clicks) <br>
+<code>reset graphics&nbsp;&nbsp;</code>
+resets the graphics, but not the widgets <br>
+<code>reset hbuff&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+resets the display buffer when in double buffer mode <br>
+<code>reset norset&nbsp;&nbsp;&nbsp;&nbsp;</code>
+resets the X events only
+</ul>
+
+<h3>Usage Notes</h3>
+<p>
+See the section of the <a href="users.html">User's Guide</a> 
+on <a href="reinitialization.html">reinitialization of GrADS</a>.
+
+
+</body>
+</html>

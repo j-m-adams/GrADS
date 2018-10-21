@@ -1,0 +1,462 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Supplibs</title>
+<link href="GrADS.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.style1 {color: #990000}
+body {
+	background-color: #e0f0ff;
+}
+-->
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body text="#000000">
+
+<center>
+  <h3>Supplemental Libraries for GrADS version 2.2</h3>
+</center>
+<p>There are many supplemental libraries that are required to enable various features in the GrADS executable. Building all these libraries from source is not necessarily easy; this page provides some guidance and suggestions that have led to success on COLA's unix systems (64-bit linux running CentOS, and Mac OSX). COLA's objective in building GrADS is to make  our binary releases portable, so we strive to build all the libraries from scratch, disabling features GrADS doesn't need, and then link statically when building GrADS. If you are building GrADS from source but not planning to distribute your build, then you may find that many of these libraries are already installed on your system and you can link with them dynamically. In this case, use the --enable-dyn-supplibs option with the GrADS configure script. Please post questions about building from source to the <a href="http://iges.org/grads/users.html" target="_parent">GrADS Users Forum</a>. If you have the proper privileges, you may install these anywhere on your system instead of $HOME, just be sure to change the commands listed in the table below to accomodate your own installation. </p>
+<p>To begin, make a directory top level directory for the supplibs under your $HOME, or some other  suitable directory:<br>
+  <span class="code">mkdir $HOME/grads/supplibs<br>
+  setenv SUPPLIBS $HOME/grads/supplibs
+  </span></p>
+<p>Make a subdirectory where you will store the tar files containing the library source code:<br>
+  <span class="code">mkdir -p $SUPPLIBS/tarfiles</span></p>
+<p>Make a subdirectory where you will store the source code when unpacking the tar files:<br>
+<span class="code">mkdir -p $SUPPLIBS/src</span></p>
+Get the src from <a href="ftp://cola.gmu.edu/grads/Supplibs/2.2/src">COLA's FTP server</a>: <br>
+<span class="code">cd $SUPPLIBS/tarfiles<br>
+ftp cola.gmu.edu<br>
+&lt;login as anonymous&gt;<br>
+cd grads/Supplibs/2.2/src<br>
+mget *<br> 
+quit </span>
+<p>These are the directories where  the compiled libaries, pkgconfig files, include files, and any executable utilities  will be installed. This will be created automatically by the library software, there is no need to create them manually. <br>
+  <span class="code">$HOME/supplibs/lib</span><br>
+<span class="code">$HOME/supplibs/include<br>
+$HOME/supplibs/bin</span></p>
+<p>This seems to be necessary in order to link the libraries dynamically to create the shared object file (libgradspy.so) for the python interface:<br>
+<span class="code">setenv CFLAGS -fPIC </span></p>
+<p>When you are done, unpack the GrADS source code tarball under $HOME. Change into the new GrADS directory you just created, and type<span class="code"> ./configure. </span>When the configuration is done, it will show a summary of which features have been enabled. Then type '<span class="code">make install</span>' and look for your executables in the ./bin directory. </p>
+<p>Good Luck!! </p>
+<p>&nbsp;</p>
+<table width="100%" border="0" cellpadding="4" cellspacing="4" class="plaintext">
+  <tr>
+    <td valign="top" bgcolor="#CCCCCC">Library</td>
+    <td valign="top" bgcolor="#CCCCCC">Version</td>
+    <td valign="top" bgcolor="#CCCCCC" class="plaintext">Why GrADS needs it </td>
+    <td bgcolor="#CCCCCC" class="plaintext">How to configure and install it for GrADS</td>
+  </tr>
+  <tr>
+    <td width="6%" valign="top" bgcolor="ccdceb">readline</td>
+    <td width="12%" valign="top" bgcolor="ccdceb">5.0</td>
+    <td width="16%" valign="top" bgcolor="ccdceb" class="plaintext"><p>Enables command line editing.<a href="http://tiswww.case.edu/php/chet/readline/rltop.html" target="_parent"><br>
+        home page</a><br>
+    </p>    </td>
+    <td width="66%" bgcolor="ccdceb" class="plaintext"><p class="code">cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/readline-5.0.tar.gz <br>
+      cd readline-5.0<br>
+      ./configure  
+      --prefix=$SUPPLIBS<br>
+      make install<br>
+    </p></td>
+  </tr>
+  <tr>
+    <td valign="top" bgcolor="b8c8d7">ncurses</td>
+    <td valign="top" bgcolor="b8c8d7">5.7</td>
+    <td valign="top" bgcolor="b8c8d7" class="plaintext"><p>Required by readline.<br>
+      <a href="http://www.gnu.org/software/ncurses/">home page</a><br>
+    </p></td>
+    <td bgcolor="b8c8d7" class="plaintext"><p class="code">cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/ncurses-5.7.tar.gz<br>
+      cd ncurses-5.7<br>
+      ./configure  
+      --prefix=$SUPPLIBS --without-ada --with-shared<br>
+      make install<br>
+    </p></td>
+  </tr>
+  <tr>
+    <td valign="top" bgcolor="ccdceb">zlib</td>
+    <td valign="top" bgcolor="ccdceb">1.2.8</td>
+    <td valign="top" bgcolor="ccdceb" class="plaintext"><p>General compression library.<br>
+      Required by NetCDF et al.<br>    
+        <a href="http://www.zlib.net/" target="_parent">home page</a><br>
+        <br>
+      </p>
+    </td>
+    <td bgcolor="ccdceb" class="code"><p>cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/zlib-1.2.8.tar.gz<br>
+      cd zlib-1.2.8<br>
+      ./configure --prefix=$SUPPLIBS<br>
+      make install<br>
+    </p></td>
+  </tr>
+  <tr>
+    <td valign="top" bgcolor="b8c8d7">libpng</td>
+    <td valign="top" bgcolor="b8c8d7">1.5.12</td>
+    <td valign="top" bgcolor="b8c8d7">PNG reference library. <br>      
+      <a href="http://www.libpng.org/pub/png/libpng.html" target="_parent">home page</a><br>      <br></td>
+    <td bgcolor="b8c8d7" class="code"><p>cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/libpng-1.5.12.tar.gz<br>
+      cd libpng-1.5.12<br>
+      ./configure  
+      --prefix=$SUPPLIBS<br>
+make install</p></td>
+  </tr>
+  <tr bgcolor="ccdceb">
+    <td valign="top" bgcolor="ccdceb">jpeg</td>
+    <td valign="top" bgcolor="ccdceb">6b</td>
+    <td valign="top" class="plaintext">Image compression library. <br>      
+      <a href="http://www.ijg.org/" target="_parent">home page</a><br></td>
+    <td bgcolor="ccdceb" class="plaintext"><p class="code">cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/jpegsrc.v6b.tar.gz <br>
+      cd jpeg-6b<br>
+        ./configure  
+      --prefix=$SUPPLIBS<br>
+make<br>
+cp libjpeg.a ../../lib/ <br>
+cp *.h ../../include/<br>
+    </p></td>
+  </tr>
+  <tr>
+    <td valign="top" bgcolor="b8c8d7">gd</td>
+    <td valign="top" bgcolor="b8c8d7">2.0.34</td>
+    <td valign="top" bgcolor="b8c8d7" class="plaintext">GD Graphics Library. <br>
+      Requires: zlib, libpng, jpeg<br>
+      <a href="http://www.libgd.org/Main_Page" target="_parent">home page</a></td>
+    <td bgcolor="b8c8d7" class="code">cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/gd-2.0.34.tar.gz<br>
+      cd gd-2.0.34<br>
+      ./configure  --prefix=$SUPPLIBS
+      --with-png=$SUPPLIBS 
+      --with-jpeg=$SUPPLIBS<br>
+      make install</td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="ccdceb">jasper</td>
+    <td valign="top" bgcolor="ccdceb">1.900.1<br>
+    14ubuntu3.2.debian</td>
+    <td valign="top" bgcolor="ccdceb">For image coding and manipulation <br>    
+    <a href="http://www.ece.uvic.ca/~mdadams/jasper/" target="_parent">home page</a><br></td>
+    <td bgcolor="ccdceb"><p class="code">cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/jasper-1.900.1-14ubuntu3.2.debian.tar.gz<br>
+      cd jasper-1.900.1<br>
+      ./configure  
+      
+      --prefix=$SUPPLIBS 
+      --with-jpeg=$SUPPLIBS<br>
+        make install<br>
+    </p></td>
+  </tr>
+  <tr bgcolor="ccdceb">
+    <td valign="top" bgcolor="b8c8d7">g2clib</td>
+    <td valign="top" bgcolor="b8c8d7">1.6.0</td>
+    <td valign="top" bgcolor="b8c8d7"><p>Decodes data in GRIB2 format. <br>
+      Requires: zlib, png, jasper<br>    
+    <a href="http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/" target="_parent">home page</a><br>
+    </p>    </td>
+    <td bgcolor="b8c8d7"><p class="code">cd $SUPPLIBS/src<br>
+tar xvfz ../tarfiles/g2clib-1.6.0.tar.gz<br>
+
+cd g2clib-1.6.0</p>
+      <p class="code style1">Note1: There is no configure script in this library, so you must edit the makefile manually. Change the  &quot;INC&quot; variable as indicated below. Be sure to write out $SUPPLIBS explicitly: <br>
+           INC=-I$SUPPLUBS/include -I$UPPLIBS/include/libpng15<br>
+          You must also edit the &quot;CFLAGS&quot; variable to include  the &quot;-fPIC&quot; option. On some unix servers it may also be necessary to 
+      remove the &quot;-m64&quot; and/or &quot;-D__64BIT__&quot; options.</p>
+      <p class="code"><span class="style1">Note2: Version 1.6.0 of the grib2 C library introduced a new output file naming convention that includes a version number. When manually installing in it the $SUPLLIBS/lib directory, rename it to the old (static) filename. It is also necessary to manually install the grib2.h file in the $SUPPLIBS/include directory.</span></p>
+      <p class="code">make<br>
+        /bin/cp -f libg2c_v1.6.0.a $SUPPLIBS/lib/libgrib2c.a<br>
+    /bin/cp -f grib2.h $SUPPLIBS/include</p></td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="b8c8d7">udunits</td>
+    <td valign="top" bgcolor="b8c8d7">1.11.7</td>
+    <td valign="top"><p>Supports units of physical quantities. <br> 
+    <a href="http://www.unidata.ucar.edu/software/udunits/" target="_parent">home page</a><br>
+    </p>    </td>
+    <td bgcolor="b8c8d7"><p class="code">cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/udunits-1.11.7.tar.gz<br>
+      cd udunits-1.11.7/src/<br>
+        ./configure --prefix=$SUPPLIBS<br>
+        make install<br>
+        <br>
+    </p></td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="ccdceb">hdf</td>
+    <td valign="top" bgcolor="ccdceb">4.2r3</td>
+    <td valign="top" bgcolor="ccdceb"> Hierarchical Data Format library, version 4. Requires: zlib, udunits, jpeg, szip<br>      <a href="http://hdfgroup.org/products/hdf4/index.html" target="_parent">home page</a><br></td>
+    <td bgcolor="ccdceb"><p class="code">cd $SUPPLIBS/src<br>
+tar xvfz ../tarfiles/HDF4.2r3.tar.gz<br>
+      cd HDF4.2r3<br>
+        ./configure --prefix=$SUPPLIBS --disable-netcdf  --disable-fortran 
+        \<br>
+        --with-zlib=$SUPPLIBS 
+        --with-jpeg=$SUPPLIBS <br>
+        make install</p></td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="b8c8d7">hdf5</td>
+    <td valign="top" bgcolor="b8c8d7">1.8.11</td>
+    <td valign="top">Hierarchical Data Format library, version 5. Requires: zlib<br><a href="http://www.hdfgroup.org/HDF5/" target="_parent">home page</a><br></td>
+    <td bgcolor="b8c8d7"><p class="code">cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/hdf5-1.8.11.tar.gz<br>
+      cd hdf5-1.8.11<br>
+      ./configure --prefix=$SUPPLIBS --disable-fortran 
+      --with-zlib=$SUPPLIBS 
+      <br>
+        make install<br>
+    </p></td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="ccdceb">curl</td>
+    <td valign="top" bgcolor="ccdceb">7.35.0<br>
+      (7.19.6 also ok)</td>
+    <td valign="top" bgcolor="ccdceb">      For enabling OPeNDAP access. <br>      
+      <a href="http://curl.haxx.se/" target="_parent">home page</a><br></td>
+    <td bgcolor="ccdceb" class="code"><p>cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/curl-7.35.0.tar.gz<br>
+      cd curl-7.35.0</p>
+      <p><span class="code style1">Note: When accessing secure (https) opendap servers it is necessary to have the SSL feature of the curl library enabled. Use &quot;--without-ssl&quot; if you do not have the openSSL library installed on your local system.</span></p>
+      <p>./configure --prefix=$SUPPLIBS --with-ssl --without-libidn 
+        \<br>
+        --enable-static --disable-ldap <br>
+      make install</p></td>
+  </tr>
+  <tr bgcolor="ccdceb">
+    <td valign="top" bgcolor="b8c8d7">netcdf</td>
+    <td valign="top" bgcolor="b8c8d7">4.3.3</td>
+    <td valign="top" bgcolor="b8c8d7">Network Common Data Form library. <br>
+      Requires hdf5, zlib, szip, curl. <br>
+      <br>      <a href="http://www.unidata.ucar.edu/software/netcdf/" target="_parent">home page</a><br></td>
+    <td bgcolor="b8c8d7"><p class="code">cd $SUPPLIBS/src<br>
+tar xvfz ../tarfiles/netcdf-4.3.3.tar.gz<br>
+        cd netcdf-4.3.3</p>
+      <p class="code"><span class="style1">Note: before running configure, set the following environment variables (remove the &quot;-lssl&quot; from $LIBS if you did not build curl with SSL enabled):<br>
+        setenv LIBS &quot;-lm  -ldl -lcurl -lssl -lrt -lz&quot;<br>
+      setenv LDFLAGS -L$SUPPLIBS/lib<br>
+      setenv CPPFLAGS -I$SUPPLIBS/include</span><br>
+        <br>
+      ./configure         --prefix=$SUPPLIBS --enable-netcdf-4 
+--enable-dap <br>
+        make install</p>
+      <p class="code"><span class="style1">Note: After the library is built, you can unset the environment variables:<br>
+        unsetenv LIBS <br>
+unsetenv LDFLAGS<br>
+      unsetenv CPPFLAGS</span></p></td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="ccdceb">tiff</td>
+    <td valign="top" bgcolor="ccdceb">3.8.2</td>
+    <td valign="top" bgcolor="ccdceb">Enables handling of image data in the Tag Image File Format.<br>
+      <a href="http://www.libtiff.org/">home page</a><br></td>
+    <td bgcolor="ccdceb" class="code">cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/tiff-3.8.2.tar.gz<br>
+      cd tiff-3.8.2<br>
+      ./configure  
+      --prefix=$SUPPLIBS<br>
+      make install</td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="b8c8d7">geotiff</td>
+    <td valign="top" bgcolor="b8c8d7">1.2.5</td>
+    <td valign="top" bgcolor="b8c8d7">Enables handling georeferenced raster imagery. 
+      Requires: tiff.<br>
+      <a href="http://geotiff.osgeo.org/">home page</a><br></td>
+    <td bgcolor="b8c8d7"><p class="code">cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/libgeotiff-1.2.5.tar.gz <br>
+        cd libgeotiff-1.2.5<br>
+        ./configure --prefix=$SUPPLIBS --enable-incode-epsg 
+        \<br>
+        --enable-static  --with-libtiff=$SUPPLIBS <br>
+        make <br>
+        make 
+        install</td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="ccdceb">shapelib</td>
+    <td valign="top" bgcolor="ccdceb">1.2.10</td>
+    <td valign="top" bgcolor="ccdceb">Enables handling of shapefiles<br>
+      <a href="http://shapelib.maptools.org/">home page</a><br></td>
+    <td bgcolor="ccdceb"><p class="code">cd $SUPPLIBS/src<br>
+        tar xvfz ../tarfiles/shapelib-1.2.10.tar.gz<br>
+        cd shapelib-1.2.10<br>
+        <br>
+        <span class="style1">Note: There is no configure script, just a Makefile. <span class="code style1">Edit the makefile to use the -fPIC option with gcc. Change &quot;CFLAGS&quot; as indicated below:<br>
+   CFLAGS = -g -fPIC <br>
+Also change &quot;-g -O2&quot; to &quot;-g -fPIC -O2&quot; when it occurs instead of $(CFLAGS)</span><br>
+<br>
+        </span>make all lib</p>
+<p class="code"><span class="style1">Installation to $SUPPLUBS is done manually. The utilities are copied to the $SUPPLIBS/bin directory in case they might be useful to the user -- GrADS doesn't explicitly need them.</span></p>
+      <p class="code">/bin/cp -f ./.libs/libshp.a $SUPPLIBS/lib<br>
+        /bin/cp -f shapefil.h  $SUPPLIBS/include<br>
+    /bin/cp -f shpcreate shpadd shpdump shprewind dbfcreate dbfadd dbfdump shptest $SUPPLIBS/bin    </p></td>
+  </tr>
+  
+  <tr bgcolor="ccdceb">
+    <td valign="top" bgcolor="ccdceb">xml2</td>
+    <td valign="top" bgcolor="ccdceb">2.9.0</td>
+    <td valign="top" bgcolor="ccdceb"><p>An XML parser and toolkit. <br>
+      Enables OPeNDAP station data access,
+      also used by Cairo library.<br>
+      <a href="http://xmlsoft.org/" target="_parent">home page</a><br>
+    </p></td>
+    <td bgcolor="ccdceb"><p class="code">cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/libxml2-2.9.0.tar.gz<br>
+      cd libxml2-2.9.0<br>
+      ./configure   --prefix=$SUPPLIBS
+      --with-zlib=$SUPPLIBS
+      --without-threads \<br>
+      --without-iconv --without-iso8859x --without-lzma<br>
+      make install<br>
+    </p></td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="b8c8d7">Xrender</td>
+    <td valign="top" bgcolor="b8c8d7">0.9.6</td>
+    <td valign="top" bgcolor="b8c8d7" bgcolo ="ccdceb">A helper tool used when compiling applications and libraries. 
+      Required for Cairo.<br>
+    <a href="http://cgit.freedesktop.org/xorg/lib/libXrender/">home page</a><br></td>
+    <td bgcolor="b8c8d7"><p class="code">cd $SUPPLIBS/src<br>
+      tar xvfz ../tarfiles/libXrender-0.9.6.tar.gz <br>
+      cd libXrender-0.9.6<br>
+      ./configure --prefix=$SUPPLIBS<br>
+        make install<br>
+      </p></td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="b8c8d7">pkgconfig</td>
+    <td valign="top" bgcolor="b8c8d7">0.23</td>
+    <td valign="top" bgcolor="b8c8d7" bgcolo ="ccdceb">A helper tool used when compiling applications and libraries. 
+      Required for Cairo.<br>
+      <a href="http://pkg-config.freedesktop.org/wiki/">home page</a><br>
+      <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/pkgconfig-0.23.tar.gz"></a></td>
+    <td bgcolor="b8c8d7"><p class="code">cd $SUPPLIBS/src<br>
+        tar xvfz ../tarfiles/pkgconfig-0.23.tar.gz<br>
+        cd pkg-config-0.23<br>
+        ./configure --prefix=$SUPPLIBS<br>
+        make install<br>
+        <br>
+        <span class="style1">Note: These environment variables must be set AFTER pkg-config is built:</span><br>
+        setenv PKG_CONFIG $SUPPLIBS/bin/pkg-config<br>
+      setenv PKG_CONFIG_PATH $SUPPLIBS/lib/pkgconfig</p></td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="b8c8d7">dap</td>
+    <td valign="top" bgcolor="b8c8d7">3.7.8 (use the modified version for newer flavors of unix)</td>
+    <td valign="top" bgcolor="b8c8d7">Open-source Project for a Network Data Access Protocol (OPeNDAP). <br>
+      Requires: xml2, curl.<br>
+<a href="http://opendap.org/index.html" target="_parent">home page</a><br></td>
+    <td bgcolor="b8c8d7"><p class="code">cd $SUPPLIBS/src<br>
+tar xvfz ../tarfiles/libdap-3.7.8-modified.tar.gz<br>
+    cd libdap-3.7.8-modified<br>
+      setenv CPPFLAGS -I$SUPPLIBS/include<br>
+./configure 
+        --prefix=$SUPPLIBS<br>
+      make install      </p></td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="ccdceb">gadap</td>
+    <td valign="top" bgcolor="ccdceb">2.0 or 2.1 (for newer flavors of unix)</td>
+    <td valign="top" bgcolor="ccdceb">Enables OPeNDAP access of <br>
+      in situ data. <br>
+      Requires dap, curl, and xml2. <br></td>
+    <td bgcolor="ccdceb"><p class="code">cd $SUPPLIBS/src<br>
+tar xvfz ../tarfiles/gadap-2.1.tar.gz<br>
+      cd gadap-2.1</p>
+      <p class="code"><span class="code style1">N.B. You will need to make sure $SUPPLIBS/bin  is in your path so the configure script can find the utility dap-config, which is part of the dap library package</span></p>
+        
+      
+      <p class="code">setenv PATH $SUPPLIBS/bin:$PATH<br>
+      setenv CPPFLAGS -I$SUPPLIBS/include<br>
+./configure --prefix=$SUPPLIBS<br>
+        make install</p></td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="ccdceb">pixman</td>
+    <td valign="top" bgcolor="ccdceb">0.34.0</td>
+    <td valign="top" bgcolor="ccdceb"><p>A pixel manipulation library for <br>
+    X and Cairo.<br>
+    <a href="http://cgit.freedesktop.org/pixman/">home page</a><br>
+    </p>    </td>
+    <td bgcolor="ccdceb"><p class="code">cd $SUPPLIBS/src<br>
+tar xvfz ../tarfiles/pixman-0.34.0.tar.gz <br>
+      cd pixman-0.34.0<br>
+      ./configure  --prefix=$SUPPLIBS<br> 
+      make install</p></td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="b8c8d7">freetype</td>
+    <td valign="top" bgcolor="b8c8d7">2.4.10</td>
+    <td valign="top" bgcolor="b8c8d7">A software font engine.
+      Required by Cairo. <br>
+      <a href="http://www.freetype.org/">home page</a><br></td>
+    <td bgcolor="b8c8d7"><p class="code">cd $SUPPLIBS/src<br>
+      tar xvfz tarfiles/freetype-2.4.10.tar.gz<br>
+      cd freetype-2.4.10<br>
+      ./configure 
+      
+      --prefix=$SUPPLIBS --with-zlib=$SUPPLIBS \<br>
+      --without-fsspec 
+      --without-fsref 
+      --without-ats --without-bzip2 \<br>
+      --without-quickdraw-toolbox 
+      --without-quickdraw-carbon <br>
+      make install</p></td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="ccdceb">fontconfig</td>
+    <td valign="top" bgcolor="ccdceb">2.9.0</td>
+    <td valign="top" bgcolor="ccdceb">A library for configuring and customizing font access. 
+Required by Cairo. <br>
+<a href="http://www.freedesktop.org/wiki/Software/fontconfig">home page</a></td>
+    <td bgcolor="ccdceb"><p class="code">cd $SUPPLIBS/src<br>
+tar xvfz tarfiles/fontconfig-2.9.0.tar.gz<br>
+      cd fontconfig-2.9.0<br>
+      ./configure --prefix=$SUPPLIBS --enable-libxml2 \<br>
+       --with-freetype-config=$SUPPLIBS/bin/freetype-config \<br>
+    --with-add-fonts=/Library/Fonts,/System/Library/Fonts <span class="style1">(for mac)</span>   
+      <br>
+    --with-add-fonts=/usr/share/X11/fonts,/usr/share/fonts <span class="style1">(for unix)
+    </span>
+    <p class="code"><span class="code style1">N.B. After configuration,  edit config.h to set USE_ICONV = 0<br>
+      I don't know of another way to tell it not to use libiconv.   </span>    
+        <br>
+    make install<br></td>
+  </tr>
+  <tr bgcolor="b8c8d7">
+    <td valign="top" bgcolor="b8c8d7">cairo</td>
+    <td valign="top" bgcolor="b8c8d7">1.14.10</td>
+    <td valign="top" bgcolor="b8c8d7">A 2D graphics library with support for multiple output devices. Requires pkgconfig, zlib, xml2, libpng, pixman, fontconfig, freetype, and Xrender.<br>
+<a href="http://www.cairographics.org/">home page</a><br></td>
+    <td bgcolor="b8c8d7"><p class="code">cd $HOME/supplibs/src<br>
+      tar xvf tarfiles/cairo-1.14.10.tar.gz<br>
+      mkdir cairo<br>
+      cd cairo-1.14.10<br>
+      ./configure --prefix=$SUPPLIBS \<br>
+      --enable-xlib=yes \<br>
+      --enable-xml=yes \<br>
+      --enable-fc=yes \<br>
+      --enable-ft=yes \<br>
+      --enable-xlib-xrender=yes \<br>
+      --enable-pthread=yes \<br>
+      --enable-xcb=no \<br>
+      --enable-qt=no \<br>
+      --enable-quartz=no \<br>
+      --enable-win32=no \<br>
+      --enable-skia=no \<br>
+      --enable-os2=no \<br>
+      --enable-beos=no \<br>
+      --enable-drm=no \<br>
+    --enable-gl=no<br>
+    make install</p></td>
+  </tr>
+</table>
+<p class="plaintext"><br>
+</p>
+</body>
+</html>

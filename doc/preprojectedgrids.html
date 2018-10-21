@@ -1,0 +1,302 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+
+<link rel="stylesheet" href="/assets/NewIGES.css">
+
+<body bgcolor="#e0f0ff">
+<h1><u>Using Preprojected Grids</u></h1>
+<ul>
+  <span class="plaintext"><a href="#polar">Polar Stereo Preprojected Data</a><br>
+  <a href="#lambert">Lambert Conformal Preprojected Data</a><br>
+  <a href="#eta">NMC Eta model</a><br>
+  <a href="#nmc">NMC high accuracy polar stereo for SSM/I data</a><br>
+  <a href="#csu">CSU RAMS Oblique Polar Stereo Grids</a><br>
+  <a href="#pit">Pitfalls when using preprojected data</a> </span> 
+</ul>
+<br>
+<br>
+<ul>
+  <b><span class="plaintext">Preprojected</span></b><span class="plaintext"> data 
+  are data <b>already</b> on a map projection. GrADS supports four types of preprojected 
+  data: </span> 
+  <p> 
+  <ol>
+    <li class="plaintext">N polar stereo (NMC model projection); 
+    <li class="plaintext">S polar stereo (NMC model projection) ; 
+    <li class="plaintext">Lambert Conformal (originally for Navy NORAPS model); 
+    <li class="plaintext">NMC eta model (unstaggered). 
+    <li class="plaintext">More precise N and S polar stereo (hi res SSM/I data) 
+    <li class="plaintext">Colorado State University RAMS model (oblique polar 
+      stereo; beta)<br>
+      When preprojected grids are opened in GrADS, bilinear interpolation constants 
+      are calculated and all date are displayed on an internal GrADS lat/lon grid 
+      defined by the <code>xdef</code> and <code>ydef</code> card in the data 
+      description or <code>.ctl</code> file (that's why it takes longer to "open" 
+      a preprojected grid data set). 
+      <p class="plaintext"> It is very important to point out that the internal 
+        GrADS grid can be any grid as it is completely independent of the preprojected 
+        data grid. Thus, there is nothing stopping you displaying preprojected 
+        data on a very high res lon/lat grid (again, defined in the <code>.ctl</code> 
+        by <code>xdef</code> and <code>ydef</code>). In fact, you could create 
+        and open multiple .ctl files with different resolutions and/or regions 
+        which pointed to the same preprojected data file. 
+      <p class="plaintext"> When you do a <a
+href="gradcomddisplay.html"><code>display</code></a> (i.e., get a grid of data), 
+        the preprojected data are bilinearly interpolated to the GrADS internal 
+        lat/lon grid. For preprojected scalar fields (e.g., 500 mb heights), the 
+        display is adequate and the precision of the interpolation can be controlled 
+        by <code>xdef</code> and <code>ydef</code> to define a higher spatial 
+        resolution grid. 
+      <p class="plaintext"> The big virtue of this approach is that all built 
+        in GrADS analytic functions (e.g., <a
+href="gradfuncaave.html"><code>aave</code></a>, <a href="gradfunchcurl.html"><code>hcurl</code></a>...) 
+        continue to work even though the data were not originally on a lon/lat 
+        grid. The downside is that you are not looking directly at your data on 
+        a geographic map. However, one could always define a .ctl file which simply 
+        opened the data file as i,j data and displayed without the map (<a href="gradcomdsetmpdraw.html"><code>set 
+        mpdraw</code></a><code> off</code>). So, in my opinion, this compromise 
+        is not that limiting even if as a modeller you wanted to look at the grid--you 
+        just don't get the map background. 
+      <p> <span class="plaintext"><code>Preprojected vector fields</code> are 
+        a little trickier, depending on whether the vector is defined relative 
+        to the data grid or relative to the Earth. For example, NMC polar stereo 
+        grids use winds relative to the data grid and thus must be rotated to 
+        the internal GrADS lat/lon grid (again defined in the <code>.ctl</code> 
+        file by the <code>xdef</code> and <code>ydef</code> cards). </span>
+      <p class="plaintext"> The only potential problem with working with preprojected 
+        data is defining the projection for GrADS. This is accomplished using 
+        a <code>pdef</code> card in the data descriptor <code>.ctl</code> file. 
+  </ol>
+</ul>
+<span class="plaintext"><br>
+</span> <br>
+<span class="plaintextbold"><a name="polar"></a>Polar Stereographic Preprojected 
+Data</span> 
+<p> 
+<ul>
+  <span class="plaintext">Preprojected data on polar stereographic projections 
+  (N and S) is defined as at NMC. For the NCEP model GRIB data distributed via 
+  anon ftp from ftp.ncep.noaa.gov, the <code>pdef</code> card is: </span> 
+  <p> 
+  <ul>
+    <span class="plaintext"><code> pdef isize jsize projtype ipole jpole lonref 
+    gridinc<br>
+    pdef 53 45 nps 27 49 -105 190.5 </code> </span> 
+  </ul>
+  <p class="plaintext"> where, 
+  <p> 
+  <ul>
+    <span class="plaintext"><code>ipole</code> and <code>jpole</code> are the 
+    (i,j) of the pole referenced from the lower left corner at (1,1) and <code>gridinc</code> 
+    is the dx in km. </span> 
+  </ul>
+  <p>&nbsp; 
+  <p><br>
+    <br>
+    <a name="lambert"><b><i>Lambert Conformal Preprojected Data</i></b></a> 
+</ul>
+<p> 
+<ul>
+  The Lambert Conformal projection (lcc) was implemented for use with data from 
+  the U.S. Navy's limited area model NORAPS. Thus, to work with your lcc data 
+  you must express your grid in the context of the Navy lcc grid. 
+  <p> A typical NORAPS Lambert-Conformal grid is described below, including the 
+    C code which sets up the internal interpolation. 
+  <p> The<code> pdef record for a typical NORAPS Lambert-Conformal grid might 
+    be:</code><code> <br>
+    pdef 103 69 lcc 30 -88 51.5 34.5 20 40 -88 90000 90000 <br>
+    </code> </p>
+  <p> where, 
+  <p> 
+  <ul>
+    <code>103&nbsp;&nbsp;&nbsp;</code>= #pts in x <br>
+    <code>69&nbsp;&nbsp;&nbsp;&nbsp;</code>= #pts in y <br>
+    <code>lcc&nbsp;&nbsp;&nbsp;</code>= Lambert-Conformal <br>
+    <code>30&nbsp;&nbsp;&nbsp;&nbsp;</code>= lat of ref point <br>
+    <code>88&nbsp;&nbsp;&nbsp;&nbsp;</code>= lon of ref point (E is positive, 
+    W is negative) <br>
+    <code>51.5&nbsp;&nbsp;</code>= i of ref point <br>
+    <code>34.5&nbsp;&nbsp;</code>= j of ref point <br>
+    <code>20&nbsp;&nbsp;&nbsp;&nbsp;</code>= S true lat <br>
+    <code>40&nbsp;&nbsp;&nbsp;&nbsp;</code>= N true lat <br>
+    <code>88&nbsp;&nbsp;&nbsp;&nbsp;</code>= standard lon <br>
+    <code>90000&nbsp</code>= dx in M <br>
+    <code>90000&nbsp</code>= dy in M 
+  </ul>
+  <p> <br>
+    <br>
+    <a name="eta"><b><i>NMC Eta model (unstaggered grids)</i></b></a> 
+</ul>
+<p> 
+<ul>
+  The NMC eta model "native" grid is awkward to work with because the variables 
+  are on staggered (e.g., the grid for winds is not the same as the grid for mass 
+  points) <i>and</i> non rectangular (number of points in i is <i>not</i> constant 
+  with j) grids. Because any contouring of irregularly gridded data involves interpolation 
+  at some point, NMC creates "unstaggered" eta model fields for practical application 
+  programs such as GrADS. In the unstaggered grids all variables are placed on 
+  a common <i>and</i> rectangular grid (the mass points). 
+  <p> Wind rotation has also been added so that vector data will be properly displayed. 
+  <p> The pdef card for a typical eta model grid is: 
+  <p> 
+  <ul>
+    <code>pdef 181 136 eta.u -97.0 41.0 0.38888888 0.37037037</code> 
+    <p> <code>181</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = #pts 
+      in x <br>
+      <code>136</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = #pts 
+      in y <br>
+      <code>eta.u</code>&nbsp;&nbsp;&nbsp;&nbsp; = eta grid, unstaggered<br>
+      <code>-97.0</code>&nbsp;&nbsp;&nbsp;&nbsp; = lon of ref point (E is positive 
+      in GrADS, W is negative) [deg] <br>
+      <code>41.0</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = lat of ref point 
+      [deg] <br>
+      <code>0.3888</code>&nbsp;&nbsp; = dlon [deg] <br>
+      <code>0.37037</code> = dlat [deg] 
+  </ul>
+  <p>&nbsp; 
+</ul>
+<br>
+<br>
+<a name="nmc"><b><i>NMC high accuracy polar stereo for SSM/I data</i></b></a>
+<p> 
+<ul>
+  The polar stereo projection used by the original NMC models is not very precise 
+  because it assumes the earth is round (eccentricity = 0). While this approximation 
+  was reasonable for coarse resolution NWP models, it is inadequate to work with 
+  higher resolution data such as SSM/I. 
+  <p> <i>Wind rotation has not been implemented!!! Use only for scalar fields.</i> 
+  <p> 
+  <ul>
+    <code>pdef ni nj pse slat slon polei polej dx dy sgn</code> 
+    <p> <code>ni</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      = # points in x <br>
+      <code>nj</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 
+      # points in y <br>
+      <code>slat</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = absolute value of the 
+      standard latitude <br>
+      <code>slon</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = absolute value of the 
+      standard longitude <br>
+      <code>pse</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = polar stereo, 
+      "eccentric"<br>
+      <code>polei</code>&nbsp;&nbsp;&nbsp; = x index position of the pole (where 
+      (0,0) is the index of the first point vice the more typical (1,1) ) <br>
+      <code>polej</code>&nbsp;&nbsp;&nbsp; = y index position of the pole (where 
+      (0,0) is the index of the first point vice the more typical (1,1) ) <br>
+      <code>dx</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 
+      delta x in km <br>
+      <code>dy</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 
+      delta y in km <br>
+      <code>sgn</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 1 for N polar 
+      stereo and -1 for S polar stereo 
+  </ul>
+  <p> Source code in GrADS for the lon,lat -> i,j mapping: 
+  <p> 
+  <pre>&nbsp;
+
+
+</pre>
+</ul>
+<br>
+<br>
+<a name="csu"><b><i>Oblique Polar Stereo Grids</i></b></a> 
+<p> 
+<ul>
+  The CSU RAMS model uses an oblique polar stereo projection. <i>Wind rotation 
+  has not been implemented!!! Use only for scalar fields.</i> 
+  <p> 
+  <ul>
+    <code> pdef 26 16 ops 40.0 -100.0 90000.0 90000.0 14.0 9.0 180000.0 180000.0</code> 
+    <p> <code>26</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      = #pts in x <br>
+      <code>16</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      = #pts in y <br>
+      <code>ops</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      = oblique polar stereo<br>
+      <code>40.0</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      = lat of ref point (14.0, 9.0) <br>
+      <code>-100.0</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = lon of ref point (14.0, 
+      9.0 (E is positive in GrADS, W is negative) <br>
+      <code>90000.0</code>&nbsp;&nbsp;&nbsp; = xref offset [m] <br>
+      <code>90000.0</code>&nbsp;&nbsp;&nbsp; = yref offset [m]<br>
+      <code>14.0</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      = i of ref point <br>
+      <code>9.0</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      = j of ref point <br>
+      <code>180000.0</code>&nbsp; = dx [m] <br>
+      <code>180000.0</code>&nbsp; = dy [m] 
+  </ul>
+  <p>&nbsp; 
+  <p>&nbsp; 
+</ul>
+<br>
+<br>
+<a name="pit"><b><i>Pitfalls when using preprojected data</i></b></a>
+<p> 
+<ul>
+  There are a few <i>gotchas</i> with using preprojected data:
+  <p> 
+  <ol>
+    <li>the units in the variable definition for the <code>u</code> and <code>v</code> 
+      components <b>must</b> be <code>33</code> and <code>34</code> (the GRIB 
+      standard) respectively, e.g., 
+      <p> 
+      <ul>
+        <code>u 15 33</code>&nbsp;&nbsp;&nbsp; u component of the wind at 15 pressure 
+        levels <br>
+        <code>v 15 34</code>&nbsp;&nbsp;&nbsp; v component of the wind at 15 pressure 
+        levels
+      </ul>
+      <p> 
+    <li>wind rotation is handled for polar stereo (N and S) preprojected data, 
+      but <i>not</i> for Lambert Conformal, as the Navy rotates the winds relative 
+      to earth. 
+    <li>the <code>eta.u</code> <b>and</b> <code>ops</code> projection are still 
+      experimental...
+  </ol>
+</ul>
+<br>
+<br>
+<a name="proj">
+<h2><u>GrADS Display Projections</u></h2>
+</a> 
+<ul>
+  Now that you hopefully understand GrADS data grids, it is time to discuss display 
+  projections. Graphics in GrADS are calculated relative to the internal GrADS 
+  data grid <code>i,j</code> space, transformed to the display device coordinates 
+  (e.g., the screen) and then displayed. That is, the i,j of the graphic element 
+  is converted to <code>lat/lon</code> and then to <code>x,y</code> on the screen 
+  via a map projection.
+  <p> GrADS currently supports four <code>display projections</code>:
+  <p> 
+  <ul>
+    <li>lat/lon (or spherical); 
+    <li>N polar stereo (<a href="gradcomdsetmproj.html"><code>set mproj</code></a><code> 
+      nps</code>); 
+    <li>S polar stereo (<a href="gradcomdsetmproj.html"><code>set mproj</code></a><code> 
+      sps</code>); 
+    <li>the Robinson projection (set lon -180 180, set lat -90 90, set mproj robinson).
+  </ul>
+  <p> As you can probably appreciate, the i,j-to-lon/lat-to-screen x,y for <code>lon/lat</code> 
+    displays is very simple and is considerably more complicated for N and S <code>polar 
+    stereo</code> projections.
+  <p> In principle, a Lambert Conformal display projection could be implemented. 
+    It just takes work and a simple user interface for setting up that display 
+    projection. Actually, the user interface (i.e., "set" calls) is the most difficult 
+    problem... 
+</ul>
+<br>
+<br>
+<a name="summary">
+<h2><u>Summary and Plans</u></h2>
+</a> 
+<ul>
+  GrADS handles map projections in two different ways. The first is preprojected 
+  data where the fields are <i>already</i> on a projection (e.g., Lambert Conformal). 
+  It is fairly straightforward to implement other preprojected data projections 
+  and we will be fully implementing the NMC eta grid both staggered and unstaggered, 
+  "thinned" gaussian grids and the CSU RAMS oblique polar stereo projection. The 
+  second is in how i,j graphics (calculated in "grid" space) are displayed on 
+  a map background. Currently, only a few basic projections (lon/lat, polar stereo 
+  and robinson) are supported, but perhaps the development group will tackle this 
+  problem.
+</ul>

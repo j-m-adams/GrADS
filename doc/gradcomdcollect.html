@@ -1,0 +1,48 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: collect</title>
+</head>
+<body text="#000000" bgcolor="e0f0ff">
+
+<h2><b>collect</b></h2>
+<p>
+This command provides a way for station data profiles and time series
+to be saved in memory as a set. The command format is:
+
+<p>
+<ul><code>collect <i>cnum expr</i></code></ul>
+
+<p>
+where <code><i>cnum</i></code> is the collection number, a value from
+0 to 31, and <code><i>expr</i></code> is any GrADS expression that
+gives a station data result. If <code>"free"</code> is given for
+<code><i>expr</i></code>, the collection is emptied and all storage is
+freed.
+
+<p>
+<h3>Usage Notes</h3>
+<p>
+<ol>
+<li>The <code>collect</code> command will only work when one dimension is
+varying, either Z or T. Each time <code>collect</code> is issued for a
+particular collection number, the station data is added to the
+collection of stations.  The order in which stations are added is
+important.
+
+<p>
+<li>After a group of station profiles or time series have been saved as a
+collection, use the <a href="gradfunccoll2gr.html">coll2gr</a>
+function to convert the collection into a grid. 
+
+<p>
+<li>See the section of the User's Guide on <a
+href="usingstationdata.html#xsection">Arbitrary Cross Sections</a> for more
+information. 
+</ol>
+
+
+</body>
+</html>
+

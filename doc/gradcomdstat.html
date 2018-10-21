@@ -1,0 +1,78 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<code>set gxout stat <br>
+d </code><br>
+<ul>sends output to the terminal as opposed to a
+plot or data output (e.g., <code>set fwrite out.dat ; set gxout fwrite;
+d rh</code>).  Or the output goes to the script variable
+<code>result</code> which
+can be parsed inside a script (see the <code>corr.gs</code> GrADS
+script)<p>
+
+The output allows many statistical calculations to be made. 
+Here's an example of opening up a global model file and looking
+at the 1000 mb relative humidity, statistically,<p>
+
+<ul>
+<code>ga-> set gxout stat <br>
+ga-> d rh <br>
+Data Type = grid <br>
+Dimensions = 0 1<br>
+I Dimension = 1 to 145 <br>
+J Dimension = 1 to 73 <br>
+Sizes = 145 73 10585<br>
+Undef value = 1e+20 <br>
+Undef count = 0  Valid count = 10585 <br>
+Min, Max = 0.0610352 100.061 <br>
+Stats(sum,sumsqr,n):     787381 6.35439e+07 10585 <br>
+Stats(sum,sumsqr)/n: 74.3865 6003.2<br>
+Stats(sum,sumsqr)/(n-1): 74.3935 6003.77 <br>
+Stats(sigma,var)(n):    21.6761 469.854 <br>
+Stats(sigma,var)(n-1): 21.6771 469.898<br>
+Cmin, cmax, cint = 10 100 10</code></ul><p>
+
+Let's break it down:<p>
+
+<ul>
+<code>Data Type = grid</code> -----  you have a grid <p>
+<code>Dimensions = 0 1</code> -----  the dimension type for the variable
+<br>
+<ul>
+<code>0</code> - lon <br>
+<code>1</code> - lat <br>
+<code>2</code> - lev <br>
+<code>3</code> - time </ul><br>
+<code>1</code> - not varying <p>
+<code>I Dimension = 1 to 145</code> ------ obvious <p>
+<code>J Dimension = 1 to 73</code><p>
+<code>Sizes = 145 73 10585</code>  ------- <code>10585</code> is 145*73
+or total number of points <p>
+<code>Undef value = 1e+20</code>   ------- undefined value <p>
+<code>Undef count = 0 Valid count = 10585</code> ----- # of defined and
+undefined points in the grid. Remember that if GrADS can't find
+any data it returns undefs. This is useful for checking if you
+have any data, <code>Valid count = 0</code> means no... <p>
+<code>Min, Max = 0.0610352 100.061</code>  ---- UHHH OHHHH! we have slight
+supersaturation..<p>
+<code>Stats(sum,sumsqr,n):     787381 6.35439e+07 10585</code> - This
+should
+be fairly obvious, sum = the simple sum of all <b>defined</b> points.<p> 
+<code>sumsqr</code> = sum of, in this case, <code>rh*rh</code> and
+<code>10585</code> is <code>n</code>.<p>
+<code>Stats(sum,sumsqr)/n:     74.3865 6003.2</code> - Divide by
+<code>n</code> for convenience, the first number is the "biased"
+mean...<p>
+<code>Stats(sum,sumsqr)/(n-1): 74.3935 6003.77</code> - the so called
+<code>unbiased</code> mean (remove 1 degree of freedom), etc.<p>
+<code>Stats(sigma,var)(n):     21.6761 469.854</code> - the standard
+deviation
+and variance "biased" (<code>n</code>) <p>
+<code>Stats(sigma,var)(n-1): 21.6771 469.898</code> - the standard
+deviation and variance "unbiased" (<code>n-1</code>)<p>
+<code>Cmin, cmax, cint = 10 100 10</code> - What GrADS will use when
+contouring.<p>
+
+</ul><b>NOTE</b>: This works for both <code>gridded</code> and
+<b>station</b> data
+
+

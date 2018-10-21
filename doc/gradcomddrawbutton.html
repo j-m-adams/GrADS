@@ -1,0 +1,62 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: draw button</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>draw button</b></h2>
+<p>
+<code>draw button <i>number xpos ypos width height string</i></code>
+
+<p>
+Draws a button centered on <code><i>xpos,ypos</i></code> with the
+following attributes:
+
+<p>
+<ul>
+<code>number&nbsp;&nbsp;&nbsp;</code>button number, 1 - 512<br>
+<code>xpos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>x center of the button in page coordinates (inches)<br>
+<code>ypos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>y center of the button in page coordinates (inches)<br>
+<code>width&nbsp;&nbsp;&nbsp;&nbsp;</code>width (x) of the button (inches)<br>
+<code>height&nbsp;&nbsp;&nbsp;</code>height (y) of the button (inches)<br>
+<code>string&nbsp;&nbsp;&nbsp;</code>text to display centered in the button<br>
+</ul>
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>Button colors are specified with the <a
+href="gradcomdsetbutton.html"><code>set button</code></a> command.
+<p>
+<li>A button's initial state is <code>ON</code>. If a user clicks on a
+button following a <a href="gradcomdqpos.html"><code>q pos</code></a> command,
+then the button state will switch from <code>ON (1)</code> to
+<code>OFF (0)</code>. A second <a href="gradcomdqpos.html"><code>q pos</code></a>
+followed by a mouse click on the button will return it to the
+<code>ON</code> state.  
+<p>
+<li>The button "state" (i.e. <code>ON/OFF</code>) may also
+be set with the <a href="gradcomdredrawbutton.html"><code>redraw
+button</code></a> command.
+<p>
+<li>See the section of the User's Guide on <a
+href="script.html#widgets">widgets</a> for more information on using
+buttons.
+</ol>
+
+<p>
+<h3>Example</h3>
+
+<p>
+<pre>
+set rgb 90 100 100 100
+set rgb 91  50  50  50
+set rgb 92 200 200 200
+set button 2 90 91 92 3 90 91 92 10
+draw button  1 2.5 8.0 2.5 0.5  Click Here
+</pre>
+
+</body>
+</html>

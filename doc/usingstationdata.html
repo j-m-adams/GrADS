@@ -1,0 +1,285 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>Using GrADS Station Data</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h1>Using GrADS Station Data</h1>
+<p>
+This section describes some of the GrADS commands and functions that are
+available for analyzing and displaying station data.  Please refer to
+the companion section <a href="aboutstationdata.html">About Station
+Data</a> for information on the structure of station data files, how
+to create them, and how to instruct GrADS to interpret them properly.
+<p>
+Here are some quick links for skipping through this section:
+<ul>
+<li><a href="usingstationdata.html#operating">Operating on Station Data</a>
+<li><a href="usingstationdata.html#model">Plotting Station Models</a>
+<li><a href="usingstationdata.html#xsection">Drawing Arbitrary Cross Sections</a>
+</ul>
+
+<hr>
+<p>
+<h2><a name="operating">Operating on Station Data</a></h2>
+
+<p>
+Currently, station data operations and display are supported for
+three distinct dimension environments:
+<p>
+<ul>
+<li>X, Y varying (horizontal X, Y plot)
+<li>Z varying  (vertical profile)
+<li>T varying  (time series)
+</ul>
+
+<p>
+Operations may be done on station data as with gridded data. 
+Operations between grids and station data are not supported.
+
+<p>
+Operations between station data are defined as being the
+operation performed on data points that have exactly the same
+varying dimension values.<p>
+
+For example, if T is the only varying dimension, the expression:<p>
+
+<dd><code>display ts-ds</code><p>
+
+would result in a time series of station data reports being
+retrieved for two separate variables.  Then, for station reports
+having exactly the same time, the operation is performed.  Note
+that duplicates are ignored, with the operation being performed
+between the first occurrences encountered.<p>
+
+When both X and Y are both fixed dimensions, the variable
+specification may include a station identifier, which specifies a
+local override for both lat and lon.<p>
+
+The syntax for this would be:<p>
+
+<dd><code>varname(stid=ident)</code><p>
+
+The station identifiers are case insensitive.<p>
+
+Some functions do not support station data types.  These are:<p>
+
+<dd><code><a href="gradfunchdivg.html">hdivg</a>  <a href="gradfunchcurl.html"> 
+hcurl</a> <a href="gradfuncvint.html">vint</a> <a
+href="gradfuncmaskout.html">maskout</a> <a href="gradfuncave.html">ave</a> <a 
+href="gradfuncaave.html">aave</a> <a
+href="gradfunctloop.html">tloop</a></code><p>
+
+When X and Y are varying, station data values are displayed as
+numbers centred at their locations.  If two expressions are
+supplied on the <a href="gradcomddisplay.html"><code>display</code></a> command
+(ie,
+<code>display</code> ts;ds) then two
+values are displayed, above and below the station location. The
+display is controlled by the following <a
+href="commands.html#set"><code>set</code></a> commands:<p>
+
+<ul>
+<code>
+<a href="gradcomdsetccolor.html">set ccolor</a> <i>color</i><br>
+<a href="gradcomdsetdignum.html">set dignum</a> <i>digits</i><br>
+<a href="gradcomdsetdigsiz.html">set digsiz</a> <i>size</i><br>
+<a href="gradcomdsetstid.html">set stid</a> <i>on|off</i><br>
+</code>
+</ul>
+
+<p>
+The <a href="gradcomdsetstid.html"><code>set stid</code></a> command
+controls whether the station identifier is displayed with each value.
+
+<p>
+<h2><a name="model">Plotting Station Models</a></h2>
+<p>
+GrADs will plot station models from station data. This is enabled
+by:<p>
+
+<dd><a href="gradcomdsetgxout.html"><code>set gxout</a> model</code><p>
+
+The appropriate display command is:<p>
+
+<dd><code>display u;v;t;d;slp;delta;cld;wx;vis</code><p>
+
+where:<p>
+
+<ul><code>u</code> and <code>v</code> are the wind components.  A wind barb will
+be drawn using
+these values.  If either is missing, the station model will not
+be plotted at all. <p>
+<code>t, d, slp</code>, and <code>delta</code> are plotted numerically
+around the station model<p>
+
+<code>cld</code> is the value of the symbol desired at the center of the
+station model.  Values <code>1</code> to <code>9</code> are assumed to be the
+marker types
+(ie, circle, square, crosshair, etc). Values <code>20</code> to <code>25</code> 
+are assumed
+to be cloudiness values:<br>
+<ul><br>
+<code>20</code>  -clear <br>
+<code>21</code>  -scattered 
+<code>22</code>  -broken <br>
+<code>23</code>  -overcast <br>
+<code>24</code>  -obscured <br>
+<code>25</code>  -missing (M plotted)</ul><p>
+<code>wx</code> is the
+value
+of the <code>wx</code> symbol (see <a
+href="gradcomddrawwxsym.html"><code>draw wxsym</code></a>) to be plotted
+in the <code>wx</code> location. <p>
+<code>vis</code> is the visibility as a real number.  It will be
+plotted as a whole number and a fraction.</ul><p>
+
+When any of these items are missing (other than <code>u</code> and
+<code>v</code>), the
+model is plotted without that element. To represent a globally
+missing value, enter a constant in the <code>display</code> command.  For
+example, if the <code>delta</code> were always missing, use:<p>
+
+<dd><code>display u;v;t;d;slp;0.0;cld</code><p>
+
+The station models respond to the usual set commands such as 
+<a href="gradcomdsetdigsize.html"><code>set digsiz</code></a>, <a
+href="gradcomdsetdignum.html"><code>set dignum</code></a>, <a
+href="gradcomdsetcthick.html"><code>set cthick</code></a>, <a
+href="gradcomdsetccolor.html"><code>set ccolor</code></a>.<p>
+
+In addition, there is:<p>
+
+<dd><code>set stnopts <dig3> <nodig3></code><p>
+
+which will cause the model to plot the number in the slp location
+as a three digit number, with only the <i>last</i> three digits of the
+whole number plotted.  This allows the  standard 3 digit sea
+level pressure to be plotted by enabling <code>dig3</code> and plotting
+slp*10.
+
+<p>
+<h2><a name="xsection">Drawing Arbitrary Cross Sections</a></h2>
+<p>
+Drawing arbitrary vertical cross sections based on a collection of
+station data profiles involves transforming station data (scattered
+observations) into gridded data so as to take advantage of the GrADS
+grid display and analysis features.
+
+<p>
+The first step is to form a collection of 1-D data (Z or T
+varying). The <a href="gradcomdcollect.html"><code>collect</code></a>
+command saves station data profiles or time series in memory as a
+set. The 1-D data may be either real station data or
+gridded data converted to station data using 
+<a href="gradfuncgr2stn.html"><code>gr2stn</code></a>. 
+
+<p> 
+The second stop is to convert the collection of station data into
+a grid for display or analysis purposes. This is accomplished by
+the new function <a href="gradfunccoll2gr.html"><code>coll2gr</code></a>. 
+ 
+
+<p>
+<a href="gradfunccoll2gr.html"><code>coll2gr</code></a> does not yet
+support time slices; currently, it will only work when the collection
+of stations is a collection of vertical profiles.
+
+<p>
+<a href="gradfunccoll2gr.html"><code>coll2gr</code></a> produces an
+output grid that varies in X and Z; the dimension environment used
+when <a href="gradfunccoll2gr.html"><code>coll2gr</code></a> is
+invoked must also be X and Z varying. The X axis of the output grid
+will contain the equally spaced station profiles and will span the
+range of the current X dimension environment. The Z axis of the output
+grid will span the range of the current Z dimension environment and
+will have either the specified number of levels or a union of the
+levels. Data points outside of the range of levels will be used for
+interpolating to within the range if appropriate.
+
+<p>
+The X axis of the output grid from <a
+href="gradfunccoll2gr.html"><code>coll2gr</code></a> is artificial in
+terms of the world coordinates -- it doesn't really represent
+longitudes. A way to completely control the labelling of the display
+output is provided:
+
+<p>
+<ul>
+<code>
+<a href="gradcomdsetxlabs.html">set xlabs</a> lab1 | lab2 | lab3 ...<br>
+<a href="gradcomdsetylabs.html">set ylabs</a> lab1 | lab2 | lab3 ...<br>
+</code>
+</ul>
+
+<p>
+Each label string may include blanks. The labels will be plotted
+equally spaced along the indicated axis. Spacing can be
+modified by adding blank strings:
+<p>
+<ul>
+<code><a href="gradcomdsetxlabs.html">set xlabs</a> | | | | lab1 | ...<br>
+</code>
+</ul>
+
+<p>
+Here is a sample script written by M. Fiorino that uses these features:
+<p>
+<code>
+*********************************************************************<br>
+* The following lines will display an arbitrary X section<br>
+* from one specified point to another.  <br>
+*<br>
+* lon1 is the westernmost longitude point<br>
+* lon2 is the easternmost longitude point<br>
+* lat1 is the latitude that corresponds to lon1<br>
+* lat2 is the latitude that corresponds to lon2<br>
+*<br>
+* The loop is used to interpolate between points in<br>
+* the arbitrary cross section.  This code will plot<br>
+* any cross section as long as you specify the points. <br> 
+* My code plots cross sections of PV after I calculated<br>
+* PV on 11 pressure surfaces.  I have another script<br>
+* that plots cross sections of potential temperature, and<br>
+* the code is very similar to this, except theta is substituted<br>
+* for PV.<br>
+*<br>
+* Many thanks to Brian Doty at COLA for his help with this code.<br>
+*<br>
+********************************************************************<br>
+<br>
+'open pv.ctl'<br>
+'set grads off'<br>
+'set zlog on'<br>
+'set x 1'<br>
+'set y 1'<br>
+'set lev 1000 100'<br>
+lon1 = -95.0<br>
+lon2 = -90.0<br>
+lat1 =  55.0<br>
+lat2 =  15.0<br>
+lon = lon1<br>
+'collect 1 free'<br>
+while (lon <= lon2)<br>
+&nbsp;&nbsp;lat = lat1 + (lat2-lat1)*(lon-lon1) / (lon2-lon1)<br>
+&nbsp;&nbsp;'collect 1 gr2stn(pv,'lon','lat')'<br>
+&nbsp;&nbsp;lon = lon + 1<br>
+endwhile<br>
+<br>
+'set x 14 16'<br>
+'set xaxis 'lon1' 'lon2<br>
+'set clab on'<br>
+'set gxout shaded'<br>
+'set clevs 0 .5 15'<br>
+'set ccols 0 0 7 0'<br>
+'d coll2gr(1,-u)'<br>
+'set gxout contour' <br>
+'set cint .5'<br>
+'d coll2gr(1,-u)'<br>
+</code>
+
+</body>
+</html>
+

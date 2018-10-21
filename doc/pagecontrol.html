@@ -1,0 +1,162 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>Page Control in GrADS</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>Page Control in GrADS</b></h2>
+<p>
+
+<h3><a name="real">Real and virtual pages</a></h3>
+<p>
+The "real" page is an 8.5x11 page in the landscape or portrait
+orientation.  The orientation is specified when you first startup <a
+href="gradcomdgrads.html">grads</a>. The graphics output window is a
+representation of the real page on your computer screen. The graphics
+window can be any size at all. You can set the dimensions explicitly
+(in pixel coordinates) using the <a href="gradcomdsetxsize.html">set
+xsize</a> command, or you can simply resize the graphics window using
+your mouse. When it comes time to print the contents of the graphics
+window to a real page, the screen coordinates (in pixels) will be
+scaled so the graphics will fit in the real page in the same way they
+fit in the graphics window.
+<p>
+The "virtual" page is a page-within-a-page that fits within the limits
+of the real page. By default, the virtual page is the same as the real
+page, so that real page coordinates are exactly the same as virtual
+page coordinates. All graphics are drawn on the virtual page. The
+limits of the virtual page may be changed by using the following
+command:
+
+<p>
+<ul>
+<code>
+<a href="gradcomdsetvpage.html">set vpage</a> <i>xmin xmax ymin ymax</i>
+</code>
+</ul>
+
+<p>
+After entering a <a href="gradcomdsetvpage.html"><code>set
+vpage</code></a> command, GrADS will return the size of the virtual
+page in inches. Any arguments to graphics commands that require page
+coordinates in inches are to be given in virtual page
+coordinates. For example, to draw a plot in the lower left quadrant 
+of the real page, use the following command:
+<p>
+<ul>
+<code><a href="gradcomdsetvpage.html">set vpage</a> 0 5.5 0 4.25</code>
+</ul>
+
+<p>
+GrADS will return the following virtual page dimensions: 
+
+<p>
+<ul>
+<code>Virtual page size = 11 8.5</code>
+</ul>
+
+<p>
+If the virtual page has the same aspect ratio as the real page, Grads 
+will give it the same dimensions as the real page -- in this case the virtual page is a mini version of an 11"x8.5" page. Here's another example where the virtual page is a centered square: 
+
+<p>
+<ul>
+<code><a href="gradcomdsetvpage.html">set vpage</a> 4 7 2.75 5.75</code>
+</ul>
+
+<p>
+GrADS will return the following virtual page dimensions: 
+
+<p>
+<ul>
+<code>Virtual page size = 8.5 8.5</code>
+</ul>
+
+<p>
+On the <i>real page</i> the plot will be within a 3" square, but on
+the <i>virtual page</i> in Grads the plot will be within an 8.5"
+square. Remember that any arguments to graphics commands that require
+page coordinates in inches are to be given in virtual page
+coordinates.
+
+<p>
+To return to the default state where the virtual page equals the
+real page, enter:
+<p>
+<ul>
+<a href="gradcomdsetvpage.html"><code>set vpage off</code></a>
+</ul>
+
+<p>
+<h3><a name="plotarea">Controlling the plot area</a></h3>
+<p>
+It is possible to control the area within the virtual page where GrADS
+draws contour plots, maps, or line graphs. The command is:
+<p>
+<ul>
+<code>
+<a href="gradcomdsetparea.html">set parea</a> <i>xmin xmax ymin ymax</i>
+</code>
+</ul>
+
+<p>
+This area does not include axis labels, titles, color bars, etc., so
+be sure to provide for adequate margins in order to see these
+features. Note that the plot area is specified in terms of virtual
+page units.
+
+<p>
+GrADS chooses an appropriate default plotting area depending on
+the type of graphics output. To return to this default, enter:
+
+<p>
+<ul>
+<code><a href="gradcomdsetparea.html">set parea</a> off</code>
+</ul>
+
+<p>
+Line graphs and contour plots that don't contain a map will be scaled
+to fill the entire plot area. Any plot that contains a map projection
+will be scaled to fit within the plotting area while maintaining a
+correct lat/lon aspect ratio. Thus, the map may not fill the entire
+plotting area except under certain lat/lon ranges.  This feature may
+be turned off by setting the map projection to "scaled". See the
+reference page for <a href="gradcomdsetmproj.html">set mproj</a> for
+additional map projection options.
+
+<p>
+<h3><a name="multipanel">Drawing Multi-Panel Plots</a></h3>
+
+<p>
+For drawing multi-panel plots, use <a
+href="gradcomdsetvpage.html"><code>set vpage</code></a> to define
+several virtual pages that fit within the limits of the real page. 
+Virtual pages may overlap.
+The sample script called 
+<a href="ftp://grads.iges.org/grads/scripts/panels_demo.gs">
+<code>panels_demo.gs</code></a> demonstrates how to set up virtual
+page coordinates for a multi-panel plot with a specified number of
+rows and columns. It uses a <a href="gsf.html">GrADS script function</a>
+called <a href="ftp://grads.iges.org/grads/scripts/panels.gsf">
+<code>panels.gsf</code></a>. 
+
+<p>
+If you want to place a label or some other graphic element in each panel, 
+the position is given in virtual page coordinates. These coordinates
+will be the same no matter which panel you're in. This makes it easy
+to shift the labels in one direction or another to accomodate the
+graphics.
+
+<p>
+Do not use <a href="gradcomdsetparea.html"><code>set parea</code></a>
+to draw multiple plots on one page. That is not what
+<code>parea</code> was designed for.  It is far better (and easier!) to
+use the <a href="gradcomdsetvpage.html"><code>set vpage</code></a>
+command as described above.
+
+
+</body>
+</html>
+

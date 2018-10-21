@@ -1,0 +1,55 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set dialog</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set dialog</b></h2>
+<p>
+<code>set dialog <i>pc fc bc oc th</i> &lt;numeric|n&gt;</code>
+
+<p>
+Sets color properties for dialog box widgets. 
+
+<p>
+<ul>
+<code><i>pc</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>prompt color <br>
+<code><i>fc</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>foreground text color <br>
+<code><i>bc</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>background color <br>
+<code><i>oc</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>outline color <br>
+<code><i>th</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>outline thickness <br>
+<code>n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>numeric input only (optional) <br>
+</ul>
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>If <code><i>th</i></code> is 1-5, a one-pixel border is drawn; if
+it is 6 or more, a two-pixel border is drawn.
+<p>
+<li>Default colors are accessed by setting the colors to -1. 
+<p>
+<li>If the numeric option is invoked, keyboard inputs are restricted
+to 0-9, ., -, +, e, and E.  Entered value is checked to assure it is a
+rational number of the form +/-nnnn, +/-nnnn.dddd, or
++/-nnnn.ddddE+/-xxxx. This assures the returned numeric value is valid
+for use by a GrADS script.
+<p>
+<li>See the <a href="gradcomdqdialog.html"><code>q dialog</code></a>
+refrence page for details on execution of the dialog box widgets.
+
+</ol>
+
+<p>
+<h3>Examples </h3>
+<p>
+<pre>
+set dialog 1 0 5 1 6
+q dialog Hello World
+say result
+</pre>
+
+</body>
+</html>
+

@@ -1,0 +1,57 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Function: oabin</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>oabin()</b></h2>
+<p>
+<code>oabin (<i>gexpr, sexpr &lt;,-flag&gt;</i>)</code>
+<p>
+This function bins station observations into grid cells based on their
+location.  If more than one station is located within a grid box, the
+observations are averaged together to produce the analyzed value.
+
+<p>
+<ul>
+<code><i>gexpr&nbsp;&nbsp;&nbsp</i></code>a valid grid expression<br>
+<code><i>sexpr&nbsp;&nbsp;&nbsp</i></code>a valid station data expression<br>
+</ul>
+<p>
+The optional <code><i>flag</i></code> may be one of the following:
+<p>
+<ul>
+<code>-f&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp</code>set the value to the first observation that gets binned<br>
+<code>-c&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp</code>output is the # of stations located within each grid cell
+</ul>
+<p>
+
+<h3>Usage Notes</h3>
+<ol>
+<li>The -f flag should be used when summing is not appropriate --
+e.g. surface type classification.
+<p>
+<li>See the related function <a href="gradfuncoacres.html"><code>oacres</code></a>.
+
+</ol>
+
+<p>
+<h3>Example</h3>
+<p>
+<pre>
+open grd_var.ctl
+open stn_var.ctl
+
+set gxout grfill
+d oabin(grd_var.1,stn_var.2)
+
+set gxout grid
+d oabin(grd_var.1,stn_var.2,-c)
+</pre>
+
+
+</body>
+</html>
+

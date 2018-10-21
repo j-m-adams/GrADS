@@ -1,0 +1,142 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Commands: sdfwrite</title>
+<style type="text/css">
+<!--
+.style1 {color: #990000}
+-->
+</style>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>sdfwrite</b></h2>
+<p><code>sdfwrite <i>varname </i></code>
+<p>This<code></code> command will write out a defined variable <code><i>varname </i></code>into a NetCDF formatted
+  data file.  
+
+<ul>
+  <p>&nbsp;</p>
+</ul>
+<h3>Usage Notes</h3>
+
+<p>
+The <code>sdfwrite</code> command was initially implemented in GrADS version <span class="style1">2.0.a3</span>. Additional features added in subsequent releases are as follows:
+<ul>
+  <li>(<span class="style1">2.0.a5</span>) NetCDF output may be forced to have 4 or 5 dimensions. </li>
+  <li>(<span class="style1">2.0.a8</span>) NetCDF output may be floating point or double precision. NetCDF output may also be version 4, with chunking and compression enabled. </li>
+  <li>(<span class="style1">2.0.a9</span>) If the output is not forced to have 4 or 5 dimensions, it will have the same number of dimensions as the defined variable being written out to file. </li>
+  <li>(<span class="style1">2.1.a1</span>) New options were added to set a record (unlimited) dimension and to force the output to have 3 dimensions. </li>
+</ul>
+<p>Options to control the name and format of the output file are implemented with the <code><a href="gradcomdsetsdfwrite.html">set sdfwrite</a></code> command. The <a href="gradcomdqsdfwrite.html"><code>q sdfwrite</code></a> command
+  returns the status of the <code>sdfwrite</code> options. 
+
+<p>The name of the output file will be <code>grads.sdfwrite.nc</code> unless specified otherwise with the <code><a href="gradcomdsetsdfwrite.html">set sdfwrite</a></code> command. If the 
+file exists, it will be replaced.  It is not possible to append variables to an existing file.  
+<p>The dimensions of the variable written to file correspond to the dimension environment that was set when the variable was  defined. The dimension environment that is set when the 'sdfwrite' command is invoked is ignored. Note this behavior is different from the fwrite command.
+<p>By default, the output file will have a coordinate variable only for  varying dimensions in the defined variable; non-varying dimensions will not appear as a coordinate variable with a size of 1. However, options have been added to the  <code><a href="gradcomdsetsdfwrite.html">set sdfwrite</a></code> command to  force the variable in the output file to have at least 3, 4, or all 5 dimensions. When either of these options to   <code><a href="gradcomdsetsdfwrite.html">set sdfwrite</a></code>  are used,   the output file will retain information about the values of the  dimensions that were fixed when the variable was defined; non-varying dimensions will appear as a coordinate variable of size 1.
+For example, if your defined variable is 500mb height on14may2002 (a 2D variable that varies only in lon and lat), and you use the -4d option, the output file with show height as a 4D variable with a Z dimension of size 1 called 'lev' with a value &quot;500 mb&quot;, and a T dimension of size 1 called 'time' with a value of &quot;0 minutes since 2002-05-14 00:00&quot;.
+<p>The coordinate variables will be  type 'double' and will have two default attributes (&quot;units&quot; and &quot;long_name&quot;) with values that are based on the GrADS 5-dimensional gridded data model. The data variable will also be  type 'double' by default; beginning with version <span class="style1">2.0.a8</span>, you can also write out data of type 'float' if you use the <code>-flt</code> option with    <code><a href="gradcomdsetsdfwrite.html">set sdfwrite</a></code> command. Data variables will have a &quot;missing _value&quot; or &quot;_FillValue&quot; attribute for undefined gridpoints. The undefined value is controlled with the 
+  <code><a href="gradcomdsetundef.html">set undef</a></code> command.
+<p>For example, if <code><i>varname</i></code> is called &quot;testvar&quot; and varies in X, Y, Z, T, and E, then the output file might have a NetCDF header that looks like this: 
+<p><code>netcdf foo {<br>
+  dimensions:<br>
+&nbsp;&nbsp;longitude = 9 ;<br>
+&nbsp;&nbsp;latitude = 9 ;<br>
+&nbsp;&nbsp;level = 9 ;<br>
+&nbsp;&nbsp;time = 9 ;<br>
+&nbsp;&nbsp;ensemble = 9 ;<br>
+variables:<br>
+&nbsp;&nbsp;double longitude(longitude) ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;longitude:units = &quot;degrees_east&quot; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;longitude:long_name = &quot;Longitude&quot; ;<br>
+&nbsp;&nbsp;double latitude(latitude) ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;latitude:units = &quot;degrees_north&quot; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;latitude:long_name = &quot;Latitude&quot; ;<br>
+&nbsp;&nbsp;double level(level) ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;level:units = &quot;millibar&quot; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;level:long_name = &quot;Level&quot; ;<br>
+&nbsp;&nbsp;double time(time) ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;time:units = &quot;minutes since 01-01-0001 00:00&quot; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;time:long_name = &quot;Time&quot; ;<br>
+&nbsp;&nbsp;double ensemble(ensemble) ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ensemble:grads_dim = &quot;e&quot; ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ensemble:long_name = &quot;Ensemble member&quot; ;<br>
+&nbsp;&nbsp;double testvar(ensemble, time, level, latitude, longitude) ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;testvar:missing_value = -888. ;<br>
+}
+</code>
+<p>The time axis units will always be &quot;minutes since ...&quot; and the date of the time axis origin will correspond to the initial time of the defined variable. 
+<p>If the variable has an ensemble dimension, the attribute &quot;grads_dim&quot; with the value &quot;e&quot; will always be present so that the resulting output file can be opened with GrADS using the 'sdfopen' command. 
+<p>To supplement or override the default attributes of the output file, use the <code><a href="gradcomdsetsdfattr.html">set sdfattr</a></code> command. 
+<p>Beginning with version 2.0.a8, the output file may also be a compressed netCDF file. Use the <code>-zip</code> option with the <code><a href="gradcomdsetsdfwrite.html">set sdfwrite</a></code> command to enable compression. Please see the documentation on <a href="compression.html">compression</a> for  more details.
+<h3>Examples </h3>
+
+<p>
+The following commands produce a regional subset of a global precip forecast :</p>
+  <pre>open gfs.ctl
+set lon -111.3 -103.8 
+set lat 40.9 45.0 
+set t 1 last
+define precip = ptot
+set sdfwrite wyoming_precip.nc
+sdfwrite precip</pre>
+    
+
+
+<p><em><strong>Appending Variables to a File</strong></em><br>
+  The sdfwrite command does not allow you to write out more than one variable to a file. The way to do achieve this is to write out each variable in a separate file, then merge them with  the <a href="http://nco.sourceforge.net/nco.html" target="_blank">NetCDF Operators (NCO)</a>. Use the <a href="http://nco.sourceforge.net/nco.html#ncks" target="_blank"><code>ncks</code></a> command to append variables defined on the same grid. The GrADS commands might look like this: 
+<pre>
+open gfs.ctl
+set x 1 720
+set y 1 361
+set t 1 last
+define slp = mslp
+define precip = ptot
+set sdfwrite -flt slp.nc
+sdfwrite slp
+sdt sdfwrite -flt precip.nc
+sdfwrite precip
+</pre>
+Then, outside GrADS, or using the ! in front of the command to send it to the shell from within GrADS, merge these two files with <a href="http://nco.sourceforge.net/nco.html#ncks" target="_blank"><code>ncks</code></a>: 
+<pre><a href="http://nco.sourceforge.net/nco.html#ncks" target="_blank">ncks</a> -h -A precip.nc slp.nc</pre>
+<p>The -A is for appending to the output file, and the -h does not add anything to the output file's global 'history' attribute. Please see the <a href="http://nco.sourceforge.net/nco.html" target="_blank">NCO User's Guide</a> for more information. 
+<p><em><strong>Concatenating Files</strong></em><br>
+  Suppose you want to write out a long time series with the sdfwrite command, but your system does not have enough memory to define the whole grid. Use GrADS to write out the data in smaller time segments (e.g. one year, or one month, or one day), and then concatenate them together with the 
+<a href="http://nco.sourceforge.net/nco.html" target="_blank">NetCDF Operators (NCO)</a>. Concatenation in the time dimension only works properly if time is defined to be a record (unlimited) dimension. If you are using GrADS version <span class="style1">2.1.a2+</span>, you can use the <code>-rt</code> option to set the time axes as a record  dimension; otherwise, you must use  the <a href="http://nco.sourceforge.net/nco.html#ncks" target="_blank"><code>ncks</code></a> command to change the time dimension to a record dimension. When the inidividual files have been created, use the <a href="http://nco.sourceforge.net/nco.html#ncrcat" target="_blank"><code>ncrcat</code></a> command to concatenate them together. The GrADS commands might look like  this: 
+<pre>
+open long_time_series.ctl
+set x 1 720
+set y 1 361
+set time 01jan2001 31dec2001
+define slp = mslp
+set sdfwrite -flt slp_2001.nc
+sdfwrite slp
+set time 01jan2002 31dec2002
+define slp = mslp
+set sdfwrite -flt slp_2002.nc
+sdfwrite slp
+set time 01jan2003 31dec2003
+define slp = mslp
+set sdfwrite -flt slp_2003.nc<br>sdfwrite slp
+</pre>
+<p>If you are using GrADS version <span class="style1">2.1.a2+</span>, the 'set sdfwrite' commands should look like this instead:<br>
+<code>set sdfwrite -flt -rt slp_2001.nc<br>
+set sdfwrite -flt -rt slp_2002.nc<br>
+set sdfwrite -flt -rt slp_2003.nc</code></p>
+<p>If you are using an earlier verison of GrADS, you must modify the time dimension with <a href="http://nco.sourceforge.net/nco.html#ncks" target="_blank"><code>ncks</code></a> -- do this outside of GrADS, or use the ! in front of the command to send it to the shell from within GrADS (the --mk_rec_dmn option modifies the time dimension): 
+</p>
+<pre><a href="http://nco.sourceforge.net/nco.html#ncks" target="_blank">ncks</a> -O -h --mk_rec_dmn time slp_2001.nc
+<a href="http://nco.sourceforge.net/nco.html#ncks" target="_blank">ncks</a><a href="http://nco.sourceforge.net/nco.html#ncks"></a> -O -h --mk_rec_dmn time slp_2002.nc
+<a href="http://nco.sourceforge.net/nco.html#ncks" target="_blank">ncks</a><a href="http://nco.sourceforge.net/nco.html#ncks"></a> -O -h --mk_rec_dmn time slp_2003.nc</pre>
+
+<p>Now you are ready to concatenate the files with <a href="http://nco.sourceforge.net/nco.html#ncrcat" target="_blank"><code>ncrcat</code></a>:
+<p><code><a href="http://nco.sourceforge.net/nco.html#ncrcat" target="_blank">
+  ncrcat</a> -O -h slp_2001.nc slp_2002.nc slp_2003.nc slp.nc</code>
+<p>The    -O is for overwriting existing output file, and the -h does not add anything to the output file's global 'history' attribute. Please see the <a href="http://nco.sourceforge.net/nco.html" target="_blank">NCO User's Guide</a> for more information -- there are  shortcuts for <a href="http://nco.sourceforge.net/nco.html#ncrcat" target="_blank"><code>ncrcat</code></a> to specify the long list of files to concatenate. 
+<p><span class="style1">N.B. (For compressed NetCDF-4 files): </span>If the NetCDF files you create with GrADS are compressed netCDF-4 format, then you must use NCO version 4.0.4 (or higher) in order to maintain the compression in the output files. The chunk sizes may also be altered by ncks or ncrcat. Use the --cnk_dmn option to specify the name and chunk size of each dimension to manually override the defaults. For example: 
+<pre><a href="http://nco.sourceforge.net/nco.html#ncrcat" target="_blank">ncrcat </a>-O -h --cnk_dmn lev,1 --cnk_dmn lat,361 --cnk_dmn lon,720 slp_2001.nc slp_2002.nc slp_2003.nc slp.nc</pre>
+</body>
+</html>
+

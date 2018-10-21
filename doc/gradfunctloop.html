@@ -1,0 +1,88 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<h2><b>tloop</b></h2><p> 
+
+<code>tloop(<i>expr</i>)</code><p>
+
+When time is a varying dimension in the dimension environment, the
+<code>tloop</code> function evaluates the <code><i>expr</i></code> at
+fixed times, then reconstructs the time series to obtain a final result
+that is time varying. The <code>tloop</code> function is required due to
+the implementation of the GrADS expression evaluation rules, and the
+implementation of certain other functions. The <code>tloop</code> function
+can also improve performance for certain calculations. <p>
+
+The <code>tloop</code> function is provided as a way to obtain time series
+from functions that themselves are not implemented to be able to operate
+when time is a varying dimension. See the examples below. <p>
+
+<h3>Usage Notes </h3><p>
+
+<ol>
+<li>The <code>tloop</code> function loops through time based on the time
+increment of the default file; it is thus important to have the default
+file set appropriately. <p>
+
+<li>The <code>tloop</code> function and the <a
+href="gradcomddefine.html"><code>define</code></a> command
+work very similarly. In many cases, the <code>define</code> command can be
+used to obtain the same result as using <code>tloop</code>. In fact, the
+<code>define</code> command can be even more useful along
+those lines, since it also loops through the Z dimension, in effect
+creating a <code>zloop</code> function. See the define command for more
+information. <p>
+</ol>
+
+<h3>Examples</h3><p> 
+
+<ol>
+<li>A typical application of the <code>tloop</code> function is to obtain
+a time series of areal averages using the <a
+href="gradfuncaave.html"><code>aave</code></a> function.
+Since the <code>aave</code> function will not work when time is a varying
+dimension, the useof <code>tloop</code> is required:<p> 
+
+<dd><code>set x 1 
+<dd>set y 1 
+<dd>set t 1 31 
+<dd>d tloop(aave(ts,lon=0,lon=360,lat=-90,lat=90)) </code><p>
+
+Note that the dimension environment is set up to reflect the kind of plot
+desired, namely a <code>line</code> plot where time is the varying
+dimension. Thus it is necessary to fix the X and Y dimensions; the values
+of those dimensions in this case are not relevent.<p> 
+
+<li>The <code>tloop</code> function can be used to smooth in time: <p>
+
+<dd><code>set lon -180 0 
+<dd>set lat 40 
+<dd>set lev 500 
+<dd>set t 3 28 
+<dd>d tloop(ave(z,t-2,t+2)) </code><p>
+
+In this example, we are plotting a time-longitude cross section, where
+each time is a 5 time period mean centered at that time. <p>
+
+<li>If we wanted to display a time-longitude cross section (X and T
+varying), with the data being averaged over latitude, the 'standard' way
+to do this might be: <p>
+
+<dd><code>set lon -180 0 
+<dd>set lat 40 
+<dd>set lev 500 
+<dd>set t 1 31 
+<dd>d ave(z,lat=20,lat=40) </code><p>
+
+This calculation could be fairly time consuming, since to perform the
+average, a longitude-time section is obtained at each latitude. If the
+time period is long, then this would be a very inneficient operation, due
+to the ordering of data in a typical GrADS data set. The
+<code>tloop</code> function might substantially improve the performance of
+this calculation: <p>
+
+<dd><code>d tloop(ave(z,lat=20,lat=40)) </code><p>
+since the average is then done at each fixed time, and is thus just an
+average of X varying data over Y. Thus the <code>tloop</code> function
+here is simply being used to force a different ordering to the
+calculation, although the result is the same.
+</ol>

@@ -1,0 +1,28 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<h2><b>smth9</b></h2><p> 
+
+<code>smth9(<i>expr</i>)</code><p>
+
+Performs a 9 point smoothing to the gridded result of the
+<code><i>expr</i></code>.<p> 
+
+<h3>Usage Notes</h3><p>
+
+<ol>
+<li>The result at each grid point is a weighted average of the grid point
+plus the 8 surrounding points. The center point receives a wieght of 1.0,
+the points at each side and above and below receive a weight of 0.5, and
+corner points receive a weight of 0.3.<p>
+
+<li>All 9 points are multiplied by their weights and summed, then divided
+by the total weight to obtain the smoothed value. Any missing data points
+are not included in the sum; points beyond the grid boundary are
+considered to be missing. Thus the final result may be the result of an
+averaging with less than 9 points. <p>
+
+<li>If the gridded data is 1-Dimensional, the result is a 3 point
+smoothing. 
+</ol>
+
+<H3>Examples</H3><P>

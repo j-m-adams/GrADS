@@ -1,0 +1,68 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Function: tcorr</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>tcorr()</b></h2>
+<p>
+<code>tcorr (<i>expr1, expr2, tdim1, tdim2</i>)</code>
+
+<p>
+This function produces a spatial map of temporal correlation
+coefficients. 
+
+<p>
+<ul>
+<code><i>expr1</i>&nbsp;&nbsp;&nbsp;</code>- 
+a valid GrADS expression that varies in time<br>
+<code><i>expr2</i>&nbsp;&nbsp;&nbsp;</code>- 
+a valid GrADS expression that varies in time and may also vary in X and Y<br>
+<code><i>tdim1</i>&nbsp;&nbsp;&nbsp;</code>- 
+starting time dimension expression <br>
+<code><i>tdim2</i>&nbsp;&nbsp;&nbsp;</code>- 
+ending time dimension expression <br>
+</ul>
+
+<p>
+The <code><i>expr1</i></code> time series is correlated to the time
+series at each grid point in <code><i>expr2</i></code>. The result is
+a grid of correlation coefficients that matches the X and Y dimensions
+of <code><i>expr2</i></code>.
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>If both <code><i>expr1</i></code> and <code><i>expr2</i></code>
+vary only in time, the output is a single value.
+<p>
+<li>Use the <a href="gradfuncscorr.html"><code>scorr</code></a>
+function to do correlation over the spatial domain.
+</ol>
+
+<p>
+<h3>Example</h3>
+<ol>
+<li>
+This example calculates the temporal correlation between sea level pressure
+and the defined variable elnino, an areal average of surface temperature 
+in the equatorial Pacific.
+<p>
+<pre>
+set x 1
+set y 1 
+set z 1 
+set t 1 100
+define elnino = aave(ts,lon=-160,lon=-80,lat=-10,lat=10)
+set lon -180 180
+set lat -90 90
+set z 1
+set t 1
+d tcorr(elnino, slp, t=1, t=100)
+</pre>
+</ol>
+
+</body>
+</html>

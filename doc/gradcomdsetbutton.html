@@ -1,0 +1,60 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set button</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set button</b></h2>
+<p>
+Sets up the color characteristics of a button widget. The syntax is:
+
+<p>
+<code>set button <i>&lt;button_ON_colors&gt; &lt;button_OFF_colors&gt; thickness</i></code>
+
+<p>
+where <code><i>&lt;button_ON_colors&gt;</i></code> and
+<code><i>&lt;button_OFF_colors&gt;</i></code> each contain four 
+color numbers:
+
+<p>
+<ul>
+<code>text&nbsp;&nbsp;&nbsp;</code>color of the button text <br>
+<code>face&nbsp;&nbsp;&nbsp;</code>color of the button face<br>
+<code>bcol&nbsp;&nbsp;&nbsp;</code>bright color of the shadow outline for 3-D look<br>
+<code>dcol&nbsp;&nbsp;&nbsp;</code>dark color of the shadow outline for 3-D look<br>
+</ul>
+
+<p>
+and <code><i>thickness</i></code> is the thickness of the shadow outline<br>
+</ul>
+</ul>
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li><code>set button</code> generally precedes the <a
+href="gradcomddrawbutton.html"><code>draw button</code></a> command.
+<p>
+<li>See the section of the User's Guide on <a
+href="script.html#widgets">widgets</a> for more information on using
+buttons.
+</ol>
+
+<p>
+<h3>Example</h3>
+
+<p>
+<pre>
+'set rgb 90 100 100 100'
+'set rgb 91  50  50  50'
+'set rgb 92 200 200 200'
+'set button 1 90 91 92 2 90 92 91 6'
+'draw button 1 1.5 8.0 2 0.5 Button #1'
+'draw button 2 4.0 8.0 2 0.5 Button #2'
+'draw button 3 6.5 8.0 2 0.5 Button #3'
+</pre>
+
+</body>
+</html>

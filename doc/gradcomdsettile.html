@@ -1,0 +1,117 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set rgb</title>
+<style type="text/css">
+<!--
+.style1 {color: #990000}
+.red {	color: #900;
+}
+.red {	color: #900;
+}
+.red {	color: #900;
+}
+.red {	color: #900;
+}
+body {
+	background-color: #e0f0ff;
+}
+-->
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body text="#000000">
+
+<h2><b>set tile</b></h2>
+
+<p>
+This command, which is available beginning with <span class="red">GrADS version 2.1</span>, is used to create a new pattern fill. Patterns are defined in the form of "tiles" which are  small images that are used repeatedly to fill an area. GrADS supports the automatic generation of tiles for drawing certain  simple patterns.  More complex patterns can be acheived by providing a custom image file. 
+<h3>Syntax</h3>
+<p>
+<code>set tile <i>number type &lt;width &lt;height &lt;lwid &lt;fgcolor &lt;bgcolor&gt;&gt;&gt;&gt;&gt; </i></code>   (for automatic generation of basic tile patters)<br>
+ ... or ... <br>
+   <code> set tile <i>number</i> 0 <i>filename                                     </i>   </code>(for user-supplied file containing the custom tile image)
+<p>
+  where:
+<ul>
+  <p><code><i>number</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>is the tile number; it can range from 0 to 2047.<br>
+    <code><i>type</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>is the tile type, valid values and what they mean are shown below.
+    <br>
+    <code><i>width</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>is the width of the generated tile in pixels (default is 9).  <br>
+    <code><i>height</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>is the  height of the generated tile in pixels (default is 9). <br>
+<code><i>lwid</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>is the line thickness used to draw the  lines in the tile. <code><i>lwid</i></code> must be an integer between 1 and 12 (default is 3). <br>
+<code><i>fgcolor</i>&nbsp;&nbsp;&nbsp;</code>is the  color used to draw the lines or dots in the tile (default is opaque white).<br>
+<code><i>bgcolor</i>&nbsp;&nbsp;&nbsp;</code>is the  color  used to fill the background of the tile (default is fully transparent).<br>
+<code><i>filename</i></code>    the full name of the .png file (including the path) to be used as a custom tile for creating the patern.</p>
+</ul>
+<p> Valid options for the tile <code><i>type</i></code> are as follows: </p>
+<ul>
+  <p><code>  0 - </code>tile image is provided with specified <code><i>filename</i></code><br>
+    <code>  1 - </code>solid <br>
+    <code>  2 - </code>dots <br>
+    <code>  3 - </code>diagonal downward lines <br>
+    <code>  4 - </code>diagonal upward lines <br>
+    <code>  5 - </code>diagonal cross hatching <br>
+    <code>  6 - </code>vertical  lines <br>
+    <code>  7 - </code>horizontal  lines <br>
+    <code>  8 - </code>rectangular cross hatching <br>
+</ul>
+  <p>Once you have defined a new tile, create the pattern fill by assigning the defined tile number to a color using the <code><a href="gradcomdsetrgb.html">set rgb</a></code> command.  The special syntax is: </p>
+  <p><code>set rgb <i>nn</i> tile <i>tt</i></code></p>
+<p> where: </p>
+  <p><code><i>nn</i> </code>is the color number (must be between 16 and 2047)<br>
+    <code><i>tt</i> </code>is the defined tile number <br>
+</ul>
+</p>
+<h3>Usage Notes</h3>
+<p> For the automatically generated tiles, GrADS creates a small image on the fly using the specified width and  height. This tile image is   filled with the foreground color (if the <code><i>type</i></code> is 1), or it is filled with the background color and then the dots or lines are drawn on top using the foreground color and the specified line thickness.  Note that the lines are  drawn from corner to corner (for diagonal lines) or through the  middle of the image (for dots and horizontal or vertical lines).  Thus the size of the image, as controlled by the width and height settings, will determine the  spacing of the dots or lines in the  pattern, and the aspect ratio of the  image will control the angle of the lines.  A smaller image will result in more closely spaced lines in the  pattern, and a larger image will  result in a more widely spaced pattern.</p>
+<p> The fully described pattern fill will be a combination of the "set tile" command and "set rgb" commands. You may  use the 16 pre-defined colors in the tiles or any newly defined color. The only restriction is that a color number that has a tile assigned to it may not be used as a foreground or background color for another tile. New colors and tiles may be defined in any order, but they should  be set before any drawing is  done.  Changing color or tile values mid-stream in a plot may result in inconsistent behavior.</p>
+<p>&nbsp;</p>
+<h3>Examples</h3>
+
+<P>The table of small images below shows what some basic automatically generated tiles can look like. 
+Each colum has a different <code><i>type</i></code> number, from 1-8.  Each row has a different foreground color and different values for the <code><i>width</i></code> and <code><i>height</i></code>, which are written to the left of each row. The value for 
+<code><i>lwid</i></code> is 1 for  all tiles. 
+<p><img src="images/pattern_demo.png" width="742" height="284" alt="pattern demo">
+<p>
+<p>This  image illustrates how you can use a stippled pattern fill as an overlay on a shaded plot. Script  sample to generate the plot is provided below.
+<p><img src="images/pattern_demo2.png" width="900" height="556" alt="pattern demo 2">
+<code>
+<p>* set up a grey scale color sequence with 'set rbcols'<br>
+  i = 60<br>
+  n = 60<br>
+  cmd = 'set rbcols'<br>
+  while (i&lt;256) <br>
+  'set rgb 'n' 'i' 'i' 'i<br>
+  cmd = cmd%' '%n<br>
+  i = i + 15<br>
+  n = n + 1<br>
+endwhile<br>
+cmd
+<p>* define 2  colors<br>
+  'set rgb 20 255 0   0'<br>
+  'set rgb 21   0 0 255'</p>
+<p>* define 2 patterns<br>
+  'set tile 0 2 6 6 3 20'<br>
+'set tile 1 2 6 6 3 21'<br>
+'set rgb 22 tile 0'<br>
+'set rgb 23 tile 1'</p>
+<p>* draw the height field with the gray shades<br>
+  'set gxout shaded'<br>
+  'set lev 200'
+  <br>
+  'd z'</p>
+<p>* overlay stippled red/blue shading of v greater than 5 and less than -5<br>
+  'set clevs 5'<br>
+  'set ccols -1 22'<br>
+  'd v'<br>
+  'set clevs -5'<br>
+  'set ccols 23 -1'<br>
+'d v'</p>
+</code>
+<p>
+
+
+</body>
+</html>

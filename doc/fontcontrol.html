@@ -1,0 +1,75 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.--><title>Font Control</title>
+
+<style type="text/css">
+<!--
+body {
+	background-color: #e0f0ff;
+}
+.style1 {color: #990000}
+.red {
+	color: #900;
+}
+-->
+</style>
+<H2><B> Font Control</B> in GrADS</H2>
+<p><a href="#hershey">Hershey Fonts</a><br />
+<a href="#cairo">Cairo Fonts</a><br />
+<a href="#emulation">Cairo Emulation of Hershey Fonts</a><br />
+  <a href="#size">Controlling Font Size</a><br />
+  <a href="#thick">Controlling Font Thickness</a><br />
+  <a href="#overrides">Temporary Overrides</a><br />
+  <a href="#examples">Examples</a>
+  </H2>
+<H3><a name="hershey" id="hershey"></a>Hershey Fonts</H3>
+<P>GrADS has traditionally used the Hershey vector fonts for all text displays. The Hershey  fonts are drawn as a collection of line segments, and can be rotated or scaled (stretched) in the X or Y direction; this makes them extremely flexible for different applications in GrADS. The Hershey fonts are defined in a set of <a href="font.html">font files</a>, which are part of the GrADS distribution and should be stored in a directory named by the <a href="http://iges.org/grads/gadoc/gradcomdgrads.html#env">GADDIR</a> environment variable. The  font style is controlled with the <code><a href="gradcomdsetfont.html">set font</a></code> command. Font numbers 0-5 are provided by GrADS (definitions given below); numbers 6-9 are reserved for additional user-defined Hershey font files. The script <a href="ftp://cola.gmu.edu/grads/scripts/font.gs">font.gs</a> will display all the characters in a given font set. 
+<pre>
+font 0 -- Simplex Roman 
+font 1 -- Complex Roman
+font 2 -- Complex Italic
+font 3 -- Complex Greek
+font 4 -- Duplex Roman
+font 5 -- Triplex Roman
+</pre>
+<p>GrADS <span class="red">version 2.1</span> with the Cairo library enabled  uses <a href="http://en.wikipedia.org/wiki/Spatial_anti-aliasing" target="_blank">anti-aliasing </a>to render the graphics when drawing to the X display window and for image output, which will make the Hershey fonts look smoother than they do with version 2.0. </p>
+<H3><a name="cairo" id="cairo"></a>Cairo Fonts</H3>
+<P>Beginning with GrADS <span class="style1">version 2.1</span>, additional fonts may be used through the Cairo graphics library.  The  integration of Cairo into GrADS provides access to fonts that are generated from polygons, and thus can look much nicer than Hershey fonts.  However,  these fonts do not behave like the raster screen fonts that are used in the browser or a terminal session, etc.  They are still graphically rendered fonts,  and how the graphics rendering aligns with the pixels on the screen or  the page can affect the quality.  This is especially noticeable for small characters or when image resolution is low.  In some cases, the traditional stroke-generated Hershey font  can produce characters that are easier to read.
+<P>Cairo employs the FreeType font library, which supports a number of scalable font formats including TrueType, Type 1, OpenType, X11 PCF, and Windows FNT. Please see <a href="http://www.freetype.org/freetype2/index.html#features">http://www.freetype.org/freetype2/index.html#features</a> for a complete list of font formats that FreeType supports. The fonts that GrADS supports will depend on whether the font files are available on your particular system. On macintosh OSX systems, available font files are generally  found in two directories: <code>/Library/Fonts</code> and <code>/System/Library/Fonts/</code>. On unix systems, look in <code>/usr/share/fonts/</code> and <code>/usr/share/X11/fonts/</code>. 
+<P>Hershey fonts correspond to single-digit font numbers; Cairo fonts correspond to double-digit font numbers. Font numbers 10-99 are reserved for user-defined fonts, which are specified with the <a href="gradcomdsetfont.html"><code>set font</code></a> command. The user must provide the name of a local font file, including its full path. If the user-specified font file cannot be opened, then the display defaults to a generic sans-serif font.
+  
+  If your build of GrADS is not enabled with the Cairo graphics library, you will get an error message if you use  <code><a href="gradcomdsetfont.html">set font</a></code> to try to set a font number greater than 9.
+<P>When using Cairo fonts, you may see this error message pop up: <strong>Fontconfig error: Cannot load default config file</strong>. This is a file that helps Cairo find fonts, but is only useful on the system where the library was originally built. The default config file is not required, and this message is harmless. The non-portability of font file locations is why it is necessary to specify the full path for a font file when using the <a href="gradcomdsetfont.html"><code>set font</code></a> command.
+
+<h3><a name="emulation" id="emulation"></a>Cairo Emulation of Hershey Fonts</h3>
+<P>If you would like to use Cairo fonts but do not know anything about  font files on your system or do not want to bother editing the font controls your existing scripts, there is a quick shortcut command for you:<code> '<a href="gradcomdsethershey.html">set hershey</a> off'</code>.
+This command uses generic Cairo fonts that are reasonable approximations of Hershey fonts 0, 1, 2, 4, and 5. Font 3 is the Greek (symbol) font, and cannot be  duplicated with generic controls. 
+<pre>
+Cairo version of font 0 -- Sans-Serif Regular 
+Cairo version of font 1 -- Serif Regular
+Cairo version of font 2 -- Monospace Italic
+Cairo version of font 4 -- Sans-Serif Bold
+Cairo version of font 5 -- Serif Bold
+</pre>
+<h3><a name="size" id="size"></a>Controlling Font Size</h3> 
+<p>The <code><a href="gradcomdsetstrsiz.html">set strsiz</a></code> command controls the font size for Hershey and Cairo fonts. Because the  fonts are vector-based, you can give different scaling factors for the width and height of the letters and the font will stretch accordingly.  If the vertical size is not given with <code><a href="gradcomdsetstrsiz.html">set strsiz</a></code>, the horizontal size will be used instead. </p>
+<h3><a name="thick" id="size2"></a>Controlling Font Thickness</h3>
+<p>The <code><a href="gradcomdsetstring.html">set string</a></code> command controls the  thickness for Hershey  fonts. For Cairo fonts, the thickness is controlled by using a bold version of your font, which will mean using a different font file. When using Cairo fonts, or when <code>'<a href="gradcomdsethershey.html">set hershey</a> off'</code> has been invoked, the thickness setting from<code> <a href="gradcomdsetstring.html">set string</a> </code>will be ignored. </p>
+<h3><a name="overrides" id="overrides"></a>Temporary Overrides</h3>
+<P>To access font numbers 10 and above within strings using the GrADS string escape characters, use the `f escape. The format of this is the backquote, followed by the character &quot;f&quot;, followed by a two digit  integer number.
+<P><em><strong>Font Override: </strong></em><br />
+  To temporarily override the  font  in a string of text, use the back quote character (`). For Hershey fonts, a back quote followed by a single digit selects that font number for the remainder of the string, or until a new back quote character is encountered. For Cairo fonts, a back quote followed by 'f' and a double-digit number selects that font number for the remainder of the string, or until a new back quote character is encountered. See examples below.
+<P><em><strong>Text Position Override:</strong></em><br />
+  It is also possible to use the back quote to change the position of the text, to draw a string above or below the base line for subscripts or superscripts. A back quote followed by the letter a (`a) will draw the subsequent text in the string as a superscript (above normal). A back quote followed by the letter b (`b) will draw the subsequent text in the string as a subscript (below normal). A back quote followed by the letter n (`n) will draw the subsequent text in the string in a normal position, to undo the effects of `a or `b. The use of the back quote to override the font works with the draw string command, contour labels, titles, axis labels, etc. The text position overrides `a, `b, and `n work in both <em>hershey mode</em> and <em>cairo mode</em>. 
+<P><em><strong>Degree Symbol:</strong></em><br />
+You can draw a degree symbol by drawing a period with font number 3 (`3.)  See examples below. 
+<H3><a name="examples" id="examples"></a>Examples</H3>
+<pre>
+set font 0
+draw string 1.5 1.25 `1use font 2 to `2emphasize `1a particular word
+draw string 1.5 2.25 use font 3 for `3greek `0letters
+draw string 1.5 3.25 `3p`0r`a2`n = area of a circle
+draw string 1.5 4.25 label temperatures in `3.`0C or `3.`0F
+
+
+
+
+</pre>

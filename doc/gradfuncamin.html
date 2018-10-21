@@ -1,0 +1,77 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Function: amin</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+body {
+	background-color: #e0f0ff;
+}
+.red {
+	color: #900;
+}
+</style>
+</head>
+<body text="#000000">
+
+<h2><b>amin()</b></h2>
+<p>This function returns an area minimum -- the minimum value in a grid spanning  an X-Y region. The syntax is:
+<p> <code>amin(<i>expr, xdim1, xdim2, ydim1, ydim2</i>)</code>
+<p> where:
+<ul>
+  <code><i>expr</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>any valid GrADS grid expression <br>
+  <code><i>xdim1</i>&nbsp;&nbsp;&nbsp;</code>starting X or LON dimension expression <br>
+  <code><i>xdim2</i>&nbsp;&nbsp;&nbsp;</code>ending X or LON dimension expression <br>
+  <code><i>ydim1</i>&nbsp;&nbsp;&nbsp;</code>starting Y or LAT dimension expression <br>
+  <code><i>ydim2</i>&nbsp;&nbsp;&nbsp;</code>ending Y or LAT dimension expression <br>
+</ul>
+<p> For global minimum, a shorthand may be used:
+  
+<ul>
+  <code>amin(<i>expr</i>, global)</code> or <br>
+  <code>amin(<i>expr</i>, g)</code>
+</ul>
+is the same as
+<ul>
+  <code>amin(<i>expr</i>, lon=0, lon=360, lat=-90, lat=90)</code>
+</ul>
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>This function will only work with <span class="red">GrADS version 2.0.2</span> or later.
+<li>This function is  more efficient that using nested <code><a href="gradfuncmin.html">min</a></code> functions. 
+<li> Related functions  <code><a href="gradfuncaminlocx.html">aminlocx</a></code> and <code><a href="gradfuncaminlocy.html">aminlocy</a></code> will return the grid location (X or Y) of the minimum value. If more than one grid box contains the minimum value, the location returned will be the first one encountered as the grid is scanned. The grid is scanned by rows from south to north, and each row is scanned from west to east. 
+<li>A similar set of functions exists for finding the maximum over an area: <code><a href="gradfuncamax.html">amax</a></code>, <code><a href="gradfuncamaxlocx.html">amaxlocx</a></code>, and <code><a href="gradfuncamaxlocy.html">amaxlocy</a></code>.
+</ol>
+
+<p>
+<h3>Examples</h3>
+<ol> 
+<li>Get the minimum value of the variable <code>ps</code> over a specified grid domain:<br>
+  <code>d amin(ps,x=10,x=120,y=15,y=45)</code><br>
+  <br></li>
+<li>Get the minimum value of the variable <code>sstanom</code> over the nino3.4 domain:<br>
+  <code>d amin(sstanom,lon=-170,lon=-120,lat=-5,lat=5)</code><br>
+  <br></li>
+<li>Get the minimum value of the variable <code>slp</code> over the global domain, and also get the grid location of that minimum. Check results. 
+  <br>
+  <pre>
+ga-> d amin(slp,g)     
+Result value = 94569 
+ga-> d aminlocx(slp,g)
+Result value = 523 
+ga-> d aminlocy(slp,g)
+Result value = 51 
+ga-> set x 523
+LON set to 261 261 
+ga-> set y 51
+LAT set to -65 -65 
+ga-> d slp
+Result value = 94569 
+  </pre>
+</li>
+</ol>
+  <p>
+</body>
+</html>

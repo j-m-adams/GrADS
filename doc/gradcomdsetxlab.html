@@ -1,0 +1,47 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set xlab</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set xlab</b></h2>
+
+<p>
+<code>set xlab <i>option</i></code>
+
+<p>
+Controls the format of X-axis tick mark labels. The <code><i>option</i></code>
+argument may be one of the following:
+
+<ul>
+<code>on&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+labeled tick marks are drawn with the default characteristics<br>
+<code>off&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+labeled tick marks are not drawn<br>
+<code><i>format</i>&nbsp;&nbsp;&nbsp;</code>
+gives a C-language template for conversion of the label value to a string <br>
+</ul>
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>If the X axis represents longitude, then the default behavior is to append an 
+"E" or "W" to all tick mark labels depending on the hemisphere. 
+<p>
+<li>Changes to the X-axis tick mark labels are reset by <a
+href="gradcomdclear.html">clear</a>, but not <a
+href="gradcomddisplay.html">display</a>.
+</ol>
+
+<p>
+<h3>Examples </h3>
+<ol>
+<li>This command would cause all X-axis labels to have 2 digits after the decimal point:
+<ul><code>set xlab %.2f </code></ul>
+</ul>
+
+
+</body>
+</html>

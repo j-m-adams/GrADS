@@ -1,0 +1,86 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set sdfwrite</title>
+<style type="text/css">
+<!--
+.style1 {color: #990000}
+-->
+</style>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set sdfwrite</b></h2>
+<p>This command sets the filename and other characteristics for self-describing netCDF data output. Is it used in conjunction with the <code><a href="gradcomdsdfwrite.html">sdfwrite</a></code> command which writes out a defined variable. 
+<h3>Syntax
+</h3>
+<p><code>set sdfwrite &lt;-3dz or -3dt or -4d or -5d&gt;  &lt;-rt or -re&gt; &lt;-flt or -dbl&gt; &lt;-nc3 or -nc4&gt; &lt;-chunk&gt; &lt;-zip&gt; <i>fname</i></code>
+<p>where</p>
+<ul>
+  <p><code><i>fname</i>&nbsp;&nbsp;&nbsp; </code>output filename (required) </p>
+</ul>
+  <p>The following six optional arguments are not enabled by default; each new call to <code><a href="gradcomdsetsdfwrite.html">set sdfwrite</a></code> will turn them off if they are not included. The default behavior is to write out a variable with the same number of varying dimensions as the defined variable and with no record (unlimited) dimension. 
+<ul>
+    <code>-3dt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>forces the output data file to have at least 3 coordinate dimensions (lon, lat,  and time)<br>
+    <code>-3dz&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>forces the output data file to have at least 3 coordinate dimensions (lon, lat, and lev)<br>
+    <code>-4d &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>forces the output data file to have at least 4 coordinate dimensions (lon, lat, lev, and time)<br>
+    <code>-4e &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>forces the output data file to have at least 4 coordinate dimensions (lon, lat, time, and ens)<br>
+    <code>-5d &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>forces the output data file to have 5 coordinate dimensions (lon, lat, lev, time, and ens)<br>
+    <code>-rt &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>sets the T axis as the record (unlimited) dimension<br>
+    <code>-re &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>sets the E axis as the record (unlimited) dimension<br>
+</ul>
+<p>The following six optional arguments will &quot;stick&quot; once they are invoked; defaults are restored with the <a href="http://iges.org/grads/gadoc/gradcomdreset.html"><code>reset</code></a>, <a href="http://iges.org/grads/gadoc/gradcomdreinit.html"><code>reinit</code></a>, or <a href="http://iges.org/grads/gadoc/gradcomdclear.html"><code>clear sdfwrite</code></a> commands.   
+  <ul>
+    <code>-flt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>output data written with floating point precision<br>
+    <code>-dbl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>output data written with double precision (default)<br>
+    <code>-nc3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>output data file written in  netCDF classic format (default)<br>
+    <code>-nc4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>output data file written in netCDF-4 format<br>
+    <code>-chunk&nbsp;&nbsp;&nbsp;</code>output data will be chunked (only if <code>-nc4</code>); set chunk sizes with the <a href="gradcomdsetchunksize.html"><code>set chunksize</code></a> command<br>
+    <code>-zip&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>output data will be compressed (implies <code>-nc4</code> and <code>-chunk</code>)<br>
+
+  </p>
+</ul>
+<p>
+<h3>Usage Notes</h3>
+<p>
+This command is  available in version <span class="style1">v2.0.a3+</span>. 
+<br>
+The <code>-4d</code> and <code>-5d</code> options are available in version <span class="style1">v2.0.a5+</span>. 
+<br>
+The <code>-flt</code>, <code>-dbl</code>, <code>-nc3</code>,<code>-nc4</code>, <code>-chunk</code>, and <code>-zip</code> options are available in version <span class="style1">2.0.a8+</span>.<br>
+The <code>-3dz,</code><code>-3dt,-rt</code> and <code>-re</code> options are available in version <span class="style1">2.1.a2+</span>.<br>
+The -4de option is available in version <span class="style1">2.1.1.b0</span>.
+<p>The options set with this command "stick" until the <a href="http://iges.org/grads/gadoc/gradcomdreset.html"><code>reset</code></a>, <a href="http://iges.org/grads/gadoc/gradcomdreinit.html"><code>reinit</code></a>, or <a href="http://iges.org/grads/gadoc/gradcomdclear.html"><code>clear sdfwrite</code></a> commands are invoked -- they are not altered when <a href="gradcomdsdfwrite.html"><code>sdfwrite</code></a> is invoked; however, there have been some changes related to  which options are reset whenever a new <code><a href="gradcomdsetsdfwrite.html">set sdfwrite</a></code> command is invoked:
+<ul>
+  <li>(<span class="style1">2.0.a3</span>) Originally, all options were designed to &quot;stick&quot; until  a  <a href="http://iges.org/grads/gadoc/gradcomdclear.html"><code>clear sdfwrite</code></a> command was invoked.</li>
+  <li>(<span class="style1">2.0.a9</span>) The interface was changed so that the <code>-5d</code> and <code>-4d</code> options are  reset to the default (off) with each  new <code><a href="gradcomdsetsdfwrite.html">set sdfwrite</a></code> command. This means that if these options are not used, the  output variable will have the same number of dimensions as the defined variable. The  options that control the precision, format, and compression of the output file continue to &quot;stick&quot; until they are explicitly changed. </li>
+  <li>(<span class="style1">2.1.a2</span>) The new options (<code>-3dz,</code><code>-3dt,-rt</code> and <code>-re</code>) have the same behavior as the <code>-5d</code> and <code>-4d</code> options -- they are reset to the default (off) with each  new <code><a href="gradcomdsetsdfwrite.html">set sdfwrite</a></code> command. </li>
+</ul>
+<p> When the <code>-3dz,</code><code>-3dt,-4d</code> or <code>-5d</code>  options are used,   the output file will retain information about the values of the  dimensions that were fixed when the variable was defined; non-varying dimensions will appear as a coordinate variable of size 1.
+
+<p>The  file <code><i>fname</i></code> will be replaced if it exists. Use the 
+  <a href="gradcomdsdfwrite.html"><code>sdfwrite</code></a> command to create the output file in netCDF format. 
+The <a href="gradcomdqsdfwrite.html"><code>query sdfwrite</code></a> command
+returns the status of the <code>sdfwrite</code> options. 
+<p>The <code><a href="gradcomdclear.html">clear sdfwrite</a></code> command resets these sdfwrite parameters back to their default values, and releases from memory all attribute metadata that has been defined with <a href="gradcomdsetsdfattr.html"><code>set sdfattr</code></a>.
+<p>If you use the <code>-zip</code> option, then it is not necessary to also specify <code>-nc4</code> or <code>-chunk</code>; GrADS will automatically set these options. A compressed file is always in netCDF-4 format and is always chunked. Use the <a href="gradcomdsetchunksize.html"><code>set chunksize</code></a> command to set the chunk size before writing out the file. 
+Please see the documentation on <a href="compression.html">compression</a> for more details. 
+Compression is not availabe with the classic netCDF format. 
+<p>The <code>-rt</code> and <code>-re</code> options are used to  assign a  record (unlimited) dimension. The default is to not have a record dimension. A netCDF-4 file may have more than one record dimension -- it can be set to T or E or both. For netCDF classic format, only one dimension may be a record dimension, and it must be the outermost (slowest varying) dimension.
+<p>
+<h3>Examples </h3>
+<p>Suppose you have a high resolution data set (5120x2560) and you wish to save the variable as compressed netcdf with floating point precsion. </p>
+<p><code>set x 1 5120<br />
+set y 1 2560<br />
+set z 1<br />
+set t 1<br />
+define var = var<br /> 
+set sdfwrite -flt  -zip var.nc<br />
+set chunksize 512 256<br />
+sdfwrite var<br />
+</code></p>
+<p>&nbsp;</p>
+</body>
+</html>
+

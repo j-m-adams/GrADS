@@ -1,0 +1,73 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<body>
+
+<h2><a name="ncgen">ncgen</a></h2>
+<code>ncgen [-b] [-c] [-f] [-n] [-o <i>output_file</i>]
+<i>input_file</i></code><p>
+Where:
+<ul>
+<code>-b</code>
+<ul>
+Create a (binary) netCDF file.  If the <code>-o</code> option is
+absent, a default file name will be constructed from the netCDF name
+(specified after the netcdf keyword in the input) by appending the
+<code>.nc</code> extension.  If a file already exists with the
+specified name, it will be overwritten.
+</ul>
+
+<p>
+<code>-c</code>
+<ul>
+Generate C source code that will create a netCDF file matching the
+netCDF specification.  The C source code is written to standard
+output.
+</ul>
+
+<p> 
+<code>-f</code> 
+<ul>
+Generate Fortran source code that will
+create a netCDF file matching the netCDF specification.  The Fortran
+source code is written to standard output.  
+</ul>
+
+<p> 
+<code>-o <i>outputfile</i></code>
+<ul>
+Name for the netCDF file created.  If this option is specified, it
+implies the <code>-b</code> option.  (This option is necessary because
+netCDF files cannot be written directly to standard output, since
+standard output is not seekable.)
+</ul>
+
+<p>
+<code>-n</code>
+<ul>
+Like <code>-b</code> option, except creates netCDF file with the
+obsolete <code>.cdf</code> extension instead of the <code>.nc</code>
+extension, in the absence of an output filename specified by the
+<code>-O</code> option.  This option is only supported for backward
+compatibility.
+</ul>
+</ul>
+
+<p>
+<b>Examples</b>
+<ol>
+<li>Check the syntax of the CDL file <code>foo.cdl</code>:<p>
+<dd><code>ncgen foo.cdl</code><p>
+<li>
+From the CDL file <code>foo.cdl</code>, generate an  equivalent  binary
+     netCDF file named <code>x.nc</code>:<p>
+<dd><code>ncgen -o x.nc foo.cdl</code><p>
+<li>
+From the CDL file <code>foo.cdl</code>, generate a C program containing
+     the  netCDF  function  invocations  necessary  to  create an
+     equivalent binary netCDF file named <code>x.nc</code>:<p>
+<dd><code>ncgen -c -o x.nc foo.cdl</code></ol>
+
+
+</body>
+</html>

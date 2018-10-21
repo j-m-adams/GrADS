@@ -1,0 +1,197 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>Templates</title>
+<style type="text/css">
+<!--
+.style1 {color: #990000}
+-->
+</style>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2>Using Templates</h2>
+<p> GrADS allows you use a single data descriptor file to aggregate multiple data 
+  files and handle them as if they were one individual file. The individual data 
+  files must be identical in the X, Y, and Z dimensions and have the same list of variables. The time range of each individual file must be indicated it its filename. 
+Beginning with version 2.0, data files may also be aggregated in the ensemble dimension. 
+<p> First, the DSET entry has a substitution template instead of 
+  a filename. See below for a description of all the possible components of the 
+  template. Second, the OPTIONS entry contains the <code>template</code> 
+  keyword. Third, the TDEF entry describes the time range for the 
+  entire set of data files. 
+<p> Templating works on any GrADS data type for which you can write a descriptor 
+  file. If you specify any additional OPTIONS keywords in the data 
+  descriptor file, make sure the options apply equally to each file included in 
+  the template. 
+<p>You can use the <code><a href='gradcomdsetmisswarn.html'>set misswarn</a></code> command to alert you if any of the data files in the templated set is missing. 
+<h3>Templating over TIME</h3>
+<p>
+Valid components of the substitution template for the TIME axis are as follows:
+
+
+<ul>
+  <p><code>%x1&nbsp;&nbsp;&nbsp;</code>1 digit decade <br>
+    <code>%x3&nbsp;&nbsp;&nbsp;</code>3 digit decade <br>
+    <code>%y2&nbsp;&nbsp;&nbsp;</code>2 digit year <br>
+    <code>%y4&nbsp;&nbsp;&nbsp;</code>4 digit year <br>
+    <code>%m1&nbsp;&nbsp;&nbsp;</code>1 or 2 digit month <br>
+    <code>%m2&nbsp;&nbsp;&nbsp;</code>2 digit month (leading zero if needed) <br>
+    <code>%mc&nbsp;&nbsp;&nbsp;</code>3 character month abbreviation <br>
+    <code>%d1&nbsp;&nbsp;&nbsp;</code>1 or 2 digit day <br>
+    <code>%d2&nbsp;&nbsp;&nbsp;</code>2 digit day (leading zero if needed) <br>
+    <code>%h1&nbsp;&nbsp;&nbsp;</code>1 or 2 digit hour <br>
+    <code>%h2&nbsp;&nbsp;&nbsp;</code>2 digit hour <br>
+    <code>%h3&nbsp;&nbsp;&nbsp;</code>3 digit hour (e.g., 120 or 012) <br>
+    <code>%n2&nbsp;&nbsp;&nbsp;</code>2 digit minute; leading zero if needed<br>
+    <code>%f2&nbsp;&nbsp;&nbsp;</code>2 digit forecast hour;  leading zero if needed; more digits added for hours &gt;99; hour values increase indefinitely<br>
+  <code>%f3&nbsp;&nbsp;&nbsp;</code>3 digit forecast hour; leading zeros if needed; more digits added for hours &gt;999; hour values increase indefinitely<br>
+    <code>%fn2&nbsp;&nbsp;</code>2 digit forecast minute; leading zero if needed; more digits added for minutes &gt; 99; minute values increase indefinitely  <span class="style1">(2.0.a9+)</span><br>
+    <code>%fhn&nbsp; </code>forecast time expressed in  hours and minutes (<code>hhnn</code>) where minute value (<code>nn)</code> is always &lt;=59<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>and hour value (<code>hh</code>) increases indefinitely. If<code> hh</code> or <code>nn</code> are &lt;=9, they are padded with a 0 <br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>so they are always at least 2 digits; more digits added for hours &gt;99. <span class="style1">(2.0.a9+)<br>
+    </span><code>%fdhn </code>forecast time expressed in days, hours, and minutes (<code>ddhhnn</code>) where minute value (<code>nn)</code> is always &lt;=59, <br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>hour value (<code>hh</code>) is always &lt;=23 and day value (<code>dd</code>) increases indefinitely. If <code>dd</code>, <code>hh,</code> or <code>nn</code> are &lt;=9, <br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>they are padded with a 0 so they are always at least 2 digits; more digits added for days &gt;99.  <span class="style1">(2.0.a9+)</span><br>
+    <code>%j3&nbsp;&nbsp;&nbsp;</code>3 digit julian day (day of year) <span class="style1">(2.0.a7+)</span><br>
+    <code>%t1&nbsp;&nbsp;&nbsp;</code>1 or 2 digit time index (file names contain number sequences that begin with 1 or 01) <span class="style1">(2.0.a7+)</span><br>
+    <code>%t2&nbsp;&nbsp;&nbsp;</code>2 digit time index (file names contain number sequences that  begin with 01)  <span class="style1">(2.0.a7+)</span><br>
+    <code>%t3&nbsp;&nbsp;&nbsp;</code>3 digit time index  (file names contain number sequences that  begin with 001) <span class="style1">(2.0.a7+)</span><br>
+    <code>%t4&nbsp;&nbsp;&nbsp;</code>4 digit time index  (file names contain number sequences that  begin with 0001)  <span class="style1">(2.0.a8+)</span><br>
+    <code>%t5&nbsp;&nbsp;&nbsp;</code>5 digit time index  (file names contain number sequences that  begin with 00001)  <span class="style1">(2.0.a8+)</span><br>
+    <code>%t6&nbsp;&nbsp;&nbsp;</code>6 digit time index  (file names contain number sequences that  begin with 000001)  <span class="style1">(2.0.a8+)</span><br>
+    <code>%tm1&nbsp;&nbsp;</code>1 or 2 digit time index (file names contain number sequences that  begin with 0 or 00)  <span class="style1">(2.0.a7+)</span><br>
+    <code>%tm2&nbsp;&nbsp;</code>2 digit time index (file names contain number sequences that  begin with 00)  <span class="style1">(2.0.a7+)</span><br>
+    <code>%tm3&nbsp;&nbsp;</code>3 digit time index  (file names contain number sequences that  begin with 000)  <span class="style1">(2.0.a7+)</span><br>
+    <code>%tm4&nbsp;&nbsp;</code>4 digit time index  (file names contain number sequences that  begin with 0000) <span class="style1">(2.0.a8+)</span><br>
+    <code>%tm5&nbsp;&nbsp;</code>5 digit time index  (file names contain number sequences that  begin with 00000) <span class="style1">(2.0.a8+)</span><br>
+    <code>%tm6&nbsp;&nbsp;</code>6 digit time index  (file names contain number sequences that  begin with 000000) <span class="style1">(2.0.a8+)</span><br>
+  </p>
+</ul>
+<p>
+When specifying the initial time (e.g., NWP model output), use these substitutions: 
+<ul>
+  <code>%ix1&nbsp;&nbsp;&nbsp;</code>initial 1 digit decade <br>
+    <code>%ix3&nbsp;&nbsp;&nbsp;</code>initial 3 digit decade <br>
+    <code>%iy2&nbsp;&nbsp;&nbsp;</code>initial 2 digit year <br>
+    <code>%iy4&nbsp;&nbsp;&nbsp;</code>initial 4 digit year <br>
+    <code>%im1&nbsp;&nbsp;&nbsp;</code>initial 1 or 2 digit month <br>
+    <code>%im2&nbsp;&nbsp;&nbsp;</code>initial 2 digit month (leading zero if 
+    needed) <br>
+    <code>%imc&nbsp;&nbsp;&nbsp;</code>initial 3 character month abbreviation 
+    <br>
+    <code>%id1&nbsp;&nbsp;&nbsp;</code>initial 1 or 2 digit day (leading zero 
+    if needed) <br>
+    <code>%id2&nbsp;&nbsp;&nbsp;</code>initial 2 digit day <br>
+    <code>%ih1&nbsp;&nbsp;&nbsp;</code>initial 1 or 2 digit hour <br>
+    <code>%ih2&nbsp;&nbsp;&nbsp;</code>initial 2 digit hour <br>
+    <code>%ih3&nbsp;&nbsp;&nbsp;</code>initial 3 digit hour <br>
+    <code>%in2&nbsp;&nbsp;&nbsp;</code>initial 2 digit minute (leading zero if needed)<br>
+</ul>
+
+<h3>Templating over ENSEMBLE</h3>
+<p>With the introduction of the extra grid dimension for ensembles in <span class="style1">version 2.0</span>, support was also added for file templating over E. The sole substitution template is <code>%e</code> and the substitution string is the ensemble name, which is provided in the EDEF entry in the descriptor file. Note that the ensemble names are limited to 15 characters -- keep this limit in mind when designing your data directory structure and file naming conventions (or use symbolic links to create short aliases for longer filenames). If you are templating over the ensemble dimension,  there can be only one ensemble member per file.
+  If your data set has an ensemble dimension, and you are using templating over T but not E (i.e., there is no %e in the DSET entry), then  all ensemble members are presumed to have identical time axes, and  all members must be contained in the data file for a given time. Templating over T but not E is not supported for  data sets in flat binary or GRIB1 formats. 
+<h3>String Substitution</h3>
+<p><a name="chsub"></a>The <code>%ch</code> template option, introduced in <span class="style1">version 1.9b4</span>, allows 
+  for <em>any</em> user-specified string substitution, not just date strings. 
+  This is useful when none of the above template options match the time ranges in 
+  the files you wish to aggregate, or if the files are located on different disk pathnames. 
+The syntax is as follows: </p>
+<ul>
+  <code>%ch&nbsp;&nbsp;&nbsp;</code>substitute string 
+</ul>
+If you put the <code>%ch</code> template in your DSET entry, then you also need 
+to put additional <a href="/grads/gadoc/descriptorfile.html#CHSUB">CHSUB</a> entries 
+in the descriptor file that contain two integers (t1 and t2) followed by a string 
+which will be substituted for <code>%ch</code> in the data file names for the 
+time steps beginning with<br>
+t1 and ending with t2. The CHSUB descriptor file entries have the following syntax: 
+<ul>
+  <p><code>CHSUB &nbsp;<em>t1</em> &nbsp;<em>t2</em> &nbsp;<em>string</em></code></p>
+</ul>
+<p><span class="style1">Version 2.1.a3</span> adds a new feature to the string substitution template: the <code><em>string</em></code> provided in the <code>CHSUB</code> entry may  contain time-based template components. GrADS will do the <code>CHSUB</code> string substitution <em>before</em> the complete filename is  generated by resolving all the other template substitution components. An application of this strategy might be to merge a reanalyis and forecast into one seamless time series, but the reanalyes and forecasts have different file naming conventions. See example #6 below.</p>
+<h3>Examples</h3>
+<ol>
+  <li>Here's a set of binary files spanning a single month, where each day's worth 
+    of hourly data is contained in individual files: <br>
+    <code> &nbsp;&nbsp;&nbsp;1may92.dat<br>
+    &nbsp;&nbsp;&nbsp;2may92.dat<br>
+    &nbsp;&nbsp;&nbsp;...<br>
+    &nbsp;&nbsp;&nbsp;31may92.dat </code> <br>
+    Three records must be modified in the data descriptor file. Note that the 
+    TDEF entry reflects the entire month's worth of data: <br>
+    <code> &nbsp;&nbsp;&nbsp;DSET ^%d1may92.dat<br>
+    &nbsp;&nbsp;&nbsp;OPTIONS template<br>
+    &nbsp;&nbsp;&nbsp;TDEF 744 linear 0z1may1992 1hr   </code>
+    <br>
+    <br>
+  </li>
+  <li>If your data set expanded, and there were more files containing hourly data 
+    for other months and years: <br>
+    <code> &nbsp;&nbsp;&nbsp;1jun92.dat<br>
+    &nbsp;&nbsp;&nbsp;2jun92.dat<br>
+    &nbsp;&nbsp;&nbsp;...<br>
+    &nbsp;&nbsp;&nbsp;1jan93.dat </code> <br>
+    Then you would add a template for month and year in your DSET entry and extend 
+    the length of your TDEF: <br>
+    <code> &nbsp;&nbsp;&nbsp;DSET ^%d1%mc%y2.dat<br>
+    &nbsp;&nbsp;&nbsp;OPTIONS template<br>
+    &nbsp;&nbsp;&nbsp;TDEF 6624 linear 0z1may1992 1hr<br>
+    </code><br><br></li>
+  <li>Suppose you have a set of seven netcdf files, each containing monthly data 
+    spanning a decade:<br>
+    &nbsp;&nbsp;&nbsp;<code>pr.1880_1889.nc</code><br>
+    &nbsp;&nbsp;&nbsp;<code>pr.1890_1899.nc</code><br>
+    &nbsp;&nbsp;&nbsp;<code>pr.1900_1909.nc</code><br>
+    &nbsp;&nbsp;&nbsp;<code>pr.1910_1919.nc</code><br>
+    &nbsp;&nbsp;&nbsp;<code>pr.1920_1929.nc</code><br>
+    &nbsp;&nbsp;&nbsp;<code>pr.1930_1939.nc</code><br>
+    &nbsp;&nbsp;&nbsp;<code>pr.1940_1949.nc</code><br>
+	Then your descriptor file would include the following entries:<br>
+    &nbsp;&nbsp;&nbsp;<code>DSET ^pr.%x30_%x39.nc </code><br>
+    &nbsp;&nbsp;&nbsp;<code>OPTIONS template </code><br>
+    &nbsp;&nbsp;&nbsp;<code>DTYPE netcdf </code><br>
+    &nbsp;&nbsp;&nbsp;<code>TDEF 840 linear jan1880 1mo</code>
+    <br><br>
+  </li>
+  <li> Here are two netcdf files, one containing 50 years of monthly data (600 
+    time steps), the other 100 years (1200 time steps): <br>
+    &nbsp;&nbsp;&nbsp;<code>pr.1851-1900.nc</code><br>
+    &nbsp;&nbsp;&nbsp;<code>pr.1901-2000.nc</code> <br>
+    Your descriptor file should include the following entries:<br>
+    &nbsp;&nbsp;&nbsp;<code>DSET ^pr.%ch.nc</code><br>
+    &nbsp;&nbsp;&nbsp;<code>CHSUB &nbsp;&nbsp;1 &nbsp;600 1851-1900</code><br>
+    &nbsp;&nbsp;&nbsp;<code>CHSUB 601 1800 1901-2000</code><br>
+    &nbsp;&nbsp;&nbsp;<code>OPTIONS template</code><br>
+    &nbsp;&nbsp;&nbsp;<code>DTYPE netcdf</code><br>
+    &nbsp;&nbsp;&nbsp;<code>TDEF 1800 linear jan1851 1mo</code><br>
+    If these two data files were located on different disks, you could write out the relevant descriptor file entries this way instead:<br>
+    &nbsp;&nbsp;&nbsp;<code>DSET %ch</code><br>
+    &nbsp;&nbsp;&nbsp;<code>CHSUB &nbsp;&nbsp;1 &nbsp;600 /disk1/pr.1851-1900.nc</code><br>
+    &nbsp;&nbsp;&nbsp;<code>CHSUB 601 1800 /disk2/pr.1901-2000.nc</code><br>
+    <br><vr>
+  </li>
+  <li>Your forecast model output looks like this:<br>
+   <code> &nbsp;&nbsp;MMOUT_DOMAIN1_00<br>
+    &nbsp;&nbsp;MMOUT_DOMAIN1_01<br>
+    &nbsp;&nbsp;MMOUT_DOMAIN1_02<br>
+   </code>
+  so your DSET enry will look like this: <br>
+  <code> &nbsp;&nbsp;DSET ^MMOUT_DOMAIN1_%tm2</code><br>
+  <br>
+  </li>
+  <li>Here is an example of using different time template substitutions within a %ch string substitution. <br>
+   <code>
+      DSET /data/projects/ops/pub/%ch<br>
+      CHSUB 1    1898 das/Y%y4/M%m2/D%d2/GEOS.fp.asm.inst3_2d_smp_Nx.%y4%m2%d2_%h2%n2.V01.nc4<br>
+      CHSUB 1899 1909 forecast/Y2014/M10/D15/H06/GEOS.fp.fcst.inst3_2d_smp_Nx.20141015_06+%y4%m2%d2_%h2%n2.V01.nc4<br>
+      OPTIONS template<br>
+    </code>
+    <br>
+  </li>
+</ol>
+</body>
+</html>
+

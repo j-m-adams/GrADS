@@ -1,0 +1,48 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set ylab</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set ylab</b></h2>
+
+<p>
+<code>set ylab <i>option</i></code>
+
+<p>
+Controls the format of Y-axis tick mark labels. The <code><i>option</i></code>
+argument may be one of the following:
+
+<ul>
+<code>on&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+labeled tick marks are drawn with default characteristics<br>
+<code>off&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+labeled tick marks are not drawn<br>
+<code><i>format</i>&nbsp;&nbsp;&nbsp;</code>
+gives a C-language template for conversion of the label value to a string <br>
+</ul>
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>If the Y axis represents latitude, then the default behavior is to label the equator 
+with "EQ" and append either "N" or "S" to all other tick mark labels depending
+on the hemisphere.  
+<p>
+<li>Changes to the Y-axis tick mark labels are reset by <a
+href="gradcomdclear.html">clear</a>, but not <a
+href="gradcomddisplay.html">display</a>.
+</ol>
+
+<p>
+<h3>Examples </h3>
+<ol>
+<li>This command would cause all Y-axis labels to have 2 digits after the decimal point:
+<ul><code>set ylab %.2f </code></ul>
+</ul>
+
+
+</body>
+</html>

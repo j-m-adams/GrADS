@@ -1,0 +1,1857 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Data Descriptor File</title>
+<link href="/assets/NewIGES.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.style2 {color: #990000}
+.style3 {color: #009933}
+body {
+	background-color: #e0f0ff;
+}
+.red {
+	color: #900;
+}
+.italic {
+	font-style: italic;
+}
+-->
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body text="#000000">
+<h2><a name="TOP"></a><span class="banner20">Components of a GrADS Data Descriptor 
+  File</span></h2>
+<p> <span class="plaintext">
+  <a href="#DSET">DSET</a><br>
+  <a href="#CHSUB">CHSUB</a><br>
+  <a href="#DTYPE">DTYPE</a><br>
+  <a href="#INDEX">INDEX</a><br>
+  <a href="#STNMAP">STNMAP</a><br>
+  <a href="#TITLE">TITLE</a><br>
+  <a href="#UNDEF">UNDEF</a><br>
+  <a href="#unpack">UNPACK</a> <br>
+  <a href="#FILEHEADER">FILEHEADER</a><br>
+  <a href="#XYHEADER">XYHEADER</a><br>
+  <a href="#XYTRAILER">XYTRAILER</a><br>
+  <a href="#THEADER">THEADER</a><br>
+  <a href="#THEADER">HEADERBYTES</a><br>
+  <a href="#TRAILERBYTES">TRAILERBYTES</a><br>
+  <a href="#XVAR">XVAR</a><br>
+  <a href="#YVAR">YVAR</a><br>
+  <a href="#ZVAR">ZVAR</a><br>
+  <a href="#STID">STID</a><br>
+  <a href="#TVAR">TVAR</a> <br>
+  <a href="#TOFFVAR">TOFFVAR</a><br>
+  <a href="#CACHESIZE">CACHESIZE</a><br>
+  <a href="#OPTIONS">OPTIONS</a><br>
+  <a href="#PDEF">PDEF</a> <br>
+  <a href="#XDEF">XDEF</a><br>
+  <a href="#YDEF">YDEF</a><br>
+  <a href="#ZDEF">ZDEF</a><br>
+  <a href="#TDEF">TDEF</a><br>
+  <a href="#EDEF">EDEF</a><br>
+  <a href="#VECT">VECTORPAIRS</a><br>
+  <a href="#VARS">VARS</a><br>
+  <a href="#VARS">ENDVARS</a><br>
+  <a href="#ATTR">ATTRIBUTE METADATA</a> <br>
+  <a href="#COMMENT">COMMENTS</a> <br>
+  </span>
+
+<hr>
+<table width="600" border="0" cellpadding="4" cellspacing="0" class="plaintext">
+  <tr> 
+    <td width="510" bgcolor="#CCCCCC"><a name="DSET"> <b>DSET</b> <i>data_filename</i></a>    </td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2"><p>This entry specifies the filename of the data file being 
+        described. If the data and the descriptor file are not in the same directory, 
+        then <i>data_filename</i> must include a full path. If a ^ character is 
+        placed in front of <i>data_filename</i>, then <i>data_filename</i> is 
+        assumed to be relative to the path of the descriptor file. If you are 
+        using the ^ character in the DSET entry, then the descriptor file and 
+        the data file may be moved to a new directory without changing any entries 
+        in the data descriptor file, provided their relative paths remain the 
+        same. For example:</p>
+      <p>If the data descriptor file is: <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /data/wx/grads/sa.ctl<br>
+        and the binary data file is:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /data/wx/grads/sa.dat<br>
+        then the data file name in the data descriptor file can be:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DSET ^sa.dat<br>
+        instead of:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DSET /data/wx/grads/sa.dat 
+      <p>If <i>data_filename</i> does not include a full path or a ^, then GrADS 
+        will only look for data files in the directory where you are running GrADS. 
+      <p>GrADS allows you use a single DSET entry to aggregate multiple data files 
+        and handle them as if they were one individual file. The individual data 
+        files must be identical in all dimensions except time, and the time range 
+        of each individual file must be indicated it its filename. To accomplish 
+        this, the DSET entry has a substitution template instead of a filename. 
+        See the section on <a href="/grads/gadoc/templates.html">Using Templates</a> 
+        for a description of all the possible components of the template. Second, 
+        the <a href="#OPTIONS">OPTIONS</a> entry must contain the template keyword.<br>
+    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"><a name="CHSUB"> <b>CHSUB</b> <i>&nbsp;t1 &nbsp;t2 &nbsp;string</i></a>    </td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2"><p>(<font color="#990000">GrADS version 1.9b4</font>) This 
+        entry is used with a new option for templating data files that allows 
+        for any user-specified string substitution, instead of only date string 
+        substitution. This is useful when none of the standard template options 
+        match the time ranges in the files you wish to aggregate, or if the files 
+        are located on different disks. When you put the <code>%ch</code> template 
+        in your <a href="#DSET">DSET</a> entry, then you also need to put additional 
+        <a href="/grads/gadoc/descriptorfile.html#CHSUB">CHSUB</a> entries in 
+        the descriptor file. The <em>string</em> will be substituted for <code>%ch</code> 
+        in the data file name for the time steps beginning with <em>t1</em> and 
+        ending with <em>t2</em>.See the section on <a href="/grads/gadoc/templates.html">Using 
+        Templates</a> for examples. <br>
+        <br>
+      </p>    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> <a name="DTYPE"> <b>DTYPE</b></a><em> keyword</em></td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2">The DTYPE entry specifies the type of data being described. 
+      There are four options: grib, hdfsds, netcdf, or station. If the data type 
+      is none of these, then the DTYPE entry is omitted completely from the descriptor 
+      file and GrADS will assume the data type is<a href="aboutgriddeddata.html"> gridded binary</a>. <br> <table width="100%" border="0" cellpadding="4" cellspacing="4" class="plaintext">
+        <tr> 
+          <td valign="top" bgcolor="b8c8d7">bufr</td>
+          <td bgcolor="b8c8d7" class="plaintext">(<font color="#990000">GrADS 
+            version 1.9</font>) Data file is a BUFR station data file. This data 
+            type must be accompanied by the following special entries: <a href="#XVAR">XVAR</a>, 
+            <a href="#YVAR">YVAR</a>, <a href="#TVAR">TVAR</a>, <a href="#STID">STID</a>. 
+            Optional special entries are: <a href="#ZVAR">ZVAR</a>, <a href="#TOFFVAR" class="plaintext">TOFFVAR</a>.          </td>
+        </tr>
+        <tr> 
+          <td width="11%" valign="top" bgcolor="ccdceb">grib</td>
+          <td width="89%" bgcolor="ccdceb">Data file is an indexed GRIB (version 1) file. 
+            This data type requires a secondary entry in the descriptor file: 
+            <a href="#INDEX">INDEX</a>. The <a href="#INDEX">INDEX</a> entry provides 
+            the filename (including the full path or a ^) for the GRIB index file. 
+            The index file is created by the <a href="util/gribmap.html">gribmap</a> 
+            utility. You must run <a href="util/gribmap.html">gribmap</a> and 
+            create the index file before you can display the GRIB data in GrADS.          </td>
+        </tr>
+        <tr>
+          <td valign="top" bgcolor="b8c8d7">grib2</td>
+          <td bgcolor="b8c8d7" class="plaintext">(<font color="#990000">GrADS version 2.0</font>) Data file is an indexed GRIB2 file. This data type requires a secondary entry in the descriptor file: : 
+          <a href="#INDEX">INDEX</a>. The <a href="#INDEX">INDEX</a> entry provides the filename (including the full path or a ^) for the GRIB2 index file. The index file is created by the <a href="util/gribmap.html">gribmap</a> utility. You must run <a href="util/gribmap.html">grib2map</a> and create the index file before you can display the GRIB2 data in GrADS. </td>
+        </tr>
+        <tr bgcolor="ccdceb">
+          <td valign="top">hdfsds</td>
+          <td bgcolor="ccdceb" class="plaintext">(<font color="#990000">GrADS 
+            version 1.9</font>) Data file is an HDF Scientific Data Set (SDS). 
+            Although HDF-SDS files are self-describing and may be read automatically 
+            using the <a href="cmd/sdfopen.html">sdfopen</a>/<a href="cmd/xdfopen.html">xdfopen</a> commands, this DTYPE gives you the option of overriding the file's 
+            own metadata and creating a descriptor file for some or all of the 
+            variables in the file. This DTYPE may also be used if the metadata 
+            in the HDF-SDS file is insufficient or is not coards-compliant. This 
+            data type requires a special entry in the <em>units</em> field of 
+            the <a href="#VARS">variable declaration.</a> The <a href="#UNDEF">undef</a> and <a href="#UNPACK">unpack</a> entries contain special options for 
+            this dtype. </td>
+        </tr>
+        <tr bgcolor="ccdceb">
+          <td valign="top" bgcolor="b8c8d7">hdf5_grid</td>
+          <td bgcolor="b8c8d7" class="plaintext">(<font color="#990000">GrADS version 2.0.a7+</font>) Data file is HDF5 gridded format. The HDF5 format is extremely general and is designed to store a variety of data types. The GrADS interface is only for grids, and requires a complete descriptor file -- there is no sdfopen/xdfopen interface for HDF5.</td>
+        </tr>
+        <tr bgcolor="b8c8d7">
+          <td valign="top" bgcolor="ccdceb">netcdf</td>
+          <td bgcolor="ccdceb">(<font color="#990000">GrADS version 1.9</font>) 
+            Data file is NetCDF. Although NetCDF files are self-describing and 
+            may be read automatically using the <a href="cmd/sdfopen.html">sdfopen</a>/<a href="cmd/xdfopen.html">xdfopen</a> commands, this DTYPE gives you the option of overriding the file's 
+            own metadata and creating a descriptor file for some or all of the 
+            variables in the file. This DTYPE may also be used if the metadata 
+            in the NetCDF file is insufficient or is not coards-compliant. This 
+            data type requires a special entry in the<em> units</em> field of 
+            the <a href="#VARS">variable declaration.</a> The <a href="#UNDEF">undef</a> and <a href="#UNPACK">unpack</a> entries contain special options for 
+            this dtype. </td>
+        </tr>
+        <tr bgcolor="ccdceb">
+          <td valign="top" bgcolor="b8c8d7">station</td>
+          <td bgcolor="b8c8d7">Data file is in GrADS station data format. This 
+            data type requires a secondary entry in the descriptor file: STNMAP. 
+            The STNMAP entry provides the filename (including the full path or 
+            a ^) for the station data map file. The map file is created by the <a href="util/stnmap.html">stnmap</a> utility. You must run <a href="util/stnmap.html">stnmap</a> and create the map file before you can display the station data in 
+            GrADS. </td>
+        </tr>
+        
+      </table>    </td>
+  </tr>
+  <tr> 
+    <td valign="middle" bgcolor="#CCCCCC"> <p><a name="INDEX"></a> <b>INDEX</b> 
+        <i>filename</i> </p></td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2">This entry specifies the name of the grib map file. It is 
+      required when using the <a href="#DTYPE">DTYPE</a> grib or grib2 entry to read GRIB formatted data. The file is generated by running the external utility <a href="util/gribmap.html">gribmap</a>. or <a href="util/grib2map.html">grib2map</a>.      Filenaming conventions are the same as those described for the <a href="#DSET">DSET</a> 
+      entry.</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"><a name="STNMAP"></a><strong>STNMAP</strong><em> filename</em></td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2">This entry specifies the name of the station map file. It 
+      is required when using the <a href="#DTYPE">DTYPE</a> station entry to read 
+      GrADS-formatted station data. The file is generated by running the external 
+      utility <a href="util/stnmap.html">stnmap</a>. Filenaming conventions are 
+      the same as those described for the <a href="#DSET">DSET</a> entry.</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> <p> <a name="TITLE"> <b>TITLE</b> <i>string</i></a> 
+    </td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2"><p>This entry gives brief description of the contents of the 
+        data set. <em>String</em> will be included in the output from a <a
+href="cmd/query.html">query</a> command and it will appear in the directory listing 
+        if you are serving this data file with the <a href="/grads/gds">GrADS-DODS 
+        Server (GDS)</a>, so it is helpful to put meaningful information in the 
+        title field. For GDS use, do not use double quotation marks (&quot;) in 
+        the title.</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"><a name="UNDEF"> <b>UNDEF</b> <i>value</i></a> <em>&lt;undef_attribute_name&gt; &lt;secondar_undef_attribute_name&gt;</em></td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2" class="plaintext"><p>This entry specifies the undefined or 
+        missing data value. UNDEF is a <i>required entry </i>even if there are 
+        no undefined data. GrADS operations and graphics routines will ignore 
+        data with this value from this data set. <br>
+        (<font color="#990000">GrADS version 1.9b4</font>) An optional second 
+        argument has been added for data sets of <a href="#DTYPE">DTYPE</a> netcdf 
+        or hdfsds -- it is the name of the attribute that contains the undefined 
+        value. This should be used when individual variables in the data file 
+        have different undefined values. After data I/O, the missing values in 
+        the grid are converted from the variable undef to the file-wide undef 
+        (the numerical value in the first argument of the UNDEF record). Then 
+        it appears to GrADS that all variables have the same undef value, even 
+        if they don't in the original data file. If the data require a transformation 
+        using the attributes named in the <a href="#unpack">UNPACK</a> entry, 
+        GrADS assumes the variable undef value corresponds to the data values 
+        as they appear in the file, i.e., <em>before</em> they are transformed 
+        using a scale factor and offset. Missing packed data values are thus assigned 
+        the file-wide undef value and are never unpacked. Attribute names are 
+        case sensitive, and it is assumed that the name is identical for all variables 
+        in the netcdf or hdfsds data file. If the name given does not match any 
+        attributes, or if no name is given, the file-wide undef value will be 
+        used. <br>
+        (<font color="#990000">GrADS version 2.1.0</font>) An optional third 
+        argument has been added for data sets of <a href="#DTYPE">DTYPE</a> netcdf 
+        or hdfsds -- it is the name of a secondary attribute that contains another undefined 
+        value.        <br>
+        Example: UNDEF 1e+33 missing_value _FillValue</p>    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"><a name="unpack"></a><strong>UNPACK</strong> <em>scale_factor_attribute_name 
+      &lt;add_offset_attribute_name&gt;</em></td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2"><div align="left">(<font color="#990000">GrADS version 1.9</font>) 
+        This entry is used with <a href="#DTYPE">DTYPE</a> netcdf, hdfsds, or hdf5_grid (<font color="#990000">GrADS version 2.0.a7+</font>) for 
+        data variables that are 'packed' -- i.e. non-float data that need to be 
+        converted to float by applying the following formula: <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y = x * <em>scale_factor</em> + <em>add_offset</em><br>
+        If your self-describing file does not have an offset attribute, the 2nd argument may 
+        be omitted, and the offset will be assigned the default value of 0.0. 
+        If your self-describing file has an offset attribute, but not a scale factor, use &quot;NULL&quot; for the <em>scale_factor_attribute_name</em>. (This &quot;NULL&quot; option is in <span class="style2">GrADS version 2.0.0+</span>). Attribute names are case sensitive, and it is assumed that the names are 
+        identical for all variables in the netcdf or hdfsds data file. If the 
+        names given do not match any attributes, the scale factor will be assigned 
+        a value of 1.0 and the offset will be assigned a value of 0.0. The transformation 
+        of packed data is done after the undef test has been applied. <br>
+        Examples: <br>
+        UNPACK scale_factor add_offset<br>
+        UNPACK NULL add_offset<br>
+        UNPACK Slope Intercept<br>
+      </div></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> <p> <a name="FILEHEADER"> <b>FILEHEADER</b> <i>length</i></a> 
+    </td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2">This optional entry tells GrADS that your data file has a 
+      header record of <em>length</em> bytes that precedes the data. GrADS will 
+      skip past this header, then treat the remaineder of the file as though it 
+      were a normal GrADS binary file after that point. This optional descriptor 
+      file entry is only valid for GrADS gridded data sets. </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> <p> 
+	<a name="THEADER"> <b>THEADER</b> <i>length</i></a><br>   
+	<b>HEADERBYTES</b> <i>length</i><
+    </td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2">These two equivalent  optional entries tell GrADS that the data file has a header 
+      record of <em>length</em> bytes preceding each time block of binary data. Use one or the other but not both.
+      These entries are only valid for GrADS gridded data 
+      sets. See the section on <a href="aboutgriddeddata.html#structure">structure 
+      of a gridded binary data file</a> for more information.</td>
+  </tr>
+  <tr>
+    <td bgcolor="#CCCCCC"> <a name="TRAILERBYTES"> <b>TRAILERBYTES</b> <i>length</i></a> </td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back to top</a></td>
+  </tr>
+  <tr>
+    <td colspan="2">This optional entry tell GrADS that the data file has a trailer record of <em>length</em> bytes following
+	 each time block of binary data. This entry is only valid for GrADS gridded data sets. See the section on <a href="aboutgriddeddata.html#structure">structure of a gridded binary data file</a> for more information.</td>
+  </tr>
+  <tr> 
+  <td bgcolor="#CCCCCC"> <a name="XYHEADER"> <b>XYHEADER</b> <i>length</i></a>    </td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2">This optional entry tells GrADS that the data file has a header 
+      record of <em>length</em> bytes preceding each horizontal grid (XY block) of binary 
+      data. This entry is only valid for GrADS gridded 
+      data sets. See the section on <a
+href="aboutgriddeddata.html#structure">structure of a gridded binary data file</a> 
+      for more information.</td>
+  </tr>
+      <tr>
+    <td bgcolor="#CCCCCC"> <a name="XYTRAILER"> <b>XYTRAILER</b> <i>length</i></a>    </td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2">(<span class="red">GrADS version 2.1.1.b0+</span>) This optional entry tells GrADS that the data file has a trailer 
+      record of <em>length</em> bytes following each horizontal grid (XY block) of binary 
+      data. This entry is only valid for GrADS gridded 
+      data sets. See the section on <a
+href="aboutgriddeddata.html#structure">structure of a gridded binary data file</a> 
+      for more information. </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"><strong><a name="XVAR"></a>XVAR</strong> <em>x,y</em></td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2" class="plaintext">(<font color="#990000">GrADS version 1.9</font>) 
+      This entry provides the x,y pair for the station's longitude. This entry 
+      is required for <a href="#DTYPE">DTYPE</a> bufr.</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"><strong><a name="YVAR"></a>YVAR</strong> <em>x,y</em></td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2">(<font color="#990000">GrADS version 1.9</font>) This entry 
+      provides the x,y pair for the station's latitude. This entry is required 
+      for <a href="#DTYPE">DTYPE</a> bufr.</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"><strong><a name="ZVAR"></a>ZVAR</strong> <em>x,y</em></td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2">(<font color="#990000">GrADS version 1.9</font>) This entry 
+      provides the x,y pair for the station data's vertical coordinate (e.g., 
+      pressure). This is an optional entry for <a href="#DTYPE">DTYPE</a> bufr.    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"><strong><a name="STID"></a>STID</strong><em> x,y</em></td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2">(<font color="#990000">GrADS version 1.9</font>) This entry 
+      provides the x,y pair for the station ID. This entry is required for <a href="#DTYPE">DTYPE</a> 
+      bufr.</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"><strong><a name="TVAR"></a>TVAR</strong> yr <em>x,y</em> 
+      mo <em>x,y</em> dy <em>x,y</em> hr <em>x,y</em> mn <em>x,y</em> sc <em>x,y</em></td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2" class="plaintext">(<font color="#990000">GrADS version 1.9</font>) 
+      This entry provides the x,y pairs for all the <strong>base time</strong> 
+      coordinate variables. Each time unit (year=yr, month=mo, day=dy, hour=hr, 
+      minute=mn, second=sc) is presented as a 2-letter abbreviation followed by 
+      the x,y pair that goes with that time unit. The time for any individual 
+      station report is the base time plus the offset time (see <a href="#TOFFVAR">TOFFVAR</a>). 
+      All six base time units are not required to appear in the TVAR record, only 
+      those that are in the data file. This entry is required for <a href="#DTYPE">DTYPE</a> 
+      bufr.</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"><strong><a name="TOFFVAR"></a>TOFFVAR</strong> yr <em>x,y</em> 
+      mo <em>x,y</em> dy <em>x,y</em> hr <em>x,y</em> mn <em>x,y</em> sc <em>x,y</em></td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2" class="plaintext">(<font color="#990000">GrADS version 1.9</font>) 
+      This entry provides the x,y pairs for all the <strong>offset time</strong> 
+      coordinate variables. The syntax is the same as <a href="#TVAR">TVAR</a>. 
+      The time for any individual station report is the base time plus the offset 
+      time. All six offset time units are not required to appear in the TOFFVAR 
+      record, only those that are in the data file. This is an optional entry 
+      for <a href="#DTYPE">DTYPE</a> bufr. </td>
+  </tr>
+  <tr>
+    <td bgcolor="#CCCCCC"><p><a name="CACHESIZE" id="CACHESIZE"> <b>CACHESIZE</b> <i>bytes</i></a></p></td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr>
+    <td>(<font color="#990000">GrADS version 2.0.a8+</font>) 
+    This entry overrides the default size of the cache for reading HDF5 or NetCDF4 files. It is not relevant for other data types. It should not be necessary to set the cache size explicitly unless the data file has especially large chunks. Please see the documentation on <a href="compression.html">compression</a>. </td>
+    <td align="right" valign="top">&nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"><p><a name="OPTIONS"> <b>OPTIONS</b> <i>keyword</i></a></p></td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2"><p>This entry controls various aspects of the way GrADS interprets 
+        the raw data file. It replaces the old FORMAT record. The <i>keyword</i> 
+        argument may be one or more of the following:</p>
+      <table width="100%" border="0" cellpadding="4" cellspacing="4" class="plaintext">
+        <tr bgcolor="b8c8d7">
+          <td valign="top" bgcolor="b8c8d7">pascals</td>
+          <td>(<font color="#990000">GrADS version 2.0</font>) (<span class="style3">For DTYPE grib2 only</span>) Indicates that pressure values that appear in the descriptor file (in the ZDEF entry and in the GRIB2 codes in the variable declarations)  are given in units of Pascals. The <a href="gradutilgribmap.html">gribmap</a> utility requires pressure to be given in Pascals. If this keyword is present, the pressure level values will be converted to millibars after the gribmap index is generated and the descriptor file is opened with GrADS. If this keyword is omitted, pressure levels will remain in Pascals, and many of the internal functions (which assume a vertical dimension in units of millibars) will not work properly. </td>
+        </tr>
+        <tr bgcolor="ccdceb"> 
+          <td valign="top" bgcolor="ccdceb">yrev</td>
+          <td>Indicates that the Y dimension (latitude) in the data file has been 
+            written in the reverse order from what GrADS assumes. An important 
+            thing to remember is that GrADS still presents the view that the data 
+            goes from south to north. The YDEF statement does not change; it still 
+            describes the transformation from a grid space going from south to 
+            north. The reversal of the Y axis is done as the data is read from 
+            the data file.</td>
+        </tr>
+        <tr> 
+          <td valign="top" bgcolor="b8c8d7">zrev</td>
+          <td bgcolor="b8c8d7">Indicates that the Z dimension (pressure) in the 
+            data file has been written from top to bottom, rather than from bottom 
+            to top as GrADS assumes. The same considerations as noted above for 
+            yrev also apply. </td>
+        </tr>
+        <tr bgcolor="ccdceb"> 
+          <td valign="top">template</td>
+          <td>Indicates that a template for multiple data files is in use. For 
+            more information, see the section on <a href="templates.html">Using 
+            Templates</a>. </td>
+        </tr>
+        <tr> 
+          <td valign="top" bgcolor="b8c8d7">sequential</td>
+          <td bgcolor="b8c8d7">Indicates that the file was written in sequential 
+            unformatted I/O. This keyword may be used with either station or gridded 
+            data. If your gridded data is written in sequential format, then each 
+            record must be an X-Y varying grid. If you have only one X and one 
+            Y dimension in your file, then each record in the file will be one 
+            element long (it may not be a good idea to write the file this way).</td>
+        </tr>
+        <tr bgcolor="ccdceb"> 
+          <td valign="top">365_day_calendar </td>
+          <td>Indicates the data file was created with perpetual 365-day years, 
+            with no leap years. This is used for some types of model ouput.</td>
+        </tr>
+        <tr> 
+          <td valign="top" bgcolor="b8c8d7">byteswapped</td>
+          <td bgcolor="b8c8d7">Indicates the binary data file is in reverse byte 
+            order from the normal byte order of your machine. Putting this keyword 
+            in the OPTIONS record of the descriptor file tells GrADS to swap the 
+            byte order as the data is being read. May be used with gridded or 
+            station data.</td>
+        </tr>
+        <tr> 
+          <td colspan="2" valign="top">The best way to ensure hardware independence 
+            for gridded data is to specify the data's source platform. This facilitates 
+            moving data files and their descriptor files between machines; the 
+            data may be used on any type of hardware without having to worry about 
+            byte ordering. The following three OPTIONS keywords are used to describe 
+            the byte ordering of a gridded or station data file:</td>
+        </tr>
+        <tr> 
+          <td valign="top" bgcolor="ccdceb">big_endian</td>
+          <td bgcolor="ccdceb">Indicates the data file contains 32-bit IEEE floats 
+            created on a big endian platform (e.g., sun, sgi)</td>
+        </tr>
+        <tr> 
+          <td valign="top" bgcolor="b8c8d7">little_endian</td>
+          <td bgcolor="b8c8d7">Indicates the data file contains 32-bit IEEE floats 
+            created on a little endian platform (e.g., iX86, and dec)</td>
+        </tr>
+        <tr> 
+          <td valign="top" bgcolor="ccdceb">cray_32bit_ieee</td>
+          <td bgcolor="ccdceb">Indicates the data file contains 32-bit IEEE floats 
+            created on a cray.</td>
+        </tr>
+      </table></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"><a name="PDEF"></a><strong>PDEF</strong></td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2">PDEF is so powerful it has<a href="pdef.html"> its own documentation 
+      page</a>. </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> <p><a name="XDEF"></a> <b>XDEF</b> <i>xnum mapping 
+        &lt;additional arguments&gt;</i> </td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2"><p> This entry defines the grid point values for the X dimension, 
+        or longitude. The first argument, <i>xnum</i>, specifies the number of 
+        grid points in the X direction. <i>xnum</i> must be an integer >= 1. <i>mapping</i> 
+        defines the method by which longitudes are assigned to X grid points. 
+        There are two options for <i>mapping</i>: 
+      <ul>
+        LINEAR&nbsp;&nbsp;&nbsp;&nbsp;Linear mapping <br>
+        LEVELS&nbsp;&nbsp;&nbsp;&nbsp;Longitudes specified individually 
+      </ul>
+      <p> The LINEAR mapping method requires two additional arguments: <i>start</i> 
+        and <i>increment</i>. <i>start</i> is a floating point value that indicates 
+        the longitude at grid point X=1. Negative values indicate western longitudes. 
+        <i>increment</i> is the spacing between grid point values, given as a 
+        positive floating point value. 
+      <p> The LEVELS mapping method requires one additional argument, <i>value-list</i>, 
+        which explicitly specifies the longitude value for each grid point. <i>value-list</i> 
+        should contain <i>xnum</i> floating point values. It may continue into 
+        the next record in the descriptor file, but note that records may not 
+        have more than 255 characters. There must be at least 2 levels in <i>value-list</i>; 
+        otherwise use the LINEAR method. 
+      <p> Here are some examples: 
+      <ul>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+          <tr> 
+            <td width="6%">XDEF</td>
+            <td width="4%" align="right">144</td>
+            <td width="11%" align="center">LINEAR</td>
+            <td width="79%">0.0 2.5</td>
+          </tr>
+          <tr> 
+            <td>XDEF</td>
+            <td align="right">72</td>
+            <td align="center">LINEAR</td>
+            <td>0.0 5.0 </td>
+          </tr>
+          <tr> 
+            <td>XDEF</td>
+            <td align="right">12</td>
+            <td align="center"> LEVELS</td>
+            <td>0 30 60 90 120 150 180 210 240 270 300 330 </td>
+          </tr>
+          <tr> 
+            <td>XDEF</td>
+            <td align="right">12</td>
+            <td align="center"> LEVELS</td>
+            <td>15 45 75 105 135 165 195 225 255 285 315 345</td>
+          </tr>
+        </table>
+      </ul></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> <a name="YDEF"> <b>YDEF</b><em> ynum mapping &lt;additional 
+      arguments&gt;</em></a></td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2">This entry defines the grid point values for the Y dimension, 
+      or latitude. The first argument, <i>ynum</i>, specifies the number of grid 
+      points in the Y direction. <i>ynum</i> must be an integer >= 1. <i>mapping</i> 
+      defines the method by which latitudes are assigned to Y grid points. There 
+      are several options for <i>mapping</i>: 
+      <p> 
+      <ul>
+        LINEAR&nbsp;&nbsp;&nbsp;&nbsp;Linear mapping <br>
+        LEVELS&nbsp;&nbsp;&nbsp;&nbsp;Latitudes specified individually <br>
+        GAUST62&nbsp;&nbsp;&nbsp;Gaussian T62 latitudes<br>
+        GAUSR15&nbsp;&nbsp;&nbsp;Gaussian R15 latitudes<br>
+        GAUSR20&nbsp;&nbsp;&nbsp;Gaussian R20 latitudes<br>
+        GAUSR30&nbsp;&nbsp;&nbsp;Gaussian R30 latitudes<br>
+        GAUSR40&nbsp;&nbsp;&nbsp;Gaussian R40 latitudes<br>
+      </ul>
+      <p> The LINEAR mapping method requires two additional arguments: <i>start</i> 
+        and <i>increment</i>. <i>start</i> is a floating point value that indicates 
+        the latitude at grid point Y=1. Negative values indicate southern latitides. 
+        <i>increment</i> is the spacing between grid point values in the Y direction. 
+        It is assumed that the Y dimension values go from south to north, so <i>increment</i> 
+        is always positive. 
+      <p> The LEVELS mapping method requires one additional argument, <i>value-list</i>, 
+        which explicitly specifies the latitude for each grid point, from south 
+        to north. <i>value-list</i> should contain <i>ynum</i> floating point 
+        values. It may continue into the next record in the descriptor file, but 
+        note that records may not have more than 255 characters. There must be 
+        at least 2 levels in <i>value-list</i>; otherwise use the LINEAR method. 
+      <p> The Gaussian mapping methods require one additional argument: start. 
+        This argument indicates the first gaussian grid number. If the data span 
+        all latitudes, start would be 1, indicating the southernmost gaussian 
+        grid latitude. 
+      <p> Here are some examples: 
+      <ul>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+          <tr> 
+            <td width="6%">YDEF</td>
+            <td width="4%" align="right">73</td>
+            <td width="12%" align="center">LINEAR</td>
+            <td width="78%">-90 2.5</td>
+          </tr>
+          <tr> 
+            <td>YDEF</td>
+            <td align="right">180</td>
+            <td align="center">LINEAR</td>
+            <td>-90 1.0</td>
+          </tr>
+          <tr> 
+            <td>YDEF</td>
+            <td align="right">18</td>
+            <td align="center">LEVELS</td>
+            <td>-85 -75 -65 -55 -45 -35 -25 -15 -5 5 15 25 35 45 55 65 75 85 </td>
+          </tr>
+          <tr> 
+            <td>YDEF</td>
+            <td align="right">94</td>
+            <td align="center">GAUST62</td>
+            <td>1</td>
+          </tr>
+          <tr> 
+            <td>YDEF</td>
+            <td align="right">20</td>
+            <td align="center">GAUSR40</td>
+            <td>15</td>
+          </tr>
+        </table>
+      </ul>
+      <p> The NCEP/NCAR Reanalysis surface variables are on the GAUST62 grid. 
+      <p> The final example shows that there are 20 Y dimension values which start 
+        at Gaussian Latitude 15 (64.10 south) on the Gaussian R40 grid</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> <a name="ZDEF"> <b>ZDEF</b> <i>znum mapping &lt;additional 
+      arguments&gt;</i></a> </td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2"><p> This entry defines the grid point values for the Z dimension. 
+        The first argument, <i>znum</i>, specifies the number of pressure levels. 
+        <i>znum</i> must be an integer >= 1. <i>mapping</i> defines the method 
+        by which level values are assigned to Z grid points. There are two options 
+        for <i>mapping</i>: 
+      <ul>
+        <p>LINEAR&nbsp;&nbsp;&nbsp;&nbsp;Linear mapping <br>
+          LEVELS&nbsp;&nbsp;&nbsp;&nbsp;Pressure levels specified individually 
+      </ul>
+      <p> The LINEAR mapping method requires two additional arguments: <i>start</i> 
+        and <i>increment</i>. <i>start</i> is a floating point value that indicates 
+        the level value at grid point Z=1. <i>increment</i> is the spacing between 
+        grid point values in the Z direction, or from lower to higher. <i>increment</i> 
+        must be non-zero and non0negative.</p>
+      <p>The LEVELS mapping method requires one additional argument, <i>value-list</i>, 
+        which explicitly specifies the pressure level for each grid point in ascending 
+        order. <i>value-list</i> should contain <i>znum</i> floating point values. 
+        It may continue into the next record in the descriptor file, but note 
+        that records may not have more than 255 characters. </p>
+      <p> Here are some examples: 
+      <ul>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+          <tr> 
+            <td width="7%">ZDEF</td>
+            <td width="2%" align="right">7</td>
+            <td width="10%" align="center">LEVELS</td>
+            <td width="81%">1000 850 700 500 300 200 100 </td>
+          </tr>
+          <tr> 
+            <td>ZDEF</td>
+            <td align="right">17</td>
+            <td align="center">LEVELS</td>
+            <td>1000 925 850 700 600 500 400 300 250 200 150 100 70 50 </td>
+          </tr>
+        </table>
+      </ul>
+        <p>(<font color="#990000">GrADS version 2.0</font>) (<span class="style3">For DTYPE grib2 only</span>) If your Z axis is pressure, the <a href="gradutilgribmap.html">gribmap</a> utility requires the level values to be given in units of Pascals instead of millibars. Use the &quot;options pascals&quot; keyword to convert the unit of the level values to millibars after the gribmap index is generated and when the descriptor file is opened with GrADS. Pressure level values may remain in Pascals, but then many of the internal functions (which assume a vertical dimension in units of millibars) will not work properly. </p>
+        </ul></td>
+  </tr>
+  <tr>
+    <td bgcolor="#CCCCCC"> <a name="TDEF"> <b>TDEF</b> <i>tnum</i> LINEAR <i>start increment</i></a> </td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back to top</a></td>
+  </tr>
+  <tr>
+    <td colspan="2"><p> This entry defines the grid point values for the T dimension. The first argument, <i>tnum</i>, specifies the number of time steps. <i>tnum</i> must be an integer >= 1. The method by which times are assigned to T grid points is always LINEAR. 
+          <p> <i>start</i> indicates the initial time value at grid point T=1. <i>start</i> must be specified in the GrADS absolute date/time format: 
+          <ul>
+            <i>hh</i>:<i>mm</i>Z<i>ddmmmyyyy</i>
+          </ul>
+          <p> where: 
+          <ul>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+              <tr valign="top">
+                <td width="6%">hh</td>
+                <td width="2%" align="center">=</td>
+                <td width="92%">hour (two digit integer)</td>
+              </tr>
+              <tr valign="top">
+                <td>mm</td>
+                <td align="center">=</td>
+                <td>minute (two digit integer) </td>
+              </tr>
+              <tr valign="top">
+                <td>dd</td>
+                <td align="center">=</td>
+                <td>day (one or two digit integer)</td>
+              </tr>
+              <tr valign="top">
+                <td>mmm</td>
+                <td align="center">=</td>
+                <td>3-character month </td>
+              </tr>
+              <tr valign="top">
+                <td>yyyy</td>
+                <td align="center">=</td>
+                <td>year (may be a two or four digit integer; 2 digits implies a year between 1950 and 2049)</td>
+              </tr>
+            </table>
+          </ul>
+          <p>If not specified, <i>hh</i> defaults to 00, <i>mm</i> defaults to 00, and <i>dd</i> defaults to 1. The month and year must be specified. No intervening blanks are allowed in the GrADS absolute date/time format. 
+          <p> <i>increment</i> is the spacing between grid point values in the T direction. <i>increment</i> must be specified in the GrADS absolute time increment format: 
+          <ul>
+            <i>vvkk</i>
+          </ul>
+          <p> where: 
+          <ul>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+              <tr valign="top">
+                <td width="4%">vv</td>
+                <td width="2%" align="center">=</td>
+                <td width="94%">an integer number, 1 or 2 digits </td>
+              </tr>
+              <tr valign="top">
+                <td>kk</td>
+                <td align="center">=</td>
+                <td>mn (minute) <br>
+            hr (hour) <br>
+            dy (day) <br>
+            mo (month) <br>
+            yr (year) </td>
+              </tr>
+            </table>
+          </ul>
+          <p> Here are some examples: </p>
+          <ul>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+              <tr>
+                <td width="7%">TDEF</td>
+                <td width="4%" align="right">60</td>
+                <td width="10%" align="center">LINEAR</td>
+                <td width="79%">00Z31dec1999 1mn </td>
+              </tr>
+              <tr>
+                <td>TDEF</td>
+                <td align="right">73</td>
+                <td align="center">LINEAR</td>
+                <td> 3jan1989 5dy</td>
+              </tr>
+              <tr>
+                <td>TDEF</td>
+                <td align="right">730</td>
+                <td align="center">LINEAR</td>
+                <td>00z1jan1990 12hr </td>
+              </tr>
+              <tr>
+                <td>TDEF</td>
+                <td align="right">12</td>
+                <td align="center">LINEAR</td>
+                <td>1jan2000 1mo </td>
+              </tr>
+              <tr>
+                <td>TDEF</td>
+                <td align="right">365</td>
+                <td align="center">LINEAR</td>
+                <td>12Z1jan1959 1dy</td>
+              </tr>
+              <tr>
+                <td>TDEF</td>
+                <td align="right">40</td>
+                <td align="center">LINEAR</td>
+                <td> 1jan1950 1yr</td>
+              </tr>
+            </table>
+        </ul></td>
+  </tr>
+  <tr>
+    <td bgcolor="#CCCCCC"> <a name="EDEF"> <b>EDEF</b> <i>enum</i> NAMES <i>&lt;list of names&gt;</i></a> </td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back to top</a></td>
+  </tr>
+  <tr>
+    <td height="4" colspan="2"></td>
+  </tr>
+  <tr>
+    <td bgcolor="#CCCCCC">  <b>EDEF</b> <i>enum</i><br>
+    ensemble_record_1<br>
+    ensemble_record_2<br>
+    ...<br>
+    ensemble_record_<i>enum</i><br>
+    <b>ENDEDEF</b></td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back to top</a></td>
+  </tr>
+
+  <tr>
+    <td colspan="2"><p>(<font color="#990000">GrADS version 2.0</font>) This entry defines the ensemble dimension. All ensemble members must have identical X, Y, and Z dimensions, the same list of variables, and the same time axis increment. There are two different syntaxes for the EDEF entry: the first  is simpler and requires only the names for each ensemble member, the second expanded form contains a name, individual time axis information, and optional GRIB2 codes.</p>
+      <p>Both EDEF syntaxes begin with the <em>enum</em> argument, an integer &gt;=1 which specifies the number of ensemble members.</p>
+      <p>If all of the ensemble members have an identical time axis (i.e. length, initial time, and increment are the same for each one), then it is only necessary to distinguish the ensembles by their names, and the simplified EDEF syntax with the NAMES keyword may be used. A simple space-delimited list of names is all that is required. Ensemble names must have between 1 and 15 alphanumeric characters, lower case only. (<span class="style2">In version 2.0.0 and later, mixed case ensemble names are allowed</span>). Some examples are: </p>
+      <ul>
+      <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+        <tr>
+          <td width="8%">EDEF</td>
+          <td width="3%" align="right">10</td>
+          <td width="12%" align="center">NAMES</td>
+          <td width="81%">1 2 3 4 5 6 7 8 9 10 </td>
+        </tr>
+        <tr>
+          <td width="8%">EDEF</td>
+          <td width="5%" align="right">12</td>
+          <td width="12%" align="center">NAMES</td>
+          <td>m01 m02 m03 m04 m05 m06 m07 m08 m09 m10 m11 ensm </td>
+        </tr>
+        <tr>
+          <td width="8%">EDEF</td>
+          <td width="5%" align="right">7</td>
+          <td width="12%" align="center">NAMES</td>
+          <td>e1 e2 e3 e4 e5 e6 e7 </td>
+        </tr>
+      </table>
+    </ul>    
+    <p>When the <a href="#OPTIONS">OPTIONS</a> TEMPLATE entry is used with EDEF, the ensemble names are used in the %e substitution template to generate the file name. See <a href="templates.html">Using Templates</a> for more details. </p>
+    <p>If the ensemble members do not have identical time axes (i.e., their lengths or initial times are not the same), 
+	  or if you need to include the GRIB2 codes, then you must use the expanded EDEF syntax: a collection of records framed by EDEF and ENDEDEF. 
+	  The format of the ensemble records is as follows: </p>
+    <ul>
+        <p><i>ensname length start &lt;grib2 codes&gt; </i></p>
+      </ul>
+    <p>The <em>ensname</em> is the  1-15 character &quot;name&quot; for the ensemble member. The<em> length </em>is the size of the time axis of the ensemble, which must be less than or equal to the <em>tnum</em> argument in the TDEF entry. (The time axis described by <a href="#TDEF">TDEF</a> must span all the ensemble members.) The<em> start </em> argument is the initial time  of the ensemble member and must be given in GrADS absolute date/time format. (See <a href="#TDEF">TDEF</a> for details). </p>
+    <p>The <i>grib2 codes</i> are required if (1) the DTYPE is grib2 and (2) there is more than one ensemble member (<i>enum</i> &gt; 1). The expanded form of the EDEF entry must be used when <i>grib2 codes</i> are required, even if the length and start times are the same for all members. For GRIB2 ensembles, support currently exists for four different Product Definition Template (PDT) numbers: 1, 2, 11, and 12. These are grouped into two types: individual ensemble forecasts (PDT 1 and 11) or derived forecasts based on all ensemble members (PDT 2 and 12). For individual ensemble forecasts (PDT 1 and 11), two comma-delimited <i>grib2 codes</i>  are required: the ensemble type and perturbation number. For derived forecasts based on all ensemble members (PDT 2 and 12), only one <i>grib2 code</i> is required: the derived forecast. Clarification of all the GRIB2 nomenclature may be found in the documentation at <a href="http://www.wmo.ch/web/www/DPS/grib-2.html">WMO</a> and <a href="http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc.shtml">NCEP</a>. Two examples are given below. </p>
+    <p>The first example illustrates ensemble members with different lengths and start times: </p>
+    <ul>
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+    <tr>
+      <td colspan="3">TDEF 591 linear 12z09dec1980 12hr </td>
+    </tr>
+    <tr>
+      <td colspan="3">EDEF 16 </td>
+      </tr>
+    <tr>
+      <td>ensm</td>
+      <td align="center">591</td>
+      <td>12z09dec1980</td>
+    </tr>
+    <tr>
+      <td width="6%">m01</td>
+      <td width="8%" align="center">591</td>
+      <td width="86%">12z09dec1980 </td>
+    </tr>
+    <tr>
+      <td>m02</td>
+      <td align="center">589</td>
+      <td>12z10dec1980 </td>
+    </tr>
+    <tr>
+      <td>m03</td>
+      <td align="center">587</td>
+      <td>12z11dec1980</td>
+    </tr>
+    <tr>
+      <td>m04</td>
+      <td align="center">585</td>
+      <td>12z12dec1980</td>
+    </tr>
+    <tr>
+      <td>m05</td>
+      <td align="center">583</td>
+      <td>12z13dec1980</td>
+    </tr>
+    <tr>
+      <td>m06</td>
+      <td align="center">571</td>
+      <td>12z19dec1980</td>
+    </tr>
+    <tr>
+      <td>m07</td>
+      <td align="center">569</td>
+      <td>12z20dec1980</td>
+    </tr>
+    <tr>
+      <td>m08</td>
+      <td align="center">567</td>
+      <td>12z21dec1980</td>
+    </tr>
+    <tr>
+      <td>m09</td>
+      <td align="center">565</td>
+      <td>12z22dec1980</td>
+    </tr>
+    <tr>
+      <td>m10</td>
+      <td align="center">563</td>
+      <td>12z23dec1980</td>
+    </tr>
+    <tr>
+      <td>m11</td>
+      <td align="center">549</td>
+      <td>12z30dec1980</td>
+    </tr>
+    <tr>
+      <td>m12</td>
+      <td align="center">547</td>
+      <td>12z31dec1980</td>
+    </tr>
+    <tr>
+      <td>m13</td>
+      <td align="center">545</td>
+      <td>12z01jan1981</td>
+    </tr>
+    <tr>
+      <td>m14</td>
+      <td align="center">543</td>
+      <td>12z02jan1981</td>
+    </tr>
+    <tr>
+      <td>m15</td>
+      <td align="center">541</td>
+      <td>12z03jan1981</td>
+    </tr>
+    <tr>
+      <td colspan="3">ENDEDEF</td>
+      </tr>
+  </table>
+</ul>
+<p>The second example illustrates the use of GRIB2 codes:</p>
+<ul>
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+    <tr>
+      <td colspan="4">TDEF 31 linear 00z24apr2007 12hr </td>
+    </tr>
+    <tr>
+      <td colspan="4">EDEF 23 </td>
+    </tr>
+    <tr>
+      <td width="6%">p01</td>
+      <td width="8%" align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,1</td>
+    </tr>
+    <tr>
+      <td>p02</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,2</td>
+    </tr>
+    <tr>
+      <td>p03</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,3</td>
+    </tr>
+    <tr>
+      <td>p04</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,4</td>
+    </tr>
+    <tr>
+      <td>p05</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,5</td>
+    </tr>
+    <tr>
+      <td>p06</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,6</td>
+    </tr>
+    <tr>
+      <td>p07</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,7</td>
+    </tr>
+    <tr>
+      <td>p08</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,8</td>
+    </tr>
+    <tr>
+      <td>p09</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,9</td>
+    </tr>
+    <tr>
+      <td>p10</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,10</td>
+    </tr>
+    <tr>
+      <td>p11</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,11</td>
+    </tr>
+    <tr>
+      <td>p12</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,12</td>
+    </tr>
+    <tr>
+      <td>p13</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,13</td>
+    </tr>
+    <tr>
+      <td>p14</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,14</td>
+    </tr>
+    <tr>
+      <td>p15</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,15</td>
+    </tr>
+    <tr>
+      <td>p16</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,16</td>
+    </tr>
+    <tr>
+      <td>p17</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,17</td>
+    </tr>
+    <tr>
+      <td>p18</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,18</td>
+    </tr>
+    <tr>
+      <td>p19</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,19</td>
+    </tr>
+    <tr>
+      <td>p20</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>3,20</td>
+    </tr>
+    <tr>
+      <td>c00</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>1,0</td>
+    </tr>
+    <tr>
+      <td>avg</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>spr</td>
+      <td align="center">31</td>
+      <td width="20%">00z24apr2007</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td colspan="4">ENDEDEF</td>
+    </tr>
+  </table>
+</ul></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"><a name="VECT"><strong>VECTORPAIRS</strong></a> <i>U-component,V-component 
+      </i> </td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2"> <p>(<font color="#990000">GrADS version 1.9b4</font>) This 
+        entry is for explicity identifying vector component pairs. This is only 
+        necessary if the data are on a native projection other than lat/lon (i.e. 
+        you are using <a href="#PDEF">PDEF</a>) and if the winds have to be <a href="pdef.html#rotation">rotated</a> 
+        from a grid-relative sense to an Earth-relative sense. (GrADS has to retrieve 
+        both the u and v component in order to do the rotation calculation.)</p>
+      <p>Using this entry replaces the old technique of putting 33 (for U) or 
+        34 (for V) in the first element of the units field in the variable declaration. 
+        The <i>U-component</i> and <i>V-component </i>arguments should be variable 
+        names that appear in the <a href="#VARS">VARS</a> list. They are separated 
+        by a comma, with no spaces. More than one pair of components may be listed; 
+        in this case, the pairs should be separated by a space. For example: </p>
+      <ul>
+        VECTORPAIRS &nbsp;u,v &nbsp;u10,v10 &nbsp;uflx,vflx</p> </ul></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> <a name="VARS"> <b>VARS</b> <i>varnum</i><br>
+      </a> variable_record_1<br>
+      variable_record_2<br>
+      ...<br>
+      variable_record_<i>varnum</i><br> <b>ENDVARS</b></td>
+    <td width="74" align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2"><p> This ensemble of entries describes all the variables contained 
+        in the data set. <em>varnum</em> indicates the number of variables in 
+        the data set and is therefore also equal to the number of variable records 
+        that are listed between the VARS and ENDVARS entries. ENDVARS must be 
+        the final line of the Grads data descriptor file. Any blank lines after 
+        the ENDVARS statement may cause <a href="cmd/open.html">open</a> to fail! 
+      <p> The format of the variable records is as follows: 
+      <ul>
+        <p><i>varname levs units description</i>                                 (<span class="red">Version 2.0.1 or earlier</span>)<br>
+        <i>varname levs &lt;additional_codes&gt; units description</i>    (<span class="red">Version 2.0.2 or later</span>)</p>
+      </ul>
+<p>The syntax of <em>varname</em> and <em>units</em> is different depending 
+        on what kind of data format (DTYPE) you are describing. The <i> &lt;additional_codes&gt;</i> are only necessary for certain types of GRIB2 data sets. Details provided 
+        below:</p>
+      <table width="100%" border="0" cellpadding="4" cellspacing="4" class="plaintext">
+        <tr bgcolor="b8c8d7"> 
+          <td valign="top" bgcolor="#b8c8d7"><em>varname</em></td>
+          <td bgcolor="#b8c8d7">This is a 1-15 character "name" or abbreviation for the data variable. 
+            <i>varname</i> may contain alphabetic and numeric characters but it 
+            must start with an alphabetic character (a-z). </td>
+        </tr>
+        <tr> 
+          <td width="12%" valign="top" bgcolor="ccdceb"><em>varname<br>
+            </em>(DTYPE netcdf,  hdfsds, or hdf5_grid)</td>
+          <td width="88%" bgcolor="ccdceb">(<font color="#990000">GrADS version 
+            1.9+</font>) For <a href="#DTYPE">DTYPE</a> netcdf or hdfsds, <em>varname</em> 
+            may have a different syntax. This syntax is required when the name of the data variable in the SDF does not conform to the GrADS naming conventions (see below for list of criteria), but it may also be used to shorten or change the variable name to make it easier to work with inside GrADS. The syntax is:
+            <ul>
+              SDF_varname=&gt;grads_varname 
+            </ul>
+            <p>SDF_varname is the name the data variable was given when the SDF 
+              file was originally created. For NetCDF files, this name appears 
+              in the output from ncdump. It is important that SDF_varname exactly 
+              matches the variable name in the data file. SDF_varname may contain 
+              uppercase letters and non-alpha-numeric characters. </p>
+            <p>The classic <em>varname</em> syntax (i.e., when &quot;SDF_varname 
+              =&gt;&quot; is omitted) may be used if SDF_varname meets the criteria 
+              for GrADS variable names: it must be less than 16 characters, start 
+              with an alphabetic character, and cannot contain any upper case 
+              letters or non-alpha-numeric characters. </p>
+            <p>(<font color="#990000">GrADS version 
+            2.0.a3+</font>) If the SDF_varname contains spaces, substitute &quot;~&quot; for each space -- the spaces in the variable name string will be swapped back in later after the descriptor file has been parsed.</p>
+          <p>(<font color="#990000">GrADS version 2.0.a7+</font>) For dtype hdf5_grid, the SDF_varname may be particularly long since it must contain the names of all the nested groups (separated by &quot;/&quot;) to which the data set belongs. <br>
+            For example:<br>
+            /HDFEOS/GRIDS/EarthSurfaceReflectanceClimatology/Data~Fields/MonthlySurfaceReflectance=&gt;msr</p>          </td>
+        </tr>
+        <tr> 
+          <td valign="top" bgcolor="#b8c8d7"><em>levs</em></td>
+          <td bgcolor="#b8c8d7"><p>This is an integer that specifies the number 
+              of vertical levels the variable contains. <i>levs</i> may not exceed 
+              <i>znum</i> as specified in the ZDEF statement. If <i>levs</i> is 
+              0, the variable does not correspond to any vertical level. Surface 
+              variables (e.g. sea level pressure) have a <i>levs</i> value of 
+              0. </p>
+            <p>For <a href="#DTYPE">DTYPE</a> station or bufr, surface variables 
+              have a <i>levs</i> value of 0 and upper air variables have a <i>levs</i> 
+              value of 1. (Exception to this rule for bufr data: replicated surface 
+              variables are given a levs value of 2). </p></td>
+        </tr>
+        <tr>
+          <td valign="top" bgcolor="ccdceb"><p><em>levs</em><br>
+          (DTYPE grib2) </p></td>
+          <td bgcolor="ccdceb"><p>(<font color="#990000">GrADS version 2.0</font>) This is a comma-delimited list of numbers that provide information about the vertical dimension of a variable. The first number in the list is the number of vertical levels the variable contains or zero if the variable doesn't vary in Z. The remaining numbers are the GRIB2 parameters that specify the veritcal level or layer. The levs field may contain up to five comma-delimited numbers: </p>
+            <ul>
+              NLEVS,LTYPE,LVAL,LVAL2,LTYPE2
+            </ul>
+            where            <ul>
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+                <tr>
+                  <td width="9%" valign="top">NLEVS</td>
+                  <td width="2%" align="center" valign="top">=</td>
+                  <td width="89%"> The number of vertical levels, or 0 if not Z-varying (Required) </td>
+                </tr>
+                <tr>
+                  <td valign="top">LTYPE</td>
+                  <td align="center" valign="top">=</td>
+                  <td>The level type indicator (Required)</td>
+                </tr>
+                <tr>
+                  <td valign="top">LVAL</td>
+                  <td align="center" valign="top"> =                  </td>
+                  <td>The value of the 1st level (Not Required for all level types) </td>
+                </tr>
+                <tr>
+                  <td valign="top">LVAL2</td>
+                  <td align="center" valign="top">=</td>
+                  <td>The  value of the 2nd level (Only Required for layers between 2 fixed levels) </td>
+                </tr>
+                <tr>
+                  <td valign="top">LTYPE2</td>
+                  <td align="center" valign="top">= </td>
+                  <td>The level type indicator for the 2nd level (Only required  if different from LTYPE)</td>
+                </tr>
+              </table>
+            </ul>            
+            <p>If NLEVS &gt; 0 and is followed only by the LTYPE, the values for LVAL will be determined by the <a href="#ZDEF">ZDEF</a> entry. If a variable has an NLEVS entry that is &gt; 0 but less than the number of levels declared in the  <a href="#ZDEF">ZDEF</a> entry, then the values for LVAL will correspond to the first NLEVS values of the Z axis. If LTYPE is 100 (the GRIB2 code for an isobaric surface), the units of LVAL must be Pascals. If the values of LVAL are taken from the ZDEF entry, use <a href="#OPTIONS">OPTIONS</a>  <em>pascals</em> to convert the vertical coordinate  to millibars once the descriptor file is opened with GrADS. Some level types such as &quot;mean sea level&quot; or &quot;tropopause&quot; do not require an LVAL. In this case, LVAL may be omitted (see the &quot;slp&quot; example below). If two LTYPE entries are required but LVAL and LVAL2 are not, then the LVAL entries may be omitted, with adjacent commas used to indicate missing values (see the &quot;cloud&quot; example below). </p>
+            <p>Examples:</p>
+            <ul>
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+                <tr>
+                  <td width="10%">hgt</td>
+                  <td width="20%" align="center">26,100</td>
+                  <td width="12%" align="center">0,3,5</td>
+                  <td>Geopotential Height [gpm] </td>
+                </tr>
+                <tr>
+                  <td>hgt500</td>
+                  <td align="center">0,100,50000</td>
+                  <td align="center">0,3,5</td>
+                  <td> Geopotential Height at 500mb [gpm] </td>
+                </tr>
+                <tr>
+                  <td>slp</td>
+                  <td align="center">0,101</td>
+                  <td align="center">0,3,1</td>
+                  <td>Sea Level Pressure [Pa]</td>
+                </tr>
+                <tr>
+                  <td>t2m</td>
+                  <td align="center">0,103,2</td>
+                  <td align="center">0,0,0</td>
+                  <td>2-meter Temperature [K]</td>
+                </tr>
+                <tr>
+                  <td>soilt1</td>
+                  <td align="center">0,106,0,0.1</td>
+                  <td align="center">0,0,0</td>
+                  <td>Soil Temp, 0-0.10m below surface [K]</td>
+                </tr>
+                <tr>
+                  <td>cloud</td>
+                  <td align="center">0,1,,,8</td>
+                  <td align="center">0,6,1</td>
+                  <td>Total Cloud Cover, from surface to  TOA [%]</td>
+                </tr>
+              </table>
+          </ul>            <p>The external utilities <a href="util/grib2scan">grib2scan</a> and <a href="http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/index.html">wgrib2</a> are quite useful in determining what the values for the <em>levs</em> field should be for a GRIB2 data file.</p></td>
+        </tr>
+        <tr bgcolor="ccdceb">
+          <td valign="top" bgcolor="#b8c8d7"><i>additional_codes<br>
+(DTYPE grib2)<br>
+(optional) </i></td>
+          <td bgcolor="#b8c8d7">(<font color="#990000">GrADS version 2.0.2+</font>) This field specifies any additional GRIB2 codes that are required to uniquely identify the record when the elements in the <span class="italic">levs</span> and <span class="italic">units</span> fields are not sufficient. It is only required for certain Product Definition Templates: the Probability Forecasts (PDT 5 and 9),  Percentiles (PDT 6 and 10), and the Optical Properties of Aerosol (PDT 48). The <i>additional_codes</i> field always begins with the letter &quot;a&quot; (for &quot;additional&quot;) followed by a set of comma-delimited numbers. The quantity and meaning of the numbers depends on the product. </td>
+        </tr>
+        <tr bgcolor="ccdceb">
+          <td valign="top" bgcolor="#ccdceb"><i> additional_codes<br>
+            (PDT 5 or 9) </i></td>
+          <td bgcolor="#ccdceb"><p>For the Probability forecasts (PDT 5 or  9), the <i>additional_codes</i> field has 2 or 3 comma-delimted numbers, preceded by the letter &quot;a&quot; :</p>
+            <ul>
+              aPTYPE,LIMIT,LIMIT2
+            </ul>
+            where
+         
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+                <tr>
+                  <td width="9%" valign="top">PTYPE</td>
+                  <td width="2%" align="center" valign="top">=</td>
+                  <td width="89%">The probability type indicator </td>
+                </tr>
+                <tr>
+                  <td valign="top">LIMIT</td>
+                  <td align="center" valign="top"> = </td>
+                  <td>The value of the limit (for probabilities above or below the given limit) </td>
+                </tr>
+                <tr>
+                  <td valign="top">LIMIT2</td>
+                  <td align="center" valign="top">=</td>
+                  <td>The  value of the 2nd limit (for probabilities between the 2 given limits)<br>
+                  (only needed for PTYPE=2)</td>
+                </tr>
+              </table>
+         
+            <p>Examples:</p>
+           
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+                <tr>
+                  <td>pt2m273</td>
+                  <td align="center">0,103,2</td>
+                  <td align="center">a0,273</td>
+                  <td align="center">0,0,0</td>
+                  <td>Prob. of 2-m Temp below 273</td>
+                </tr>
+                <tr>
+                  <td width="11%">pcape250</td>
+                  <td width="10%" align="center">0,1,0</td>
+                  <td width="11%" align="center">a1,250</td>
+                  <td width="11%" align="center">0,7,6</td>
+                  <td width="57%">Prob. of CAPE above 250</td>
+                </tr>
+                <tr>
+                  <td>pcape500</td>
+                  <td align="center">0,1,0</td>
+                  <td align="center">a1,500</td>
+                  <td align="center">0,7,6</td>
+                  <td>Prob. of CAPE above 500</td>
+                </tr>
+                <tr>
+                  <td>pcape1000</td>
+                  <td align="center">0,1,0</td>
+                  <td align="center">a1,1000</td>
+                  <td align="center">0,7,6</td>
+                  <td>Prob. of CAPE above 1000</td>
+                </tr>
+                <tr>
+                  <td>pcsnow1</td>
+                  <td align="center">0,1,0</td>
+                  <td align="center">a2,1,1</td>
+                  <td align="center">0,1,195</td>
+                  <td>Prob. of categor. snow between 1 and 1</td>
+                </tr>
+              </table>
+          
+            <p>The external utilities <a href="util/grib2scan">grib2scan</a> (with the -v option) and <a href="http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/index.html">wgrib2</a> are quite useful in determining what the values for the <i>additional_codes</i><em> </em>field should be for a GRIB2 data file.</p></td>
+        </tr>
+        <tr bgcolor="ccdceb">
+          <td valign="top" bgcolor="#ccdceb"><i> additional_codes<br>
+            (PDT 6 or 10) </i></td>
+          <td bgcolor="#ccdceb"><p>(<span class="red">Version 2.1.a3+</span>) For the Percentile forecasts (PDT 6 or  10), the <i>additional_codes</i> field has only one number preceded by the letter &quot;a&quot; :</p>
+            <ul>
+              aPCT
+            LE
+            </ul>
+            where
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+              <tr>
+                <td width="9%" valign="top">PCTLE</td>
+                <td width="2%" align="center" valign="top">=</td>
+                <td width="89%">The percentile value</td>
+              </tr>
+            </table>
+            <p>Examples:</p>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+              <tr>
+                <td width="11%">t75</td>
+                <td width="10%" align="center">0,103,2</td>
+                <td width="11%" align="center">a75</td>
+                <td width="11%" align="center">0,0,0</td>
+                <td width="57%">75th percentile of of 2-m Temperatures</td>
+              </tr>
+              <tr>
+                <td>t90</td>
+                <td align="center">0,103,2</td>
+                <td align="center">a90</td>
+                <td align="center">0,0,0</td>
+                <td>90th percentile of of 2-m Temperatures</td>
+              </tr>
+            </table>
+            <p>The external utilities <a href="util/grib2scan">grib2scan</a> (with the -v option) and <a href="http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/index.html">wgrib2</a> are quite useful in determining what the values for the <i>additional_codes</i><em> </em>field should be for a GRIB2 data file.</p></td>
+        </tr>
+        <tr bgcolor="ccdceb">
+          <td valign="top" bgcolor="#ccdceb"><i> additional_codes<br>
+            (PDT 48)          </i></td>
+          <td bgcolor="#ccdceb"><p>For the Aerosol Forecasts (PDT 48), the  <i>additional_codes</i> field may have up to 7 comma-delimted numbers, preceded by the letter &quot;a&quot;: 
+  </p>
+            <ul>
+            <p>aATYPE,STYPE,S1,S2,WTYPE,W1,W2</p>
+</ul>
+where
+
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+    <tr>
+      <td width="9%" valign="top">ATYPE</td>
+      <td width="2%" align="center" valign="top">=</td>
+      <td width="89%">  The aerosol type indicator </td>
+    </tr>
+    <tr>
+      <td valign="top">STYPE</td>
+      <td align="center" valign="top"> = </td>
+      <td> The type of interval for the first and second size</td>
+    </tr>
+    <tr>
+      <td valign="top">S1</td>
+      <td align="center" valign="top">=</td>
+      <td><p> The first size (in meters)</p></td>
+    </tr>
+    <tr>
+      <td valign="top">S2</td>
+      <td align="center" valign="top">=</td>
+      <td> The second size (in meters)</td>
+    </tr>
+    <tr>
+      <td valign="top">WTYPE</td>
+      <td align="center" valign="top">=</td>
+      <td> The type of interval for the first and second wavelength</td>
+    </tr>
+    <tr>
+      <td valign="top">W1</td>
+      <td align="center" valign="top">=</td>
+      <td> The first wavelength (in meters)</td>
+    </tr>
+    <tr>
+      <td valign="top">W2</td>
+      <td align="center" valign="top">=</td>
+      <td> The second wavelength (in meters)</td>
+    </tr>
+  </table>
+
+<p>The ATYPE code is always required. If the STYPE is non-missing, then the trio of numbers STYPE,S1,S2 must be included in the <i>additional_codes</i> field. Similarly, if WTYPE is non-missing, then the trio of numbers WTYPE,W1,W2 must be included in the <i>additional_codes</i> field. If both STYPE and WTYPE are non-missing, then all six codes must be present in the order listed above. </p>
+<p>Examples:</p>
+
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+    <tr>
+      <td width="9%" height="20">aotk</td>
+      <td width="9%" align="center">0,10,0</td>
+      <td width="54%" align="center">a62000,0,2e-5,0,7,5.45e-7,5.65e-7</td>
+      <td width="14%" align="center">0,0,0 </td>
+      <td width="14%" align="center">*desc1</td>
+      </tr>
+
+    <tr>
+      <td>aemflx</td>
+      <td align="center">0,10,0</td>
+      <td align="center">a62001,0,2e-05,0</td>
+      <td align="center">0,20,3</td>
+      <td align="center">*desc2 </td>
+      </tr>
+
+  </table>
+  <br>
+  *desc1=Total Aerosol Optical Thickness,
+        size  &lt; 2e-5, 
+        wavelength &gt;= 5.45e-7 
+        and &lt;= 5.65e-7<br>
+        *desc2=Atmosphere Emission Mass Flux
+        for Dry Dust, 
+        size is &lt; 2e-5        <p>The external utilities <a href="util/grib2scan">grib2scan</a> (with the -v option) and <a href="http://www.cpc.ncep.noaa.gov/products/wesley/wgrib2/index.html">wgrib2</a> are quite useful in determining what the values for the <i>additional_codes</i><em> </em>field should be for a GRIB2 data file. </p></td>
+        </tr>
+        <tr> 
+          <td colspan="2" valign="top">The <i>units</i> component of the variable 
+            record is used for data with <a href="#DTYPE">DTYPE</a> bufr, grib, 
+            netcdf, or hdfsds. It is also used for non-standard binary data files 
+            that require special &quot;unpacking&quot; instructions, and special 
+            cases of pre-projected wind components. If the data you are describing 
+            does not fall into any of these categories, put a value of 99 in the 
+            <em>units</em> field. </td>
+        </tr>
+        <tr bgcolor="b8c8d7"> 
+          <td valign="top" bgcolor="#b8c8d7"><em>units</em></td>
+          <td bgcolor="#b8c8d7">For flat binary files containing 4-byte floating-point data that 
+            are not pre-projected, this field is ignored but must be included. 
+            Put in a value of 99. </td>
+        </tr>
+        <tr bgcolor="ccdceb"> 
+          <td valign="top"><em>units<br>
+            </em>(DTYPE bufr)</td>
+          <td valign="top" bgcolor="ccdceb">(<font color="#990000">GrADS version 
+            1.9</font>) For <a href="#DTYPE">DTYPE</a> bufr files, this field 
+            contains the x,y pair for the named variable. </td>
+        </tr>
+        <tr bgcolor="b8c8d7"> 
+          <td valign="top" bgcolor="b8c8d7"><em>units<br>
+            </em>(DTYPE grib)</td>
+          <td bgcolor="b8c8d7"> <p>For <a href="#DTYPE">DTYPE</a> grib, the <em>units</em> 
+              field specifies the GRIB parameters of the variable. This information 
+              is used by the <a href="util/gribmap.html">gribmap</a> utility for 
+              mapping the variables listed in the descriptor file to the data 
+              records in the GRIB files. This parameter may contain up to four 
+              comma-delimited numbers: 
+            <ul>
+              VV,LTYPE,LVAL,TRI 
+                <br>
+                 or<br>
+            VV,LTYPE,LVAL,LVAL2
+</ul>
+            where, 
+            <ul>
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+                <tr> 
+                  <td width="9%">VV</td>
+                  <td width="2%" align="center"> = </td>
+                  <td width="89%">The GRIB parameter number (Required)</td>
+                </tr>
+                <tr> 
+                  <td>LTYPE</td>
+                  <td align="center">=</td>
+                  <td>The level type indicator (Required)</td>
+                </tr>
+                <tr> 
+                  <td>LVAL</td>
+                  <td align="center">=</td>
+                  <td>The value of the 1st level  (Required if NLEVS=0)</td>
+                </tr>
+                <tr>
+                  <td>LVAL2</td>
+                  <td align="center">=</td>
+                  <td>The value of the 2nd level (Optional)</td>
+                </tr>
+                <tr> 
+                  <td>TRI</td>
+                  <td align="center">=</td>
+                  <td>The &quot;time range indicator&quot;                    (Optional) </td>
+                </tr>
+              </table>
+            </ul>
+            <p>The external utilities <a href="util/gribscan">gribscan</a> and 
+              <a href="http://www.cpc.ncep.noaa.gov/products/wesley/wgrib.html">wgrib</a> 
+              are quite useful in determining what the values for the <em>units</em> 
+              field should be for a GRIB data file. Examples:</p>
+            <ul>
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+                <tr> 
+                  <td width="6%">u</td>
+                  <td width="5%" align="center">39</td>
+                  <td width="20%" align="center">33,100</td>
+                  <td>U Winds [m/s]</td>
+                </tr>
+                <tr> 
+                  <td>t</td>
+                  <td align="center">39</td>
+                  <td align="center">11,100</td>
+                  <td> Temperature [K]</td>
+                </tr>
+                <tr> 
+                  <td>ts</td>
+                  <td align="center">0</td>
+                  <td align="center">11,1</td>
+                  <td>Surface Temperature [K]</td>
+                </tr>
+                <tr> 
+                  <td>tb</td>
+                  <td align="center">0</td>
+                  <td align="center">11,116,60,30</td>
+                  <td>Temperature, 30-60mb above surface [K]</td>
+                </tr>
+                <tr> 
+                  <td>dpt</td>
+                  <td align="center">0</td>
+                  <td align="center">17,100,1000</td>
+                  <td> Dew Point Temperature at 1000 mb [K]</td>
+                </tr>
+              </table>
+            </ul></td>
+        </tr>
+        <tr>
+          <td valign="top" bgcolor="ccdceb"><em>units<br>
+          </em>(DTYPE grib2)</td>
+          <td bgcolor="ccdceb"><p>(<font color="#990000">GrADS version 2.0</font>) This is a comma-delimited list of  values that identify  a GRIB2 parameter (variable): </p>
+            <ul>
+              DISC,CAT,NUM,SP,SP2
+            </ul>
+            <p>where, </p>
+            <ul>
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+                <tr>
+                  <td width="8%">DISC</td>
+                  <td width="3%" align="center">=</td>
+                  <td width="89%">The  parameter Discipline (Required)</td>
+                </tr>
+                <tr>
+                  <td>CAT</td>
+                  <td align="center">=</td>
+                  <td>The  parameter Category  (Required)</td>
+                </tr>
+                <tr>
+                  <td>NUM</td>
+                  <td align="center">=</td>
+                  <td>The  parameter Number   (Required)</td>
+                </tr>
+                <tr>
+                  <td valign="top">SP</td>
+                  <td align="center" valign="top">=</td>
+                  <td>The Statistical Process used to derive the parameter <br>
+                  (May be required if parameter is not an instantaneous value)</td>
+                </tr>
+                <tr>
+                  <td valign="top">SP2</td>
+                  <td align="center" valign="top">=</td>
+                  <td>The Spatial Process used to interpolate the parameter<br>
+                  (Required only for Product Definition Template 4.15)</td>
+                </tr>
+              </table>
+            </ul>
+            <p>Some examples are: </p>
+           
+              <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+                <tr>
+                  <td width="8%">u</td>
+                  <td width="18%" align="center">26,100</td>
+                  <td width="16%" align="center">0,2,2</td>
+                  <td width="58%">U-Component of Wind [m/s]</td>
+                </tr>
+                <tr>
+                  <td>v</td>
+                  <td align="center">26,100</td>
+                  <td align="center">0,2,3</td>
+                  <td>V-Component of Wind [m/s]</td>
+                </tr>
+                <tr>
+                  <td>t2max</td>
+                  <td align="center">0,103,2</td>
+                  <td align="center">0,0,5</td>
+                  <td> 2-meter Temperature Maximum [K] (NCEP)</td>
+                </tr>
+                <tr>
+                  <td>t2max</td>
+                  <td align="center">0,103,2</td>
+                  <td align="center">0,0,0,2</td>
+                  <td> 2-meter Temperature Maximum [K] (TIGGE)</td>
+                </tr>
+                <tr>
+                  <td>soilm1</td>
+                  <td align="center">0,106,0,0.1</td>
+                  <td align="center">2,0,192</td>
+                  <td>Soil Moisture, 0-0.10m below surface [K]</td>
+                </tr>
+                <tr>
+                  <td>catave</td>
+                  <td align="center">10,100</td>
+                  <td align="center">0,19,22,0,3</td>
+                  <td> Spatial Avg. of Clear Air Turbulence [%]</td>
+                </tr>
+                <tr>
+                  <td>catmax</td>
+                  <td align="center">10,100</td>
+                  <td align="center">0,19,22,2,3</td>
+                  <td> Spatial Max of Clear Air Turbulence [%]</td>
+                </tr>
+              </table>
+          <p>&nbsp;</p></td>
+        </tr>
+        <tr bgcolor="b8c8d7"> 
+          <td valign="top"><em>units<br>
+            </em>(DTYPE netcdf, <br>
+            hdfsds, or hdf5_grid)</td>
+          <td> <p class="plaintext">(<font color="#990000">GrADS 
+              version 1.9</font>) For <a href="#DTYPE">DTYPE</a> netcdf or hdfsds or hdf5_grid (<font color="#990000">GrADS 
+              version 2.0.a7+</font>) , 
+              the <em>units</em> field is a comma-delimited list of the varying 
+              dimensions of the variable. Dimensions expressed as x, y, z, or 
+              t correspond to the four axes defined by XDEF, YDEF, ZDEF and TDEF. 
+              For example, a surface variable such as sea level pressure might 
+              look like this: 
+            <ul>
+              presSFC=&gt;psfc&nbsp;&nbsp; 0&nbsp;&nbsp; y,x&nbsp;&nbsp; Surface 
+              Pressure 
+            </ul>
+            <p>A time-varying atmospheric variable such as geopotential height 
+              might look like this:</p>
+            <ul>
+              Height=&gt;hght&nbsp;&nbsp; 17&nbsp;&nbsp; t,z,y,x&nbsp;&nbsp; Geopotential 
+              Height (m) 
+            </ul>
+            <p class="plaintext">The order of the dimensions listed in the <em>units</em> 
+              field does matter. They must describe the shape of the variable 
+              as it was written to the SDF data file. For NetCDf files, this information 
+              appears in the output from ncdump next to the variable name. 
+            <p class="plaintext">If your data file contains a variable that also 
+              varies in a non-world-coordinate dimension (e.g. histogram interval, 
+              spectral band, ensemble number) then you can put a non-negative 
+              integer in the list of varying dimensions that will become the array 
+              index of the extra dimension. For example: 
+            <ul>
+              <p class="plaintext"> VAR=&gt;hist0&nbsp;&nbsp; 0&nbsp;&nbsp; 0,y,x&nbsp;&nbsp; 
+                First historgram interval for VAR<br>
+                VAR=&gt;hist1&nbsp;&nbsp; 0&nbsp;&nbsp; 1,y,x&nbsp;&nbsp; Second 
+                historgram interval for VAR<br>
+                VAR=&gt;hist2&nbsp;&nbsp; 0&nbsp;&nbsp; 2,y,x&nbsp;&nbsp; Third 
+                histogram interval for VAR </p>
+            </ul>
+            <p class="plaintext">Another option in this example would be to fill 
+              the unused Z axis with the histogram intervals: </p>
+            <ul>
+              <p class="plaintext"> zdef 3 linear 1 1<br>
+                ... <br>
+                VAR=&gt;hist&nbsp;&nbsp; 3&nbsp;&nbsp; z,y,x&nbsp;&nbsp; VAR Histogram</p>
+            </ul>
+            <p class="plaintext">In this case, it would appear to GrADS that variable 
+              'hist' varies in Z, but the user would have to remember that the 
+              Z levels correspond to histogram intervals. The latter technique 
+              makes it easier to slice through the data, but is not the most accurate 
+              representation. And if you don't have an unsued world-coordinate 
+              axis available, then you still have a way to access your data<em>.</em></p></td>
+        </tr>
+        <tr bgcolor="ccdceb"> 
+          <td valign="top"><em>units</em> <br>
+            (non-standard binary)</td>
+          <td> <p>For non-standard binary files, the <i>units</i> field is used 
+              to instruct GrADS how to read binary files that do not conform to 
+              the <a href="aboutgriddeddata.html#structure">default structure</a> 
+              or do not contain 4-byte float data. GrADS assumes the data were 
+              written in the following order (starting from the fastest varying 
+              dimension to the slowest): longitude (X), latitude (Y), vertical 
+              level (Z), variable (VAR), time (T). If your binary data set was 
+              created or "packed" according to a different dimension sequence, 
+              then you can use the <i>units</i> field to tell GrADS exactly how 
+              to unpack the data. </p>
+            <p>For these non-standard binary files, the <i>units</i> field is 
+              a series of one or more comma-delimited numbers, the first of which 
+              is always -1. The syntax is as follows: 
+            <ul>
+              -1, <i>structure</i> &lt;,arg&gt; 
+            </ul>
+            <p>There are four options for <i>structure</i>, outlined below. Some 
+              of these options have additional attributes which are specified 
+              with <i>arg</i>. </p>
+            <table width="100%" border="1" cellpadding="2" cellspacing="0" bordercolor="#999999" class="plaintext">
+              <tr> 
+                <td width="13%" valign="top"> -1,10,<em>arg</em> </td>
+                <td width="87%"> <p><span class="style2">(GrADS 1.9 or earlier)</span> This option indicates that "VAR" and "Z" have 
+                    been transposed in the dimension sequence. The order is: longitude 
+                    (X), latitude (Y), variable (VAR), vertical level (Z), time(T). 
+                    Thus, all variables are written out one level at a time. This feature was designed to be used with NASA GCM data in 
+                    the "phoenix" format. The upper air <i>prognostic</i> variables 
+                    were transposed, but the <i>diagnostic</i> variables were 
+                    not. Thus an <i>arg</i> of 1 means the variable has been var-z 
+                    transposed, and an <i>arg</i> of 2 means the variable has 
+                    not. </td>
+              </tr>
+              <tr> 
+                <td valign="top">-1,20</td>
+                <td><p>This option indicates that "VAR" and "T" have been transposed 
+                    in the dimension sequence. The order is: longitude (X), latitude 
+                    (Y), vertical level (Z), time(T), variable (VAR). Thus, all 
+                    times for one variable are written out in order followed by 
+                    all times for the next variable, etc. Data files for which 
+					&quot;VAR&quot; and &quot;T&quot; have been transposed may not be templated together.</td>
+              </tr>
+              <tr> 
+                <td valign="top">-1,30 </td>
+                <td><span class="style2">(GrADS 1.9 or earlier)</span> This option handles the cruel and unusual case where X and 
+                  Y dimensions are transposed and the horizontal grids are (lat,lon) 
+                  as opposed to (lon,lat) data. This option causes GrADS to work 
+                  very inefficiently. However, it is useful for initial inspection 
+                  and debugging. </td>
+              </tr>
+              <tr> 
+                <td valign="top">-1,40,<em>arg</em> </td>
+                <td><p>This option handles non-float data. If there are multiple variables in the same file, they must all be the same type. The dimension sequence is assumed to be the default. The secondary 
+                    <i>arg</i> tells GrADS what type of data values are in the 
+                    binary file: 
+                  <ul>
+                    <i>units</i> = -1,40,1&nbsp;&nbsp;&nbsp;&nbsp; = 1-byte unsigned 
+                    chars (0-255) <br>
+                    <i>units</i> = -1,40,2&nbsp;&nbsp;&nbsp;&nbsp; = 2-byte unsigned 
+                    integers<br>
+                    <i>units</i> = -1,40,2,-1 = 2-byte signed 
+                    integers<br>
+                    <i>units</i> = -1,40,4&nbsp;&nbsp;&nbsp;&nbsp; = 4-byte integers<br>
+                  </ul></td>
+              </tr>
+            </table></td>
+        </tr>
+        <tr bgcolor="b8c8d7">
+          <td valign="top" bgcolor="b8c8d7"><em>units</em> <br>
+            (pre-projected wind components)</td>
+          <td bgcolor="b8c8d7">For pre-projected vector component data that require the use of <a href="/grads/gadoc/pdef.html">PDEF</a> and <a href="/grads/gadoc/pdef.html#rotation">rotation</a>, 
+            GrADS has to retrieve both the u and v component in order to do the 
+            rotation calculation. The new (and recommended) method for matching 
+            vector components is to use the <a href="#VECT">VECTORPAIRS</a> descriptor 
+            file entry. The old technique (for versions older than 1.9b4) is to 
+            use the<em> units</em> field of the variable record. The u-component 
+            variable must have a <em>units</em> value of 33, and the v-component 
+            variable must have a <em>units</em> value of 34. (This is the GRIB 
+            convention). If there are more than one u/v pairs, secondary <em>units</em> values are used.</td>
+        </tr>
+        <tr bgcolor="ccdceb">
+          <td valign="top" bgcolor="#b8c8d7"><em>description</em></td>
+          <td bgcolor="#b8c8d7">This is text description or long name for the variable. Max 140 characters. </td>
+        </tr>
+      </table>
+      <p><br>
+    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> <a name="ATTR"> <b>@ &nbsp;</b><em>varname &nbsp;attribute_type 
+      &nbsp;attribute_name &nbsp;attribute_value </em></a></td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2"> <p>(<font color="#990000">GrADS version 1.9b4</font>) To 
+        supplement the metadata in your descriptor file, use attribute comments. 
+        The first two characters of the attribute comment must be &quot;@&quot; 
+        followed by a space -- this distinguishes it from an ordinary comment 
+        (see below). Attribute comments may appear anywhere in the descriptor 
+        file, and they will be ignored if used with older versions of GrADS. </p>
+      <p>All file attributes may be retrieved with the <a href="gradcomdqattr.html">'query 
+        attr'</a> command. </p>
+      <p><em>varname</em> may be set to &quot;global&quot; to describe general 
+        attributes that are valid for the entire data set. Set <em>varname</em> 
+        to &quot;lon&quot;, &quot;lat&quot;, &quot;lev&quot;, or &quot;time&quot; 
+        to describe attributes of the four coordinate axes; otherwise, use one 
+        of the variable names listed in the variable declarations. If a variable 
+        name is aliased, use the grads_varname instead of the native SDF_varname.</p>
+      <p><em>attribute_type</em> should be one of the following case-sensitive 
+        types: String, Byte, Int16, UInt16, Int32, UInt32, Float32, Float64.</p>
+      <p><em>attribute_name</em> may be any single word or string with no spaces 
+        (e.g.: &quot;units&quot;, &quot;minimum_value&quot;)</p>
+      <p><em>attribute_value</em> can be any string as long as the length of the 
+        entire entry does not exceed 512 characters. </p>
+      <p class="plaintext">For example:<br>
+        @ precip String units mm/day<br>
+        @ global String documentation http://put.your.documentation.url.here<br>
+        <br>
+      </p></td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC"> <a name="COMMENT"> <b>*</b> <em>comment</em></a></td>
+    <td align="right" valign="top" bgcolor="#CCCCCC"><a href="#TOP" class="item9">back 
+      to top</a></td>
+  </tr>
+  <tr> 
+    <td colspan="2">You may put comments in your descriptor file by beginning 
+      the entry with * . Use @ for formatted attribute comments (see above). </td>
+  </tr>
+  <tr> 
+    <td colspan="2">&nbsp;</td>
+  </tr>
+</table>
+<p> </p>
+</body>
+</html>
+

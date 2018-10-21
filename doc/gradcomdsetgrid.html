@@ -1,0 +1,72 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set grid</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set grid</b></h2>
+<p>
+<code>set grid <i>status &lt;linestyle&gt; &lt;color#&gt;</i></code>
+
+<p>
+Specifies the characteristics of the displayed grid lines. Default is to draw
+horizontal and vertical grid lines with color number 15 (grey) and linestyle 5 (dotted).
+
+<p>
+Options for <code><i>status</i></code> are:
+<ul>
+<code>on&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+- both latitude and longitude lines are drawn<br>
+<code>off&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+- no grid lines lines are drawn<br>
+<code>horizontal&nbsp;</code>
+- only latitude grid lines are drawn<br>
+<code>vertical&nbsp;&nbsp;&nbsp;</code> 
+- only longigude grid lines are drawn<br>
+</ul>
+
+<p>
+Options for <code><i>linestyle</i></code> are:
+<ul>
+<code>1 </code>- solid <br>          
+<code>2 </code>- long dash <br>  
+<code>3 </code>- short dash <br>  
+<code>4 </code>- long dash, short dash <br>  
+<code>5 </code>- dotted <br>  
+<code>6 </code>- dot dash <br>  
+<code>7 </code>- dot dot dash <br>  
+</ul>
+
+<p>
+<code><i>color#</i></code> may be one of the <a href="16colors.html">16 GrADS default colors</a> 
+or a new color defined with <a href="gradcomdsetrgb.html"><code>set rgb</code></a>. 
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>Changes to the grid display characteristics 'stick' until reset by a new
+execution of <code>set grid</code>.
+<p>
+<li>You cannot specify a <code><i>color#</i></code> without also specifying
+a <code><i>linestyle</i></code>.
+<p>
+<li>Grid lines are aligned with the labeled tick marks on the X and Y
+axes. GrADS chooses appropriate defaults for spacing of the labeled
+tick marks, but these defaults may be overridden by the commands <a
+href="gradcomdsetxaxis.html">set xaxis</a>, <a
+href="gradcomdsetyaxis.html">set yaxis</a>, <a
+href="gradcomdsetxlint.html">set xlint</a>, <a
+href="gradcomdsetylint.html">set ylint</a>, <a
+href="gradcomdsetxlevs.html">set xlevs</a>, and <a
+href="gradcomdsetylevs.html">set ylevs</a>.  Please consult these
+reference pages for more information.
+</ol>
+
+<p>
+<h3>Examples </h3>
+
+</body>
+</html>
+

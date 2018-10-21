@@ -1,0 +1,152 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Script Functions</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+<h2>Dynamic Loading of Script Functions</h2> 
+
+<p>
+Script variables are generally local to the functions (scripts) they
+are contained in; they exist in memory only while the function is
+executing. If a variable name starts with an underscore (_), then it
+becomes a <i>global</i> script variable and keeps its value throughout
+the execution of the main script file. The drawback to global
+variables was that the functions they are defined in had to be
+included in the main script file. With a new capability that comes
+with GrADS version 1.8, that is no longer the case.
+
+<p>
+Dynamic loading of script functions means that when your main script
+calls a function (subscript), all global variables from that function
+will be retained in memory and can continue to be used by main
+script. Commonly used functions do not have to be copied into every script
+that calls them.
+
+<p>
+The names of GrADS script functions may now have 16 characters and include 
+the underscore, although they still must begin with an alphabetic character.
+Grads script function names are case sensitive.
+
+<p>
+Error messages will include the file name
+where the error ocurred -- in this case, the full path name of
+the file that was actually opened.
+
+<p>
+<h3>Using GrADS Script Functions</h3>
+
+<p>
+The tricks to using GrADS script functions are (1) to enable dynamic
+loading and (2) to teach GrADS how to find the script functions you
+call from your main script.
+
+<p>
+To enable the dynamic loading of script functions, put this at the top
+of your script:
+
+<p>
+<ul><code>rc = gsfallow("on")</code></ul>
+
+<p>
+To teach Grads how to find the script functions you call from your
+main script, you must first know how Grads searches for main
+script file names. 
+
+<p>
+<b><i>How GrADS searches for main script file names</i></b>
+
+<p>
+Let's assume the user wants to run a script called
+<code>do_eof.gs</code> and gives the Grads command:
+
+<p>
+<ul><code>ga-> do_eof</code></ul>
+
+<p>
+Grads will search in the currently directory for the script name, as
+provided. If it doesn't find the script, it appends .gs to the script
+name and tries again. If the script is still not found, then the
+environment variable GASCRP is examined. GrADS attemps to open the
+script file in all the directories listed in the GASCRP variable,
+first with the provided name, then with the .gs appended.
+
+<p>
+If GASCRP contains "<code>/usr/local/gradslib
+/usr/homes/myhome</code>", then GrADS will search for the script
+<code>do_eof</code> in the following order:
+
+<ul>
+<code>
+<li>do_eof
+<li>do_eof.gs
+<li>/usr/local/gradslib/do_eof
+<li>/usr/local/gradslib/do_eof.gs
+<li>/usr/homes/myhome/do_eof
+<li>/usr/homes/myhome/do_eof.gs
+</code>
+</ul>
+
+<p>
+GrADS uses the first file it finds. Once found, the directory that
+contains the script file is remembered as the "main function prefix".
+
+<p>
+<b><i>How GrADS searches for script function file names</i></b>
+
+<p>
+Continuing with our example, let's further assume that GrADS
+encounters a function in <code>do_eof.gs</code> that is not included
+in the stuff already loaded from the main script file. GrADS will look
+for a .gsf file to load, using the following search path:
+
+<p>
+<ul>
+<code>
+<li>&lt;main-function-prefix&gt;/&lt;function-name&gt;.gsf
+<li>&lt;main-function-prefix&gt;/&lt;private-paths&gt;/&lt;function-name&gt;.gsf
+<li>&lt;GASCRP-paths&gt;/&lt;function-name&gt;.gsf
+</code>
+</ul>
+
+<p>
+The private path directory list is an optional list that 
+is provided via the <code>gsfpath</code> function:
+
+<p>
+<ul><code>rc = gsfpath("dirlist")</code></ul>
+
+If used, the declaration of the private path directory list should
+appear at the top of the main script just underneath the statement
+enabling the dynamic script loading.
+
+<p>
+For example, if our main script "do_eof.gs" is executed with the command:
+
+<p>
+<ul><code>run /usr/local/gradslib/do_eof</code></ul>
+
+<p>
+and this script file contains the following lines at the front:
+
+<p>
+<ul><code>
+rc = gsfallow("on")<br>
+rc = gsfpath("math1 string2")
+</code></ul>
+
+<p>
+and the script calls a function <code>str_chop</code> which is not found in
+the main script, then the search path would be:
+
+<p>
+<ol>
+<li>/usr/local/gradslib/str_chop.gsf
+<li>/usr/local/gradslib/math1/str_chop.gsf
+<li>/usr/local/gradslib/string2/str_chop.gsf
+</ol>
+
+</body>
+</html>
+

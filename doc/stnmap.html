@@ -1,0 +1,72 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<h2>stnmap</h2>
+<code>stnmap [ -<i>i fname</i> ]</code><p>
+<h3>Usage Notes</h3>
+<code>stnmap</code> is a GrADS utility  that  writes  out  a  hash
+table
+     and/or  link  list  information for station data that allows
+     GrADS to access the report data more efficiently.
+     <p>
+If you change the data file - perhaps by  appending  another
+     time  group  -  you  will also have to change the descriptor
+     file to reflect the changes - the new number  of  times  for
+     example - and then rerun the <code>stnmap</code> utility.
+     <p>
+Note the difference between station descriptor  file  and  a
+     grid descriptor file:<p>
+<ul>
+
+<code>DTYPE</code>&nbsp;&nbsp;&nbsp;&nbsp;               specify a data
+type of: station<p>
+<code>STNMAP</code>&nbsp;&nbsp;&nbsp;&nbsp;              gives the file
+name of the station mapping file.     <p>
+<code>XDEF, YDEF, ZDEF</code>&nbsp;&nbsp;&nbsp;&nbsp;    not
+specified.<p>
+<code>TDEF</code>&nbsp;&nbsp;&nbsp;&nbsp;                describes the
+time grouping interval and
+                         the  number  of  the  time groups in the
+                         file.<p>
+
+<code>VAR</code>&nbsp;&nbsp;&nbsp;&nbsp;                 surface
+variables must come first, and
+                         are     given    a    zero    for    the
+                         number-of-levels field. Level  dependent
+                         variables  are  listed after the surface
+                         variables,  and are given a one  in  the
+                         number-of-levels field.</ul><p>
+<h3>Examples</h3>
+When a data set, for example <code>ua.reps</code>  is  written,  and
+the
+     descriptor  file <code>stat.ctl</code>, including the information
+records
+     for the station data file <code>ua.reps</code>  is  created,  you
+should
+     then create the station map file <code>ua.map</code> (named in the
+<code>STNMAP</code>
+     record of the descriptor file; see  below)  by  running  the
+     <code>stnmap</code> utility.<p>
+Example descriptor file: <code>stat.ctl</code>
+<ul>
+<code>
+ DSET   ^ua.reps<br>
+                    DTYPE   station<br>
+                    STNMAP ^ua.map<br>
+                    UNDEF   -999.0<br>
+                    TITLE   Real Time Upper air obs<br>
+                    TDEF    10 linear 12z18jan1992 12hr<br>
+                    VARS    12<br>
+                      &nbsp;&nbsp;slp   0  99  SLP<br>
+                      &nbsp;&nbsp;ts    0  99 Temps<br>
+                      &nbsp;&nbsp;us    0  99  U Winds<br>
+                      &nbsp;&nbsp;vs    0  99  V Winds<br>
+                      &nbsp;&nbsp;z     1  99  Heightsa<br>
+                      &nbsp;&nbsp;t     1  99  Temps<br>
+                      &nbsp;&nbsp;u     1  99  U Winds<br>
+                      &nbsp;&nbsp;v     1  99  V WInds<br>
+                    ENDVARS</code></ul><p>
+Running the <code>stnmap</code> utility:<p>
+<dd>                    <code>stnmap -i stat.ctl</code><p>
+     The station map file <code>ua.map</code> is a binary file, which
+includes
+     the hash table and/or link list information.

@@ -1,0 +1,8 @@
+#!/bin/sh
+mkdir -p etc
+aclocal
+autoheader
+touch config.h.in
+touch src/stamp-h
+automake -i --foreign --add-missing
+autoconf

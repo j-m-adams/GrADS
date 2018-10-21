@@ -1,0 +1,1044 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<h1>Using Map Projections in GrADS</h1>
+
+It is important to understand the distinction between the two
+uses of map projections when creating GrADS displays of your
+data:<p>
+
+<ul>
+<li>projection of the data (preprojected grids);<br>
+<li>projection of the display.</ul><p>
+
+GrADS supports two types of data grids:<p>
+<ul>
+<li><code>lon/lat</code> grids (and not necessarily regular,
+e.g., gaussian);<br>
+<li>preprojected grids.</ul><p>
+<ul>
+<a href="#pre">Using Preprojected Grids</a><br>
+<a href="#proj">GrADS Display Projections</a><br>
+<a href="#summary">Summary and Plans</a></ul><br>
+<hr>
+<p>
+
+<a name="pre"><h2><u>Using Preprojected Grids</u></h2></a>
+<ul>
+<a href="#polar">Polar Stereo Preprojected Data</a><br>
+<a href="#lambert">Lambert Conformal Preprojected Data</a><br>
+<a href="#eta">NMC Eta model</a><br>
+<a href="#nmc">NMC high accuracy polar stereo for SSM/I 
+data</a><br>
+<a href="#csu">CSU RAMS Oblique Polar Stereo Grids</a><br>
+<a href="#pit">Pitfalls when using preprojected
+data</a></ul><br>
+<br>
+<ul><b>Preprojected</b> data are data <b>already</b> on a map
+projection. GrADS
+supports four types of preprojected data:<p>
+
+<ol>
+<li>N polar stereo (NMC model projection); 
+<li>S polar stereo (NMC model projection) ; 
+<li>Lambert Conformal (originally for Navy NORAPS model); 
+<li>NMC eta model (unstaggered). 
+<li>More precise N and S polar stereo (hi res SSM/I data) 
+<li>Colorado State University RAMS model (oblique polar stereo;
+beta)</ol><p>
+
+When preprojected grids are opened in GrADS, bilinear
+interpolation constants are calculated and all date are displayed
+on an internal GrADS lat/lon grid defined by the
+<code>xdef</code> and <code>ydef</code>
+card in the data description or <code>.ctl</code> file (that's
+why it takes
+longer to "open" a preprojected grid data set).<p>
+
+It is very important to point out that the internal GrADS grid
+can be any grid as it is completely independent of the
+preprojected data grid.  Thus, there is nothing
+stopping you
+displaying preprojected data on a very high res
+lon/lat grid
+(again, defined in the <code>.ctl</code> by <code>xdef</code> 
+and <code>ydef</code>). In fact, you
+could create and open multiple .ctl files with different
+resolutions and/or regions which pointed to the same
+preprojected
+data file.<p>
+
+When you do a <a
+href="gradcomddisplay.html"><code>display</code></a>
+(i.e., get a grid of data), the
+preprojected data are bilinearly interpolated to
+the GrADS
+internal lat/lon grid.  For
+preprojected
+scalar fields (e.g., 500
+mb heights), the display is adequate and the precision of the
+interpolation can be controlled by <code>xdef</code> and
+<code>ydef</code> to define a
+higher spatial resolution grid.<p>
+
+The big virtue of this approach is that all built in GrADS
+analytic functions (e.g., <a
+href="gradfuncaave.html"><code>aave</code></a>,
+<a href="gradfunchcurl.html"><code>hcurl</code></a>...)
+continue to work even
+though the data were not originally on a lon/lat grid.  The
+downside is that you are not looking directly at your data on a
+geographic map.  However, one could always define a .ctl file
+which simply opened the data file as i,j data and displayed
+without the map (<a href="gradcomdsetmpdraw.html"><code>set
+mpdraw</a> off</code>). So, in my opinion, this
+compromise is not that limiting even if as a modeller you wanted
+to look at the grid--you just don't get the map background.<p>
+
+<code>Preprojected vector fields</code> are a little trickier,
+depending on
+whether the vector is defined relative to the data grid or
+relative to the Earth.  For example, NMC polar stereo grids use
+winds relative to the data grid and thus must be rotated to the
+internal GrADS lat/lon grid (again defined in the
+<code>.ctl</code> file by
+the <code>xdef</code> and <code>ydef</code> cards).<p>
+
+The only potential problem with working with preprojected data
+(e.g., Lambert Conformal model data) is defining the projection
+for GrADS. This is accomplished using a <code>pdef</code> card
+in the data
+descriptor <code>.ctl</code> file.
+</ul><br><br>
+
+<a name="polar"><b><i>Polar Stereo Preprojected Data (coarse
+accuracy for NMC
+Models)</i></b><p>
+<ul>
+Preprojected data on a polar stereo projection (N and S) is
+defined as at NMC.  For the NCEP model GRIB data distributed
+via anon ftp from ftp.ncep.noaa.gov, the <code>pdef</code> card
+is:<p>
+<ul>
+<code>
+pdef isize jsize projtype ipole jpole lonref gridinc<br>
+pdef 53 45 nps 27 49 -105 190.5
+</code>
+</ul><p>
+
+where,<p>
+
+<ul><code>ipole</code> and <code>jpole</code> are the (i,j) of
+the pole referenced from the lower left corner at (1,1) and <code>gridinc</code> is the dx
+in km.</ul><p>
+
+The relevant GrADS source is:<p>
+
+<code>
+void w3fb04 (float alat, float along, float xmeshl, float
+orient,
+float *xi, float *xj) {<br>
+ /* <br>
+C <br>
+C SUBPROGRAM: W3FB04     LATITUDE, LONGITUDE TO GRID
+COORDINATES <br>
+C   AUTHOR: MCDONELL,J.   
+  ORG: W345       DATE: 90-06-04 <br>
+C <br>
+C ABSTRACT: CONVERTS THE
+COORDINATES OF A LOCATION ON EARTH FROM THE <br>
+C   NATURAL
+COORDINATE SYSTEM OF LATITUDE/LONGITUDE TO THE GRID (I,J) <br>
+C  
+COORDINATE SYSTEM OVERLAID ON A POLAR STEREOGRAPHIC MAP PRO
+<br>
+C  
+JECTION TRUE AT 60 DEGREES N OR S LATITUDE. W3FB04 IS THE
+REVERSE<br>
+C   OF W3FB05. <br>
+C <br>
+C PROGRAM HISTORY LOG: <br>
+C   77-05-01  J.
+MCDONELL<br>
+C   89-01-10  R.E.JONES   CONVERT TO MICROSOFT FORTRAN 4.1
+<br>
+C  
+90-06-04  R.E.JONES   CONVERT TO SUN FORTRAN 1.3 <br>
+C
+93-01-26 B.
+Doty     converted to <br>
+C <br>C <br>C USAGE:  CALL W3FB04 (ALAT,
+ALONG,
+XMESHL, ORIENT, XI, XJ) <br>C <br>C   INPUT VARIABLES: <br>C
+NAMES 
+INTERFACE DESCRIPTION OF VARIABLES AND TYPES <br>C     ------
+--------- ----------------------------------------------- <br>C    
+ALAT   ARG LIST  LATITUDE IN DEGREES (<0 IF SH) <br>C     ALONG
+ARG
+LIST  WEST LONGITUDE IN DEGREES <br>C     XMESHL ARG LIST  MESH
+LENGTH OF GRID IN KM AT 60 DEG LAT(<0 IF SH) <br>C                  
+(190.5 LFM GRID, 381.0 NH PE GRID,-381.0 SH PE GRID) <br>C
+ORIENT
+ARG LIST  ORIENTATION WEST LONGITUDE OF THE GRID <br>C                
+  (105.0 LFM GRID, 80.0 NH PE GRID, 260.0 SH PE GRID) <br>C
+<br>C  
+OUTPUT VARIABLES: <br>C     NAMES  INTERFACE DESCRIPTION OF
+VARIABLES
+AND TYPES <br>C     ------ ---------
+----------------------------------------------- <br>C     XI
+ARG
+LIST  I OF THE POINT RELATIVE TO NORTH OR SOUTH POLE <br>C
+XJ    
+ARG LIST  J OF THE POINT RELATIVE TO NORTH OR SOUTH POLE <br>C
+<br>C  
+SUBPROGRAMS CALLED: <br>C     NAMES                                   
+               LIBRARY <br>C    
+------------------------------------------------------- --------
+<br>C     COS SIN                                                
+SYSLIB <br>C <br>C   REMARKS: ALL PARAMETERS IN THE CALLING
+STATEMENT
+MUST BE <br>C     REAL. THE RANGE OF ALLOWABLE LATITUDES IS
+FROM A
+POLE TO <br>C     30 DEGREES INTO THE OPPOSITE HEMISPHERE.
+<br>C THE
+GRID USED IN THIS SUBROUTINE HAS ITS ORIGIN (I=0,J=0) <br>C
+AT
+THE POLE IN EITHER HEMISPHERE, SO IF THE USER'S GRID HAS ITS
+<br>C    
+ORIGIN AT A POINT OTHER THAN THE POLE, A TRANSLATION IS NEEDED
+<br>C  
+  TO GET I AND J. THE GRIDLINES OF I=CONSTANT ARE PARALLEL TO A
+<br>C 
+   LONGITUDE DESIGNATED BY THE USER. THE EARTH'S RADIUS IS TAKEN
+C     TO BE 6371.2 KM. <br>C <br>C ATTRIBUTES: <br>C
+LANGUAGE: SUN FORTRAN
+1.4 C   MACHINE:  SUN SPARCSTATION 1+ <br>C*/ 
+<br>static float
+radpd =
+0.01745329; <br>
+static float earthr = 6371.2;<p>
+
+float re,xlat,wlong,r; <br>
+&nbsp;&nbsp;&nbsp;re    = (earthr * 1.86603) / xmeshl;<br>
+&nbsp;&nbsp;&nbsp;xlat
+=  alat * radpd; <br>
+&nbsp;&nbsp;&nbsp;if (xmeshl>0.0) { <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wlong =
+(along + 180.0 -
+orient) * radpd; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r     =
+(re * cos(xlat)) / (1.0 +
+sin(xlat));
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*xi    =
+r * sin(wlong); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*xj = r *
+cos(wlong);<p>
+
+&nbsp;&nbsp;&nbsp;} else { <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;re    = -re; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xlat =
+-xlat;
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wlong = (along - orient) *
+radpd; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r     =
+(re * cos(xlat)) / (1.0+ sin(xlat)); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*xi =
+r *
+sin(wlong); <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*xj   =
+-r * cos(wlong); <br>
+&nbsp;&nbsp;&nbsp;} <br>
+}
+</code></ul>
+<br>
+<br>
+
+<a name="lambert"><b><i>Lambert Conformal Preprojected
+Data</i></b></a><p>
+<ul>
+
+The Lambert Conformal projection (lcc) was implemented for the
+U.S. Navy's limited area model NORAPS.  Thus, to work with your
+lcc data you must express your grid in the context of the Navy
+lcc grid.  NMC has been able to do this for their AIWIPS grids
+and the Navy definition should be general enough for others.<p>
+
+A typical NORAPS Lambert-Conformal grid is described below,
+including the C code which sets up the internal
+interpolation.<p>
+
+The <code>.ctl</code> file is:<p>
+
+<ul>
+<code>
+dset ^temp.grd <br>
+title NORAPS DATA TEST <br>
+undef 1e20 <br>
+pdef 103 69 lcc 30 -88 51.5 34.5 20 40 -88 90000 90000 <br>
+xdef 180 linear -180 1.0<br>
+ydef 100 linear  -10 1.0 <br>
+zdef  16 levels 1000 925 850 700 500 400 300 250 200 150 100 70
+50 30 20 10 <br>
+tdef   1 linear 00z1jan94 12hr<br>
+vars 1 <br>
+&nbsp;&nbsp;&nbsp;t 16 0 temp <br>
+endvars</code></ul><p>
+
+where,<p>
+
+<ul>
+<code>103&nbsp;&nbsp;&nbsp;</code>= #pts in x <br>
+<code>69&nbsp;&nbsp;&nbsp;&nbsp;</code>= #pts in y <br>
+<code>lcc&nbsp;&nbsp;&nbsp;</code>= Lambert-Conformal <br>
+<code>30&nbsp;&nbsp;&nbsp;&nbsp;</code>= lat of ref point <br>
+<code>88&nbsp;&nbsp;&nbsp;&nbsp;</code>= lon of ref point (E is positive, W is negative) <br>
+<code>51.5&nbsp;&nbsp;</code>= i of ref point <br>
+<code>34.5&nbsp;&nbsp;</code>= j of ref point <br>
+<code>20&nbsp;&nbsp;&nbsp;&nbsp;</code>= S true lat <br>
+<code>40&nbsp;&nbsp;&nbsp;&nbsp;</code>= N true lat <br>
+<code>88&nbsp;&nbsp;&nbsp;&nbsp;</code>= standard lon <br>
+<code>90000&nbsp</code>= dx in M <br>
+<code>90000&nbsp</code>= dy in M
+</ul><p>
+
+Otherwise, it is the same as other GrADS files.<p>
+
+<b>Note</b> - the <code>xdef/ydef</code> apply to the
+<code>lon/lat</code> grid GrADS internally interpolates to and
+can be anything...<p>
+
+The GrADS source which maps <code>lon/lat</code> of the GrADS
+internal <code>lon/lat</code>
+grid to <code>i,j</code> of the preprojected grid is:<p>
+
+<code>
+<pre>
+/* Lambert Conformal conversion */
+void ll2lc (float *vals, float grdlat, float grdlon, 
+float *grdi, float *grdj) {
+/*  Subroutine to convert from lat-lon to Lambert Conformal i,j.
+Provided by NRL Monterey; converted to C 6/15/94.
+c                SUBROUTINE: ll2lc
+c
+c                PURPOSE: To compute i- and j-coordinates of a specified
+c                         grid given the latitude and longitude points. 
+c                         All latitudes in this routine start 
+c                         with -90.0 at the south pole and increase 
+c                         northward to +90.0 at the north pole.  The 
+c                         longitudes start with 0.0 at the Greenwich 
+c                         meridian and increase to the east, so that 
+c                         90.0 refers to 90.0E, 180.0 is the inter- 
+c                         national dateline and 270.0 is 90.0W. 
+c
+c                INPUT VARIABLES: 
+c 
+c   vals+0         reflat: latitude at reference point (iref,jref) 
+c
+c   vals+1         reflon: longitude at reference point (iref,jref) 
+c 
+c   vals+2         iref:   i-coordinate value of reference point 
+c 
+c   vals+3         jref:   j-coordinate value of reference point 
+c 
+c   vals+4         stdlt1: standard latitude of grid 
+c 
+c   vals+5         stdlt2: second standard latitude of grid (only required 
+c                  if igrid = 2, lambert conformal) 
+c 
+c   vals+6         stdlon: standard longitude of grid (longitude that 
+c                          points to the north) 
+c 
+c   vals+7         delx:   grid spacing of grid in x-direction 
+c                          for igrid = 1,2,3 or 4, delx must be in meters 
+c                          for igrid = 5, delx must be in degrees 
+c 
+c   vals+8         dely:   grid spacing (in meters) of grid in y-direction 
+c                          for igrid = 1,2,3 or 4, delx must be in meters 
+c                          for igrid = 5, dely must be in degrees 
+c 
+c                  grdlat: latitude of point (grdi,grdj) 
+c 
+c                  grdlon: longitude of point (grdi,grdj)
+c 
+c                  grdi:   i-co ordinate(s) that this routine will generate 
+c                          information for 
+c 
+c                  grdj:   j-coordinate(s) that this routine will generate 
+c                          information for 
+c 
+*/
+
+   float pi, pi2, pi4, d2r, r2d, radius, omega4; 
+   float gcon,ogcon,ahem,deg,cn1,cn2,cn3,cn4,rih,xih,yih,rrih,check; 
+   float alnfix,alon,x,y; 
+   pi = 4.0*atan(1.0); 
+   pi2 = pi/2.0; 
+   pi4 = pi/4.0;
+   d2r = pi/180.0; 
+   r2d = 180.0/pi; 
+   radius = 6371229.0; 
+   omega4 = 4.0*pi/86400.0;
+
+/*mf -------------- mf*/ 
+/*case where standard lats are the same */ 
+  if(*(vals+4) == *(vals+5)) { 
+    gcon = sin(*(vals+4)*d2r); 
+  } else { 
+    gcon = (log(sin((90.0-*(vals+4))*d2r))
+    log(sin((90.0-*(vals+5))*d2r)))
+    /(log(tan((90.0-*(vals+4))*0.5*d2r))
+    log(tan((90.0-*(vals+5))*0.5*d2r))); 
+  } 
+/*mf -------------- mf*/
+  ogcon = 1.0/gcon; 
+  ahem = fabs(*(vals+4))/(*(vals+4)); 
+  deg = (90.0-fabs(*(vals+4)))*d2r; 
+  cn1 = sin(deg); 
+  cn2 = radius*cn1*ogcon;
+  deg = deg*0.5; 
+  cn3 = tan(deg); 
+  deg = (90.0-fabs(*vals))*0.5*d2r;
+  cn4 = tan(deg); 
+  rih = cn2*pow((cn4/cn3),gcon); 
+  deg = (*(vals+1)-*(vals+6))*d2r*gcon; 
+  xih = rih*sin(deg); 
+  yih = -rih*cos(deg)*ahem; 
+  deg = (90.0-grdlat*ahem)*0.5*d2r; 
+  cn4 = tan(deg); 
+  rrih = cn2*pow((cn4/cn3),gcon); 
+  check = 180.0-*(vals+6); 
+  alnfix = *(vals+6)+check; 
+  alon = grdlon+check;
+  while (alon<0.0) alon = alon+360.0; 
+  while (alon>360.0) alon = alon-360.0; 
+  deg = (alon-alnfix)*gcon*d2r; 
+  x = rrih*sin(deg); 
+  y = -rrih*cos(deg)*ahem; 
+  *grdi = *(vals+2)+(x-xih)/(*(vals+7)); 
+  *grdj = *(vals+3)+(y-yih)/(*(vals+8)); 
+}
+</pre></code></ul>
+<br>
+<br><a name="eta"><b><i>NMC Eta model (unstaggered
+grids)</i></b></a><p>
+<ul>
+
+The NMC eta model "native" grid is awkward to work with because
+the variables are on staggered (e.g., the grid for winds is not
+the same as the grid for mass points) <i>and</i> non rectangular (number
+of points in i is <i>not</i> constant with j) grids.  Because any
+contouring of irregularly gridded data involves interpolation at
+some point, NMC creates "unstaggered"  eta model fields for
+practical application programs such as GrADS.  In the unstaggered
+grids all variables are placed on a common <i>and</i> rectangular grid
+(the mass points).<p>
+
+Wind rotation has also been added so that vector data will be
+properly displayed.<p>
+
+The pdef card for a typical eta model grid is:<p>
+
+<ul>
+<code>pdef 181 136 eta.u -97.0 41.0 0.38888888 0.37037037</code><p>
+
+<code>181</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = #pts in x <br>
+<code>136</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    = #pts in y <br>
+<code>eta.u</code>&nbsp;&nbsp;&nbsp;&nbsp;  = eta grid, unstaggered<br>
+<code>-97.0</code>&nbsp;&nbsp;&nbsp;&nbsp;  = lon of ref point (E is positive in GrADS, W
+is negative)
+[deg] <br>
+<code>41.0</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = lat of ref point [deg] <br>
+<code>0.3888</code>&nbsp;&nbsp; = dlon [deg] <br>
+<code>0.37037</code> = dlat [deg]</ul><p>
+
+The source code in GrADS for the lon,lat -> i,j mapping is:<p>
+<pre>
+void ll2eg (int im, int jm, float *vals,  float grdlon, float grdlat,
+      float *grdi, float *grdj, float *alpha) {
+
+/*  Subroutine to convert from lat-lon to NMC eta i,j.
+
+    Provided by Eric Rogers NMC; converted to C 3/29/95 by Mike Fiorino.
+
+c                SUBROUTINE: ll2eg 
+c 
+c                PURPOSE: To compute i- and j-coordinates of a specified 
+c                         grid given the latitude and longitude points.
+c                         All latitudes in this routine start 
+c                         with -90.0 at the south pole and increase 
+c                         northward to +90.0 at the north pole.  The 
+c                         longitudes start with 0.0 at the Greenwich 
+c                         meridian and increase to the east, so that 
+c                         90.0 refers to 90.0E, 180.0 is the inter- 
+c                         national dateline and 270.0 is 90.0W. 
+c 
+c                INPUT VARIABLES: 
+c 
+c   vals+0         tlm0d: longitude of the reference center point 
+c 
+c   vals+1         tph0d: latitude of the reference center point 
+c 
+c   vals+2         dlam:  dlon grid increment in deg 
+c 
+c   vals+3         dphi:  dlat grid increment in deg 
+c 
+c 
+c                  grdlat: latitude of point (grdi,grdj) 
+c 
+c                  grdlon: longitude of point (grdi,grdj) 
+c 
+c                  grdi:   i-coordinate(s) that this routine will generate 
+c                          information for 
+c 
+c                  grdj:   j-coordinate(s) that this routine will generate 
+c                          information for 
+c
+
+*/
+
+   float pi,d2r,r2d, earthr;   float tlm0d,tph0d,dlam,dphi;  
+   float 
+    phi,lam,lame,lam0,phi0,lam0e,cosphi,sinphi,sinphi0,cosphi0,sinlam r,cos 
+    lamr;
+   float x1,x,y,z,bigphi,biglam,cc,num,den,tlm,tph;
+
+   int idim,jdim;
+
+   pi=3.141592654;
+
+   d2r=pi/180.0;   
+   r2d=1.0/d2r;   
+   earthr=6371.2;
+
+   tlm0d=-*(vals+0); /* convert + W to + E, the grads standard for
+    longitude */   
+   tph0d=*(vals+1);   
+   dlam=(*(vals+2))*0.5;  
+   dphi=(*(vals+3))*0.5;
+
+   /* grid point and center of eta grid trig */
+
+   /* convert to radians */
+
+   phi    = grdlat*d2r;   
+   lam    = -grdlon*d2r; /* convert + W to + E, the grads standard for 
+    longitude */   
+   lame   = (grdlon)*d2r;
+
+   phi0   = tph0d*d2r;   
+   lam0   = tlm0d*d2r;   
+   lam0e  = ( 360.0 + *(vals+0) )*d2r;
+
+   /* cos and sin */
+
+   cosphi = cos(phi);   
+   sinphi = sin(phi);
+
+   sinphi0 = sin(phi0);   
+   cosphi0 = cos(phi0);
+
+   sinlamr=sin(lame-lam0e);   
+   coslamr=cos(lame-lam0e);
+
+   x1     = cosphi*cos(lam-lam0);   
+   x      = cosphi0*x1+sinphi0*sinphi;   
+   y      = -cosphi*sin(lam-lam0);   
+   z      = -sinphi0*x1+cosphi0*sinphi;
+
+   /* params for wind rotation alpha */
+
+   cc=cosphi*coslamr;   
+   num=cosphi*sinlamr;  
+   den=cosphi0*cc+sinphi0*sinphi;
+
+   tlm=atan2(num,den);
+
+   /* parms for lat/lon -> i,j */
+
+   bigphi = atan(z/(sqrt(x*x+y*y)))*r2d;   
+   biglam = atan(y/x)*r2d;
+
+   idim = im*2-1;   
+   jdim = jm*2-1 ;
+
+   *grdi  = (biglam/dlam)+(idim+1)*0.5;   
+   *grdj  = (bigphi/dphi)+(jdim+1)*0.5;   
+   *grdi  = (*grdi+1)*0.5-1;   
+   *grdj  = (*grdj+1)*0.5-1;
+
+   *alpha = asin( ( sinphi0*sin(tlm)) / cosphi ) ;
+ 
+/*   printf("qqq %6.2f %6.2f %6.2f %6.2f %g %g %g %g\n",    
+       grdlon,grdlat,*grdi,*grdj,*alpha,tlm*r2d,cosphi,sinphi0); 
+*/
+
+}
+</code></pre></ul>
+<br>
+<br>
+
+<a name="nmc"><b><i>NMC high accuracy polar stereo for SSM/I
+data</i></b></a><p>
+<ul>
+The polar stereo projection used by the original NMC models is
+not very precise because it assumes the earth is round
+(eccentricity = 0).  While this approximation was reasonable for
+coarse resolution NWP models, it is inadequate to work with
+higher resolution data such as SSM/I.<p>
+
+<i>Wind rotation has not been implemented!!!  Use only for scalar
+fields.</i><p>
+
+<ul><code>pdef ni nj pse slat slon polei polej dx dy sgn</code><p>
+
+<code>ni</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  = # points in x
+<br>
+<code>nj</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = # points in y <br>
+<code>slat</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = absolute value of the standard latitude
+<br>
+<code>slon</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = absolute value of the standard longitude
+<br>
+<code>pse</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  = polar stereo,
+"eccentric"<br>
+<code>polei</code>&nbsp;&nbsp;&nbsp;  = x index position of the pole (where (0,0) is the
+index of the first point vice the more typical (1,1) ) <br>
+<code>polej</code>&nbsp;&nbsp;&nbsp;  = y index position of the pole (where (0,0) is the
+index of the first point vice the more typical (1,1) ) <br>
+<code>dx</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = delta x in km <br>
+<code>dy</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = delta y in km <br>
+<code>sgn</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 1 for N polar stereo and -1
+for S polar
+stereo</ul><p>
+
+Source code in GrADS for the lon,lat -> i,j mapping:<p>
+<pre>
+</code>
+void ll2pse (int im, int jm, float *vals, float lon, float lat,   
+       float *grdi, float *grdj) {
+
+   /* Convert from geodetic latitude and longitude to polar stereographic      
+      grid coordinates.  Follows mapll by V. J. Troisi.         */   
+   /* Conventions include that slat and lat must be absolute values */   
+   /* The hemispheres are controlled by the sgn parameter */   
+   /* Bob Grumbine 15 April 1994. */
+
+   const rearth = 6738.273e3;   
+   const eccen2 = 0.006693883;  
+   const float pi = 3.141592654;
+
+   float cdr, alat, along, e, e2;
+   float t, x, y, rho, sl, tc, mc;
+   float slat,slon,xorig,yorig,sgn,polei,polej,dx,dy;
+
+   slat=*(vals+0);
+   slon=*(vals+1);
+   polei=*(vals+2);  
+   polej=*(vals+3);
+   dx=*(vals+4)*1000;
+   dy=*(vals+5)*1000;  
+   sgn=*(vals+6);
+
+   xorig = -polei*dx;
+   yorig = -polej*dy;
+
+   /*printf("ppp %g %g %g %g %g %g
+   %g\n",slat,slon,polei,polej,dx,dy,sgn);*/
+
+   cdr   = 180./pi;
+   alat  = lat/cdr;
+   along = lon/cdr;
+   e2    = eccen2;
+   e     = sqrt(eccen2);
+
+   if ( fabs(lat) > 90.)  {
+     *grdi = -1;
+     *grdj = -1;    
+     return;
+   }
+   else {
+     t = tan(pi/4. - alat/2.) /
+       pow( (1.-e*sin(alat))/(1.+e*sin(alat)) , e/2.);
+
+     if ( fabs(90. - slat) < 1.E-3) {
+       rho = 2.*rearth*t/
+     pow( pow(1.+e,1.+e) * pow(1.-e,1.-e) , e/2.);
+       }
+       else {
+         sl = slat/cdr;
+         tc = tan(pi/4.-sl/2.) /
+         pow( (1.-e*sin(sl))/(1.+e*sin(sl)), (e/2.) );
+         mc = cos(sl)/ sqrt(1.-e2*sin(sl)*sin(sl) );
+         rho = rearth * mc*t/tc;
+       }
+
+       x = rho*sgn*cos(sgn*(along+slon/cdr));
+       y = rho*sgn*sin(sgn*(along+slon/cdr));
+
+       *grdi = (x - xorig)/dx+1;
+       *grdj = (y - yorig)/dy+1;
+
+       /*printf("ppp (%g %g) (%g %g %g) %g
+     %g\n",lat,lon,x,y,rho,*grdi,*grdj);*/
+
+       return;
+   }
+
+}
+</code></pre></ul>
+<br>
+<br>
+
+<a name="csu"><b><i>CSU RAMS Oblique Polar Stereo
+Grids</i></b></a><p>
+<ul>
+
+The CSU RAMS model uses an oblique polar stereo projection.  This
+projection is still being tested...<p>
+
+<ul>
+<code>
+pdef 26 16 ops 40.0 -100.0 90000.0 90000.0 14.0 9.0 180000.0
+180000.0</code><p>
+
+<code>26</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+= #pts in x <br>
+<code>16</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+= #pts in y <br>
+<code>ops</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   =
+oblique polar
+stereo<br>
+<code>40.0</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  = lat of ref
+point (14.0, 9.0) <br>
+<code>-100.0</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = lon of ref point (14.0, 9.0 (E is
+positive in
+GrADS, W is negative) <br>
+<code>90000.0</code>&nbsp;&nbsp;&nbsp; = xref offset [m] <br>
+<code>90000.0</code>&nbsp;&nbsp;&nbsp;  = yref offset [m]<br>
+<code>14.0</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = i of ref point
+<br>
+<code>9.0</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = j of
+ref
+point <br>
+<code>180000.0</code>&nbsp;  = dx [m] <br>
+<code>180000.0</code>&nbsp;  = dy [m]</ul><p>
+
+<i>Wind rotation has not been implemented!!!  Use only for scalar
+fields.</i><p>
+
+Source code in GrADS for the lon,lat -> i,j mapping:<p>
+<pre>
+<code>
+void ll2ops(float *vals, float lni, float lti, float *grdi, float *grdj) 
+   {
+
+   const float radius = 6371229.0 ;   
+   const float pi = 3.141592654;
+
+   float stdlat, stdlon, xref, yref, xiref, yjref, delx , dely;
+
+   float plt,pln;   
+   double pi180,c1,c2,c3,c4,c5,c6,arg2a,bb,plt1,alpha,
+   pln1,plt90,argu1,argu2;
+
+   double hsign,glor,rstdlon,glolim,facpla,x,y;
+
+   stdlat = *(vals+0);
+   stdlon = *(vals+1);
+   xref = *(vals+2);  
+   yref = *(vals+3);
+   xiref = *(vals+4);
+   yjref = *(vals+5);  
+   delx = *(vals+6);
+   dely = *(vals+7);
+
+   c1=1.0 ;
+   pi180 = asin(c1)/90.0;
+
+/* 
+c 
+c     set flag for n/s hemisphere and convert longitude to <0 ; 360> 
+   interval 
+c 
+*/
+   if(stdlat >= 0.0) {
+     hsign= 1.0 ;  
+   } else {
+     hsign=-1.0 ;
+   } 
+/* 
+c 
+c     set flag for n/s hemisphere and convert longitude to <0 ; 360> 
+   interval 
+c 
+*/  
+   glor=lni ;
+   if(glor <= 0.0) glor=360.0+glor ;
+   rstdlon=stdlon;  
+   if(rstdlon < 0.0) rstdlon=360.0+stdlon;
+
+/* 
+c 
+c     test for a n/s pole case 
+c 
+*/
+   if(stdlat == 90.0) {   
+     plt=lti ;
+     pln=fmod(glor+270.0,360.0) ;
+     goto l2000;
+   }
+
+  if(stdlat == -90.0) {
+     plt=-lti ;    
+     pln=fmod(glor+270.0,360.0) ;
+     goto l2000;
+   }
+
+/* 
+c 
+c     test for longitude on 'greenwich or date line' 
+c 
+*/  
+   if(glor == rstdlon) {
+     if(lti > stdlat) {      
+       plt=90.0-lti+stdlat;
+       pln=90.0;
+     } else {
+       plt=90.0-stdlat+lti;
+       pln=270.0;;
+     }   
+     goto l2000;
+   }
+
+   if(fmod(glor+180.0,360.0) == rstdlon) {    
+     plt=stdlat-90.0+lti;
+     if(plt < -90.0) {
+       plt=-180.0-plt;  
+       pln=270.0;
+     } else {
+       pln= 90.0;
+     }
+     goto l2000;
+   }
+
+/* 
+c 
+c     determine longitude distance relative to rstdlon so it belongs to 
+c     the absolute interval 0 - 180 
+c 
+*/
+   argu1 = glor-rstdlon;
+   if(argu1 > 180.0) argu1 = argu1-360.0;
+   if(argu1 < -180.0) argu1 = argu1+360.0;
+
+/* 
+c 
+c     1. get the help circle bb and angle alpha (legalize arguments) 
+c 
+*/
+
+   c2=lti*pi180 ;
+   c3=argu1*pi180 ;
+   arg2a = cos(c2)*cos(c3) ;  
+   if( -c1 > arg2a ) arg2a = -c1 ; /* arg2a = max1(arg2a,-c1)  */  
+   if(  c1 < arg2a ) arg2a = c1 ; /* min1(arg2a, c1)         */
+   bb = acos(arg2a) ;
+
+   c4=hsign*lti*pi180 ;
+   arg2a = sin(c4)/sin(bb) ;
+   if( -c1 > arg2a ) arg2a = -c1 ; /* arg2a = dmax1(arg2a,-c1) */
+   if(  c1 < arg2a ) arg2a = c1  ; /* arg2a = dmin1(arg2a, c1) */
+   alpha = asin(arg2a) ; 
+/* 
+c 
+c     2. get plt and pln (still legalizing arguments) 
+c 
+*/
+   c5=stdlat*pi180 ;
+   c6=hsign*stdlat*pi180 ;  
+   arg2a = cos(c5)*cos(bb) + sin(c6)*sin(c4) ;
+   if( -c1 > arg2a ) arg2a = -c1 ; /* arg2a = dmax1(arg2a,-c1) */
+   if(  c1 < arg2a ) arg2a = c1  ; /* arg2a = dmin1(arg2a, c1) */
+   plt1   = asin(arg2a) ;
+
+   arg2a = sin(bb)*cos(alpha)/cos(plt1) ;
+
+   if( -c1 > arg2a ) arg2a = -c1 ; /* arg2a = dmax1(arg2a,-c1) */
+   if(  c1 < arg2a ) arg2a =  c1 ; /* arg2a = dmin1(arg2a, c1) */  
+   pln1   = asin(arg2a) ;
+
+/* 
+c 
+c    test for passage of the 90 degree longitude (duallity in pln) 
+c         get plt for which pln=90 when lti is the latitude 
+c 
+*/   
+   arg2a = sin(c4)/sin(c6);
+   if( -c1 > arg2a ) arg2a = -c1 ; /* arg2a = dmax1(arg2a,-c1) */
+   if(  c1 < arg2a ) arg2a =  c1 ; /* arg2a = dmin1(arg2a, c1) */
+   plt90 = asin(arg2a) ;
+
+/* 
+c  
+c         get help arc bb and angle alpha 
+c 
+*/
+   arg2a = cos(c5)*sin(plt90) ;
+   if( -c1 > arg2a ) arg2a = -c1 ; /* arg2a = dmax1(arg2a,-c1) */
+   if(  c1 < arg2a ) arg2a =  c1 ; /* arg2a = dmin1(arg2a, c1) */
+   bb    = acos(arg2a) ;
+
+   arg2a = sin(c4)/sin(bb) ;
+   if( -c1 > arg2a ) arg2a = -c1 ; /* arg2a = dmax1(arg2a,-c1) */
+   if(  c1 < arg2a ) arg2a =  c1 ; /* arg2a = dmin1(arg2a, c1) */
+   alpha = asin(arg2a) ;
+
+/* 
+c 
+c         get glolim - it is nesc. to test for the existence of solution 
+c 
+*/
+   argu2  = cos(c2)*cos(bb) / (1.-sin(c4)*sin(bb)*sin(alpha)) ;
+   if( fabs(argu2) > c1 ) {    
+     glolim = 999.0;
+   } else {
+     glolim = acos(argu2)/pi180;
+   }
+
+/* 
+c 
+c
+     modify (if nesc.) the pln solution 
+c 
+*/
+   if( ( fabs(argu1) > glolim && lti <= stdlat ) || ( lti > stdlat ) ) {   
+     pln1 = pi180*180.0 - pln1;
+   } 
+/* 
+c 
+c     the solution is symmetric so the direction must be if'ed 
+c 
+*/
+   if(argu1 < 0.0) { 
+     pln1 = -pln1;
+   } 
+/* 
+c 
+c     convert the radians to degrees
+c 
+*/
+   plt = plt1/pi180 ;
+   pln = pln1/pi180 ;
+
+/* 
+c
+c     to obtain a rotated value (ie so x-axis in pol.ste. points east) 
+c     add 270 to longitude 
+c 
+*/  
+   pln=fmod(pln+270.0,360.0) ;
+
+ l2000:
+
+/* 
+c 
+c     this program convert polar stereographic coordinates to x,y ditto 
+c     longitude:   0 - 360  ; positive to the east 
+c     latitude : -90 -  90  ; positive for northern hemisphere 
+c     it is assumed that the x-axis point towards the east and 
+c     corresponds to longitude = 0 
+c 
+c     tsp 20/06-89 
+c 
+c     constants and functions 
+c 
+*/
+   facpla = radius*2.0/(1.0+sin(plt*pi180))*cos(plt*pi180);   
+   x = facpla*cos(pln*pi180) ;   
+   y = facpla*sin(pln*pi180)  ;
+
+   *grdi=(x-xref)/delx + xiref;
+   *grdj=(y-yref)/dely + yjref;
+
+   return;
+
+}
+</pre></code></ul>
+<br>
+<br>
+
+<a name="pit"><b><i>Pitfalls when using preprojected
+data</i></b></a><p>
+<ul>
+
+There are a few <i>gotchas</i> with using preprojected data:<p>
+
+<ol>
+<li>the units in the variable definition for the <code>u</code> and <code>v</code>
+components <b>must</b> be <code>33</code> and <code>34K</code> (the GRIB standard)
+respectively, e.g.,<p>
+
+<ul>
+<code>u 15 33</code>&nbsp;&nbsp;&nbsp;  u component of the wind at 15 pressure levels
+<br>
+<code>v 15 34</code>&nbsp;&nbsp;&nbsp; v component of the wind at 15 pressure
+levels</ul><p>
+
+<li>wind rotation is handled for polar stereo (N and S)
+preprojected data, but <i>not</i> for Lambert Conformal, as the Navy
+rotates the winds relative to earth.  This will have to be added
+later......
+
+<li>the <code>eta.u</code> <b>and</b> <code>ops</code> projection are still
+experimental...</ol>
+</ul>
+<br>
+<br>
+
+<a name="proj"><h2><u>GrADS Display Projections</u></h2></a>
+<ul>
+Now that you hopefully understand GrADS data grids, it is time to
+discuss display projections. Graphics in GrADS are calculated
+relative to the internal GrADS data grid <code>i,j</code> space, transformed
+to the display device coordinates (e.g., the screen) and then
+displayed.  That is, the i,j of the graphic element is converted
+to <code>lat/lon</code> and then to <code>x,y</code> on the screen via a map
+projection.<p>
+
+GrADS currently supports four <code>display projections</code>:<p>
+
+<ul>
+<li>lat/lon (or spherical);
+<li>N polar stereo (<a href="gradcomdsetmproj.html"><code>set mproj</a> nps</code>);
+<li>S polar stereo (<a href="gradcomdsetmproj.html"><code>set mproj</a> sps</code>);
+<li>the Robinson projection (set lon -180 180, set lat -90 90,
+set mproj robinson).</ul><p>
+
+As you can probably appreciate, the i,j-to-lon/lat-to-screen x,y
+for <code>lon/lat</code> displays is very simple and is considerably more
+complicated for N and S <code>polar stereo</code> projections.<p>
+
+In principle, a Lambert Conformal display projection could be
+implemented.  It just takes work and a simple user interface for
+setting up that display projection.  Actually, the user interface
+(i.e., "set" calls) is the most difficult problem...
+</ul>
+<br>
+<br>
+
+<a name="summary"><h2><u>Summary and Plans</u></h2></a>
+
+<ul>
+GrADS handles map projections in two different ways.  The first
+is preprojected data where the fields are <i>already</i> on a projection
+(e.g., Lambert Conformal).  It is fairly straightforward to
+implement other preprojected data projections and we will be
+fully implementing the NMC eta grid both staggered and
+unstaggered, "thinned" gaussian grids and the CSU RAMS oblique
+polar stereo projection.  The second is in how i,j graphics
+(calculated in "grid" space) are displayed on a map background. 
+Currently, only a few basic projections (lon/lat, polar stereo
+and robinson) are supported, but perhaps the development group
+will tackle this problem.</ul>
+
+

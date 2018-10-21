@@ -1,0 +1,29 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<H2><B>set parea</B></H2><P>
+<code>set parea <i>xmin xmax ymin ymax</i></code><p>
+
+The command specifies the area for plotting contour plots, maps, or line
+graphs. This area does not include axis labels, titles, etc., so if you
+need to see those, provide for an adequate margin. <p>
+
+The region is specified in terms of virtual page units. By default, the
+virtual page is equal to the real page, so the units are approximately
+inches on the real page. <p>
+
+Maps are scaled to fit within the plotting area such that their correct
+aspect ratio is maintained. Thus, the map will not fill the entire
+plotting area except under certain lat/lon ranges. A line graph or a
+contour plot without a map will be scaled to fit entirely within the
+specified plotting area. <p>
+
+By default, an appropriate plotting area is chosen depending on the type
+of graphics output. To return to this default, enter: <p>
+
+<dd><code>set parea off </code><p>
+
+It is not appropriate to use this command to put multiple plots on one
+page. It is better to use the <a href="gradcomdsetvpage.html"><code>set
+vpage</code></a> command. <p>
+<H3>Usage Note</H3><P>
+<H3>Examples</H3><P>

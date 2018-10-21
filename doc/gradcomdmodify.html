@@ -1,0 +1,37 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+
+<link rel="stylesheet" href="GrADS.css">
+
+<body bgcolor="e0f0ff">
+<h2>modify</h2>
+<span class="code">modify <i>varname type</i></span> 
+<p class="plaintext"> This command defines a climatological variable, which is 
+  year-independent. <span class="code"><i>varname</i></span> is a defined grid. 
+  There are two options for <span class="code"><i>type</i></span>: 
+<ul>
+  <code>seasonal&nbsp;&nbsp;&nbsp;</code> <span class="plaintext">- For creating 
+  monthly or multi-monthly climatologies</span><br>
+  <code>diurnal&nbsp;&nbsp;&nbsp;&nbsp;</code> <span class="plaintext">- For creating 
+  climatologies over a time period less than a day<br>
+  </span>
+</ul>
+<p> 
+<h3>Usage Notes</h3>
+<h3>Example</h3>
+<p class="plaintext">Say you have a 50-year timeseries of monthly mean sea surface 
+  temperatures (a variable named sst with 600 time steps) and you want to create 
+  a climatology and then look at the monthly anomalies. First, set the time range 
+  for 1 to 12, to span a complete year. Second, define the variable &quot;sstclim&quot; 
+  which will contain the January mean in the first time step, the February mean 
+  in the second time set, etc. Then use 'modify' to turn 'sstclim' into a climatological 
+  variable. This means that the calendar year associated with 'sstclim' (the first 
+  year in the original sst data set) becomes a wild card. Then you can define 
+  the anomaly by subtracting the climatology from the original time series. The 
+  commands are as follows: </p>
+<p class="code"> 'set t 1 12'<br>
+  'define sstclim = ave(sst, t+0, t=600, 12)'<br>
+  'modify sstclim seasonal'<br>
+  'set t 1 last'<br>
+  'define anom = sst - sstclim'<br>
+</p>

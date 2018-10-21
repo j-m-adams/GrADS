@@ -1,0 +1,15 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<H2><B>set misswarn</B></H2>
+<P>
+<code>set misswarn <i>on|off fnum</i></code>
+<p>
+This command enables a warning message when GrADS is unable to open one of the data files  in a templated data set.  The <code><i>fnum</i></code> argument specifies which of the open files the warnings shall be applied to. The warning message will contain the  name of the data file
+that was missing. <p><H3>Example</H3>
+<code>open mydata.ctl
+<br />
+set misswarn off
+<br />
+set t 1 last
+<br />
+d var </code>

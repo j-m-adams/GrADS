@@ -1,0 +1,44 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set clip</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set clip</b></h2>
+<p>
+<code>set clip <i>xlo xhi ylo yhi</i> </code>
+
+<p>
+This command sets the coordinates for clipping the plot area for
+display and draw commands. The four arguments <code><i>xlo, xhi, ylo,
+yhi</i></code> are the clipping coordinates in real page inches.
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>The default clipping region is the area specified by the
+<a href="gradcomdsetparea.html"><code>set parea</code></a> command. 
+<code>set clip</code> overrides this default. 
+<p>
+<li>Every time a <a
+href="gradcomddisplay.html"><code>display</code></a> command is
+executed, GrADS sets the clipping area to the region specified by <a
+href="gradcomdsetparea.html"><code>set parea</code></a> or <code>set
+clip</code>, draws the graphic, then resets the clipping region to the
+entire page.
+<p>
+<li>
+The clipping region is reset to the default by entering <a
+href="gradcomdclear.html"><code>clear</code></a> or <a
+href="gradcomddisplay.html"><code>display</code></a>.
+</ol>
+<p>
+<h3>Examples </h3>
+
+</body>
+</html>
+
+
+

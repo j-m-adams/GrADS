@@ -1,0 +1,90 @@
+netcdf wrf_sample.nc {
+dimensions:
+	Time = UNLIMITED ; // (2 currently)
+	south_north = 249 ;
+	west_east = 249 ;
+	bottom_top = 25 ;
+variables:
+	float T(Time, bottom_top, south_north, west_east) ;
+		T:FieldType = 104 ;
+		T:MemoryOrder = "XYZ" ;
+		T:description = "perturbation potential temperature (theta-t0)" ;
+		T:units = "K" ;
+		T:stagger = "" ;
+	float P(Time, bottom_top, south_north, west_east) ;
+		P:FieldType = 104 ;
+		P:MemoryOrder = "XYZ" ;
+		P:description = "pressure" ;
+		P:units = "pascals" ;
+		P:stagger = "" ;
+	float T2(Time, south_north, west_east) ;
+		T2:FieldType = 104 ;
+		T2:MemoryOrder = "XY " ;
+		T2:description = "TEMP at 2 M" ;
+		T2:units = "K" ;
+		T2:stagger = "" ;
+	float HGT(Time, south_north, west_east) ;
+		HGT:FieldType = 104 ;
+		HGT:MemoryOrder = "XY " ;
+		HGT:description = "Terrain Height" ;
+		HGT:units = "m" ;
+		HGT:stagger = "" ;
+	float XLAT(Time, south_north, west_east) ;
+		XLAT:FieldType = 104 ;
+		XLAT:MemoryOrder = "XY " ;
+		XLAT:description = "LATITUDE, SOUTH IS NEGATIVE" ;
+		XLAT:units = "degree" ;
+		XLAT:stagger = "" ;
+	float XLONG(Time, south_north, west_east) ;
+		XLONG:FieldType = 104 ;
+		XLONG:MemoryOrder = "XY " ;
+		XLONG:description = "LONGITUDE, WEST IS NEGATIVE" ;
+		XLONG:units = "degree" ;
+		XLONG:stagger = "" ;
+
+// global attributes:
+		:TITLE = " OUTPUT FROM WRF V1.3 MODEL" ;
+		:START_DATE = "2002-06-11_00:00:00" ;
+		:WEST-EAST_GRID_DIMENSION = 250 ;
+		:SOUTH-NORTH_GRID_DIMENSION = 250 ;
+		:BOTTOM-TOP_GRID_DIMENSION = 25 ;
+		:DYN_OPT = 2 ;
+		:DIFF_OPT = 0 ;
+		:KM_OPT = 1 ;
+		:DAMP_OPT = 0 ;
+		:KHDIF = 0.f ;
+		:KVDIF = 0.f ;
+		:MP_PHYSICS = 3 ;
+		:RA_LW_PHYSICS = 1 ;
+		:RA_SW_PHYSICS = 1 ;
+		:BL_SFCLAY_PHYSICS = 1 ;
+		:BL_SURFACE_PHYSICS = 1 ;
+		:BL_PBL_PHYSICS = 1 ;
+		:CU_PHYSICS = 1 ;
+		:WEST-EAST_PATCH_START_UNSTAG = 1 ;
+		:WEST-EAST_PATCH_END_UNSTAG = 249 ;
+		:WEST-EAST_PATCH_START_STAG = 1 ;
+		:WEST-EAST_PATCH_END_STAG = 250 ;
+		:SOUTH-NORTH_PATCH_START_UNSTAG = 1 ;
+		:SOUTH-NORTH_PATCH_END_UNSTAG = 249 ;
+		:SOUTH-NORTH_PATCH_START_STAG = 1 ;
+		:SOUTH-NORTH_PATCH_END_STAG = 250 ;
+		:BOTTOM-TOP_PATCH_START_UNSTAG = 1 ;
+		:BOTTOM-TOP_PATCH_END_UNSTAG = 25 ;
+		:BOTTOM-TOP_PATCH_START_STAG = 1 ;
+		:BOTTOM-TOP_PATCH_END_STAG = 26 ;
+		:DX = 8000.f ;
+		:DY = 8000.f ;
+		:DT = 48.f ;
+		:CEN_LAT = 36.299995f ;
+		:CEN_LON = -116.f ;
+		:TRUELAT1 = 36.299999f ;
+		:TRUELAT2 = 36.299999f ;
+		:GMT = 0.f ;
+		:JULYR = 2002 ;
+		:JULDAY = 162 ;
+		:ISWATER = 16 ;
+		:MAP_PROJ = 1 ;
+		:MMINLU = "USGS" ;
+
+}

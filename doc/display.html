@@ -1,0 +1,129 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>Displaying Data in GrADS</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<a href="#DDP">Drawing Data Plots</a><br>
+<a href="#CTD">Clearing the Display</a><br>
+<a href="#GOT">Graphics Output Types</a><br>
+<a href="advdisplay.html">Advanced Display Options</a><br>
+<p>
+<hr>
+<a name="DDP"><h2>Drawing Data Plots</h2></a>
+
+The <code>display</code> command is how you actually display data (output
+expressions) plots via the graphics output window.  The command
+is:<p>
+
+<dd><code><a href="gradcomddisplay.html">display</a> <i>expression</i></code><p>
+
+or<p>
+
+<dd><code>d <i>expression</i></code><p>
+
+The simplest <code><i>expression</i></code> is a variable abbreviation.<p>
+
+If you display when <b>all</b> dimensions are fixed, you get a <b>single</b>
+value which is typed out.<p>
+
+If you display when <b>one</b> dimension varies, you get a <b>1-D line
+graph</b> by default.<p>
+
+If you display when <b>two</b> dimensions are varying, you get a <b>2-D
+contour plot</b> by default.<p>
+
+A variety of <a href="#GOT">plot types</a> are available in addition to the above
+defaults.<p>
+
+<a name="CTD"><h2>Clearing the Display</h2></a><p>
+
+GrADS will overlay the output from each display command. To clear
+the display, enter:<p>
+
+<dd><code><a href="gradcomdclear.html">clear</a></code> (or just <code>c</code>)<p>
+
+Issued without parameters, the <code>clear</code> command does pretty heavy
+duty clearing of many of the GrADS internal settings. Parameters
+can be added to limit what is cleared when using more advanced
+features, for example:<p>
+<ul>
+<code>c events</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; flushes the events
+buffer (e.g., mouse clicks)<br>
+<code>c graphics</code>&nbsp;&nbsp;&nbsp;&nbsp; clears the graphics, but <b>not</b> the
+widgets <br>
+<code>c hbuff</code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; clears
+the display buffer when in double buffer mode</ul><p>
+
+WARNING: If you make any error in the syntax of clear then
+GrADS
+does the full clear...<p>
+
+<a name="GOT"><h2>Graphics Output Types</h2></a>
+
+<p>
+Before you can display a graph of your data, you will need to set
+the type of plot you want and, probably, some other graphics
+parameters as well.
+
+<p>
+By default, when one dimension varies, you get a line graph, and
+when two dimensions vary, you get a contour plot.  These defaults
+can be changed by the command:
+
+<p>
+<ul>
+<code>
+<a href="gradcomdsetgxout.html">set gxout</a> <i>graphics_type</i>
+</code>
+</ul>
+
+<p>
+Some examples of <code><i>graphics_type</i></code> are <code>contour,
+shaded, grid, bar, vector,</code> or <code>streamline</code>. For a
+complete list, see the <a href="gradcomdsetgxout.html">reference
+page</a>.
+
+<p>
+There are many options that can be set to control how the
+data will be displayed for each <code><i>graphics_type</i></code>.  
+
+<p>
+For the graphics output types <code>vector, stream,</code> and
+<code>barb</code>, the plotting routines need two result grids, where the
+first result grid is treated as the U component, and the second result
+grid is treated as the V component. These two result grids are
+provided to the <a href="gradcomddisplay.html">display</a> command by
+entering two expressions separated by a semicolon:
+<p>
+<ul>
+<code>
+display u ; v<br>
+display ave(u,t=1,t=10) ; ave(v,t=1,t=10)<br>
+</code>
+</ul>
+
+<p>
+For the graphics output types <code>vector</code> and
+<code>stream</code>, you can specify a third result grid that will be used to
+colorize the vectors or streamlines:
+
+<p>
+<ul>
+<code>
+display u ; v ; mag(u,v)<br>
+display u ; v ; hcurl(u,v)<br> 
+</code>
+</ul>
+
+<p>
+For a graphics output type <code>wxsym</code>, each value at a station
+location is assumed to be a wx symbol code number. To see a chart of
+all available wx symbols and their corresponding code numbers, run the
+sample script <code>wxsym.gs</code>.
+
+</body>
+</html>
+

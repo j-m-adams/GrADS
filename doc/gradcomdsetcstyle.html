@@ -1,0 +1,49 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set cstyle</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set cstyle</b></h2>
+<p>
+<code>set cstyle <i>style</i></code>
+
+<p>
+Sets the contour linestyle. <code><i>style</i></code> options are:
+
+<p>
+<ul>
+<code>0 </code>- no contours <br>          
+<code>1 </code>- solid <br>          
+<code>2 </code>- long dash <br>  
+<code>3 </code>- short dash <br>  
+<code>4 </code>- long dash, short dash <br>  
+<code>5 </code>- dotted <br>  
+<code>6 </code>- dot dash <br>  
+<code>7 </code>- dot dot dash <br>  
+</ul>
+
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li><code>set cstyle</code> is reset by entering <a
+href="gradcomdclear.html"><code>clear</code></a> or <a
+href="gradcomddisplay.html"><code>display</code></a>.
+<p>
+<li><code>set cstyle 0</code> will generate the following message:
+<code>"WARNING cstyle = 0 ; no lines will be plotted; I suggest 1
+..."</code>. However, it may be used with <a
+href="gradcomdsetcmark.html"><code>set cmark</code></a> for drawing a
+'line' plot with marks at all the data points that are not connected
+by a line.
+</ol>
+
+<p>
+<h3>Examples </h3>
+
+
+</body>
+</html>

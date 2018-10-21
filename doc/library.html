@@ -1,0 +1,316 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Script Library</title>
+<link rel="stylesheet" href="GrADS.css">
+<style type="text/css">
+<!--
+.style1 {color: #990000}
+-->
+</style>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+<center>
+  <h2 class="banner18">GrADS Script Library</h2>
+</center>
+<p>
+<table border=1 bordercolor=#6699ff cellpadding=3>
+  <tr> 
+    <td valign=top border=1 class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/basemap.gs">basemap.gs</a>    </td>
+    <td class="plaintext">Overlays a land or ocean mask that exactly fits the 
+      coastal outlines. Requires the following supplemental data files:<br>
+      <a href="ftp://cola.gmu.edu/grads/scripts/lpoly_lowres.asc">lpoly_lowres.asc</a> 
+      and <a href="ftp://cola.gmu.edu/grads/scripts/lpoly_mres.asc">lpoly_mres.asc</a> 
+      and <a href="ftp://cola.gmu.edu/grads/scripts/lpoly_hires.asc">lpoly_hires.asc</a><br>
+      <a href="ftp://cola.gmu.edu/grads/scripts/opoly_lowres.asc">opoly_lowres.asc</a> 
+      and <a href="ftp://cola.gmu.edu/grads/scripts/opoly_mres.asc">opoly_mres.asc</a> 
+      and <a href="ftp://cola.gmu.edu/grads/scripts/opoly_hires.asc">opoly_hires.asc</a><br>  
+      See instructions in script header for using <a href="ftp://cola.gmu.edu/grads/scripts/lpoly_US.asc">lpoly_US.asc</a> 
+      to mask out non-US areas. </td>
+  </tr>
+  <tr>
+    <td valign=top class="plaintext"><a href="ftp://cola.gmu.edu/grads/scripts/box_and_whisker.gs">box_and_whisker.gs</a></td>
+    <td class="plaintext">Demonstrates  how to use gxout bar and errbar to draw a box and whisker plot</td>
+  </tr>
+  <tr> 
+
+    <td valign=top class="plaintext"> <p><a href="ftp://cola.gmu.edu/grads/scripts/cbar.gs">cbar.gs</a> 
+      
+      and <br>
+      
+      <a href="ftp://cola.gmu.edu/grads/scripts/cbarn.gs">cbarn.gs</a> 
+            <br>
+            <a href="ftp://cola.gmu.edu/grads/scripts/cbarm.gs">cbarm.gs</a></p>      </td>
+
+    <td class="plaintext">Scripts to draw a long rectangular color legend next 
+
+      to shaded plots. <br>
+      cbar.gs is the original version -- just the filled rectangles with labels<br>
+      cbarn has some added features and arguments -- it draws outlines and triangular 
+
+      endpoints<br>
+      cbarm will look better if using 30+ colors -- labels are drawn at appropriate intervals</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/cbarc.gs">cbarc.gs</a>    </td>
+
+    <td class="plaintext">Draws a small fan-shaped color legend in the corner 
+
+      of shaded plots.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/cbar_l.gs">cbar_l.gs</a> 
+      <br>
+      <a href="ftp://cola.gmu.edu/grads/scripts/cbar_line.gs">cbar_line.gs</a> 
+      <br>
+      <a href="ftp://cola.gmu.edu/grads/scripts/cbar_line2.gs">cbar_line2.gs      </a><br> </td>
+
+    <td class="plaintext">Scripts to draw a legend for line graphs.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/cmap.gs">cmap.gs</a><br>    </td>
+
+    <td class="plaintext">Creates a color table. See additional <a href="ftp://cola.gmu.edu/grads/scripts/cmapdoc">documentation</a>.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/connect_the_dots.gs">connect_the_dots.gs</a><br>    </td>
+
+    <td class="plaintext">Draws a line connecting user's mouse clicks.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/define_colors.gs">define_colors.gs</a><br>    </td>
+
+    <td class="plaintext">Defines a variety of colors using the <a href="gradcomdsetrgb.html"><span class="code">set 
+
+      rgb</span></a> command.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/defval_demo.gs">defval_demo.gs</a><br>    </td>
+
+    <td class="plaintext">Illustrates the use of <a href="gradcomdquery.html"><span class="code">q 
+
+      defval</span></a> and <a href="gradcomdsetdefval.html"><span class="code">set 
+
+      defval</span></a> commands. </td>
+  </tr>
+
+  <tr>
+    <td valign=top class="plaintext"><a href="ftp://cola.gmu.edu/grads/scripts/draw_pdsi.gs">draw_pdsi.gs</a></td>
+    <td class="plaintext">Demonstrates a  way to use the shapefile interface in GrADS by drawing the Palmer Drought Severity Index (PDSI) values for U.S. climate divisions.</td>
+  </tr>
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/font.gs">font.gs</a><br>    </td>
+
+    <td class="plaintext">Displays all the characters in a font set.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/isen.gs">isen.gs</a><br>    </td>
+
+    <td class="plaintext">Displays a field interpolated to a specified isentropic 
+
+      level.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/lats4d.gs">lats4d.gs</a><br>    </td>
+
+    <td class="plaintext">Writes NetCDF, HDF-SDS or GRIB files from GrADS. See 
+
+      additional <a href="http://dao.gsfc.nasa.gov/software/grads/lats4d/">documentation</a>.</td>
+  </tr>
+
+  <tr>
+
+    <td valign=top class="plaintext"><a href="ftp://cola.gmu.edu/grads/scripts/makebg.gs">makebg.gs</a></td>
+
+    <td class="plaintext">Creates a background map image that shows topographic 
+
+      texture. It requires a DODS-enabled version of GrADS and also uses the external 
+
+      ImageMagick utility &quot;combine&quot;.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/map.gs">map.gs</a><br>    </td>
+
+    <td class="plaintext">Automates settings for a variety of useful map projections.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/mconv.gs">mconv.gs</a><br>    </td>
+
+    <td class="plaintext">Calculates moisture convergence.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top border=1 class="plaintext"><a href="ftp://cola.gmu.edu/grads/scripts/meteogram_subset_GDS.gs">meteogram_subset_GDS.gs</a><br>
+      <a href="ftp://cola.gmu.edu/grads/scripts/meteogram_GDS.gs">meteogram_GDS.gs</a></td>
+
+    <td class="plaintext">These scrips draw a 10-day meteogram based on NCEP GFS forecast 
+      data, which is accessed through the GrADS Data Server. First run meteogram_subset_GDS.gs  with an OPeNDAP-enabled build of GrADS  to download the data to a local file. Then run meteogram_GDS.gs to draw the meteogram. </td>
+  </tr>
+
+  <tr>
+    <td valign=top class="plaintext"><a href="ftp://cola.gmu.edu/grads/scripts/narropen.gs">narropen.gs</a></td>
+    <td class="plaintext">This script uses command line arguments to build a data descriptor file   to open  pre-projected (lambert conformal) NARR netCDF data in GrADS (version 1.9b4 or later). </td>
+  </tr>
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/panels.gsf">panels.gsf</a> 
+
+      and<br>
+
+      <a href="ftp://cola.gmu.edu/grads/scripts/panels_demo.gs">panels_demo.gs</a>    </td>
+
+    <td class="plaintext">Scripts to create global variables that contain the 
+
+      'set vpage' commands for a multi-panel plot. These also illustrate the <a href="gsf.html">dynamic 
+
+      loading of script functions</a>.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/script_math_demo.gs">script_math_demo.gs</a><br>    </td>
+
+    <td class="plaintext">Illustrates the use of the scripting language math funcitons.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/pinterp.gs">pinterp.gs</a><br>    </td>
+
+    <td class="plaintext">Displays a field interpolated to a specified pressure 
+
+      level.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/plotskew.gs">plotskew.gs</a><br>    </td>
+
+    <td class="plaintext">Draws a SkewT/LogP Diagram.</td>
+  </tr>
+
+  <tr>
+    <td valign=top class="plaintext"><a href="ftp://cola.gmu.edu/grads/scripts/rgb255.gs">rgb255.gs</a></td>
+    <td class="plaintext"><span class="style1">(Version 2.0.a6) </span>Defines a set of rainbow colors and draws a demo plot; uses <a href="ftp://cola.gmu.edu/grads/scripts/cbarm.gs">cbarm.gs</a> to draw a color bar</td>
+  </tr>
+  <tr>
+    <td valign=top class="plaintext"><a href="ftp://cola.gmu.edu/grads/scripts/sdfopen365.gs">sdfopen365.gs</a></td>
+    <td class="plaintext">This script opens creates an xdfopen-style descriptor for files with a 365-day calendar</td>
+  </tr>
+  <tr>
+    <td valign=top class="plaintext"><a href="ftp://cola.gmu.edu/grads/scripts/sdfopent.gs">sdfopent.gs</a></td>
+    <td class="plaintext">This script simulates the old 3-arg sdfopen for templating</td>
+  </tr>
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/stack.gs">stack.gs</a><br>    </td>
+
+    <td class="plaintext">Delays display while command sequence is entered by 
+
+      user, then executes all at once.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/string.gs">string.gs</a><br>    </td>
+
+    <td class="plaintext">Draws a string located at position of user's mouse click.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/sweat_index.gs">sweat_index.gs</a><br>    </td>
+
+    <td class="plaintext">Calculates the SWEAT Index given relative humidity, 
+
+      temperature, and wind components.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/traj.gs">traj.gs</a><br>    </td>
+
+    <td class="plaintext">Draws forward and backward trajectories in the horizontal 
+
+      plane.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/use.gs">use.gs</a><br>    </td>
+
+    <td class="plaintext">Similar to <a href="gradcomdopen.html"><span class="code">open</span></a> 
+
+      except it checks the list of current files to see if the specified file 
+
+      has already been opened. If it has been opened, it changes the default file 
+
+      number to the previously opened file instead of opening the same data file 
+
+      again. </td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/wxsym.gs">wxsym.gs</a><br>    </td>
+
+    <td class="plaintext">Displays available weather symbols.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/xanim.gs">xanim.gs</a><br>    </td>
+
+    <td class="plaintext">Controls an animated display.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/zinterp.gs">zinterp.gs</a><br>    </td>
+
+    <td class="plaintext">Displays a field interpolated to a specified height 
+
+      level.</td>
+  </tr>
+
+  <tr> 
+
+    <td valign=top class="plaintext"> <a href="ftp://cola.gmu.edu/grads/scripts/zoom.gs">zoom.gs</a><br>    </td>
+
+    <td class="plaintext">A simple way to zoom into a plot. </td>
+  </tr>
+</table>
+
+
+
+</body>
+
+</html>
+
+
+
+
+

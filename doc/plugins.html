@@ -1,0 +1,64 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>Plug-ins for GrADS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link href="GrADS.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+.red {
+        color: #C00;
+}
+body {
+        background-color: #e0f0ff;
+}
+</style>
+</head>
+<body text="#000000">
+
+<h1>Plug-ins for GrADS</h1>
+<p>GrADS 
+
+has begun to make use of plug-ins, which are software components (modules) that add specific features to an existing program. The use of plug-ins brings an improvement in performance and flexibility for users who want to create customized functions or features for GrADS. 
+The User Defined Plug-in Table (<a href="udpt.html">UDPT</a>) is a simple stand-alone text file that
+  contains all the information about plug-ins that GrADS requires. 
+  
+  Check the <a href="udpt.html">documentation</a> for more information about the proper syntax of UDPT records. 
+<h2>User-Defined Plug-in Functions</h2>
+<p>The first plug-in capability  was introduced in  <span class="red">version 2.1.1.b0</span>, and replaced the old interface for user-defined functions. The <a href="udp.html"><code>User Defined Plug-ins (UDP)</code></a> allow users to write their own GrADS functions in the computer language of their choice, and have them 
+  perform customized calculations and operations via the GrADS expression.  
+  The function arguments and data grids are no longer passed between GrADS and the user's program through data files written out to disk. With plug-ins, the user's code is dynamically loaded into GrADS when the function is invoked by the user, and the data is operated on while still sitting in memory.  The <a href="udp.html">documentation</a> has more information about how to compile, setup, and use user-defined plug-in functions. 
+<h2>Graphics Plug-ins</h2>
+<p><span class="red">Version 2.2.0</span> introduced a redesign of the GrADS code so that  the graphics capabilities are treated as plug-ins, with separate modules for the interactive display (in an X window) and printing  (creating graphics output in image and vector formats). The graphics plug-ins are part of the GrADS core source code -- they are not user-defined -- although the plug-in architecture certainly makes it possible for motivated users to create new interfaces for printing or display that could  be used instead of the options we provide. The plug-in architecture makes it possible to re-introduce the older graphics engines that were part of GrADS before the Cairo library was adopted. 
+The display and printing plug-ins are independent, so users can mix and match new and old depending on what is needed. The old pre-Cairo code for creating vector graphic output for printing (.ps and .eps) is no longer supported at all -- those output formats are now only supported through the Cairo interface. 
+<p><strong>Graphics Display</strong><br>
+For the interactive X-window display, users can choose between the newer Cairo interface or the tradtional X11 code that supports  widgets (buttons, drop menus, and rubber banding). The Cairo  plug-in creates a more visually pleasing graphic because it support fonts, anti-aliasing, transparent colors, and pattern filling. The  downsides of using Cairo for the display are: (1) it doesn't support the widgets,  (2) it slower than the old X11 code, and (3) a few users have  reported that it is buggy (fragmented and only partially rendered) for  X11 servers on some  desktop unix platforms. </p>
+<p><strong>Graphics Printing</strong><br>
+For printing -- creating graphical output in image or vector formats -- users can choose between  Cairo or the GD library.  The  GD interface is very fast and creates relatively small image files, but the image quality is low. The GrADS GD plug-in does not support fonts, anti-aliasing, transparent colors, or pattern filling.  If image quality is more important than the time it takes to create the files or the size of the output files, then the Cairo interface is recommended. The Cairo plug-in supports only .png for image output; the GD plug-in  supports .png as well as .gif and .jpg image formats. If you want a vector graphic  (.ps, .eps, .pdf, or .svg) then your only option is the Cairo plug-in.</p>
+<p><strong>GrADS without Graphics<br>
+</strong>We also provide a  plug-in that  is a no-op for all the graphics subroutines, called gxdummy. The gxdummy plug-in can be used when no graphics capabilities are needed, or  as a template for creating new graphics plug-ins. </p>
+<p><strong>Mix and Match</strong><br>
+All combinations of display and printing plug-ins are supported. Selecting the Cairo plug-ins for  display <em>and</em> printing guarantees that the output will exactly match what is seen in the display. Similarly, the selection of the old X11 and GD plug-ins will  ensure that the output matches the display, except for the widgets, which  are never printed. Specific user needs dictate which options are best. 
+<p><strong>How to Specify Graphics Plug-ins</strong><br>
+The user can specify which graphics plug-ins to use on startup with the following arguments: -d (for display) and -h (for printing; 'h' is for hardcopy). Each argument is followed by the name of the desired plug-in. The names are provided in the <a href="udpt.html">UDPT</a>. <br>
+<br>
+Examples are:<br>
+<code>
+&gt; grads -d Cairo -h GD <br>
+&gt; grads -d Cairo -h Cairo <br>
+&gt; grads -d X11 -h GD <br>
+&gt; grads -d X11 -h Cairo<br><br>
+</code>
+If the -h and -d options are not used, GrADS will look for graphics and display plug-ins named &quot;Cairo&quot; by default. It is  only necessary to use -h or -d when Cairo is not desired.
+<p><strong>Errors
+  </strong><br>
+  On startup, GrADS will look for information about plug-ins in two places: in 
+the file named by the GAUDPT environment variable, and in a file named &quot;udpt&quot; in the GADDIR directory. If there are any syntax errors in either of these  files, it is not a fatal error -- GrADS will issue a warning message with information about where the error is and what is wrong with the record, then it will ignore the record and continue. After all the available information about plug-ins has been parsed, GrADS will initialize the graphics package, with the message <code>&quot;GX Package Initialization&quot;</code>. It is at this point that GrADS will try to open and load the graphics plug-ins. If there are any problems, GrADS will return the message <code>&quot;GX Package Error: Could not find a record for the printing plug-in&quot;</code> or <code>&quot;GX Package Error: Could not find a record for the display plug-in&quot;</code> followed by some helpful information about the name of the  plug-in it is looking for, and the names of the files it parsed. These errors mean that something is wrong with the <a href="udpt.html">User-Defined Plug-in Tables</a>. Remember that the records in the GAUDPT file take precedence over records in the default udpt in GADDIR. If GrADS returns the message <code>&quot;GX Package Error: dlopen failed&quot;</code> it means the error is related to the shared object file itself -- it may be missing, corrupted, or the permissions may be wrong. 
+<p><strong>How to Query Graphics Plug-Ins</strong><br>
+The <code>'q udpt'</code> command will return a list of the plug-ins that GrADS found after parsing the <a href="udpt.html">User-Defined Plug-in Tables</a> on startup. <br>
+The <code>'q gxconfig'</code> command will return information about the graphics plug-ins currently in use: the name, shared object filename, and any relevant library version information.
+<p>
+<p>
+</body>
+</html>
+

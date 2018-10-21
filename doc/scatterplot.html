@@ -1,0 +1,57 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set gxout</title>
+
+
+<style type="text/css">
+.Red {
+	color: #900;
+}
+.italic {
+	color: #900;
+}
+.red {
+	color: #900;
+}
+body {
+	background-color: #e0f0ff;
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body text="#000000">
+
+<h2><b>Scatter Plots</b></h2>
+<p class="plaintext">
+
+This section describes how to draw a scatter plot and refine the display with controls over colors and axis labels. The commands are:
+<p><code>set gxout scatter<br>
+  display exp1;exp2<span class="italic">&lt;;exp3&gt;</span></code>
+<p class="plaintext">
+Where:
+<ul>
+
+<code>exp1&nbsp;&nbsp;&nbsp;</code>
+<span class="plaintext">A grid expression that determines the position of the scatter points on the X axis</span><br>
+
+<code>exp2&nbsp;&nbsp;&nbsp;</code>
+<span class="plaintext">A grid expression that determines the position of the scatter points on the Y axis</span><br>
+
+<code>exp3&nbsp;&nbsp;&nbsp;</code>
+<span class="plaintext">A grid expression that determines the color of the points in the scatter plot (</span><span class="red">GrADS version 2.0.2+</span>)<br>
+</ul>
+<h3>Usage Notes</h3>
+<ol>
+  <p class="fineprint"><span class="plaintext">The third argument to control the colorization of the points in the scatter diagram is new in GrADS version 2.0.2. </span>Use <code><a href="gradcomdsetclevs.html">set clevs</a></code> and <code><a href="gradcomdsetccols.html">set ccols</a></code> to control the range of values and color for each level. When using colorization of the scatter plot, if any of the color numbers is &lt; 0, no points will be drawn for that level.</p>
+  <p class="fineprint"><span class="plaintext">After a display of a scatter plot, GrADS will return four numbers: the
+    min and max   of the X axis values, followed by the min and max of the Y axis values.</span></p>
+  <p class="fineprint"><span class="plaintext">Use the <a href="gradcomdsetvrange.html"><code>set vrange</code></a> command to specificy the min and max of the X axis values  if you do not wish to use the defaults that GrADS selects. <br>
+    Use the <a href="gradcomdsetvrange2.html"><code>set vrange2</code></a> command to specificy the min and max of the Y axis values  if you do not wish to use the defaults that GrADS selects.    <br>
+  </span></p>
+  <p>&nbsp; </p>
+</ol>
+</body>
+</html>
+

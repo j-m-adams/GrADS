@@ -1,0 +1,130 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<title>GrADS Function: aave</title>
+<body  bgcolor="e0f0ff" text="#000000">
+
+<H2><b>aave()</b></H2><p>
+<p>
+This function takes an areal average over an X-Y region. The syntax is:
+<p>
+<code>aave(<i>expr, xdim1, xdim2, ydim1, ydim2</i>)</code>
+
+<p>
+where:
+<p>
+<ul>
+<code><i>expr</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>- any valid GrADS expression <br>
+<code><i>xdim1</i>&nbsp;&nbsp;&nbsp;</code>- starting X dimension expression <br>
+<code><i>xdim2</i>&nbsp;&nbsp;&nbsp;</code>- ending X dimension expression <br>
+<code><i>ydim1</i>&nbsp;&nbsp;&nbsp;</code>- starting Y dimension expression <br>
+<code><i>ydim2</i>&nbsp;&nbsp;&nbsp;</code>- ending Y dimension expression <br>
+</ul>
+<p>
+For global averaging, a shorthand may be used:
+
+<ul>
+<code>aave(<i>expr</i>, global)</code> or <br>
+<code>aave(<i>expr</i>, g)</code>
+</ul>
+is the same as
+<ul>
+<code>aave(<i>expr</i>, lon=0, lon=360, lat=-90, lat=90)</code>
+</ul> 
+
+<p>
+<H3>Usage Notes</H3>
+<p>
+<ol>
+<li>In the absence of missing data values, <code>aave</code> gives the
+same result as nested <code><a href="gradfuncave.html">ave</a></code> 
+functions in the X and Y dimensions. The expression
+<p>
+<dd>ave(ave(<i>expr</i>,x=1,x=72),y=1,y=46)</code>
+<p> 
+will produce the same numerical result as 
+<p>
+<dd><code>aave(<i>expr</i>,x=1,x=72,y=1,y=46)</code>
+<p>
+but the <code>aave</code> function is faster more efficient. 
+
+<p>
+<li>When there are missing data values, the <code>aave</code> function
+does <i><b>not</b></i> return the same result as nested <a
+href="gradfuncave.html"><code>ave</code></a> functions. To
+see this, consider the small grid:<p>
+<pre>
+        6       18      3       5
+
+        10      10      10      10
+
+        12      U       U       U
+</pre>
+where U represents the missing data value. If we apply nested
+<code><a href="gradfuncave.html">ave</a></code> functions, the inner
+<code><a href="gradfuncave.html">ave</a></code> will provide row
+averages of 8, 10, and 12. When the outside 
+<code><a href="gradfuncave.html">ave</a></code> is applied,
+the result will be an average of 10. When <code>aave</code> is used, all
+the values participate equally (in this case, we are assuming no weights
+applied to the final average), and the result is 84/9 or about 9.33.
+
+<p>
+<li>The <code>aave</code> function assumes that the world
+coordinates are longitude in the X dimension and latitude in the Y
+dimension, and does weighting in the latitude dimension by the
+difference between the sines of the latitude at the northern and
+southern edges of the grid box. For areal averaging without latitude weighting,
+use the <a href="gradfuncamean.html"><code>amean</code></a> function.
+<p>
+<li>Both the <code>aave</code> and <a
+href="gradfuncamean.html"><code>amean</code></a> functions use
+appropriate weighting to account for unevenly spaced grids.
+
+<p>
+<li>The <code>aave</code> function always does its average to the exact
+boundaries specified, in world coordinates. This is somewhat different
+from the <a href="gradfuncave.html"><code>ave</code></a> function, where
+the <code>-b</code> flag is used
+to get this behavior. If the boundaries specified via the dimension
+expressions do not fall on grid boundaries, then the boundary values are
+weighted appropriately in the average.
+
+<p>
+<li>When grid coordinates are used in the dimensions expressions,
+then they are converted to world coordinates for the boundary to be
+determined. This conversion is done using the scaling of the default
+file. Note that the conversion is done using the outside grid
+boundary, rather than the grid center. For example: 
+<p>
+<dd><code>aave(expr,x=1,x=72,y=1,y=46)</code>
+<p>
+Here the boundary would be determined by using the grid values 0.5, 72.5,
+0.5, and 46.5 which would be converted to world coordinates. If we assume
+that <code>x=1</code> is 0 degrees longitude and <code>x=72</code> is 355
+degrees longitude, then the averaging boundary would be -2.5 to 357.5
+degrees, which would cover the earth. In the Y dimension, when the
+boundary is beyond the pole, the <code>aave</code> function recognizes
+this and weights appropriately.
+
+</ol>
+<p>
+
+<H3>Examples</H3> 
+
+<ol>
+<li>See the <a href="gradfunctloop.html"><code>tloop</code></a> function
+for an example of creating a time
+series of area averages. 
+<p><li>An example of taking an area average of data only over land, given
+a
+mask grid: <p>
+
+<dd><code>aave(maskout(p,mask.3(t=1)),x=1,x=72,y=1,y=46) </code><p>
+
+In this case, it is assumed the mask grid has negative values at ocean
+points. <p>
+
+
+</body>
+</html>

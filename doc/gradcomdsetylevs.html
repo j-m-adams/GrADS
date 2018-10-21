@@ -1,0 +1,45 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set ylevs</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set ylevs</b></h2>
+
+<p>
+<code>set ylevs <i>lev1 lev2 ... levN</i></code>
+
+<p>
+Allows the user to specify each individual labeled tick mark for the Y-axis.
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>Reset by <a href="gradcomdclear.html">clear</a>, but not <a
+href="gradcomddisplay.html">display</a>.
+<p>
+<li><code>set ylevs</code> will override the tick mark interval specified with the
+<a href="gradcomdsetylint.html"><code>set ylint</code></a> command. 
+<p>
+<li>If you use <a href="gradcomdsetyaxis.html"><code>set
+yaxis</code></a> to specify labeled tick marks and also invoke
+<code>set ylevs</code>, then the tick marks <code><i>lev1
+... levN</i></code> specified with <code>set ylevs</code> will appear
+if they fall within the <code><i>start</i></code> and
+<code><i>end</i></code> range specified in the <a
+href="gradcomdsetyaxis.html"><code>set yaxis</code></a> command.
+<p>
+<li>This command does not apply to a date/time axis. 
+</ol>
+
+<p>
+<h3>Examples </h3>
+
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,63 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set ccolor</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set ccolor</b></h2>
+
+<p><ul>
+<code>set ccolor rainbow</code><br>
+<code>set ccolor <i>color#</i></code>
+</ul>
+
+<p>
+This command sets the color of the plotted contours. If
+<code>ccolor</code> is set to <code>rainbow</code>, then GrADS will
+use the <a href="16colors.html">default rainbow sequence</a> to assign
+colors to individual contours, resulting in a pleasing color palette
+that spans the range of the plotted values. To draw all contours with
+the same color, use the second option, where
+<code><i>color#</i></code> may be one of the <a
+href="16colors.html">16 GrADS default colors</a> or the number of a
+user-defined color created with <a href="gradcomdsetrgb.html">set
+rgb</a>.
+
+<p>
+<h3>Usage Notes</h3>
+
+<ol>
+<li><code>set ccolor</code> is reset by entering <a
+href="gradcomdclear.html"><code>clear</code></a> or <a
+href="gradcomddisplay.html"><code>display</code></a>.
+<p>
+<li>The color sequence for the <a href="16colors.html">default rainbow
+palette</a> is: <code>9 14 4 11 5 13 3 10 7 12 8 2 6</code>. This may
+be overridden by using the <a href="gradcomdsetrbcols.html">set rbcols</a>
+command.
+<p>
+<li>If the number of colors in the rainbow palette is smaller 
+than the number of contour levels, then some contour colors will be
+repeated -- i.e. not every contour color will be unique. Likewise, if
+the number of colors in the rainbow palette is larger than the number
+of contour levels, then some colors will be omitted.
+<p>
+<li>When overlaying contour plots, GrADS will automatically change the
+color of the contours for each successive plot in order to distinguish
+between different variables. The default order is: rainbow, foreground, 
+3 (green), 7 (yellow), 2 (red), 6 (magenta), 9 (purple), .... 
+
+</ol>
+
+<p>
+<h3>Examples </h3>
+
+
+</body>
+</html>
+
+
+
+

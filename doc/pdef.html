@@ -1,0 +1,769 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>PDEF - Displayng Pre-Projected Data in GrADS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="GrADS.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.style1 {color: #990000}
+-->
+</style>
+</head>
+
+<body bgcolor="e0f0ff">
+<p class="banner18">Use PDEF For Displaying Pre-Projected Data With GrADS</p>
+<p class="plaintext"><a href="#about">Display pre-projected data with PDEF</a><br>
+  <a href="#syntax">PDEF Syntax</a><br>
+  <a href="#interp">How grid interpolation works</a><br>
+  <a href="#rotation">How wind rotation works</a><br>
+  <a href="#bilin">PDEF BILIN option</a><br>
+  <a href="#file">PDEF GENERAL option</a><br>
+  <a href="#file">PDEF FILE option</a></p>
+<table width="650" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><p class="plaintext"><a name="about" class="item12bold">Display Pre-Projected 
+        Data with PDEF</a></p>
+      <p class="plaintext">Gridded data that are mapped onto a particular map 
+        projection are called 'pre-projected.' An example of pre-projected data 
+        is the output from a weather forecast model that is mapped onto a north 
+        polar stereographic grid. </p>
+      <p class="plaintext">In order to display pre-projected data on a map in 
+        GrADS, the descriptor file must contain a PDEF entry. A descriptor file 
+        that contains a PDEF record describes two different grids. The first grid 
+        is described by the PDEF record itself and is the &quot;native&quot; grid 
+        for the pre-projected data in the file. The second 
+        grid described in the desctiptor file is a rectilinear lat/lon grid, which 
+        is defined by the XDEF and YDEF records. The PDEF record describes the 
+        size of the native grid, and then describes how to convert from i/j of the native grid to the lat/lon values of the rectilinear grid described by XDEF and YDEF. The information in the PDEF entry describes the 
+        projection of the grid along with the projection constants or providing 
+        the mapping to the native grid in a supplementary data file. The rectilinear grid is used 
+        by GrADS internally and can be any size or resolution -- it is completely 
+        independent of the pre-projected or native grid. GrADS uses the information 
+        about the two grids to interpolate from the PDEF-described native grid 
+        to the XDEF/ YDEF-described rectilinear grid. All displays and analyses 
+        are done using the interpolated data on the rectilinear grid. The virtue 
+        of this approach is that all built in GrADS analytic functions (e.g., 
+        <a
+href="/grads/gadoc/gradfuncaave.html">aave</a>, <a href="/grads/gadoc/gradfunchcurl.html">hcurl</a>...) 
+        will work even though the data were not originally on a lon/lat grid. 
+        The downside is that you are looking at interpolated data. </p>
+      <p class="plaintext">It is possible to view the pre-projected data on its 
+        native grid. To do this, you omit the PDEF entry from the descriptor file, 
+        and use the XDEF and YDEF entries to describe the shape of the native 
+        grid. In this case, your displays must be drawn in i/j space without a 
+        map projection (<a href="/grads/gadoc/gradcomdsetmpdraw.html">set mpdraw</a> 
+        off). </p>
+      <p class="plaintext">When you do a <a
+href="/grads/gadoc/gradcomddisplay.html">display</a> of a pre-projected vector 
+        field, you must know whether the original vector components are defined 
+        relative to the data grid or relative to the Earth. If the data are grid-relative, 
+        they must be rotated to Earth-relative coordinates in order for the interpolation 
+        to work properly. See the &quot;Notes&quot; under each particular projection 
+        type for further information.</p>
+      <p class="item12bold"><a name="syntax"></a>PDEF Syntax</p>
+      <ul>
+        <table width="600" border="0" cellpadding="0" cellspacing="4" class="plaintext">
+          <tr bgcolor="#CCCCCC"> 
+            <td colspan="3"> <strong>PDEF <em>isize jsize</em> NPS<em> ipole jpole 
+              lonref gridinc</em><br>
+              PDEF <em>isize jsize</em> SPS<em> ipole jpole lonref gridinc</em></strong></td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td width="50" align="right">Example:</td>
+            <td colspan="2">PDEF 53 45 nps 27 49 -105 190.5</td>
+          </tr>
+          <tr bgcolor="b8c8d7"> 
+            <td align="right" valign="top">Args: </td>
+            <td colspan="2"> <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr class="plaintext"> 
+                  <td width="60" valign="top"><em>isize</em></td>
+                  <td>The size of the native grid in the x direction </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>jsize</em></td>
+                  <td>The size of the native grid in the y direction </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>ipole</em></td>
+                  <td>the i coordinate of the pole referenced from the lower left 
+                    corner, assumed to be at (1,1)</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>jpole</em></td>
+                  <td>the j coordinate of the pole referenced from the lower left 
+                    corner, assumed to be at (1,1)</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>lonref</em></td>
+                  <td>reference longitude</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>gridinc</em></td>
+                  <td>distance between gripoints in km</td>
+                </tr>
+              </table></td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td align="right" valign="top">Notes: </td>
+            <td colspan="2">Polar stereographic projections (N and S) are defined 
+              as at NCEP. Wind rotation has also been added so that vector data 
+              will be properly displayed. </td>
+          </tr>
+          <tr> 
+            <td>&nbsp;</td>
+            <td colspan="2">&nbsp;</td>
+          </tr>
+          <tr bgcolor="#CCCCCC"> 
+            <td colspan="3"><strong>PDEF <em>isize jsize</em> LCCR <em>latref 
+              lonref iref jref Struelat Ntruelat slon dx dy<br>
+              </em>PDEF <em>isize jsize</em> LCC <em>latref lonref iref jref Struelat 
+              Ntruelat slon dx dy</em><em> </em></strong></td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td align="right">Example:</td>
+            <td colspan="2">PDEF 103 69 lccr 30 -88 51.5 34.5 20 40 -88 90000 
+              90000</td>
+          </tr>
+          <tr bgcolor="b8c8d7"> 
+            <td align="right" valign="top" bgcolor="b8c8d7">Args: </td>
+            <td colspan="2"> <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr class="plaintext"> 
+                  <td width="60" valign="top"><em>isize</em></td>
+                  <td>The size of the native grid in the x direction </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>jsize</em></td>
+                  <td>The size of the native grid in the y direction </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>latref</em></td>
+                  <td>reference latitude</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>lonref</em></td>
+                  <td>reference longitude (in degrees, E is positive, W is negative)                  </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>iref</em></td>
+                  <td>i of ref point </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>jref</em></td>
+                  <td>j of ref point </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>Struelat</em></td>
+                  <td>S true lat </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>Ntruelat</em></td>
+                  <td>N true lat </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>slon</em></td>
+                  <td>standard longitude</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>dx</em></td>
+                  <td>grid X increment in meters</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>dy</em></td>
+                  <td>grid Y increment in meters</td>
+                </tr>
+              </table></td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td align="right" valign="top" bgcolor="ccdceb">Notes: </td>
+            <td colspan="2">Starting with version 1.9b4, the LCCR option supplements 
+              the use of PDEF with data on the Lambert Conformal projection. With 
+              LCCR, wind rotation has been implemented for data files with grid-relative 
+              winds instead of Earth-relative winds. Use LCC if your vector components 
+              are already Earth-relative. </td>
+          </tr>
+          <tr> 
+            <td>&nbsp;</td>
+            <td width="9%">&nbsp;</td>
+            <td width="82%">&nbsp;</td>
+          </tr>
+          <tr bgcolor="#CCCCCC"> 
+            <td colspan="3"><strong>PDEF <em>isize jsize </em>ETA.U<em> lonref 
+              latref dlon dlat</em></strong></td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td align="right">Example:</td>
+            <td colspan="2">PDEF 181 136 eta.u -97.0 41.0 0.38888888 0.37</td>
+          </tr>
+          <tr> 
+            <td align="right" valign="top" bgcolor="b8c8d7">Args: </td>
+            <td colspan="2" bgcolor="b8c8d7"> <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr class="plaintext"> 
+                  <td width="60" valign="top"><em>isize</em></td>
+                  <td>The size of the native grid in the x direction </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>jsize</em></td>
+                  <td>The size of the native grid in the y direction </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top">lonref</td>
+                  <td>reference longitude (in degrees, E is positive, W is negative)                  </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top">latref</td>
+                  <td>reference latitude</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top">dlon</td>
+                  <td>grid longitude increment in degrees</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top">dlat</td>
+                  <td>grid latitude increment in degrees</td>
+                </tr>
+              </table></td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td align="right" valign="top">Notes: </td>
+            <td colspan="2">The eta model native grid is awkward to work with 
+              because the variables are on staggered <i>and</i> non-rectangular 
+              grids. NCEP created "unstaggered" eta model fields, in which the 
+              variables are placed on a common rectangular grid. Wind rotation 
+              has also been added so that vector data will be properly displayed.            </td>
+          </tr>
+          <tr> 
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr bgcolor="#CCCCCC"> 
+            <td colspan="3"><strong>PDEF <em>isize jsize</em> PSE <em>slat slon 
+              ipole jpole dx dy sign</em></strong></td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td align="right" valign="top">Example:</td>
+            <td colspan="2">&nbsp;</td>
+          </tr>
+          <tr bgcolor="b8c8d7"> 
+            <td align="right" valign="top">Args: </td>
+            <td colspan="2"> <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr class="plaintext"> 
+                  <td width="60" valign="top"><em>isize</em></td>
+                  <td>The size of the native grid in the x direction </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top"><em>jsize</em></td>
+                  <td>The size of the native grid in the y direction </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top">slat</td>
+                  <td>absolute value of the standard latitude </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top">slon</td>
+                  <td>absolute value of the standard longitude</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top">ipole</td>
+                  <td>the i coordinate of the pole referenced from the lower left 
+                    corner, assumed to be at (0,0)</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top">jpole</td>
+                  <td>the j coordinate of the pole referenced from the lower left 
+                    corner, assumed to be at (0,0)</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top">dx</td>
+                  <td>grid X increment in km</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top">dy</td>
+                  <td>grid Y increment in km</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td valign="top">sign</td>
+                  <td>1 for NH; -1 for SH</td>
+                </tr>
+              </table></td>
+          </tr>
+          <tr> 
+            <td align="right" valign="top" bgcolor="ccdceb">Notes: </td>
+            <td colspan="2" bgcolor="ccdceb">The polar stereo projection used 
+              by the original NMC models is not very precise because it assumes 
+              the earth is round (eccentricity = 0). While this approximation 
+              was reasonable for coarse resolution NWP models, it is inadequate 
+              to work with higher resolution data such as SSM/I. <i>Wind rotation 
+              has not been implemented!!! Use only for scalar fields.</i></td>
+          </tr>
+          <tr> 
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr bgcolor="#CCCCCC"> 
+            <td colspan="3"><strong>PDEF <em>isize jsize</em> OPS <em> latref 
+              lonref xoff yoff iref jref dx dy </em></strong></td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td align="right">Example:</td>
+            <td colspan="2">PDEF 26 16 ops 40.0 -100.0 90000.0 90000.0 14.0 9.0 
+              180000.0 180000.0 </td>
+          </tr>
+          <tr bgcolor="b8c8d7"> 
+            <td align="right" valign="top" bgcolor="b8c8d7">Args: </td>
+            <td colspan="2"> <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+                <tr class="plaintext"> 
+                  <td width="60"><em>isize</em></td>
+                  <td>The size of the native grid in the x direction </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td><em>jsize</em></td>
+                  <td>The size of the native grid in the y direction </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td>latref</td>
+                  <td>reference latitude</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td>lonref</td>
+                  <td>reference longitude (in degrees, E is positive, W is negative)                  </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td>xoff</td>
+                  <td>lonref offset in meters</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td>yoff</td>
+                  <td>latref offset in meters</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td>iref</td>
+                  <td>the i coordinate of the reference point</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td>jref</td>
+                  <td>the j coordinate of the reference point</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td>dx</td>
+                  <td>grid X increment in km</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td>dy</td>
+                  <td>grid Y increment in km</td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td>dy</td>
+                  <td>grid Y increment in km</td>
+                </tr>
+              </table></td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td align="right" valign="top">Notes: </td>
+            <td colspan="2">The CSU RAMS model uses an oblique polar stereo projection. 
+              <i>Wind rotation has not been implemented!!! Use only for scalar 
+              fields.</i></td>
+          </tr>
+          <tr bgcolor="ccdceb">
+            <td align="right" valign="top" bgcolor="#FFFFFF">&nbsp;</td>
+            <td colspan="2" bgcolor="#FFFFFF">&nbsp;</td>
+          </tr>
+          <tr bgcolor="#CCCCCC">
+            <td colspan="3"><strong>PDEF <em>isize jsize</em> ROTLL<em> lonpol latpol dlon dlat lonll latll <br>
+            </em>PDEF <em>isize jsize</em> ROTLLR<em> lonpol latpol dlon dlat lonll latll </em></strong></td>
+          </tr>
+          <tr bgcolor="#CCCCCC"></tr>
+          <tr bgcolor="ccdceb">
+            <td align="right">Example:</td>
+            <td colspan="2">PDEF 500 330 rotllr -170.0  43.0   0.02   0.02  -5.5 -3.8</td>
+          </tr>
+          <tr bgcolor="b8c8d7">
+            <td align="right" valign="top" bgcolor="b8c8d7">Args: </td>
+            <td colspan="2"><table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+                <tr class="plaintext">
+                  <td width="60"><em>isize</em></td>
+                  <td>The size of the native grid in the x direction </td>
+                </tr>
+                <tr class="plaintext">
+                  <td><em>jsize</em></td>
+                  <td>The size of the native grid in the y direction </td>
+                </tr>
+                <tr class="plaintext">
+                  <td>lonpol</td>
+                  <td>Longitude of the rotated pole in degrees</td>
+                </tr>
+                <tr class="plaintext">
+                  <td>latpol</td>
+                  <td>Latitude of the rotated pole in degrees</td>
+                </tr>
+                <tr class="plaintext">
+                  <td>dlon</td>
+                  <td>grid spacing in longitudinal direction of the rotated grid in degrees</td>
+                </tr>
+                <tr class="plaintext">
+                  <td>dlat</td>
+                  <td>grid spacing in latitudinal direction of the rotated grid in degrees</td>
+                </tr>
+                <tr class="plaintext">
+                  <td>lonll</td>
+                  <td>longitude of the lower left corner, given in rotated space in degree</td>
+                </tr>
+                <tr class="plaintext">
+                  <td>latll</td>
+                  <td>latitude of the lower left corner, given in rotated space in degree</td>
+                </tr>
+
+            </table></td>
+          </tr>
+          <tr bgcolor="ccdceb">
+            <td align="right" valign="top">Notes: </td>
+            <td colspan="2" bgcolor="ccdceb"><p>(<font color="#990000">GrADS version 2.0</font>) The rotated lat/lon grid projection is described in the  <a href="http://www.cosmo-model.org/content/model/documentation/core/cosmo_userguide_5.04.pdf" target="_blank">COSMO documentation</a>, Chapter 3.3. The lower left corner, i.e. the first element in the data array, has to be the southwest corner.  It is  not possible to use a mirrored grid by setting dlon or dlat to a negative value.</p>            </td>
+          </tr>
+          
+          <tr bgcolor="ccdceb"> 
+            <td align="right" valign="top" bgcolor="#FFFFFF">&nbsp;</td>
+            <td colspan="2" bgcolor="#FFFFFF">&nbsp;</td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td colspan="3" align="left" valign="top" bgcolor="#CCCCCC"> <p><strong>PDEF<em> 
+                isize jsi</em>ze BILIN <em>format byteorder fname</em></strong></p></td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td align="right" valign="top">Example:</td>
+            <td colspan="2">PDEF 100 100 BILIN sequential binary-big ^mygrid.interp.values            </td>
+          </tr>
+          <tr bgcolor="b8c8d7"> 
+            <td align="right" valign="top" bgcolor="b8c8d7">Args:</td>
+            <td colspan="2"> <table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+                <tr class="plaintext"> 
+                  <td width="60"><em>isize</em></td>
+                  <td>The size of the native grid in the x direction </td>
+                </tr>
+                <tr class="plaintext"> 
+                  <td><em>jsize</em></td>
+                  <td>The size of the native grid in the y direction </td>
+                </tr>
+                <tr> 
+                  <td><em>format</em></td>
+                  <td>Must be either STREAM (direct access) or SEQENTIAL (fortran 
+                    formatted)</td>
+                </tr>
+                <tr> 
+                  <td valign="top"><em>byteorder</em></td>
+                  <td>If set to BINARY, byte odering is assumed to be same as 
+                    local machine<br>
+                    If set to BINARY-BIG, byte ordering is assumed to be big-endian<br>
+                    If set to BINARY-LITTLE, byte ordering is assumed to be little-endian</td>
+                </tr>
+                <tr> 
+                  <td valign="top"><em>fname</em></td>
+                  <td>The name of the supplementary file </td>
+                </tr>
+              </table></td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td align="right" valign="top">Notes:</td>
+            <td colspan="2">The supplementary file contains three lat-lon floating-point 
+              grids: i values, j values, and wind rotation values. The native grid  is assumed to have a corner (i,j) value of (1,1). The size of 
+              these grids must match the XDEF and YDEF entries in the descriptor 
+              file. </td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td align="right" valign="top" bgcolor="#FFFFFF">&nbsp;</td>
+            <td colspan="2" bgcolor="#FFFFFF">&nbsp;</td>
+          </tr>
+          <tr align="left" bgcolor="#CCCCCC">
+            <td colspan="3" valign="top"><strong>PDEF<em> isize jsize</em> GENERAL <em>num 
+              format byteorder fname</em></strong></td>
+          </tr>
+          <tr bgcolor="ccdceb">
+            <td align="right" valign="top">Example:</td>
+            <td colspan="2">PDEF 182 149  general 4 sequential binary-big ^mygrid.interp.values<br>
+              PDEF 15238 1 general 1 stream binary ^gtd.filepdef</td>
+          </tr>
+          <tr bgcolor="b8c8d7">
+            <td align="right" valign="top">Args:</td>
+            <td colspan="2"><table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+                <tr>
+                  <td><em>isize</em></td>
+                  <td>The size of the native grid in the x direction </td>
+                </tr>
+                <tr>
+                  <td><em>jsize</em></td>
+                  <td>The size of the native grid in the y direction </td>
+                </tr>
+                <tr>
+                  <td width="60"><em>num</em></td>
+                  <td>number of sets of interpolation grids supplied</td>
+                </tr>
+                <tr>
+                  <td><em>format</em></td>
+                  <td>Must be either STREAM (direct access) or SEQENTIAL (fortran 
+                    formatted)</td>
+                </tr>
+                <tr>
+                  <td valign="top"><em>byteorder</em></td>
+                  <td>If set to BINARY, byte odering is assumed to be same as 
+                    local machine<br>
+                    If set to BINARY-BIG, byte ordering is assumed to be big-endian<br>
+                    If set to BINARY-LITTLE, byte ordering is assumed to be little-endian</td>
+                </tr>
+                <tr>
+                  <td valign="top"><em>fname</em></td>
+                  <td>The name of the supplementary file; it may be mixed case. </td>
+                </tr>
+            </table></td>
+          </tr>
+          <tr bgcolor="ccdceb">
+            <td align="right" valign="top" bgcolor="ccdceb">Notes:</td>
+            <td colspan="2" bgcolor="ccdceb"><p>(<span class="style1">GrADS version 2.0.a3 and later</span>) The syntax and behavior of PDEF GENERAL is exactly like PDEF FILE, except that the convention for the native grid offset values in the pdef file is the same for all data formats. The offsets should be 1-based; the first grid point is assumed to have (i,j) values of (1,1), and  valid offset values are &gt; 0 and &lt;= <em>isize</em>*<em>jsize</em> .</p>
+              <p>Native grid offset values of -999 indicate not to use 
+        an input point for that portion of the calculation (thus you can apply 
+        less than the &quot;<em>num</em>&quot; number of interpolation points for some 
+        of the points). </p>
+              <p>See additional notes in the paragraphs below.</p></td>
+          </tr>
+          <tr align="left" bgcolor="#CCCCCC">
+            <td colspan="3" valign="top" bgcolor="#FFFFFF">&nbsp;</td>
+          </tr>
+          
+          <tr align="left" bgcolor="#CCCCCC"> 
+            <td colspan="3" valign="top"><strong>PDEF<em> isize jsize</em> FILE <em>num 
+              format byteorder fname</em></strong></td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td align="right" valign="top">Example:</td>
+            <td colspan="2">PDEF 182 149 file 4 sequential binary-big ^mygrid.interp.values<br>
+              PDEF 15238 1 file 1 stream binary ^gtd.filepdef</td>
+          </tr>
+          <tr bgcolor="b8c8d7"> 
+            <td align="right" valign="top">Args:</td>
+            <td colspan="2"><table width="100%" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+                <tr>
+                  <td><em>isize</em></td>
+                  <td>The size of the native grid in the x direction </td>
+                </tr>
+                <tr>
+                  <td><em>jsize</em></td>
+                  <td>The size of the native grid in the y direction </td>
+                </tr>
+                
+                <tr> 
+                  <td width="60"><em>num</em></td>
+                  <td>number of sets of interpolation grids supplied</td>
+                </tr>
+                <tr> 
+                  <td><em>format</em></td>
+                  <td>Must be either STREAM (direct access) or SEQENTIAL (fortran 
+                    formatted)</td>
+                </tr>
+                <tr> 
+                  <td valign="top"><em>byteorder</em></td>
+                  <td>If set to BINARY, byte odering is assumed to be same as 
+                    local machine<br>
+                    If set to BINARY-BIG, byte ordering is assumed to be big-endian<br>
+                    If set to BINARY-LITTLE, byte ordering is assumed to be little-endian</td>
+                </tr>
+                <tr> 
+                  <td valign="top"><em>fname</em></td>
+                  <td>The name of the supplementary file; it may be mixed case.                  </td>
+                </tr>
+              </table></td>
+          </tr>
+          <tr bgcolor="ccdceb"> 
+            <td align="right" valign="top">Notes:</td>
+            <td colspan="2" bgcolor="ccdceb"><p>For GrADS v2.0.a2 and earlier, <em>jsize</em> was fixed to be 1, and <em>isize</em> was the size of the native grid expressed as a vector (i.e., all gridpoints in the x-y grid). This mode for describing the native grid will continue to work with v2.0.a3+, but only if the native grid is in GRIB or binary format. For NetCDF and HDF formats, the <em>isize</em> and <em>jsize</em> args must match the X and Y dimensions of the native grid. </p>
+            <p><span class="style1">WARNING: The use of PDEF FILE may be incorrect!</span> A long-standing bug and incomplete documentation has led to different conventions for the native grid offset values in the pdef file for GRIB and non-GRIB data formats. For GRIB (1&amp;2), the offsets must be 0-based; the first grid point is assumed to have (i,j) values of (0,0). For all other data types, the offsets must be 1-based; the first grid point is assumed to have (i,j) values of (1,1). Thus:<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for GRIB format: valid offset values are &gt;= 0 and &lt; <em>isize</em>*<em>jsize</em><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for other formats: valid offset values are &gt; 0 and &lt;= <em>isize</em>*<em>jsize</em><br>
+              To maintain backward compatibility, the bug will remain in GrADS as a feature, but the use of PDEF FILE has been deprecated as of version 2.0.a3 and a warning message will be displayed when a data set is opened that uses PDEF FILE. Note that if you use <a href="http://www.cpc.ncep.noaa.gov/products/wesley/grib2ctl.html">grib2ctl</a> or <a href="http://www.cpc.ncep.noaa.gov/products/wesley/g2ctl.html">g2ctl </a>to generate your pdef file, the offsets are correct. </p>
+            <p>Native grid offset values of -999 indicate not to use 
+        an input point for that portion of the calculation (thus you can apply 
+        less than the &quot;<em>num</em>&quot; number of interpolation points for some 
+        of the points). </p>
+            <p>See additional notes in the paragraphs below.</p></td>
+          </tr>
+        </table>
+      </ul>
+      <p class="item16"> <span class="item12bold"><strong><a name="interp"></a>How 
+        PDEF Grid Interpolation Works</strong></span><br>
+        <span class="plaintext">To illustrate how the data is interpolated from 
+        the native grid to the rectilinear grid, let's consider an example. Here 
+        are a set of relevant records from a descriptor file: <br>
+        PDEF 100 100 nps ...<br>
+        XDEF 181 linear -180 1<br>
+        YDEF 90 linear 0 1<br>
+        These three entries describe data on a native 100x100 North Polar stereographic 
+        projection and a rectilinear lat/lon grid that is 181 by 90 and has an 
+        interval of 1 degree in both lat and lon. Consider one point within the 
+        rectilinear grid, the point -90,40. GrADS calls an internal routine to 
+        calculate the i and j values in the native grid that correspond to this 
+        lat/lon point. Let's say we get i,j values of 31.24 and 67.88. To do the 
+        interpolation to the lat/lon point -90,40, GrADS uses the data values 
+        from the following four native grid points: 31,67 - 31,68 - 32,67 - 32,68. 
+        Bi-linear interpolation is used within this grid box to get down to the 
+        position 31.24,67.88. The interpolation is linear within the i,j grid. 
+        When a descriptor file is opened that contains a PDEF record, GrADS calculates 
+        the i/j values in the native grid that correspond to the lat/lon pair 
+        for each gridpoint in the rectilinear grid. </span></p>
+      <p class="item16"> <span class="item12bold"><strong><a name="rotation"></a>How 
+        PDEF Wind Rotation Works</strong></span><br>
+        <span class="plaintext">There is a third value calculated for every lat/lon 
+        point, and that is the wind rotation value. With some &quot;pre-projected&quot; 
+        or native grids, the winds are given relative to the i/j space and not 
+        the lat/lon space. To insure correct interpolation, the winds must be 
+        rotated to lat/lon space. This is done by determining a rotation amount 
+        for each lat/lon point. When u or v wind components are displayed, the 
+        values are not just interpolated but also rotated. </span></p>
+      <p class="plaintext">To do the wind rotation properly, GrADS requires both 
+        the u and v components. Even if you are just displaying u, GrADS has to 
+        retrieve (internally) both the u and v component in order to do the rotation 
+        calculation. GrADS determines how to match u and v variables by checking 
+        the<em> units</em> field of the variable record in the descriptor file. 
+        The u variable must have a <em>units</em> value of 33, and the v variable 
+        must have a <em>units</em> value of 34. (This is the GRIB convention). 
+        If there are more than one u/v pairs, secondary <em>units</em> values 
+        are used. For example: 
+      <ul>
+        <table width="600" border="0" cellpadding="0" cellspacing="0" class="plaintext">
+          <tr> 
+            <td width="30">u</td>
+            <td width="15" align="right">18</td>
+            <td width="50" align="center"> <p>33,100</p></td>
+            <td > U-Wind Components on Pressure Levels</td>
+          </tr>
+          <tr> 
+            <td>v</td>
+            <td align="right">18</td>
+            <td align="center">34,100</td>
+            <td> V-Wind Components on Pressure Levels</td>
+          </tr>
+          <tr> 
+            <td>u10</td>
+            <td align="right">0</td>
+            <td align="center"> 33,105</td>
+            <td>10 Meter U Wind</td>
+          </tr>
+          <tr> 
+            <td>v10</td>
+            <td align="right">0</td>
+            <td align="center">34,105</td>
+            <td>10 Meter V Wind</td>
+          </tr>
+        </table>
+      </ul>
+      <p class="plaintext">might be some variable records in the descriptor file. 
+        If wind rotation is called for, u and v would be paired, and u10 and v10 
+        would be paired (since the secondary values would be checked, ie, the 
+        105,100 values). </p>
+      <p class="item16"><span class="item12bold"><strong><a name="bilin"></a>The 
+        PDEF BILIN Option</strong></span><br>
+        <span class="plaintext">When a descriptor file is opened that contains 
+        a PDEF record, we have explained that GrADS internally generates three 
+        grids, each one the size of the rectilinear lat/lon grid. The first two 
+        grids contain the i and j values (respectively) from the native grid that 
+        correspond to each grid point in the rectilinear grid; the third grid 
+        contains wind rotation values. But this only works for a small set of 
+        well-defined native grids. GrADS will generate these three internal grids 
+        automatically for polar stereographic, lamber conformal, and some eta 
+        grids. If the native grid for your data is not one of the predefined projections, 
+        it is still possible for GrADS to handle the data. All you have to do 
+        is supply these three grids to GrADS with a supplementary data file and 
+        use the bilin option in your PDEF record. </span></p>
+      <p class="plaintext">The supplementary file will contains three lat-lon 
+        floating-point grids sized according to the XDEF and YDEF records in the 
+        descriptor file.The three grids contain: i values, j values, and wind 
+        rotation values. A value of -999 in the i-value grid indicates not to 
+        interpolate to that lat-lon point (will end up missing on output) and 
+        a value of -999 in the wind-rotation grid indicates not to do wind rotation 
+        for that point. If the wind-rotation grid is all -999 values, no rotation 
+        is ever done and a flag is set not to even attempt rotation.</p>
+      <p class="item16"><span class="item12bold"><strong><a name="file"></a>The 
+        PDEF GENERAL Option (and the PDEF FILE option)</strong></span><br>
+        <span class="plaintext">All of the PDEF examples discussed so far involve 
+        the same method for grid interpolation: a grid point value in the rectilinear 
+        grid is calculated by finding the four neighboring grid points in the 
+        native grid and averaging them, with weights applied bi-linearly according 
+        to their proximity to the to rectilinear grid point. The PDEF GENERAL option 
+        and the PDEF FILE option generalize this method so that an arbitrary number of native grid point 
+        values and their weights are averaged to generate the interpolated rectilinear 
+        grid point values. The index values for the native grid values that are 
+        to be used and their weights are specified by the user in a supplementary 
+        data file (<em>fname</em>). The  FILE and GENERAL options are identical except for one detail: they have different conventions for the native grid offset values in the supplementary file (see the &quot;Notes&quot; in the syntax tables above for specifics). <br>
+        </span></p>
+      <p class="plaintext">The <em>num</em> argument in the PDEF FILE entry specifies 
+        the number of native grid points that will be used to calcuate each interpolated 
+        rectilinear grid point value. For each <em>num, </em>the supplementary 
+        data file will contain two grids -- both will be the size of the rectilinear 
+        grid (as defined by XDEF and YDEF). The first grid contains the index 
+        or offset values that point to the native grid value that will be used 
+        in the interpolation; the second grid contains the weights for those native 
+        grid values. The first grid contains integer values, the second grid contains 
+        floating-point values. Finally, the supplementary data file must also 
+        contain one grid of floating-point wind rotation values. Thus if <em>num</em> 
+        equals 1, there will be 3 grids in <em>fname</em>. If <em>num</em> equals 
+        3, there will be 7 grids in <em>fname</em> (3 sets of 2 grids plus the 
+        wind rotation grid). </p>
+      <p class="plaintext">To do the grid interpolation, GrADS will first read 
+        the data in the native grid (vector) along with the values in the supplementary 
+        grids. To calculate the interpolated value for a particular lat-lon point, 
+        GrADS will get <em>num</em> native grid point values, multiply each by 
+        their weight, sum over all the weighted native grid points, and divide 
+        by the sum of the weights. </p>
+      <p class="plaintextbold">An Example: </p>
+      <p class="plaintext">The original data are set up as a vector of land points 
+        only, taken from a 1-degree lat/lon grid. There are 15238 land points 
+        in the native grid (vector). We use the PDEF FILE option to repopulate 
+        a rectilinear lat/lon grid with the land values, leaving the ocean grid 
+        points as missing. In this case, ther eis no interpolation done. The PDEF 
+        option is used simply to convert a vector of land points into a 2D grid 
+        with ocean points missing. The descriptor file looks like this: 
+      <ul>
+        <span class="plaintext"> DSET ^gswp_vegetation_parameters.nc<br>
+        DTYPE netcdf <br>
+        TITLE Monthly Vegetation parameters at 1x1 degree<br>
+        UNDEF 1.e+20<br>
+        PDEF 15238 1 file 1 stream binary ^gswp.filepdef<br>
+        XDEF 360 linear -179.5 1<br>
+        YDEF 150 linear -59.5 1<br>
+        ZDEF 1 linear 1 1<br>
+        TDEF 204 linear 00Z01jan1982 1mo<br>
+        VARS 1<br>
+        NDVI=&gt;ndvi 0 t,x Monthly vegetation index<br>
+        ENDVARS</span> 
+      </ul>
+      <p class="plaintext">The supplementary file gtd.filepdef contains three 
+        grids -- the first contains the index values that associate each location 
+        in the lat/lon grid with it's point in the vector. All of the ocean points 
+        will have a missing value of -999. The second grid will contain the weights, 
+        which will be 1 for land points, 0 for ocean points. The third grid will 
+        contain all missing values since wind rotation is not a issue in this 
+        example. Here is a descriptor file for the supplementary data file (a 
+        useful strategy for making sure you've got everything written out correctly):</p>
+      <ul>
+        <p class="plaintext">DSET ^gswp.filepdef<br>
+          TITLE PDEF file for GSWP Vegetation Parameters<br>
+          UNDEF -999<br>
+          XDEF 360 linear -179.5 1<br>
+          YDEF 150 linear -59.5 1<br>
+          ZDEF 1 linear 1 1 <br>
+          TDEF 1 linear 00z01jul1982 3hr<br>
+          VARS 3<br>
+          i 0 -1,40,4 Index Values<br>
+          w 0 99 Weights<br>
+          r 0 99 Wind Rotation Values<br>
+          ENDVARS</p>
+        <p></p>
+        <p>&nbsp;</p>
+      </ul>
+
+</td>
+  </tr>
+</table>
+<p class="plaintext">&nbsp;</p>
+</body>
+</html>

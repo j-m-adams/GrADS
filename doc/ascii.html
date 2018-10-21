@@ -1,0 +1,149 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>Controlling Colors in GrADS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+body {
+	background-color: #e0f0ff;
+}
+.red {
+	color: #900;
+}
+</style>
+</head>
+<body text="#000000">
+
+<h2><b>ASCII or Text Data and GrADS</b></h2>
+<p>&nbsp;</p>
+<p><font size=+1><b><i>Input ASCII data</i></b></font></p>
+<p>
+GrADS does not directly handle data in ASCII format -- there is no such thing as '<a href="http://iges.org/grads/gadoc/descriptorfile.html#DTYPE" target="pages">dtype</a> ascii'. ASCII data must be converted to into one of the binary data formats that are handled by GrADS. There are many ways to do this with a variety of programming/scripting languages and tools. Below is a very simple example of how you could do it using a GrADS script. 
+<p>Suppose you have an ascii file that contains a column of 100 numbers: 
+<pre>18864
+20844
+24124
+27388 
+36884
+39836
+...</pre>
+<p>Here is a how you would convert that to a binary file using GrADS. You must have a file open for this to work, any file will do.  </p>
+<pre>'open dummy.ctl'
+file = 'my_ascii_file.txt'
+datafile = 'my_binary_file.dat'
+'set gxout fwrite'
+'set fwrite -ap 'datafile
+'!/bin/rm -f 'datafile
+while (1)
+  res = read(file)
+  line1 = sublin(res,1)
+  line2 = sublin(res,2)
+  rc1 = subwrd(line1,1)
+  if (rc1); break; endif
+  val = subwrd(line2,1)
+  'd 'val
+endwhile<br>rc = close(file)
+'disable fwrite'</pre>
+The descriptor file would look like this, assuming you wanted to map your data into the X dimension:
+<pre><p>dset ^my_binary_file.dat<br>title Sample of ASCII data converted to binary
+undef -9.99e8<br>xdef 100 linear 1 1<br>ydef 1 linear 1 1<br>zdef 1 linear 1 1<br>tdef 1 linear 01jan0001 1dy<br>vars 1<br>a 0 99 ascii variable<br>endvars</pre>
+<p>
+  <font size=+1><b><i>Output Gridded Data in ASCII Format</i></b></font><p>
+1. GrADS can create 
+ascii output for any display with the '<a href="gradcomdsetgxout.html" target="pages">set gxout</a> print' option. The formatting of the output is controlled with the '<a href="gradcomdsetprnopts.html" target="pages">set prnopts</a>' command. The output is printed to the command window, but it is also stored in the internal variable 'result' inside a script, where it can be easily output to a file. Below is a simple script example to write  formatted ascii output to a file. Note that the choice of writing 72 numbers per line is based on the X dimension of the grid being displayed. 
+<pre>
+'open /data/grib/model/model.ctl'
+'set x 1 72'
+outfile = 'my_ascii_file.txt'
+'set gxout print'
+'set prnopts %7.3f 72 1'
+'d ts'
+rc = write(outfile,result)</pre>
+<p>The beginning of the file my_ascii_file.txt looks like this:</p>
+<pre>
+Printing Grid -- 3312 Values -- Undef = -9.99e+08
+258.493 258.493 258.493 258.493 258.493 258.493 258.493 258.493 258.493 258.493 258.493 &lt;etc.&gt;   </pre>
+
+
+<p>2. In the above example, note that the first line of the output file will contain some diagnostic information about the number of values written and the undef value. If you want to omit that line and write out just the ascii data, then use this slightly more complicated version of the script which skips over the first line of diagnostic info. Two other changes in this example are in the formatting (the output will be comma delimited for  importing into a spreadsheet) and the displayed variable, which is now an expression instead of  a variable name. It is not necessary to '<a href="gradcomddefine.html" target="pages">define</a>' the expression before displaying it. </p>
+<pre>
+'open /data/grib/model/model.ctl'
+'set x 1 72'
+outfile='my_ascii_file.txt'
+'!/bin/rm -f 'outfile
+'set gxout print'
+'set prnopts %g, 72 0'
+'d ts-273.15'
+i=1
+while (1)
+  line = sublin(result,i)
+  if (line = ''); break; endif
+  if (i&gt;1)
+    rc = write(outfile,line,append)
+  endif
+  i=i+1
+endwhile</pre>
+<p>Now the beginning of the output file my_ascii_file.txt looks like this:</p>
+<pre>
+-14.6567,-14.6567,-14.6567,-14.6567,-14.6567,-14.6567,-14.6567,-14.6567,-14.6567,&lt;etc.&gt;
+</pre>
+
+<p>3. If you want to write out the grid information along with data from more than one variable, then you must save the result from the display of each variable/expression (including longitude and latitude), parse each data point individually, construct the line of ascii output, and then write it out. Here is an example the writes out longitude, latitude, surface temperature, surface pressure, and precipitation:
+<pre>'open /data/grib/model/model.ctl'
+'set x 1 72'
+outfile='my_ascii_file.txt'
+'!/bin/rm -f 'outfile
+'set gxout print'
+fmt='%8.3f'
+numcols=72
+'set prnopts 'fmt' 'numcols' 1'
+'d lon'
+lon_data = result
+'d lat'
+lat_data = result
+'d ts'
+v1_data = result
+'d ps'
+v2_data = result
+'d p'
+v3_data = result
+i=1
+while (1)
+  lons  = sublin(lon_data,i)
+  lats  = sublin(lat_data,i)
+  line1 = sublin(v1_data,i)
+  line2 = sublin(v2_data,i)
+  line3 = sublin(v3_data,i)
+  if (lons='' | lats='' | line1='' | line2='' | line3=''); break; endif
+  if (i&gt;1)
+    j=1
+    while (j&lt;=numcols)
+      str = subwrd(lons,j); lon = math_format(fmt,str)
+      str = subwrd(lats,j); lat = math_format(fmt,str)
+      str = subwrd(line1,j); v1 = math_format(fmt,str)
+      str = subwrd(line2,j); v2 = math_format(fmt,str)
+      str = subwrd(line3,j); v3 = math_format(fmt,str)
+      record = lon' 'lat' 'v1' 'v2' 'v3
+      rc = write(outfile,record,append)
+      j=j+1
+    endwhile
+  endif
+  i=i+1
+endwhile
+</pre>
+<p>Now the head of the output file my_ascii_file.txt looks like this:</p>
+<pre>
+   0.000  -90.000  258.493  669.911    0.000
+   5.000  -90.000  258.493  669.911    0.000
+  10.000  -90.000  258.493  669.911    0.000
+  15.000  -90.000  258.493  669.911    0.000
+  20.000  -90.000  258.493  669.911    0.000
+  25.000  -90.000  258.493  669.911    0.000
+  30.000  -90.000  258.493  669.911    0.000
+  35.000  -90.000  258.493  669.911    0.000
+  40.000  -90.000  258.493  669.911    0.000
+</pre>
+</body>
+</html>
+

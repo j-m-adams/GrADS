@@ -1,0 +1,117 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Function: tmave</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>tmave()</b></h2>
+<p>
+This function does time averaging while applying a mask. The syntax is:
+<p>
+<ul><code>tmave(<i>maskexpr,expr,timexpr1,timexpr2</i>)</code></ul>
+<p>
+where:
+<p>
+<ul>
+<code><i>maskexpr</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>
+- the mask expression; when evaluated at a fixed time, it must give a single value<br>
+<code><i>expr</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+- the expression to be averaged<br>
+<code><i>timexpr1,2</i>&nbsp;&nbsp</code>
+- the limits of the time averaging domain<br>
+</ul>
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+
+<li>This function works similarly to the <a
+href="gradfuncave.html"><code>ave</code></a> function,
+except for the masking. Using <code>tmave</code> is much more efficient than using 
+<a href="gradfuncmaskout.html"><code>maskout</code></a> with 
+<a href="gradfuncave.html"><code>ave</code></a>). 
+
+<p>
+<li>The function loops through the specified time steps, and evaluates
+<code><i>maskexpr</i></code> at each fixed time.
+<code><i>maskexpr</i></code> must yeild a single value. If this value
+is the undefined/missing data value, then <code><i>expr</i></code> for
+that time is not included in the average.
+
+<p>
+<li>If <code><i>maskexpr</i></code> is not the undefined data value, it is
+used as the weight for <code><i>expr</i></code> in the average. So if
+you define <code><i>maskexpr</i></code> accordingly, you can use the
+<code>tmave</code> function to do weighted time averaging.
+
+<p>
+<li>The tricky aspect of using <code>tmave</code> is setting up
+<code><i>maskexpr</i></code>.  If <code><i>expr</i></code> is a grid
+with X and/or Y and/or Z varying, then <code><i>maskexpr</i></code>
+*MUST* refer to either a defined variable or a file with only time
+varying. In general, you have to set up <code><i>maskexpr</i></code>
+in advance.
+
+</ol>
+
+<p>
+<h3>Examples</h3>
+
+<ol>
+<li>
+Say you want to average <code>slp</code> over some time range 
+but only when <code>sst</code> over some region is above some value.  You can 
+do this by:
+<p>
+<ul>
+<pre>
+set x 1
+set y 1
+set t 1 last
+define sstmask = aave(sst,lon=-180,lon=-90,lat=-20,lat=20)
+define sstmask = const(maskout(sstmask,sstmask-25.0),1)
+</pre>
+</ul>
+
+<p>
+Now <code>sstmask</code> is a time series where the value is 1 when
+the <code>sst</code> areal average is above 25 and undefined when the
+value is below 25. <a
+href="gradfuncmaskout.html"><code>maskout</code></a> set the values
+below 25 to missing; <a
+href="gradfuncconst.html"><code>const</code></a> set the non-missing
+values to 1. We can now do our <code>tmave</code>:
+<p>
+<ul>
+<pre>
+set lon -180 -90
+set lat -20 20
+set t 1
+d tmave(sstmask,slp,t=1,t=last)
+</pre>
+</ul>
+
+<p>
+<li>The mask could also be written to a file with all dimensions
+nonvarying except for time. Here is what some of the records in the
+data descriptor file might look like:
+<p>
+<ul>
+<pre>
+dset <i>maskfilename</i>
+xdef 1 linear 1 1
+ydef 1 linear 1 1
+zdef 1 linear 1 1
+tdef 100 linear 
+....
+</pre>
+</ul>
+</ol>
+
+
+
+</body>
+</html>
+

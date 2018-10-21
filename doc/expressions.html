@@ -1,0 +1,91 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.--><style type="text/css">
+<!--
+body {
+	background-color: #e0f0ff;
+}
+.style1 {color: #990000}
+-->
+</style>
+
+<h1>Expressions</h1>
+
+A GrADS expression consists of operators, operands, and
+parentheses.  Parentheses are used to
+control the order of operation -- this is especially important when using the logical operators. 
+<p>
+
+Operators are:
+<ul>
+<code>+&nbsp;&nbsp;&nbsp;</code>Addition <br>
+<code>-&nbsp;&nbsp;&nbsp;</code>Subtraction <br>
+<code>*&nbsp;&nbsp;&nbsp;</code>Multiplication <br>
+<code>/&nbsp;&nbsp;&nbsp;</code>Division <br>
+</ul>
+
+Logical Operators (introduced in <span class="style1">Version 2.1.1.b0</span> for GRIDDED data only):
+<ul>
+<code>= &nbsp;&nbsp;&nbsp;</code>Equal ( <code>== </code> is also acceptable)<br>
+<code>!=&nbsp;&nbsp;&nbsp;</code>Not Equal<br>
+<code>> &nbsp;&nbsp;&nbsp;</code>Greater than<br>
+<code>>=&nbsp;&nbsp;&nbsp;</code>Greater than or equal <br>
+<code><&nbsp;&nbsp;&nbsp;&nbsp;</code>Less than <br>
+<code><=&nbsp;&nbsp;&nbsp;</code>Less than or equal<br>
+<code>&&nbsp;&nbsp;&nbsp;&nbsp;</code>And  (<code> &amp;&amp; </code> is also acceptable)<br>
+<code>|&nbsp;&nbsp;&nbsp;&nbsp;</code>Or  ( <code>|| </code> is also acceptable)<br>
+
+</ul>
+
+
+
+<p>
+
+Operands are:
+
+
+<dd><code><a href="variable.html">variable specifications</a>, <a href="functions.html">functions</a>, and constants</code>.</dd>
+<h3>Usage Notes</h3>
+Operations between two variables are done on equivalent grid points in each grid. 
+Missing data values in either grid give a result of a missing
+data value at that grid point.  Dividing by zero gives a result
+of a missing data value at that grid point.<p>
+
+Operations cannot be done between grids that have different
+scaling in their varying dimensions -- i.e., grids that have
+different rules for converting the varying dimensions from grid
+space to world coordinate space.  This can only be encountered
+when you are attempting operations between grids from different
+files that have different scaling rules.
+<p>
+
+If one grid has more varying dimensions than the other, the grid
+with fewer varying dimensions     is 'expanded' and the operation
+is performed.
+<p>Expression evaluation in GrADS is recursive, so that multiple expressions may be nested together. 
+<p>(<span class="style1">GrADS version 2.0.a7+</span>) Variable specifications can include a dimension expression to set time as an <a href="offt.html">offset</a> from the variable's initial time. 
+
+<p>(<span class="style1">GrADS version 2.1.1.b0+</span>) The result of a logical operation is boolean -- an answer to a yes/no question. If the expression is true the result is 1, if the expression is false the answer is  -1 (instead of zero).  
+This is slightly different from the usual convention, but it is implemented this way in GrADS to make it easier to use logical operators with the <code><a href="gradfuncmaskout.html">maskout()</a></code> function. An <code><a href="gradfuncif.html">if()</a></code> function has also been implemented to  use  logical operators in expressions of the form if-then-else. Note: the logical operators have not yet been implemented for station data. <br />
+<h3>Examples</h3>
+
+<ul>
+<code>slp/100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>(Convert sea level pressure units from hPa to mb)<br>
+<code>z-z(t-1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>(Height change over one time step)<br>
+<code>z-z(offt=0)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>(Height change since initial time)<br>
+<code>t(lev=500)-t(lev=850)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>(Temp difference between 500
+and 850mb)<br>
+<code>ave(z,t=1,t=5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>(Average of z over first 5 times in file) <br>
+<code>sum(prec(offt+0),t=1,t=4)&nbsp;&nbsp;&nbsp;</code>(Accumulated precipitation -- sum of 2nd through 5th time steps in file) <br>
+<code>z-ave(z,lon=0,lon=360,-b)&nbsp;&nbsp;&nbsp;</code>(Remove zonal mean)<br>
+<code>tloop(aave(p,global))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>(Time series of globally averaged precip)<br />
+<br />
+</ul>
+<h3>Examples Using Logical Operators</h3>
+<ul>
+<code>tsfc&gt;=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>(Surface temperatures greater than or equal to zero)<br />
+<code>maskout(tsfc,tsfc&gt;=0)&nbsp;&nbsp;&nbsp;                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>(Set all negative surface temperatures to be undefined)<br />
+<code>(tsfc&gt;30)|(tsfc&lt;-30)&nbsp;                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>(Surface temperature extremes)<br />
+<code>(lat&gt;=-5)&amp;(lat&lt;=5)&amp;(lon&gt;=190)&amp;(lon&lt;=240)               </code>(Lat/Lon bounding box -- Nino3.4)<br />
+<code>maskout(tsfc,(lat&gt;=-5)&amp;(lat&lt;=5)&amp;(lon&gt;=190)&amp;(lon&lt;=240)) </code>(Surface temperature only defined within the Lat/Lon box)<br /><br />
+
+</ul>
+ 

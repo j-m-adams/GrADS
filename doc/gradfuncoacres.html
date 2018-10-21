@@ -1,0 +1,84 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Function: oacres</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>oacres()</b></h2>
+<p>
+<code>oacres (<i>gexpr, sexpr &lt,radii&gt</i>)</code>
+
+<p> 
+A Cressman objective analysis is performed on the station data to arrive
+at a gridded result that represents the station data. 
+
+<p> 
+<ul>
+<code><i>gexpr</i>&nbsp;&nbsp;&nbsp;</code>a valid grid expression<br>
+<code><i>sexpr</i>&nbsp;&nbsp;&nbsp;</code>a valid station data expression<br>
+<code><i>radii</i>&nbsp;&nbsp;&nbsp;</code>optional radii of influence. Defaults are: 10,7,4,2,1<br>
+</ul>
+<p>
+The Cressman Analysis scheme is described in a 1959 paper in Monthly
+Weather Review. Multiple passes are made through the grid with
+increasingly smaller radii of influence. At each pass, a new value is
+calculated for each grid point based on a correction factor that is
+determined by looking at each station within the radius of influence.
+<p>
+For each such station, an error is defined as the difference
+between the station value and a value arrived by interpolation from
+the grid to that station. The correction factor is based on a distance
+weighted formula applied to all such errors within the radius of
+influence. The correction factors are applied to each grid point
+before the next pass is made. 
+<p>
+Any grid boxes that do not have stations within the third specified
+radius are set to the missing data value.
+
+<p>
+<h3>Usage Notes </h3><p>
+
+<ol>
+<li>The <code>oacres</code> function can be quite slow to execute,
+depending on grid and station data density. 
+<p>
+<li>The actual values of the gridded expression are ignored, but 
+the grid itself is used as a template to perform the analysis. The scaling of
+the grid must be linear in lat-lon.
+<p>
+<li>The Cressman Analysis scheme can be unstable if the grid density is
+substantially higher than the station data density (ie, far more grid
+points than station data points). In such cases, the analysis can produce
+extrema in the grid values that are not realistic. It is thus suggested
+that you examine the results of <code>oacres</code> and compare them to
+the station data to insure they meet your needs. 
+<p>
+<li>Objective analysis is a complex topic, and many schemes for doing
+it have been developed over the years. The <code>oacres</code>
+function is more of a quick-look function rather than a rigorous
+analysis scheme. If you have specific analysis requirements, consider
+doing your objective analysis outside of GrADS with a <a
+href="udf.html">user-defined function</a>.
+<p>
+<li>See the related function <a href="gradfuncoabin.html"><code>oabin</code></a>.
+</ol>
+
+<h3>Examples </h3>
+<p>
+<ol>
+<li>The simplest case: 
+<p>
+<dd><code>oacres(ts,ts.2)</code>
+<p>
+<li>To specify your own radii of influence: 
+<p>
+<dd><code>oacres(ts,ts.2,12,8,5,4,3,2,1)</code>
+<p>
+</ol>
+
+
+</body>
+</html>
+

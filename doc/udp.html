@@ -1,0 +1,95 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS User Defined Plug-ins</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link href="GrADS.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+.red {
+	color: #C00;
+}
+body {
+	background-color: #e0f0ff;
+}
+</style>
+</head>
+<body text="#000000">
+
+<h2>User Defined Plug-in Functions (UDPs)</h2>
+<p>
+
+<a href="#overview">Overview </a><br>
+<a href="#how">How to set up and use User Defined Plug-in Functions</a><br>
+<a href="#compile">How to compile User Defined Plug-in Functions</a><br>
+<a href="#table">The User Defined Plug-in Table</a><br>
+<a href="#gaudpt">The environment variable GAUDPT</a><br>
+<a href="#example1">Example: Add a number to a variable</a><br><br>
+<hr>
+  
+<a name="overview"><h3>Overview</h3></a>
+<p>User Defined <a href="plugins.html">Plug-in</a> functions were introduced in <span class="red">version 2.1.1.b0</span> and are intended to replace the old <a href="udf.html">User Defined Functions</a>, which were disabled when version 2.0 was introduced. The use of plug-in functions will be an improvement in performance and flexibility for users who want to create customized functions. The function arguments and data grids are no longer passed between GrADS and the user's program through data files written out to disk. With plug-in functions, the user's code is dynamically loaded into GrADS when the function is invoked by the user, and the data is operated on while still sitting in memory. Please read the following documentation carefully.</p>
+
+<a name="how">
+<h3>How to set up and use User Defined Plug-in functions:</h3></a>
+<ol>
+<li>Compile your plug-in functions  as shared object files. (Scroll down for <a href="#compile">additional documention</a>.)
+<li>Update a stand-alone text file called the User Defined Plug-in Table (<a href="udpt.html">UDPT</a>) that  provides all the necessary information GrADS needs to know about 
+   plug-ins. 
+(Scroll down for <a href="#table">additional documention.</a>)
+<li>Set the environment variable GAUDPT  to provide the full name (including the path) of the <a href="udpt.html">UDPT</a> file. 
+<li>When GrADS is first started up, it will parse the UDPT records so it knows all the plug-in function names and where to find them. The plug-ins  will be loaded dynamically by GrADS only when the function is called by the user. <br>
+<li>When a plug-in function is invoked in an <a href="expressions.html">expression</a>, GrADS passes all the function arguments as-is to the plug-in.  The arguments to a plug-in generally contain one or more GrADS expressions plus any additional numbers or strings that might be needed. The plug-in should contain the necessary code to parse and check the arguments, evaluate the expressions(s), perform the calculations, print out any desired diagnostic information, and return the result back to GrADS. 
+<li>Note: User defined plug-ins do <em>NOT</em> have precedence over GrADS intrinsic
+functions, thus a UDP cannot be set up to replace
+a GrADS function. This behavior is different from the old user defined functions. 
+
+</ol>
+
+<a name="compile">
+<h3>How to compile User Defined Plug-in functions:</h3></a>
+<p> User Defined Plug-ins are compiled as dynamic libraries or shared object files and are loaded by GrADS using the dlopen(), dlsym(), and dlclose() functions. Compiling these dynamic object files is a two-step process that requires a slightly different syntax than what is normally used to compile a stand-alone executable. Consider an example plug-in program called addthis.c:
+<p>Compile the 
+  plug-in source code (<code><a href="addthis.c">addthis.c</a></code>) and create the object file.
+<ol>
+<li>
+  <pre>  gcc -fPIC -Wall -g -c addthis.c </pre>
+<p>Note that this program requies the inclusion of <code>grads.h</code>, which is part of the GrADS source code. Use the environment variable CFLAGS to specify the directory where <code>grads.h</code> resides (e.g. $HOME/grads/src/grads.h):</p>
+<pre>  setenv CFLAGS -I$HOME/grads/src
+  gcc -fPIC -Wall -g -c addthis.c $CFLAGS</pre>
+<p>If you get an error message that the compiler cannot find additional include files such as <code>shapefil.h</code>, then try adding the supplibs include directory where the file is located to the <code>CFLAGS</code> environment variable, or use the -D option to disable the USESHP macro:</p>
+<pre>  gcc -fPIC -Wall -g -c addthis.c $CFLAGS -DUSESHP=0</pre>
+</li>
+
+<li>Once you have compiled the program and successfully created the object file <code>addthis.o</code>, you must create the dynamic library/shared object file that will be loaded  by GrADS. More  ```` than one object file can be packaged in a dynamic library/shared object file. The synatx for this step is different for Linux systems and for Mac OS X:
+  <p>
+  For Linux:
+  <pre>  gcc -fPIC -g -shared -rdynamic addthis.o -o addthis.so </pre>
+  <p>For Mac OS X:
+  <pre>  libtool -dynamic -flat_namespace -undefined suppress addthis.o -o addthis.dylib </pre>
+</li>
+</ol>
+
+<a name="table">
+<h3>The User Defined Plug-in Table</h3></a>
+<p>
+The <a href="udpt.html">user-defined plug-in table (UDPT)</a> is a simple text file that
+contains information about a user defined plug-in function. A record in the UDPT is required before the plug-in funciton can be used in GrADS. Check the <a href="udpt.html">documentation</a> for more information about the proper syntax of UDPT records.  An example record for our example plug-in <code>addthis.c</code> might look like this:
+<pre>   function addthis /home/username/grads/udp/addthis.so</pre>
+
+
+
+<a name="gaudpt">
+<h3>The environment variable GAUDPT</h3></a>
+<p>GrADS will look for user defined plug-in function entries in two places: the file name pointed to by the 
+  <a href="gradcomdgrads.html#env">environment variable</a> GAUDPT, and a file named &quot;udpt&quot; in the directory named by the GADDIR environment variable.  An example of setting the GAUDPT environment
+  variable is:
+  
+<pre>    setenv GAUDPT $HOME/grads/udpt</pre>
+
+<a name="example1">
+<h3>Example: Add a number to a variable</h3>
+</a>
+<p><a href="addthis.c"><code><b>addthis.c</b></code></a> is a sample user defined plug-in function for use with GrADS that does a very basic task: it adds a number to all the non-missing values in a GrADS expression, which may be for gridded or station data. Additional information may be found in the comments of the source code.</p>
+</body>
+</html>

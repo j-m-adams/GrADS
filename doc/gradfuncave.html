@@ -1,0 +1,141 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Function: ave</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>ave()</b></h2>
+<p>
+<code>ave(<i>expr, dim1, dim2 <,tinc></i> <,-b>)</code>
+<p>
+Averages the result of <code><i>expr</i></code> over the specified 
+dimension range. If the averaging dimension is time, an
+optional time increment <code><i>tincr</i></code> may be specified.
+
+<p>
+<ul>
+<code><i>expr</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>- any valid GrADS expression <br>
+<code><i>dim1</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>- the start point for the average<br>
+<code><i>dim2</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>- the end point for the average<br>
+<code><i>tinc</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>- optional increment for time averaging<br>
+<code>-b&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>- use exact boundaries<br>
+</ul>
+
+<p>
+<code><i>dim1</i></code> and <code><i>dim2</i></code> are standard
+GrADS dimension expressions whose dimensions must match.
+
+<p>
+<h3>Usage Notes</h3><p>
+<p>
+<ol>
+<li>The limits and intervals of the averaging are set according to the
+grid coordinates of the default file. If <code><i>dim1</i></code>
+and <code><i>dim2</i></code> are specified in world coordinates, the
+coordinates are converted to the nearest integer grid coordinates
+based on the scaling of the default file. See the examples below for
+further illustration. 
+<p>
+<li>
+The end points are given normal weighting, unless the <code>-b</code>
+boundary flag is specified. The boundry flag indicates that the
+average should be taken to the exact boundaries specified by
+<code><i>dim1</i></code> and <code><i>dim2</i></code>, rather than
+the nearest grid points.
+<p>
+<li>The average is weighted by grid interval to account for non-linear
+grid spacing. Averages in the latitude dimension are weighted by the
+difference between the sines of the latitude at the northern and
+southern edges of the grid box. The edges of the grid box are always
+defined as being the midpoint between adjacent grid points. To
+calculate an average without using the latitude weighting, use the
+<code><a href="gradfuncmean.html">mean</a></code> function.
+<p>
+
+</ol>
+
+<p>
+<h3>Examples</h3>
+<p>
+For the following examples, the dimension environment is X-Y varying; Z-T are fixed. 
+<p>
+
+<ol>
+<li>Consider the following average, when the default file is file #1: <p>
+
+<dd><code>ave(z.2,t=1,t=10) </code><p>
+
+We are averaging a variable from file #2, but using the scaling from file
+#1. File #1 has a time interval of 6 hours, but file #2 has a time
+interval of 12 hours. The average will thus attempt to access data from
+file #2 for times that are not available, and an error will
+ocurr. To avoid this, the default file should be set to file #2:
+<code><a href="gradcomdsetdfile.html">set dfile</a> 2</code>
+
+<p>
+<li>The average: <p>
+
+<dd><code>ave(z,t=1,t=120,4) </code><p>
+
+will average only 00Z reports from file #1, since the time increment is 4,
+which for this file is 24 hours. <p>
+
+<li>If you attempt to take a zonal average as follows: <p>
+
+<dd><code>ave(z,lon=0,lon=360) </code><p>
+
+the world coordinates will be converted to grid coordinates, here
+<code>X</code> varying from 1 to 181, and the grid point at longitude 0
+(and 360) will be used twice in the average. To have the end points of
+this average weighted properly, use the <code>-b</code> flag:<p>
+ 
+<dd><code>ave(z,lon=0,lon=360,-b)</code><p> 
+
+or average using the grid coordinates directly: <p>
+
+<dd><code>ave(z,x=1,x=180) </code><p>
+
+<li>You can nest averaging operations: <p>
+
+<dd><code>ave(ave(z,x=1,x=180),y=1,y=46) </code><p>
+
+In this case, to take an areal average. Note that for areal averaging, the
+<code>aave</code> function is better. See the <a
+href="gradfuncaave.html"><code>aave</code></a> function
+description. <p>
+
+When nesting averages, the order of the nesting can have a dramatic affect
+on performance. 
+Keep in mind the ordering of the data in a GrADS file: X varies the
+fastest, then Y, then Z, then T. When nesting averages, put the faster
+varying dimension within the inner average: <p>
+
+<dd><code>set lon -90 
+<dd>set lat -90 90 
+<dd>set lev 1000 100 
+<dd>d ave(ave(t,x=1,x=180),t=1,t=20) </code><p>
+
+This average would be more efficient than, for example: <p>
+
+<dd><code>ave(ave(t,t=1,t=20),x=1,x=180) </code><p>
+
+although the final numerical result would be the same. <p>
+
+<li>The use of the <a href="gradcomddefine.html"><code>define</code></a>
+command can make certain operations much more efficient. If you want to
+calculate standard deviation, for example: <p>
+
+<dd><code>sqrt(ave(pow(ave(z,t=1,t=20)-z,2),t=1,t=20)) </code><p>
+
+would be correct, but the inside average would be calculated 20 times.
+Defining the inside average in advance will be substantially faster: <p>
+
+<dd><code>define zave = ave(z,t=1,t=20) 
+<dd>d sqrt(ave(pow(zave-z,2),t=1,t=20)) </code>
+</ol>
+
+
+</body>
+</html>

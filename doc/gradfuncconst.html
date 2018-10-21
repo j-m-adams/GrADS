@@ -1,0 +1,104 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<title>GrADS Function: const</title>
+<body bgcolor="e0f0ff" text="#000000">
+<h2><b>const()</b></h2> <p>
+
+<p>
+<code>const (<i>expr, value,</i> <-u|-a>)</code>
+
+<p>
+This is a powerful function that allows the user to change the missing
+values of a variable, set all the non-missing values of a variable to
+a constant, or set all possible values of a variable (both valid and
+missing) to a constant. 
+
+<p>
+<ul>
+<code><i>expr</i>&nbsp;&nbsp;&nbsp;</code>a valid GrADS expression <br>
+<code><i>value</i>&nbsp;&nbsp;</code>a constant, either an integer or floating point value <br>
+<code>-u&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>all missing data are set to 
+<code><i>value</i></code>; non-missing data are unchanged<br>
+<code>-a&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>all data are set to 
+<code><i>value</i></code>, both missing and non-missing<br>
+</ul>
+
+<p>
+Default behaviour is to set all non-missing data equal to 
+<code><i>value</i></code>; missing data are unchanged <br>
+</ul>
+
+
+<p>
+<h3>Usage Notes</h3> 
+
+<ol>
+<li>The <code>const</code> function operates on both gridded and
+station data.
+
+<li>If <code><i>value</i></code> is given as an integer, 
+it will still be treated as as floating point.
+</ol>
+
+<p>
+<h3>Examples</h3><p>
+
+<ol>
+<li>The <code>const</code> function assigns a new value to missing
+data, so that missing data may participate in operations: 
+<p>
+<ul><code>const(z, 0, -u)</code></ul>
+<p>
+<li>The <code>const</code> function is used with the <a
+href="gradcomdsetgxout.html"<code>set gxout linefill</code></a> graphics output
+option to define a straight horizontal line: 
+<p>
+<ul>
+<code>
+set lon -90 <br>
+set lat -90 90 <br>
+set gxout linefill <br>
+set lev 500 <br>
+d const(t, -20);t-273 <br>
+</code>
+</ul>
+<p>
+<li>In this example, <code>const</code> is used to calculate a daily
+timeseries of the fraction of the globe convered by precipitation
+greater than <code>10mm/day</code>:
+
+<p> 
+<ul>
+<code>
+set lon 0 360 <br>
+set lat -90 90 <br> 
+set t 1 last <br>
+define ones = const(const(maskout(p,p-10),1),0,-u) <br>
+set x 1 <br>
+set y 1 <br>
+display tloop(aave(ones,lon=0,lon=360,lat=0,lat=360)) <br>
+</code>
+</ul>
+
+<p>
+Notes: The <a href="gradcomddefine.html">defined</a> variable
+<code>"ones"</code> contains <code>1</code> wherever the precip value
+is greater than <code>10</code>, and <code>0</code> whever the precip
+value is less than <code>10</code>. This is done via nested functions;
+first <a href="gradfuncmaskout.html"><code>maskout</code></a> sets all
+values less than <code>10</code> to missing, then <code>const</code>
+sets all non-missing values to <code>1</code>, then <code>const</code>
+is used with the <code>-u</code> flag to set all the missing data
+values to <code>0</code>.  The <a
+href="gradfuncaave.html"><code>aave</code></a> function calculates an
+area weighted average. Since we are averaging zeros and ones, the
+result is the fraction of the area where there are ones. See the <a
+href="gradfunctloop.html"><code>tloop</code></a> function for a
+description of how to perform time series of areal averages.
+</ol>
+</body>
+</html>
+
+
+

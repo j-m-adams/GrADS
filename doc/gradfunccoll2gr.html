@@ -1,0 +1,76 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Function: coll2gr</title>
+<style type="text/css">
+body {
+	background-color: #e0f0ff;
+}
+.red {
+	color: #900;
+}
+</style></head>
+<body text="#000000" bgcolor="e0f0ff">
+
+<h2><b>coll2gr()</b></h2>
+<p>
+This function creates a grid from a collection of station data. The syntax is:
+
+<p>
+<code>coll2gr(<i>cnum &lt;,num&gt;</i>)</code>
+
+<p>
+<ul>
+<code><i>cnum</i>&nbsp;&nbsp;&nbsp;&nbsp;</code> collection number<br>
+<code><i>num</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code> 
+number of vertical levels in the output grid (default is 10)<br>
+</ul>
+<p>
+If <code><i>num</i></code> is given as <code>"-u"</code>, then the
+vertical levels will be a union of all the levels in the collection of
+station data.
+
+<p>
+<h3>Usage Notes</h3>
+<p>
+<ol>
+<li>Before using <code>coll2gr</code>, you must create the collection of
+stations using the GrADS command <a
+href="gradcomdcollect.html"><code>collect</code></a>.
+
+<p>
+<li><code>coll2gr</code> does not yet support time slices; currently, it will
+only work when the collection of stations is a collection of
+vertical profiles. 
+
+<p>
+<li><code>coll2gr</code> produces an output grid that varies in X and Z;
+the dimension environment used when <code>coll2gr</code> is invoked
+must also be X and Z varying. The X axis of the output grid will contain
+the equally spaced station profiles and will span the range of the
+current X dimension environment. The Z axis of the output grid will
+span the range of the current Z dimension environment and will have
+either the specified number of levels or a union of the levels. Data
+points outside of the range of levels will be used for interpolating
+to within the range if appropriate.
+
+<p>
+<li>The <code>"-u"</code> option will only work for data in pressure
+vertical coordinates. If your vertical coordinate is height,
+<code><i>num</i></code> should be the actual number of vertical levels
+in the collection of profiles. Note: This restriction has been removed as of  <span class="red">version 2.1.0</span>.
+
+
+<p>
+<li>See the section of the User's Guide on <a
+href="usingstationdata.html#xsection">Arbitrary Cross Sections</a> for more
+information. 
+</ol>
+<p>
+<h3>Examples </h3>
+
+
+</body>
+</html>
+

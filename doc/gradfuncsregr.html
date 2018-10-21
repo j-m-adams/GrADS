@@ -1,0 +1,131 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Function: sregr</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>sregr()</b></h2>
+<p>
+<p>
+This function calculates the linear least-squares regression between two variables
+over an X-Y domain. It returns a single number. The syntax is:
+
+<ul>
+<code>sregr(<i>expr1, expr2, xdim1, xdim2, ydim1, ydim2</i>)</code>
+</ul>
+
+<p>
+where:
+<p>
+<ul>
+<code><i>expr1</i>&nbsp;&nbsp;&nbsp;</code>- a valid GrADS expression varying in X and Y<br>
+<code><i>expr2</i>&nbsp;&nbsp;&nbsp;</code>- a valid GrADS expression varying in X and Y<br>
+<code><i>xdim1</i>&nbsp;&nbsp;&nbsp;</code>- starting X dimension expression <br>
+<code><i>xdim2</i>&nbsp;&nbsp;&nbsp;</code>- ending X dimension expression <br>
+<code><i>ydim1</i>&nbsp;&nbsp;&nbsp;</code>- starting Y dimension expression <br>
+<code><i>ydim2</i>&nbsp;&nbsp;&nbsp;</code>- ending Y dimension expression <br>
+</ul>
+
+<p>
+To do the regression over the global domain, a shorthand may be used:
+<ul>
+<code>sregr(<i>expr1, expr2</i>, global)</code>  or<br>
+<code>sregr(<i>expr1, expr2</i>, g)</code>
+</ul>
+is the same as
+<ul>
+<code>sregr(<i>expr1, expr2</i>, lon=0, lon=360, lat=-90, lat=90)</code>
+</ul> 
+
+<p>
+The result from <code>sregr</code> is the expected value of
+the <code><i>expr2</i></code> departure given a 1 unit departure in
+<code><i>expr1</i></code>. 
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li>
+<code><i>expr1</i></code> is the independent variable and
+<code><i>expr2</i></code> is the dependent variable.
+<p>
+<li>The regression is sensitive to the units of the input expressions. 
+In the examples below, the sensible heat flux (shtfl) is in units of W m^-2 and 
+the surface temperature (tsfc) is in units of K, so the regression coefficient 
+of shtfl on tsfc is in units of W m^-2 K^-1.
+<p>
+<li>
+<code>sregr</code> may be used in conjunction with <a
+href="gradfunctloop.html"><code>tloop</code></a> or <a
+href="gradcomddefine.html"><code>define</code></a> to create time series
+or time/height plots.
+<p>
+<li><code>sregr</code> assumes that the world coordinates are
+longitude in the X dimension and latitude in the Y dimension, and does
+weighting in the latitude dimension by the delta of the sin of the
+latitudes. Weighting is also performed appropriately for unequally
+spaced grids.
+<p>
+<li>The result of the least squares regression of Y on X is often
+expressed as a linear equation: 
+<p>
+<ul><code>Y = slope * X + intercept</code></ul>
+<p>
+where X is the independent variable, Y is the dependent variable, and
+the slope and intercept are calculated using complicated algebraic
+formulas. The calculation is simplified if the means are
+removed. If we define x and y to be the departures from the areal
+averages of X and Y:
+<p>
+<ul><code>x = X - Xave</code><br><code>y = Y - Yave</code></ul>
+<p>
+then the regression equation becomes:
+<p>
+<ul><code>y = <i>coefficient</i> * x</code></ul>
+<p>
+Where
+<p>
+<ul><code><i>coefficient</i> = (sum of x*y over area)/(sum of x*x over area)</code></ul>
+<p>
+This <code><i>coefficient</i></code> is the output from the <code>sregr</code> function.
+The second example below shows how to construct the regression estimate of Y based on X.
+<p>
+<li>Use the <a href="gradfunctregr.html"><code>tregr</code></a>
+function to do regression over the time domain.
+<p>
+</ol>
+
+<p>
+<h3>Example</h3>
+<ol>
+<li>This example calculates the expected departure from the mean of
+the sensible heat flux (shtfl) in the North Pacific given a unit
+departure from the mean surface temperature (tsfc). The units are W m^-2 K^-1.
+<p>
+<pre>
+set lon 120 250
+set lat 15 60
+define ivar = tsfc   ;* surface temperautre
+define dvar = shtfl  ;* sensible heat flux
+set z 1
+set t 1 
+d sregr(ivar, dvar, lon=120, lon=250, lat=15, lat=60)
+</pre>
+<p>
+<li>This example builds on the previous example by 
+calculating the regression estimate of sensible heat flux based on the
+surface temperature. 
+<p>
+<pre>
+define coeff = sregr(ivar, dvar, lon=120, lon=250, lat=15, lat=60)
+define dvarave = aave(dvar, lon=120, lon=250, lat=15, lat=60)
+define ivarave = aave(ivar, lon=120, lon=250, lat=15, lat=60)
+d coeff * (ivar - ivarave) + dvarave
+</pre>
+</ol>
+
+
+</body>
+</html>

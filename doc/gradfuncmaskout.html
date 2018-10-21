@@ -1,0 +1,52 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+<style type="text/css">
+body {
+	background-color: #e0f0ff;
+}
+</style>
+
+
+<h2><b>maskout</b></h2><p>
+
+<code>maskout(<i>expr,mask</i>)</code><p> 
+
+Wherever the <code><i>mask</i></code> values are less than zero, the
+values in <code><i>expr</i></code> are set to the missing data value. 
+<p>
+
+Works with gridded or station data. Where <code><i>mask</i></code> values
+are positive, the <code><i>expr</i></code> values are not modified. Thus
+the result of <code>maskout</code> is data with a possibly increased
+number of missing data values. The <code>maskout</code> function, in spite
+of its apparent simplicity, is extremely useful.  <p>
+
+<H3>Usage Notes</H3><P>
+
+<h3>Examples</h3><p> 
+
+<ol>
+<li>See the Examples for the <a
+href="gradfuncconst.html"><code>const</code></a> function for a
+description
+of using <code>maskout</code> to calculate the percentage of the globe
+covered by precipitation. <p>
+
+<li>The <code>maskout</code> function can be used to cause part of the
+data to be ignored while doing another calculation. For example, if we
+have a land-sea mask, where sea values are negative, and we want to take
+some areal average of a quantity only over land: <p>
+
+<dd><code>d aave(maskout(p,mask.2),lon=0,lon=360,lat=0,lat=90) </code><p>
+
+<li>People frequently have trouble using a mask grid, because it is often
+put into a seperate file, and given some arbitrary date/time and level.
+Thus, it is often necessary to <i>locally override</i> the dimension
+environment while using the mask grid: <p>
+
+<dd><code>d aave(maskout(p,mask.2(t=1)),lon=0,lon=360,lat=0,lat=90)
+</code><p>
+
+would probably be how Example 2 would have to be expressed in order to
+work, with the local override of <code>t=1</code> specified on the mask
+data. See the documentation on how GrADS evaluates expressions within the
+dimension environment for more information. 

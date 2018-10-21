@@ -1,0 +1,130 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>Cross Sections</title>
+</head>
+<body text="#000000" bgcolor="e0f0ff">
+
+<h2>Drawing Arbitrary Cross Sections</h2>
+<p>
+Drawing arbitrary vertical cross sections based on a collection of
+station data profiles involves transforming station data (scattered
+observations) into gridded data so as to take advantage of the GrADS
+grid display and analysis features.
+
+<p>
+The first step is to form a collection of 1-D data (Z or T
+varying). The <a href="gradcomdcollect.html"><code>collect</code></a>
+command saves station data profiles or time series in memory as a
+set. The 1-D data may be either real station data or
+gridded data converted to station data using 
+<a href="gradfuncgr2stn.html"><code>gr2stn</code></a>. 
+
+<p> 
+The second stop is to convert the collection of station data into
+a grid for display or analysis purposes. This is accomplished by
+the new function <a href="gradfunccoll2gr.html"><code>coll2gr</code></a>. 
+ 
+
+<p>
+<a href="gradfunccoll2gr.html"><code>coll2gr</code></a> does not yet
+support time slices; currently, it will only work when the collection
+of stations is a collection of vertical profiles.
+
+<p>
+<a href="gradfunccoll2gr.html"><code>coll2gr</code></a> produces an
+output grid that varies in X and Z; the dimension environment used
+when <a href="gradfunccoll2gr.html"><code>coll2gr</code></a> is
+invoked must also be X and Z varying. The X axis of the output grid
+will contain the equally spaced station profiles and will span the
+range of the current X dimension environment. The Z axis of the output
+grid will span the range of the current Z dimension environment and
+will have either the specified number of levels or a union of the
+levels. Data points outside of the range of levels will be used for
+interpolating to within the range if appropriate.
+
+<p>
+The X axis of the output grid from <a
+href="gradfunccoll2gr.html"><code>coll2gr</code></a> is artificial in
+terms of the world coordinates -- it doesn't really represent
+longitudes. A way to completely control the labelling of the display
+output is provided:
+
+<p>
+<ul>
+<code>
+<a href="gradcomdsetxlabs.html">set xlabs</a> lab1 | lab2 | lab3 ...<br>
+<a href="gradcomdsetylabs.html">set ylabs</a> lab1 | lab2 | lab3 ...<br>
+</code>
+</ul>
+
+<p>
+Each label string may include blanks. The labels will be plotted
+equally spaced along the indicated axis. Spacing can be
+modified by adding blank strings:
+<p>
+<ul>
+<code><a href="gradcomdsetxlabs.html">set xlabs</a> | | | | lab1 | ...<br>
+</code>
+</ul>
+
+<p>
+Here is a sample script written by M. Fiorino that uses these features:
+<p>
+<code>
+*********************************************************************<br>
+* The following lines will display an arbitrary X section<br>
+* from one specified point to another.  <br>
+*<br>
+* lon1 is the westernmost longitude point<br>
+* lon2 is the easternmost longitude point<br>
+* lat1 is the latitude that corresponds to lon1<br>
+* lat2 is the latitude that corresponds to lon2<br>
+*<br>
+* The loop is used to interpolate between points in<br>
+* the arbitrary cross section.  This code will plot<br>
+* any cross section as long as you specify the points. <br> 
+* My code plots cross sections of PV after I calculated<br>
+* PV on 11 pressure surfaces.  I have another script<br>
+* that plots cross sections of potential temperature, and<br>
+* the code is very similar to this, except theta is substituted<br>
+* for PV.<br>
+*<br>
+* Many thanks to Brian Doty at COLA for his help with this code.<br>
+*<br>
+********************************************************************<br>
+<br>
+'open pv.ctl'<br>
+'set grads off'<br>
+'set zlog on'<br>
+'set x 1'<br>
+'set y 1'<br>
+'set lev 1000 100'<br>
+lon1 = -95.0<br>
+lon2 = -90.0<br>
+lat1 =  55.0<br>
+lat2 =  15.0<br>
+lon = lon1<br>
+'collect 1 free'<br>
+while (lon <= lon2)<br>
+&nbsp;&nbsp;lat = lat1 + (lat2-lat1)*(lon-lon1) / (lon2-lon1)<br>
+&nbsp;&nbsp;'collect 1 gr2stn(pv,'lon','lat')'<br>
+&nbsp;&nbsp;lon = lon + 1<br>
+endwhile<br>
+<br>
+'set x 14 16'<br>
+'set xaxis 'lon1' 'lon2<br>
+'set clab on'<br>
+'set gxout shaded'<br>
+'set clevs 0 .5 15'<br>
+'set ccols 0 0 7 0'<br>
+'d coll2gr(1,-u)'<br>
+'set gxout contour' <br>
+'set cint .5'<br>
+'d coll2gr(1,-u)'<br>
+</code>
+
+</body>
+</html>
+

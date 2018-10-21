@@ -1,0 +1,433 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS User Defined Functions</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2>User Defined Functions (UDFs)</h2><p>
+
+<a href="#overview">Overview of User Defined Functions</a><br>
+<a href="#table">The user defined function table</a><br>
+<a href="#dtf">Format of the function data transfer file</a><br>
+<a href="#frf">Format of the function result file</a><br>
+<a href="#example">Example: Linear Regression Function</a><br><br>
+<hr>
+<br>
+
+Users may write their own GrADS functions in the computer
+language of their choice, and have them available from the GrADS
+expression facility (via the <a
+href="gradcomddisplay.html"><code>display</code></a> command). Some
+possible user defined functions might be:<p>
+<ul>
+<li>filtering functions
+<li>grid interpolation functions
+<li>thermodynamic functions
+</ul>
+<p>
+You may write a function that can be invoked via the GrADs
+expression facility.  This function may be written in any
+computer language, and may perform any desired I/O, calculations,
+etc. Please read the following documentation carefully to
+understand the restrictions to this capability.<p>
+
+<a name="overview">
+<h3>Overview of User Defined Functions</h3></a>
+<p>
+The steps that GrADS uses to invoke a user defined function are:<p>
+
+<ol>
+<li> When GrADS is first started, it reads a file that describes
+the user defined functions.  This file is called the 'user
+defined function table'.<p>
+
+<li>When a user function is invoked via the display command
+expression, GrADS parses the arguments to the functions, obtains
+the results of any expressions, and writes the resultant data to
+a 'function data transfer file'.<p>
+
+Please note that in a user-defined function adding the double
+quote ("") around a <code>char</code> argument passes the string directly
+<i>without</i> the usual conversion to lower case and removal of blanks,
+e.g.,<p>
+
+<dd><code>d grhilo(slp,F8.2,"This is the Label",0.25)</code><p>
+
+Here <code>F8.2</code> is passed as <code>f8.2</code>, but the second
+character string
+would not be converted to <code>thisisthelabel</code>.<p>
+
+<li>A user written program is then invoked.  This program may read
+the function data transfer file, do any desired processing, then
+write the result into a function result file.<p>
+
+<li>GrADS will read the function result file and generate the
+internal objects necessary for this result to participate in the
+remainder of the expression evaluation.</ol>
+<p>
+
+<a name="table">
+<h3>The user defined function table</h3></a>
+<p>
+The user defined function table (UDFT) is a simple text file that
+contains information about each user defined function. There are five
+records for each defined function, and the file may contains
+descriptions for any number of functions. The 5 records are:
+<p>
+<ul>
+Record 1: This record contains several blank delimited fields:
+<p>
+<ul>
+Field 1: The name of the function, 1-8 characters, beginning with
+a letter.  The name should be in lower case.  Note that function
+names are not case dependent, and that GrADS converts all
+expression to lower case before evaluation. 
+<p>
+Field 2: An integer value, specifying the minimum number of arguments
+that the function may have.
+<p>
+Field 3: An integer value, specifying the maximum number of
+arguments that the function may have.  This may not be more than 8. 
+<p>
+Field 4 to N: A keyword describing the data type of each
+argument: <br>
+<dd><code>expr: </code> The argument is an expression.
+<dd><code>value:</code> The argument is a data value.
+<dd><code>char: </code> The argument is a character string.
+</ul>
+<p>
+Record 2:  This record contains blank delimited option keywords.  
+Current keywords are: 
+<ul>
+<p>
+<code>sequential</code> - GrADS will write data to the function data
+transfer file in FORTRAN sequential unformatted records. This is
+typically appropriate if the function is written in FORTRAN.
+<p>
+<code>direct</code> - GrADS will write data to the function data
+transfer file without any record descriptor words. This is 
+typically appropriate if the function is written in C.
+</ul>
+<p>
+Record 3: This record contains the file name of the function
+executable routine.  This routine will be invoked as its own separate
+process via the <code>system</code> call. Do a <code>man system</code>
+if you would like more information on the rules governing this system
+feature.
+<p>
+Record 4:   This record contains the file name of the function
+data transfer file.  This is the file that GrADS will write data
+to before invoking the user function executable, and is typically
+the file the function will read to obtain the data to be operated
+upon.<p>
+
+Record 5:   This record contains the file name of the function
+result file.  The function writes the result of its operations
+into this file in a specified format, and GrADS reads this file
+to obtain the result of the function calculation.
+</ul>
+<p>
+The user function definition table itself is pointed to by the
+environment variable GAUDFT.  If this variable is not set, the
+function table will not be read.  An example of setting this
+variable is:<p>
+
+<dd><code>setenv GAUDFT /usr/local/grads/udft</code><p>
+
+User defined functions have precedence over GrADS intrinsic
+functions, thus a user defined function can be set up to replace
+a GrADS function.  Be sure you do not do this inadvertently by
+choosing a function name already in use by GrADS.
+<p>
+
+<a name="dtf">
+<h3>Format of the function data transfer file</h3></a>
+<p>
+The function data transfer file contains a header record plus
+one or more records representing each argument to
+the function. The user function routine will know what data
+types to expect (since they will be specified in the UDFT), and
+can read the file in a predictable way. 
+<p>
+
+<b>Header record</b>: The header record always contains 20
+floating point numbers.  The record will always be the same size.
+Values defined in this record are:<p>
+
+<ul>
+1st value: Number of arguments used when invoking the function.
+<p>
+2nd value: Set to zero, to indicate this particular transfer
+file format.  The function should test this value, and return an
+error if non-zero, in order to be compatible with future
+enhancements to this file format. 
+<p>
+Values 3 to 20:   Reserved for future use.
+</ul>
+
+<p>
+<b>Argument records</b>: The argument records are written out in the
+order that the arguments are presented. The contents of the argument
+records depends on the data type of the argument: value, character
+string, or expression. Each of these data types will result in a
+different argument record being written out:
+<p>
+<ul>
+<li><code>value</code>: If the argument data type is a value, then the argument
+record will contain a single floating point value.
+<p>
+<li><code>char</code>: If the argument data type is a character
+string, then the argument record will an 80-byte character array that
+contains the argument string. If the argument string is longer than 80
+bytes, the trailing bytes will be lost. If the argument is shorter, it
+will be padded with blanks.  Note that the argument will already be
+processed by the GrADS expression parser, which will convert all
+characters to lower case and remove any blanks.
+<p>
+<li><code>expr</code>: If the argument data type is a gridded
+expression, then GrADS will evaluate the expression and write a series
+of records to the transfer file. Listed below are the records that
+will be written to the transfer file for each argument that is a 
+gridded expression:
+<p>
+
+<ul>
+1st record: This record contains 20 values, all floating
+point, that make up the header for the gridded expression.  Note that
+some of the values are essentially integer, but for convenience they
+are written as a floating point array.  Appropriate care should be
+taken in the function program when converting these values back to
+integer.
+<p>
+<ul>
+1 -- Undefined value for the grid 
+<p>
+2 -- An index to identify the i dimension (idim). Options for the index are: 
+<ul>
+<code>-1 &nbsp&nbsp&nbsp</code>None <br>
+<code> 0 &nbsp&nbsp&nbsp</code>X dimension (lon) <br>
+<code> 1 &nbsp&nbsp&nbsp</code>Y dimension (lat) <br>
+<code> 2 &nbsp&nbsp&nbsp</code>Z dimension (lev) <br>
+<code> 3 &nbsp&nbsp&nbsp</code>T dimension (time)<br>
+</ul>
+<p>
+3 -- An index to identify the j dimension (jdim). Options are the same
+as for idim. If both idim and jdim are -1, the grid is a single value.
+<p>
+4 -- number of elements in the i direction (isiz). 
+<p>
+5 -- number of elements in the j direction (jsiz). 
+<p>
+6 -- i dimension linear flag. If 0, the dimension has non-linear scaling.
+<p> 
+7 -- j dimension linear flag. If 0, the dimension has non-linear scaling.
+<p>
+8 -- istrt. This is the world coordinate value of the first idim element,
+ONLY if idim has linear scaling and idim is not time.
+<p>
+9 -- iincr. This is the increment of the world coordinate values for idim,
+ONLY if idim has linear scaling. 
+<p>
+10 -- jstrt. This is the world coordinate value of the first jdim element,
+ONLY if jdim has linear scaling and jdim is not time.  
+<p>
+11 -- jincr. This is the increment of the world coordinate values for jdim,
+ONLY if jdim has linear scaling. 
+<p>
+12 -- If one of the dimensions is time, values 12 to 16 define the start
+time:
+<ul>
+12: start year <br>
+13: start month <br>
+14: start day <br>
+15: start hour <br>
+16: start minute <br>
+</ul>
+<p>
+17 -- If one of the dimensions is time, values 17 and 18 define the time 
+increment:
+<ul>
+17: time increment in minutes <br>
+18: time increment in months <br>
+</ul>
+(GrADS handles all increments in terms of minutes and months.)
+<p>
+19,20 -- reserved for future use
+</ul>
+
+<p>
+2nd record: This record contains the actual grid of data. It contains
+isiz*jsiz floating point elements.
+<p>
+3rd record: This record contains the world coordinate values for each
+grid element in the i dimension. Thus, the record will contain isiz
+floating point elements.
+<p>
+4th record: This record contains the world coordinate values for each
+grid element in the j dimension. Thus, the record will contain jsiz
+floating point elements.
+</ul>
+</ul>
+<p>
+<a name="frf"><h3>Format of the function result file</h3></a>
+<p>
+The function result file returns the result of the user defined
+function to GrADS.  It is the responsibility of the function program
+to write this file in the proper format. A file written out in an
+improper format may cause GrADS to crash, or to produce incorrect
+results.
+<p>
+The result of a function is always a grid.  Thus, the format of
+the function result file is as follows:<p>
+
+<b>Header record</b>: The header record should always contain 20
+floating point numbers.  The record will always be the same size.
+Values defined in this record are:<p>
+
+<ul>
+1st value: This value
+contains the return code. Any non-zero return code causes GrADS to
+assume the function detected an error, and GrADS does not read
+any further output. 
+<p>
+2nd value: Set to zero, to indicate this particular transfer
+file format.  The function should test this value, and return an
+error if non-zero, in order to be compatible with future
+enhancements to this file format. 
+<p>
+Values 3 to 20: Reserved for future use.
+</ul>
+<p>
+<b>Grid records</b>: The grid records should be written in the same
+order and format as the <code>expr</code> argument record in
+the data transfer file, with one important exception: the 3rd and 4th
+records containing the world coordinate values for each grid element
+in the i and j dimensions are written out to the function result file
+only if the scaling is non-linear. Thus the transfer file and the result
+file are not symmetric: GrADS writes a transfer file with record #3
+and #4 always included, but it does NOT like to see record #3 and #4
+in the result file if the dimensions are linear.
+<p>
+The linear/non-linear scaling of the grid dimensions is determined by
+examining the grid header contents -- values 6 and 7 contain the idim
+and jdim linear flags.  Note that the time dimension is always linear.
+<p>
+
+
+<a name="example">
+<h3><i>Example</i>: Linear Regression Function</h3></a>
+<p>
+This is a simple example of what a user defined function might
+look like in FORTRAN.  This is a simple linear regression
+function, which only handles a 1-D grid and takes one argument,
+and expression.<p>
+
+First, the user defined function table (UDFT):
+<p>
+<ul>
+<pre>
+linreg 1 1 expr 
+sequential 
+/mnt/grads/linreg
+/mnt/grads/linreg.out 
+/mnt/grads/linreg.in
+</pre>
+</ul>
+<p>
+
+The source code for the FORTRAN program linreg is:
+<p>
+<pre>
+      real vals(20),ovals(20) 
+      real x(10000),y(10000) 
+c 
+      open (8,file='/mnt/grads/linreg.out',form='unformatted') 
+      open (10,file='/mnt/grads/linreg.in',form='unformatted') 
+c 
+      read (8)
+      read (8) vals 
+      idim = vals(2) 
+      jdim = vals(3) 
+c 
+c  If this is not a 1-D grid, write error message and exit 
+      if (idim.eq.-1 .or. jdim.ne.-1) then 
+        write (6,*) 'Error: Invalid dimension environment'
+        vals(1) = 1 
+        write (10) vals 
+        stop
+      endif 
+c 
+c  If the grid is too big, write error message and exit 
+      isiz = vals(4) 
+      if (isiz.gt.10000) then 
+        write (6,*) 'Error from linreg: Grid too big' 
+        vals(1) = 1 
+        write (10) vals 
+        stop
+      endif 
+c 
+c  Read the data 
+      read (8) (y(i),i=1,isiz) 
+c 
+c  Read non-linear scaling if necessary 
+      ilin = vals(6) 
+      if (ilin.eq.0) then 
+        read (8) (x(i),i=1,isiz) 
+      else 
+        do 100 i=1,isiz
+          x(i) = i  
+100     continue
+      endif 
+c 
+c  Do linear regression 
+      call fit (x,y,isiz,a,b) 
+c 
+c  Fill in data values 
+      do 110 i=1,isiz 
+        y(i) = a+x(i)*b  
+110   continue 
+c 
+c  Write out return info.  
+c  The header and the non-linear scaling 
+c  info will be the same as what GrADs gave us. 
+      ovals(1) = 0.0 
+      write (10) ovals 
+      write (10) vals 
+      write (10) (y(i),i=1,isiz) 
+      if (ilin.eq.0) write(10) (x(i),i=1,isiz) 
+c 
+      stop
+      end 
+c
+c---------------------------------------------------
+      SUBROUTINE FIT(X,Y,NDATA,A,B) 
+c 
+c A is the intercept 
+c B is the slope 
+c 
+      REAL X(NDATA), Y(NDATA) 
+c 
+      SX = 0. 
+      SY = 0. 
+      ST2 = 0.
+      B = 0. 
+      DO 12 I = 1, NDATA 
+        SX = SX + X(I) 
+        SY = SY + Y(I)  
+12    CONTINUE 
+      SS = FLOAT(NDATA) 
+      SXOSS = SX/SS
+      DO 14 I = 1, NDATA 
+        T = X(I) - SXOSS 
+        ST2 = ST2 + T * T 
+        B = B + T * Y(I)  
+14    CONTINUE 
+      B = B/ST2 
+      A = (SY - SX * B)/SS 
+      RETURN 
+      END
+</pre>
+</body>
+</html>

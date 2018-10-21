@@ -1,0 +1,144 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<h2>INTRODUCTION</h2>
+<ul>
+I believe the most significant contribution of GrADS to the data
+"slicing" problem is its support of a universal,
+EXTERNAL-TO-THE-DATA "world coordinate."  <p>
+
+There are three coordinate systems in GrADS:<p>
+
+<ul>
+<li>GRID or index coorindate where data are reference by indices
+<li>WORLD or some external physical coordinate
+<li>PLOT or x-y location on the screen</ul>
+
+We'll first concentrate on the data cooridinates GRID and WORLD
+before discussing PLOT coordinates since these are the most
+important for data display and analysis.<p>
+
+The world coordinate is 4-D and is DEFINED INSIDE GrADS as the
+variables or dimensions with the names <code>lon</code>,
+<code>lat</code>, <code>lev</code> and
+<code>time</code>.  The typical correspondence between these GrADS
+world
+coordinates and the "real world" is:<p>
+
+<ul>
+lon 	=	longitude on the earth in degrees east<br>
+lat	=	latitude on the earth in degrees N<br>
+lev	=	pressure levels, sigma levels or theta levels<br>
+time	=	REAL TIME in min, hours, days, months and years
+(Gregorian calendar)<br></ul>
+
+For example, the point in the physical world (NOT DATA) of
+(<code>14.3N; 145E; 500 mb; 00:12 UTC on 7 March 1996</code> (a point
+above
+Guam)) in GrADS world coordinates (<code>lon;lat;lev;time</code>) would
+be
+(<code>14.3;145.0;500;12:00Z7Mar1996</code>).<p>
+
+The grid coordinate is also 4-D and is DEFINED INSIDE GrADS as
+(<code>x,y,z,t</code>).  In FORTRAN, the data would written out<p>
+
+<ul>
+<code>parameter (nx=144,ny=73,nz=17,nt=2)<br>
+dimension u(nx,ny,nz,nt)<br>
+integer x,y,z,t<p>
+
+do t=1,nt	  
+&nbsp;&nbsp;  do z=1,nz<br>
+   &nbsp;&nbsp;&nbsp;&nbsp; write(10) ((u(x,y),x=1,nx),y=1,ny)<br>
+&nbsp;&nbsp;  end do<br>
+end do</code></ul>
+
+
+In GrADS, one can REFERENCE data in the GrADS world coordinate
+IRRESPECTIVE of the underlying data structure.  This feature is
+something that the netCDF data access procedures do NOT support
+and is what makes GrADS a powerful data slicer.<p>
+
+However, as in the real world, GrADS only supports ONE
+relationship or "map" between world and grid coordinates at a
+time.  This map is based on the "default" file which by default
+is the first file opened.  To understand where this world->grid
+and grid->world map comes from consider the following data
+descriptor or <code>.ctl</code> file:<p>
+
+<ul>
+<code>
+dset ^bm.dat<br>
+title the best model ver data<br> 
+options yrev zrev<br>
+xdef 72 linear 0.0 5.0<br>
+ydef 46 linear -90 4.0<br>
+zdef  3 levels 850 500 200<br>
+tdef  1 linear 00z1jan1996 12hr<br>
+vars 1<br>
+&nbsp;&nbsp;z 3 0 geopotential height
+endvars</code></ul>
+
+the map is defined by the <code>x(y,z,t)def</code> cards and
+(optionally)
+the <code>options</code> card.  In GrADS the world coordinate is ALWAYS
+defined such that longitude (<code>lon</code>) increases from West to
+East,
+latitutde (<code>lat</code>) increases toward the North and pressure
+level
+(<code>lev</code>) DECREASES with height (this is not strictly true but
+is
+very important when doing calculations such as vint). Time is a
+special case and can ONLY be linear with equal spacing
+(<code>12hr</code> in
+the example).  While the <code>?def</code> "cards" can be ordered in
+any way
+in the <code>.ctl</code> file, the world coordinate inside GrADS is
+ALWAYS
+(<code>lon,lat,lev,time</code>).  However, this does NOT mean the DATA
+has be
+arranged this way and the "options" card tells GrADS how the data
+differs from the standard.  In the above example case, the
+latitudes in GRID cooridates DECREASES with INCREASING <code>y</code>,
+that is
+<code>y=1 -> lat=90; y=2 -> lat=86; y=45 -> lat=-90</code> (some models
+and
+graphics systems prefer this orientation).  Similarly,
+<code>lev=200</code> is
+stored first, followed by <code>lev=500</code> and
+<code>lev=200</code>. Other
+modifications to the world<->grid map are possible, as described
+below.</ul><p>
+<br>
+<h2>DISPLAYING DATA RELATIVE TO THE WORLD COORDINATE</h2>
+<ul>
+The first task in intercomparing two or more data sets with
+different grids (i.e., different grid and world coordinates or
+grid-world "maps") is the graphical overlay or plotting two
+fields on top of each other.  One specifies a 0-3 dimensional
+volume in either grid or world coordinates and then <a
+href="gradcomddisplay.html"><code>display</code></a> a
+variable.  Consider the typical case of a 2-D contour plot:<p>
+
+<ul>
+<code>open psl.ecmwf.ctl<br>
+open psl.ncep.ctl<br>
+set gxout contour<br>
+set t 1<br>
+set lon 0 180<br>
+set lat 0 90<br>
+d psl</code></ul><p>
+
+and let's see what is happening inside GrADS.<p>
+
+the "default" file is the first one or the data in
+<code>psl.ecmwf.ctl</code>.
+This specifes that the grid-world and world-grid map will be
+based on the <code>psl.ecmwf.ctl</code>.
+
+<ul><code>set t 1</code> - look at the first time in the file or 
+
+'set time 00z1mar96' if that were the actual time corresponding the 
+
+
+
+

@@ -1,0 +1,68 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<title>GrADS Function: scorr</title>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>scorr()</b></h2>
+
+<p>
+This function calculates the spatial correlation between two variables
+over an X-Y domain. It returns a single number. The syntax is:
+
+<ul>
+<code>scorr(<i>expr1, expr2, xdim1, xdim2, ydim1, ydim2</i>)</code>
+</ul>
+
+<p>
+where:
+<p>
+<ul>
+<code><i>expr1</i>&nbsp;&nbsp;&nbsp;</code>- any valid GrADS expression <br>
+<code><i>expr2</i>&nbsp;&nbsp;&nbsp;</code>- any valid GrADS expression <br>
+<code><i>xdim1</i>&nbsp;&nbsp;&nbsp;</code>- starting X dimension expression <br>
+<code><i>xdim2</i>&nbsp;&nbsp;&nbsp;</code>- ending X dimension expression <br>
+<code><i>ydim1</i>&nbsp;&nbsp;&nbsp;</code>- starting Y dimension expression <br>
+<code><i>ydim2</i>&nbsp;&nbsp;&nbsp;</code>- ending Y dimension expression <br>
+</ul>
+
+<p>
+For global averaging, a shorthand may be used:
+<ul>
+<code>scorr(<i>expr1, expr2</i>, global)</code>  or<br>
+<code>scorr(<i>expr1, expr2</i>, g)</code>
+</ul>
+is the same as
+<ul>
+<code>scorr(<i>expr1, expr2</i>, lon=0, lon=360, lat=-90, lat=90)</code>
+</ul> 
+
+<p>
+<H3>Usage Note</H3>
+<p>
+<ol>
+<li><code>scorr</code> may be used in conjunction with <a
+href="gradfunctloop.html"><code>tloop</code></a> or <a
+href="gradcomddefine.html"><code>define</code></a> to create time
+series or time/height plots.
+<p>
+<li><code>scorr</code> assumes that the world coordinates are
+longitude in the X dimension and latitude in the Y dimension, and does
+weighting in the latitude dimension by the delta of the sin of the
+latitudes. Weighting is also performed appropriately for unequally
+spaced grids.
+</ol>
+<p>
+<H3>Examples</H3>
+<p>
+This example calculates the correlation between the surface temperature
+and the latent heat flux over the tropical Pacific:
+<p>
+<pre>
+set lat -10 10
+set lon 120 280
+d scorr(tsfc, lhtfl, lon=120, lon=280, lat=-10, lat=10)
+</pre>
+
+</body>
+</html>

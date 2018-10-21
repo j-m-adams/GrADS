@@ -1,0 +1,46 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<title>GrADS Function: atot</title>
+<style type="text/css">
+.red {
+	color: #900;
+	font-weight: bold;
+}
+.red1 {	color: #900;
+}
+body {
+	background-color: #e0f0ff;
+}
+</style>
+<body text="#000000">
+
+<H2><b>atot()</b></H2>
+<p>Thie <code>atot</code> function (in <span class="red1">GrADS version 2.0.2+</span>) duplicates the summing capability of <code><a href="gradfuncasum.html">asum</a></code> but adds the latitude-weighting feature of <code><a href="gradfuncaave.html">aave</a></code>.  The syntax is:
+<p>
+<code>atot(<i>expr, xdim1, xdim2, ydim1, ydim2</i>)</code>
+<p>
+
+<H3>Usage Notes</H3>
+<p>Please see the reference page for <code><a href="gradfuncasum.html">asum</a></code> for details on the command syntax and usage notes.
+
+  <br>
+<H3>Examples</H3>
+
+<ol>
+<li>
+  <p>An instructive sanity check is to calculate the total  area over globe on any grid of data that has a constant value of 1 and no missing values: <br>
+    <br>
+  <code>ga-&gt; d atot(const(temp,1,-a),global) <br>
+  Result value = 12.5664 </code><br>
+  <br>
+  The answer we get is 4*pi, and the unit of the result is steradians.   
+  
+<li>Suppose you have a data variable sea ice concentration (named 'sic') which is given as a % in each grid box, and you would like to calculate the total area in the Arctic covered by sea ice.
+  To calculate the  sea ice coverage in millions of km^2, we multiply the <code>atot</code> result by the square of the radius of the Earth in km:
+
+  <p><code>ga-&gt; d atot(sic/100,lon=0,lon=360,lat=40,lat=90)*6371*6371*1e-6 <br>
+    Result value = 11.289</code>
+</ol>
+</body>
+</html>

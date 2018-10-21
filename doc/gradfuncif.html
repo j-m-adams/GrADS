@@ -1,0 +1,56 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<title>GrADS Function: if</title>
+<style type="text/css">
+.red {
+	color: #900;
+}
+body {
+	background-color: #e0f0ff;
+}
+</style>
+<body text="#000000">
+
+<H2><b>if()</b></H2>
+<p>
+  This function performs an if/then/else expression evaluation. 
+It is available starting with <span class="red">GrADS version 2.1.1.b0</span>.
+<h3>Syntax</h3>
+<p>
+<code>if (<i>logical_expr, then_expr, else_expr</i>)</code>
+
+<p>
+where:
+<ul>
+  <p><code><i>logical_expr</i>&nbsp;&nbsp;&nbsp;</code>- any valid  logical expression that has a boolean (yes/no) result<br>
+    <code><i>then_expr</i>   &nbsp;&nbsp;&nbsp;</code>- the result expression if <code><i>logical_expr</i></code> is true<br>
+    <code><i>else_expr   </i>&nbsp;&nbsp;&nbsp;</code>-  the result expression if <code><i>logical_expr</i></code> is false<br>
+</ul>
+  <p>All the arguments must be expressions for gridded data -- the logical operators and the if() function have not yet been implemented for station data. <br>
+</p>
+<H3>Usage Notes</H3>
+<ol>
+<li>The <code><i>logical_expr</i></code> should include one or more of the logical operators:<code> =, !=, &gt;, &gt;=, &lt;, &lt;=, |, &amp;</code><br>
+  <br>
+The result of a logical operation is boolean -- an answer to a yes/no question. If the expression is true the result is 1, and if the expression is false the answer is  -1. The <code>if()</code> function will evaluate <code><i>logical_expr</i></code> and wherever the result is  &gt;0 it will place the value of <code><i>then_expr</i></code>, and wherever the result is &lt;0 it will place the value of <code><i>else_expr</i></code>.<br>
+<br>
+<li>The arguments<code><i>then_expr</i></code> and <code><i>else_expr</i></code> may be any GrADS expression, including a constant. If you want <code><i>then_expr</i></code> or <code><i>else_expr</i></code> to be undefined, then use  <code><a href="gradfuncmaskout.html">maskout()</a></code> instead of the <code><a href="gradfuncif.html">if()</a></code> function.
+</ol>
+
+<h3>Examples</h3>
+<p>Here is a script sample to find the minimum and maximum 2-meter temperature at each grid point over a 12-month period:<dd><code>
+  'define tmin = const(t2m,1e9)'<br>
+  'define tmax = const(t2m,-1e9)'<br>
+  t = 1<br>
+  while (t &lt;= 12) <br>
+  'set t 't<br>
+  'define tmin = if(t2m&lt;tmin,t2m,tmin)'<br>
+  'define tmax = if(t2m&gt;tmax,t2m,tmax)'<br>
+  t = t + 1<br>
+endwhile
+</code>
+</dd>
+</p>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<h2><b>tvrh2q</b></h2>
+
+<p>
+<code>tvrh2q(<i>tvexpr,rhexpr</i>)</code>
+
+<p> 
+Given virtual temperature and relative humidty, <code>tvrh2q</code>
+returns specific humidity, q, in g/g. Specifically: 
+
+<p>
+<code><i>tvexpr</i></code>&nbsp;&nbsp;&nbsp;&nbsp; 
+A GrADS expression that represents virtual temperature, in Kelvin. <br>
+<code><i>rhexpr</i></code>&nbsp;&nbsp;&nbsp;&nbsp; 
+A GrADS expression that represents relative humidty, in percent 
+(values from 0 to 100). 
+
+<p>
+This function works only on gridded data. 
+
+<p>
+<h3>Usage Notes </h3>
+
+<p>
+<ol>
+<li>The conversion formula requires a pressure in mb. <code>tvrh2q</code>
+assumes that the Z coordinate system is pressure in mb. If Z is a varying
+dimension, the pressure valid at each grid point is used. When Z is a
+fixed dimension, the Z value from the current dimension environment is
+used. 
+
+<p>
+Note that it is possible to provide values from an incorrect pressure
+level by overriding the current dimension environment: 
+
+<p>
+<code>
+<dd>set lev 500 
+<dd>d tvrh2q(tv(lev=850),rh(lev=850)) 
+</code>
+
+<p>
+In this case, the <code>tvrh2q</code> function assumes a pressure of
+500mb, which is the current setting for the Z dimension
+environment. However, <code><i>tvexpr</i></code> and
+<code><i>rhexpr</i></code> are providing data from the 850mb level, 
+so the function will produce incorrect results. 
+</ol>
+
+
+<H3>Examples</H3>

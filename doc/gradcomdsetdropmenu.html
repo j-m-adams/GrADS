@@ -1,0 +1,76 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>GrADS Command: set dropmenu</title>
+</head>
+<body bgcolor="e0f0ff" text="#000000">
+
+<h2><b>set dropmenu</b></h2>
+<p>
+Sets up the color characteristics of a dropmenu widget. The syntax is:
+
+<p>
+<code>set dropmenu <i>fc bc oc1 oc2 tfc tbc toc1 toc2 bfc bbc boc1 boc2 soc1 soc2 thick</i></code>
+
+<p>
+where:
+<p>
+<ul>
+<code><i>fc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i></code>
+menu base text color<br>
+<code><i>bc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i></code>
+menu base face color<br>
+<code><i>oc1&nbsp;&nbsp;&nbsp;&nbsp;</i></code>
+dark color of shadow outline for menu base<br>
+<code><i>oc2&nbsp;&nbsp;&nbsp;&nbsp;</i></code>
+bright color of shadow outline for menu base<br>
+<code><i>tfc&nbsp;&nbsp;&nbsp;&nbsp;</i></code>
+menu base text color when selected with a mouse click<br>
+<code><i>tbc&nbsp;&nbsp;&nbsp;&nbsp;</i></code>
+menu base face color when selected with a mouse click<br>
+<code><i>toc1&nbsp;&nbsp;&nbsp;</i></code>
+dark color of shadow outline for menu base when selected<br>
+<code><i>toc2&nbsp;&nbsp;&nbsp;</i></code>
+bright color of shadow outline for menu base when selected<br>
+<code><i>bfc&nbsp;&nbsp;&nbsp;&nbsp;</i></code>
+menu list text color<br>
+<code><i>bbc&nbsp;&nbsp;&nbsp;&nbsp;</i></code>
+menu list face color<br>
+<code><i>boc1&nbsp;&nbsp;&nbsp;</i></code>
+dark color of shadow outline for menu list<br>
+<code><i>boc2&nbsp;&nbsp;&nbsp;</i></code>
+bright color of shadow outline for menu list<br>
+<code><i>soc1&nbsp;&nbsp;&nbsp;</i></code>
+dark color of shadow outline for highlighted menu item<br>
+<code><i>soc2&nbsp;&nbsp;&nbsp;</i></code>
+bright color of shadow outline for highlighted menu item<br>
+<code><i>thick&nbsp;&nbsp;</i></code>
+thickness of the shadow outline<br>
+</ul>
+
+<p>
+<h3>Usage Notes</h3>
+<ol>
+<li><code>set dropmenu</code> generally precedes the <a
+href="gradcomddrawdropmenu.html"><code>draw dropmenu</code></a> command.
+<p>
+<li>See the section of the User's Guide on <a
+href="script.html#widgets">widgets</a> for more information on using
+dropmenus.
+</ol>
+
+<p>
+<h3>Example</h3>
+
+<p>
+<pre>
+set rgb 90 100 100 100
+set rgb 91  50  50  50
+set rgb 92 200 200 200
+set dropmenu 1 90 91 92 0 90 92 91 1 90 91 92 92 91 6
+draw dropmenu 1 1 8 1.5 0.5 Menu Base | Menu Item #1 | Menu Item #2 
+</pre>
+
+</body>
+</html>

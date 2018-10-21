@@ -1,0 +1,94 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<title>GrADS Utilities: stnmap</title>
+
+<body bgcolor="e0f0ff" text="000000">
+<h2><a name="stnmap">stnmap</a></h2>
+<code>stnmap [-i <i>fname</i>] [-0]</code>
+
+<p>
+<code>stnmap</code> is an external GrADS utility that writes out a
+hash table and/or link list information for station data that allows
+GrADS to access the data more efficiently. After a station data set
+has been written and the accompanying data descriptor file has been
+created, you must run the <code>stnmap</code> utility before you can
+look at the data in GrADS.
+
+<p>
+The <code>stnmap</code> options are as follows: 
+<ul>
+<code><i>fname</i></code>
+<ul>The name of the station data descriptor file. If not specified, 
+<code>stnmap</code> will prompt the user.</ul>
+<p>
+<code>-0</code>
+<ul>Allows processing of certain templated station data sets without 
+actually reading the data.</ul>
+</ul>
+
+<p>
+The output from <code>stnmap</code> goes into a file that is named in the
+<code>STNMAP</code> record of the data descriptor file. (See Usage Note #2).
+
+<p>
+<b>Usage Notes</b>
+<ol>
+<li>If you change the data file (perhaps by appending another time group),
+you will also have to change the descriptor file to reflect the
+changes and then rerun the <code>stnmap</code> utility.
+<p>
+<li>Note the difference between required records in a station descriptor
+file and a grid descriptor file:
+<p>
+<code>DTYPE</code>
+<ul>specifies a data type of: station</ul>
+<code>STNMAP</code>
+<ul>gives the file name of the station mapping file</ul>
+<code>XDEF, YDEF, ZDEF</code>
+<ul>these records are not specified in a station data control file</ul>
+<code>TDEF</code>
+<ul>describes the time grouping interval and the number of the time groups in the file</ul>
+<code>VARS</code>
+<ul>
+surface variables are listed first, and show a "0" for the
+number-of-levels field. Level-dependent variables are listed after the
+surface variables, and show a "1" in the number-of-levels
+field.
+</ul>
+</ol>
+<p>
+<b>Examples</b>
+<p>
+Here's a sample descriptor file <code>stat.ctl</code> for station data set <code>ua.reps</code>:
+<ul>
+<code>
+DSET&nbsp;&nbsp;&nbsp;^ua.reps<br>
+DTYPE&nbsp;&nbsp;station<br>
+STNMAP&nbsp;^ua.map<br>
+UNDEF&nbsp;&nbsp;-999.0<br>
+TITLE&nbsp;&nbsp;Real Time Upper air obs<br>
+TDEF&nbsp;&nbsp;&nbsp;10 linear 12z18jan1992 12hr<br>
+VARS&nbsp;&nbsp;&nbsp;8<br>
+&nbsp;&nbsp;slp&nbsp;0  99  SLP<br>
+&nbsp;&nbsp;ts&nbsp;&nbsp;0  99  Temps<br>
+&nbsp;&nbsp;us&nbsp;&nbsp;0  99  U Winds<br>
+&nbsp;&nbsp;vs&nbsp;&nbsp;0  99  V Winds<br>
+&nbsp;&nbsp;z&nbsp;&nbsp;&nbsp;1  99  Heightsa<br>
+&nbsp;&nbsp;t&nbsp;&nbsp;&nbsp;1  99  Temps<br>
+&nbsp;&nbsp;u&nbsp;&nbsp;&nbsp;1  99  U Winds<br>
+&nbsp;&nbsp;v&nbsp;&nbsp;&nbsp;1  99  V WInds<br>
+ENDVARS<br>
+</code>
+</ul>
+
+<p>
+Run the <code>stnmap</code> utility:
+<ul><code>stnmap -i stat.ctl</code></ul>
+<p>
+The station map file <code>ua.map</code> is a
+binary file, which includes the hash table and/or link list
+information.
+
+</body>
+</html>

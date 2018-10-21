@@ -1,0 +1,80 @@
+netcdf DAOE054A.hdf {
+dimensions:
+        TIME4DIMS:DAOgrid = 4 ; // TDEF_dimension_name = TDEF_count
+        HGHT1DIMS:DAOgrid = 1 ;
+        YDim:DAOgrid = 91 ; // YDEF_dimension_name = YDEF_count
+        XDim:DAOgrid = 144 ; // XDEF_dimension_name = XDEF_count
+        TIME8DIMS:DAOgrid = 8 ;
+        HGHT18DIMS:DAOgrid = 18 ; // ZDEF_dimension_name = ZDEF_count
+
+variables:
+// float internal_variable_name(dimlist) ;  VARS_count is 3
+        float GEOPOTENTIAL_HEIGHT(TIME4DIMS:DAOgrid, HGHT18DIMS:DAOgrid,
+                                  YDim:DAOgrid, XDim:DAOgrid) ;
+        float SPECIFICHUMIDITY(TIME4DIMS:DAOgrid, HGHT18DIMS:DAOgrid,
+                               YDim:DAOgrid, XDim:DAOgrid) ;
+        float TEMPERATURE(TIME4DIMS:DAOgrid, HGHT18DIMS:DAOgrid, YDim:DAOgrid,
+                          XDim:DAOgrid) ;
+
+// global attributes:
+                :coremetadata.0 = "\n",
+    "    /*  This attribute contains a duplicate of the Collection- */\n",
+    "    /*  level EastBoundingCoordinate value. */\n",
+    "    OBJECT                 = EASTBOUNDINGCOORDINATE\n",
+    "      NUM_VAL              = 1\n",
+// XDEF_step value = (Final_XDEF_value - First_XDEF_value)/(XDEF_count - 1)
+// (assumes equal spacing)  (177.5 - (-180))/143) => 2.5
+    "      VALUE                = 177.500000\n",      // Final_XDEF_value
+    "    END_OBJECT             = EASTBOUNDINGCOORDINATE\n",
+    "    /*  This attribute contains a duplicate of the Collection- */\n",
+    "    /*  level WestBoundingCoordinate value. */\n",
+    "    OBJECT                 = WESTBOUNDINGCOORDINATE\n",
+    "      NUM_VAL              = 1\n",
+    "      VALUE                = -180.000000\n",       // First_XDEF_value
+    "    END_OBJECT             = WESTBOUNDINGCOORDINATE\n",
+    "    /*  This attribute contains a duplicate of the Collection- */\n",
+    "    /*  level NorthBoundingCoordinate value. */\n",
+    "    OBJECT                 = NORTHBOUNDINGCOORDINATE\n",
+    "      NUM_VAL              = 1\n",
+// YDEF_step = range/(YDEF_count-1) (equal spacing assumed) (90 - (-90))/90=>2
+// (one of the 91 is 0, the equator)
+    "      VALUE                = 90.000000\n",          // Final_YDEF_value
+    "    END_OBJECT             = NORTHBOUNDINGCOORDINATE\n",
+    "    /*  This attribute contains a duplicate of the Collection- */\n",
+    "    /*  level SouthBoundingCoordinate value. */\n",
+    "    OBJECT                 = SOUTHBOUNDINGCOORDINATE\n",
+    "      NUM_VAL              = 1\n",
+    "      VALUE                = -90.000000\n",         // First_YDEF_value
+    "    END_OBJECT             = SOUTHBOUNDINGCOORDINATE\n",
+    "  END_GROUP              = BOUNDINGRECTANGLE\n",
+    "  /*  The RangeDateTime attribute values will be set at DME */\n",
+    "  /*  runtime by retrieval the granule time from the data set. */\n",
+    "  /*  The starting date of the DAO granule */\n",
+    "  GROUP                  = RANGEDATETIME\n",
+    "    /* Format of RangeBeginningDate is YYYY-MM-DD or YYYY-DDD */\n",
+    "    OBJECT                 = RANGEBEGINNINGDATE\n",
+    "      NUM_VAL              = 1\n",
+// First_TDEF_value(YYYY-DDD)
+    "      VALUE                = \"1993-181\"\n",
+    "    END_OBJECT             = RANGEBEGINNINGDATE\n",
+    "    /* Format of RangeBeginningTime is HH:MM:SS.SSSS... */\n",
+    "    OBJECT                 = RANGEBEGINNINGTIME\n",
+    "      NUM_VAL              = 1\n",
+// First_TDEF_value (HMS)
+    "      VALUE                = \"00:00:00.000000\"\n",
+    "    END_OBJECT             = RANGEBEGINNINGTIME\n",
+    "    /* Format of RangeEndingDate is YYYY-MM-DD or YYYY-DDD */\n",
+    "    OBJECT                 = RANGEENDINGDATE\n",
+    "      NUM_VAL              = 1\n",
+// TDEF_step = range/TDEF_count (equal spacing assumed) (1 day/4 => 6hr step)
+// Final_TDEF_value (YYYY-DDD)
+    "      VALUE                = \"1993-181\"\n",
+    "    END_OBJECT             = RANGEENDINGDATE\n",
+    "    /* Format of RangeEndingTime is HH:MM:SS.SSSS... */\n",
+    "    OBJECT                 = RANGEENDINGTIME\n",
+    "      NUM_VAL              = 1\n",
+// Final_TDEF_value (HMS) (round up)
+    "      VALUE                = \"23:59:59.999999\"\n",
+    "    END_OBJECT             = RANGEENDINGTIME\n",
+    "  END_GROUP              = RANGEDATETIME\n",
+}

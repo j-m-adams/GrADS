@@ -1,0 +1,72 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<title>GrADS Function: asum</title>
+<body  bgcolor="e0f0ff" text="#000000">
+
+<H2><b>asum()</b></H2><p>
+<p>
+This function takes a sum over an X-Y region. The syntax is:
+<p>
+<code>asum(<i>expr, xdim1, xdim2, ydim1, ydim2</i>)</code>
+
+<p>
+where:
+<p>
+<ul>
+<code><i>expr</i>&nbsp;&nbsp;&nbsp;&nbsp;</code>- any valid GrADS expression <br>
+<code><i>xdim1</i>&nbsp;&nbsp;&nbsp;</code>- starting X dimension expression <br>
+<code><i>xdim2</i>&nbsp;&nbsp;&nbsp;</code>- ending X dimension expression <br>
+<code><i>ydim1</i>&nbsp;&nbsp;&nbsp;</code>- starting Y dimension expression <br>
+<code><i>ydim2</i>&nbsp;&nbsp;&nbsp;</code>- ending Y dimension expression <br>
+</ul>
+<p>
+For global summing, a shorthand may be used:
+
+<ul>
+<code>asum(<i>expr</i>, global)</code> or <br>
+<code>asum(<i>expr</i>, g)</code>
+</ul>
+is the same as
+<ul>
+<code>asum(<i>expr</i>, lon=0, lon=360, lat=-90, lat=90)</code>
+</ul> 
+
+<p>
+<H3>Usage Notes</H3>
+<p>
+<ol>
+<li>The <code>asum</code> function always does its average to the
+exact boundaries specified, in world coordinates. If the boundaries
+specified via the dimension expressions do not fall on grid
+boundaries, then the boundary values are weighted appropriately in the
+sum.
+
+<p>
+<li>When grid coordinates are used in the dimensions expressions,
+then they are converted to world coordinates for the boundary to be
+determined. This conversion is done using the scaling of the default
+file. Note that the conversion is done using the outside grid
+boundary, rather than the grid center. For example: 
+<p>
+<dd><code>asum(expr,x=1,x=72,y=1,y=46)</code>
+<p>
+Here the boundary would be determined by using the grid values 0.5,
+72.5, 0.5, and 46.5 which would be converted to world coordinates. If
+we assume that <code>x=1</code> is 0 degrees longitude and
+<code>x=72</code> is 355 degrees longitude, then the averaging
+boundary would be -2.5 to 357.5 degrees, which would cover the
+earth. In the Y dimension, when the boundary is beyond the pole, the
+<code>asum</code> function recognizes this and weights
+appropriately. To calculate a sum without any weighting, use the
+<code><a href="gradfuncasumg.html">asumg</a></code> function.
+
+
+</ol>
+<p>
+
+<H3>Examples</H3> 
+
+ 
+</body>
+</html>
