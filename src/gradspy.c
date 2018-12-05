@@ -344,7 +344,7 @@ static PyObject* put(PyObject* self, PyObject *args) {
   }
   pygr.grid = buf;
 
-  for (i=0; i<gsz; i++) *(buf+i) = *(gdata+i);  /* JMA this might have i/j axes switched */
+  for (i=0; i<gsz; i++) *(buf+i) = *(gdata+i);
 
   /* if dimension increment is negative and size is > 1, copy array of levels for X, Y, and Z coordinates */
   if (pygr.xincr < 0 && pygr.xsz > 1) {
