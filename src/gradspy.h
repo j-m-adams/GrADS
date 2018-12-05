@@ -21,4 +21,5 @@ struct pygagrid {
 static char *(*pdocmd)(char *,int *);
 static int   (*pgainit)(int,char **);
 static int   (*pdoexpr)(char *,struct pygagrid *);
+static int   (*psetup)(char *,struct pygagrid *);
 static void  (*pyfre)(struct pygagrid *);

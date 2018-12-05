@@ -42,14 +42,6 @@
 #include "hdf5.h"
 #endif
 
-#if USENETCDF==1
-#include "netcdf.h"
-#include "netcdf_meta.h"
-#endif
-
-#if USEGADAP==1
-const char *libgadap_version(void);
-#endif
 
 #include "gatypes.h"
 #include "gx.h"
@@ -158,7 +150,8 @@ snprintf(cmd,255,"Config: v%s",GRADS_VERSION);
 #endif
  
 #if USENETCDF==1
-   snprintf(cmd,255," -+- NetCDF interface ENABLED  netcdf-%s \n",NC_VERSION);
+   const char * nc_inq_libvers(void);
+   snprintf(cmd,255," -+- NetCDF interface ENABLED  netcdf-%s \n",nc_inq_libvers());
    gaprnt(verbose,cmd);
 #else 
    gaprnt(verbose," -+- NetCDF interface DISABLED\n");
@@ -171,6 +164,7 @@ snprintf(cmd,255,"Config: v%s",GRADS_VERSION);
 #endif
 
 #if USEGADAP==1
+   const char *libgadap_version(void);
    snprintf(cmd,255," -+- OPeNDAP station data interface ENABLED  %s \n", libgadap_version());
    gaprnt(verbose,cmd);
 #else

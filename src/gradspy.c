@@ -10,6 +10,7 @@
 #include <Python.h>
 #include <numpy/arrayobject.h>
 #include <dlfcn.h>
+#include <stdio.h>
 #include "gradspy.h"
 
 static int gapyerror;
@@ -19,8 +20,8 @@ static int gapystart;
 
 static PyObject* start(PyObject* self, PyObject *args) {
 PyObject *item;
-int i,rc,siz;
 Py_ssize_t tupsiz;
+int i,rc,siz;
 char *ganame = "gradspy";
 char *arglist[50];
 
@@ -214,7 +215,7 @@ static PyObject* result(PyObject* self, PyObject *args) {
   *(s+5) = pygr.zincr;      /* Z increment (negative if non-linear) */
   
 
-  /* We're done copying data, so we can release the pypgr structure on the GrADS side */
+  /* We're done copying data, so we can release the pygr structure on the GrADS side */
   (*pyfre)(&pygr);
   
   /* Returns the tuple containing the return code, the result, and the metadata back to Python. 
@@ -225,11 +226,176 @@ static PyObject* result(PyObject* self, PyObject *args) {
 }
 
 
+/* The 'put' method complements the 'result' method: it takes a name and a Python tuple 
+   (with the similar structure) as arguments and creates a defined object within GrADS.
+
+   The tuple has seven elements (one string, one integer, and six PyObjects):
+   0. The variable's name (alphanumeric, lowercase, starts with a letter, <=16 chars)
+   1. The NumPy array containing the data grid (with NaN for missing data values) 
+   2. 1D NumPy array of X coordinate values (NaN if X is not varying) 
+   3. 1D NumPy array of Y coordinate values (NaN if Y is not varying)
+   4. 1D NumPy array of Z coordinate values (NaN if Z is not varying)
+   5. 1D NumPy array of grid metadata (14 integers)
+   6. 1D NumPy array of grid metadata (6 doubles) 
+*/
+
+static PyObject* put(PyObject* self, PyObject *args) {
+
+  PyArrayObject *grid,*xvals,*yvals,*zvals,*iinfo,*dinfo;
+  /* PyArrayObject **grid,**xvals,**yvals,**zvals,**iinfo,**dinfo; */
+  /* PyObject *grid,*xvals,*yvals,*zvals,*iinfo,*dinfo; */
+  PyObject *rval;
+  struct pygagrid pygr;
+  double mynan;
+  char *name,*ch;
+  int i,rc,gsz;
+  long *idata;
+  double *ddata,*gdata,*xdata,*ydata,*zdata;
+  double *buf=NULL,*xlevs=NULL,*ylevs=NULL,*zlevs=NULL;
+
+  
+  if (gapyerror) {
+    PyErr_SetString(PyExc_TypeError, "put error: prior initialization error");
+    rc=1; goto rtrn;
+  }
+  if (!gapystart) {
+    PyErr_SetString(PyExc_TypeError, "put error: start method failed or not called");
+    rc=1; goto rtrn;
+  }
+
+  /* Evaluate the input tuple, returns true on success */
+  rc = PyArg_ParseTuple(args,"(sOOOOOO)",&name,&grid,&xvals,&yvals,&zvals,&iinfo,&dinfo);
+
+  if (!rc) {
+    /* PyErr_SetString(PyExc_TypeError, "put error: PyArg_ParseTuple failed"); */
+    rc=1; goto rtrn;
+  }
+ 
+  /* Initialize the pygr structure*/
+  mynan = strtod("nan",&ch);
+  pygr.gastatptr = NULL;
+  pygr.grid = NULL;
+  pygr.isiz = 0;
+  pygr.jsiz = 0;
+  pygr.idim = -1;
+  pygr.jdim = -1;
+  pygr.xsz = 1; 
+  pygr.ysz = 1; 
+  pygr.zsz = 1; 
+  pygr.tsz = 1; 
+  pygr.esz = 1;
+  pygr.xstrt = mynan; 
+  pygr.ystrt = mynan; 
+  pygr.zstrt = mynan;
+  pygr.xincr = mynan; 
+  pygr.yincr = mynan; 
+  pygr.zincr = mynan;
+  pygr.syr = 0; 
+  pygr.smo = 0; 
+  pygr.sdy = 0; 
+  pygr.shr = 0; 
+  pygr.smn = 0;
+  pygr.tincr = 0; 
+  pygr.ttyp = 0; 
+  pygr.tcal = 0;
+  pygr.estrt = 0;
+  pygr.xvals = NULL; 
+  pygr.yvals = NULL; 
+  pygr.zvals = NULL;
+  
+  /* check the args */
+  gdata = (double*)PyArray_DATA(grid);
+  xdata = (double*)PyArray_DATA(xvals);
+  ydata = (double*)PyArray_DATA(yvals);
+  zdata = (double*)PyArray_DATA(zvals);
+  idata =   (long*)PyArray_DATA(iinfo);
+  ddata = (double*)PyArray_DATA(dinfo);
+
+  /* Copy 14 integers from iinfo into pygr */
+  pygr.xsz   = (int)idata[0] ;     /* X (lon)  size (1 if not varying) */
+  pygr.ysz   = (int)idata[1] ;     /* Y (lat)  size (1 if not varying) */
+  pygr.zsz   = (int)idata[2] ;     /* Z (lev)  size (1 if not varying) */
+  pygr.tsz   = (int)idata[3] ;     /* T (time) size (1 if not varying) */
+  pygr.esz   = (int)idata[4] ;     /* E (ens)  size (1 if not varying) */
+  pygr.syr   = (int)idata[5] ;     /* T start time -- year   */
+  pygr.smo   = (int)idata[6] ;     /* T start time -- month  */
+  pygr.sdy   = (int)idata[7] ;     /* T start time -- day    */
+  pygr.shr   = (int)idata[8] ;     /* T start time -- hour   */
+  pygr.smn   = (int)idata[9] ;     /* T start time -- minute */
+  pygr.tincr = (int)idata[10];     /* T increment */
+  pygr.ttyp  = (int)idata[11];     /* type of T increment (1==months, 0==minutes) */
+  pygr.tcal  = (int)idata[12];     /* T calendar type (0==normal, 1==365-day) */
+  pygr.estrt = (int)idata[13];     /* E start (E increment is always 1) */
+
+  /* Copy 6 doubles from dinfo into pygr */
+  pygr.xstrt = *(ddata+0);      /* X start value (if linear) */
+  pygr.xincr = *(ddata+1);      /* X increment (negative if non-linear) */
+  pygr.ystrt = *(ddata+2);      /* Y start value (if linear) */
+  pygr.yincr = *(ddata+3);      /* Y increment (negative if non-linear) */
+  pygr.zstrt = *(ddata+4);      /* Z start value (if linear) */
+  pygr.zincr = *(ddata+5);      /* Z increment (negative if non-linear) */
+  
+  /* Allocate memory to copy the grid values */
+  gsz = pygr.xsz * pygr.ysz * pygr.zsz * pygr.tsz * pygr.esz; 
+  buf = (double *)malloc(gsz*sizeof(double));
+  if (buf==NULL) {
+    PyErr_SetString(PyExc_TypeError, "put error: unable to allocate memory for data grid");
+    rc=1; goto rtrn;
+  }
+  pygr.grid = buf;
+
+  for (i=0; i<gsz; i++) *(buf+i) = *(gdata+i);  /* JMA this might have i/j axes switched */
+
+  /* if dimension increment is negative and size is > 1, copy array of levels for X, Y, and Z coordinates */
+  if (pygr.xincr < 0 && pygr.xsz > 1) {
+    xlevs = (double *)malloc(pygr.xsz*sizeof(double));
+    if (xlevs==NULL) {
+      PyErr_SetString(PyExc_TypeError, "put error: unable to allocate memory for X coordinate values");
+      rc=1; goto rtrn;
+    }
+    pygr.xvals = xlevs;
+    for (i=0; i<pygr.xsz; i++) *(xlevs+i) = *(xdata+i);
+  }
+  
+  if (pygr.yincr < 0 && pygr.ysz > 1) {
+    ylevs = (double *)malloc(pygr.ysz*sizeof(double));
+    if (ylevs==NULL) {
+      PyErr_SetString(PyExc_TypeError, "put error: unable to allocate memory for Y coordinate values");
+      rc=1; goto rtrn;
+    }
+    pygr.yvals = ylevs;
+    for (i=0; i<pygr.ysz; i++) *(ylevs+i) = *(ydata+i);
+  }
+  
+  if (pygr.zincr < 0 && pygr.zsz > 1) {
+    zlevs = (double *)malloc(pygr.zsz*sizeof(double));
+    if (zlevs==NULL) {
+      PyErr_SetString(PyExc_TypeError, "put error: unable to allocate memory for Z coordinate values");
+      rc=1; goto rtrn;
+    }
+    pygr.zvals = zlevs;
+    for (i=0; i<pygr.zsz; i++) *(zlevs+i) = *(zdata+i);
+  }
+
+  /* Hand the data and metadata to GraDS */
+  rc = (*psetup)(name,&pygr);
+  /* if (rc) PyErr_SetString(PyExc_TypeError, "put error: gasetup failed"); */
+
+
+rtrn:
+  if (buf) free(buf);
+  if (xlevs) free(xlevs);
+  if (ylevs) free(ylevs);
+  if (zlevs) free(zlevs);
+  rval =  Py_BuildValue("i",rc); 
+  return(rval);
+}
 
 static PyMethodDef gradspy_funcs[] = {
     {"start",  (PyCFunction)start,  METH_VARARGS, "Start GrADS with desired switches and arguments"},
     {"cmd",    (PyCFunction)cmd,    METH_VARARGS, "Issue a command to GrADS"},
     {"result", (PyCFunction)result, METH_VARARGS, "Retrieve a grid using a GrADS expression"},
+    {"put",    (PyCFunction)put,    METH_VARARGS, "Create a defined grid object in GrADS"},
     {NULL}
 };
 
@@ -243,8 +409,8 @@ const char *error;
 
   Py_InitModule3("gradspy", gradspy_funcs,"GrADS extension modlues for Python");
 
-  handle = dlopen ("libgradspy.so",    RTLD_LAZY | RTLD_GLOBAL );  /* for linux */
-/*   handle = dlopen ("libgradspy.dylib", RTLD_LAZY | RTLD_GLOBAL );  /\* for mac   *\/ */
+/*   handle = dlopen ("libgradspy.so",    RTLD_LAZY | RTLD_GLOBAL );  /\* for linux *\/ */
+  handle = dlopen ("libgradspy.dylib", RTLD_LAZY | RTLD_GLOBAL );  /* for mac   */
   if (!handle) {
     fputs (dlerror(), stderr);
     fputs ("\n", stderr);
@@ -267,6 +433,13 @@ const char *error;
     }
     
     pdoexpr = dlsym(handle, "gadoexpr");  /* evaluates an expression */
+    if ((error = dlerror()) != NULL)  {
+      fputs(error, stderr);
+      fputs ("\n", stderr);
+      gapyerror = 1;
+    }
+    
+    psetup = dlsym(handle, "gasetup");    /* creates a defined grid object */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);

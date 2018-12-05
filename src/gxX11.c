@@ -780,6 +780,7 @@ gaint i1,i2,j1,j2;
   if (QLength(display)&&rstate) gxdeve(0);
 }
 
+
 void gxdsgl (void) {
 gaint i;
   if (dblmode) {
@@ -3141,6 +3142,8 @@ void gxdsignal (gaint sig) {
 void gxdXflush (void) {
 }
 void gxdclip (gadouble xlo, gadouble xhi, gadouble ylo, gadouble yhi) {
+}
+void gxdcirc (gadouble x, gadouble y, gadouble r, gaint flg) {
 }
 void gxdcfg (void) {
   printf("X%d.%d ",X_PROTOCOL,X_PROTOCOL_REVISION);

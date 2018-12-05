@@ -3396,6 +3396,8 @@ char *r1mask, *r2mask, *cmask=NULL;
         if (*cmask==0) {
 	  /* if color grid has missing data, use color 15 */
 	  gxcolr(15);
+          /* don't draw marks when color grid is missing */
+          drawthismark=0;
 	}
         else {
           lcol = gashdc(pcm,*c);

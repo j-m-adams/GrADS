@@ -760,6 +760,22 @@ gadouble di1,di2,dj1,dj2;
   }
 }
 
+/* Draw an open or filled circle */
+
+void gxCcirc (gadouble x, gadouble y, gadouble r, gaint flg) {
+gadouble di,dj,rad;
+  if (drawing) cairo_stroke(cr);
+  drawing = 0;
+  gxCxycnv (x,y,&di,&dj);
+  rad = r*yscl;
+  cairo_move_to(cr,di+rad,dj);
+  cairo_arc (cr, di, dj, rad, 0, 2*M_PI);
+  if (flg)
+    cairo_fill (cr);    /* filled */
+  else
+    cairo_stroke (cr);  /* open */
+}
+
 
 /* initialize a polygon fill by turning on a flag */
 

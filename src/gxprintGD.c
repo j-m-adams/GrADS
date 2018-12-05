@@ -110,4 +110,6 @@ gadouble gxpqchl (char ch, gaint fn, gadouble w) {
 }
 void gxpclip (gadouble x1, gadouble x2, gadouble y1, gadouble y2) { 
 }
+void gxpcirc (gadouble x, gadouble y, gadouble r, gaint flg) {  
+}
 

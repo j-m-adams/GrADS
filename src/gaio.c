@@ -140,7 +140,8 @@ gaint gaggrd (struct gagrid *pgrid) {
     msgflg = 0;
   }
 
-  if (pfi->type==4) {
+  /* check if it's a defined grid */
+  if (pfi->type==4 || pfi->type==5) {
     rc = gagdef();
     return (rc);
   }
@@ -3553,12 +3554,18 @@ gaint h5openvar (gaint h5id, char *vname, hid_t *dataspace, hid_t *h5varflg) {
   hid_t fid,vid,plid,dsid;
   size_t nslots;
   gadouble pp;
+  herr_t rc;
 
   /* create a property list, and change the cache settings with two hard-coded args */ 
   plid = H5Pcreate (H5P_DATASET_ACCESS);
   nslots = 51203;
   pp = 0.75;
-  H5Pset_chunk_cache(plid, nslots, cachesf*pfi->cachesize, pp);
+  rc = H5Pset_chunk_cache(plid, nslots, cachesf*pfi->cachesize, pp);
+  if (rc<0)  {
+    snprintf(pout,1255,"Error: H5Pset_chunk_cache failed for variable %s \n",vname);
+    gaprnt(0,pout);
+    return (1); 
+  }
 
   /* now open the variable with the modified property list */
   fid = (hid_t)h5id;
@@ -4206,6 +4213,9 @@ gadouble *dattr_val;
 gafloat  *fattr_val;
 long   *iattr_val;
 short  *sattr_val;
+unsigned short  *usattr_val;
+long long   *i64attr_val;
+unsigned long long  *ui64attr_val;
 char   *cattr_val;
 char  **strattr_val;
 char   *battr_val;
@@ -4339,6 +4349,26 @@ size_t sz,asize;
 	      }
 	      gree(sattr_val,"f141");
 	      break;
+	    case (NC_USHORT):
+	      sz = asize * sizeof (NC_USHORT);
+	      usattr_val = (unsigned short *) galloc(sz,"usattrval");
+	      if (nc_get_att_ushort(ncid, varid, attr_name, usattr_val) == -1) {
+		gaprnt(2,"nc_get_att_ushort failed for type NC_USHORT\n"); 
+	      }
+	      else {
+		gaprnt(2,abbrv); 
+		gaprnt(2," UInt16 "); 
+		gaprnt(2,attr_name); 
+		gaprnt(2," ");
+		for (i=0; i<asize; i++) {
+		  snprintf(pout,1255,"%d", (gaint)(usattr_val[i])); 
+		  gaprnt(2,pout);
+		  if (i<asize-1) gaprnt(2,",");
+		}
+		gaprnt(2,"\n");
+	      }
+	      gree(usattr_val,"f141b");
+	      break;
 	    case (NC_LONG):
 	      sz = asize * sizeof (NC_LONG);
 	      iattr_val = (long *) galloc(sz,"iattrval1");
@@ -4358,6 +4388,46 @@ size_t sz,asize;
 		gaprnt(2,"\n");
 	      }
 	      gree(iattr_val,"f142");
+	      break;
+	    case (NC_INT64):
+	      sz = asize * sizeof (NC_INT64);
+	      i64attr_val = (long long *) galloc(sz,"i64attrval");
+	      if (nc_get_att_longlong(ncid, varid, attr_name, i64attr_val) == -1) {
+		gaprnt(2,"nc_get_att_longlong failed for type NC_INT64\n"); 
+	      }
+	      else {
+		gaprnt(2,abbrv); 
+		gaprnt(2," Int64 "); 
+		gaprnt(2,attr_name); 
+		gaprnt(2," ");
+		for (i=0; i<asize; i++) {
+		  snprintf(pout,1255,"%lld", i64attr_val[i]); 
+		  gaprnt(2,pout);
+		  if (i<asize-1) gaprnt(2,",");
+		}
+		gaprnt(2,"\n");
+	      }
+	      gree(i64attr_val,"f142");
+	      break;
+	    case (NC_UINT64):
+	      sz = asize * sizeof (NC_INT64);
+	      ui64attr_val = (unsigned long long *) galloc(sz,"ui64attrval");
+	      if (nc_get_att_ulonglong(ncid, varid, attr_name, ui64attr_val) == -1) {
+		gaprnt(2,"nc_get_att_ulonglong failed for type NC_UINT64\n"); 
+	      }
+	      else {
+		gaprnt(2,abbrv); 
+		gaprnt(2," UInt64 "); 
+		gaprnt(2,attr_name); 
+		gaprnt(2," ");
+		for (i=0; i<asize; i++) {
+		  snprintf(pout,1255,"%lld", ui64attr_val[i]); 
+		  gaprnt(2,pout);
+		  if (i<asize-1) gaprnt(2,",");
+		}
+		gaprnt(2,"\n");
+	      }
+	      gree(ui64attr_val,"f142");
 	      break;
 	    case (NC_FLOAT):
 	      sz = asize * sizeof (gafloat);

@@ -854,7 +854,7 @@ gaint gaddes (char *name, struct gafile *pfi, gaint mflag) {
 	
     }  else if (cmpwrd("xdef",rec)) {
 
-      if (pfi->type == 2) continue;
+      if (pfi->type==2) continue;
       if ( (ch = nxtwrd(rec)) == NULL) goto err1;
       if ( (pos = intprs(ch,&(pfi->dnum[0])))==NULL) goto err1;
       if (pfi->dnum[0]<1) {
@@ -1008,7 +1008,7 @@ gaint gaddes (char *name, struct gafile *pfi, gaint mflag) {
 	/* check if 0 dt */
 	if ( (v1 == 0) && (v2 == 0) ) goto err4c_tdef;  
 	sz = sizeof(gadouble)*8;
-        if ((vals = (gadouble *)galloc(sz,"tvals5")) == NULL) goto err8; 
+        if ((vals = (gadouble *)galloc(sz,"valslin3")) == NULL) goto err8; 
         *(vals) = dt1.yr;
         *(vals+1) = dt1.mo;
         *(vals+2) = dt1.dy;
@@ -1489,7 +1489,7 @@ gaint gaddes (char *name, struct gafile *pfi, gaint mflag) {
       pfi->dnum[4]=1;
       /* set up linear scaling */
       sz = sizeof(gadouble)*6;
-      if ((vals = (gadouble *)galloc(sz,"evals3")) == NULL) goto err8;
+      if ((vals = (gadouble *)galloc(sz,"valslin4")) == NULL) goto err8;
       v1=v2=1;
       *(vals+1) = v1 - v2;
       *(vals) = v2;
@@ -2492,9 +2492,10 @@ gaint gaddes (char *name, struct gafile *pfi, gaint mflag) {
 gaint deflin (char *ch, struct gafile *pfi, gaint dim, gaint flag) {
 gadouble *vals,v1,v2;
 size_t sz;
-
+char name[10];
   sz = sizeof(gadouble)*6;
-  vals = (gadouble *)galloc(sz,"vals1");
+  sprintf(name,"valslin%d\n",dim);
+  vals = (gadouble *)galloc(sz,name);
   if (vals==NULL) return (-1);
 
   if ((ch = nxtwrd(ch))==NULL) goto err1;
@@ -2538,14 +2539,15 @@ gaint deflev (char *ch, char *rec, struct gafile *pfi, gaint dim) {
 gadouble *vvs,*vals,v1;
 gaint i;
 size_t sz;
-
+ char name[10];
   if (pfi->dnum[dim]==1) {
     i = deflin (ch, pfi, dim, 1);
     return (i);
   }
 
   sz = (pfi->dnum[dim]+5)*sizeof(gadouble);
-  vals = (gadouble *)galloc(sz,"vals2");
+  sprintf(name,"valslev%d",dim);
+  vals = (gadouble *)galloc(sz,name);
   if (vals==NULL) return (-1);
 
   vvs = vals;

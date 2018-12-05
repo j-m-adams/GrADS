@@ -217,6 +217,8 @@ gaint gxload(char *gxdopt, char *gxpopt) {
   if ((err=dlerror())!=NULL) {printf("Error in gxload: %s\n",err); return(1);}
   psubs.gxprec   = dlsym(phandle,"gxprec");   
   if ((err=dlerror())!=NULL) {printf("Error in gxload: %s\n",err); return(1);}
+  psubs.gxpcirc  = dlsym(phandle,"gxpcirc");   
+  if ((err=dlerror())!=NULL) {printf("Error in gxload: %s\n",err); return(1);}
   psubs.gxpbpoly = dlsym(phandle,"gxpbpoly"); 
   if ((err=dlerror())!=NULL) {printf("Error in gxload: %s\n",err); return(1);}
   psubs.gxpepoly = dlsym(phandle,"gxpepoly"); 
@@ -292,6 +294,8 @@ gaint gxload(char *gxdopt, char *gxpopt) {
   dsubs.gxdrbb   = dlsym(dhandle,"gxdrbb"); 
   if ((err=dlerror())!=NULL) {printf("Error in gxload: %s\n",err); return(2);}
   dsubs.gxdrec   = dlsym(dhandle,"gxdrec"); 
+  if ((err=dlerror())!=NULL) {printf("Error in gxload: %s\n",err); return(2);}
+  dsubs.gxdcirc  = dlsym(dhandle,"gxdcirc"); 
   if ((err=dlerror())!=NULL) {printf("Error in gxload: %s\n",err); return(2);}
   dsubs.gxdrmu   = dlsym(dhandle,"gxdrmu"); 
   if ((err=dlerror())!=NULL) {printf("Error in gxload: %s\n",err); return(2);}
@@ -899,6 +903,27 @@ void gxrset (gaint level) {
   if (level > 2) gconv=NULL;
   if (level > 1) { fconv=NULL; bconv=NULL; }
 }
+
+/* Plot a circle. flg=0 for open, flg=1 for filled. */
+
+void gxcirc (gadouble x, gadouble y, gadouble r, gaint flg) {
+gadouble xr,xr2,yr,rad;
+  if (x<=clminx || x>=clmaxx || y<=clminy || y>=clmaxy) return;
+  gxvcon (x,y,&xr,&yr);
+  gxvcon (x+r,y,&xr2,&y);
+  if (xr2>=xr)
+    rad = xr2-xr;
+  else
+    rad = xr-xr2;
+  if (flg)
+    hout3(-24,xr,yr,rad);
+  else
+    hout3(-25,xr,yr,rad);
+  if (intflg) {
+    dsubs.gxdcirc (xr, yr, rad, flg);
+  }
+}
+
 
 /* Plot a color filled rectangle.  */
 

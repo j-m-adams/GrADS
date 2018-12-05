@@ -358,7 +358,8 @@ struct gastat {
   gaint type;                /* Type of file:  1 = grid
                                                2 = simple station
                                                3 = mapped station
-                                               4 = defined grid       */
+                                               4 = defined grid       
+                                               5 = defined grid (from Python) */
   char title[512];           /* Title -- describes the file.          */
   gadouble undef;            /* Global undefined value for this file  */
   gadouble ulow,uhi;         /* Undefined limits for missing data test  */

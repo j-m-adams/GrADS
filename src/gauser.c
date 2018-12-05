@@ -1197,8 +1197,8 @@ gaint gadraw (char *cmd, struct gacmn *pcm) {
 struct gbtn btn;
 struct gdmu dmu;
 gadouble *xy, *newxy, llinc;
-gadouble x,y,xlo,xhi,ylo,yhi,cs,swide,shite,ang;
- gaint i,cnt,newcnt,cflg,ipos,len,mk,wx,thk,col;
+gadouble x,y,xlo,xhi,ylo,yhi,r,cs,swide,shite,ang;
+gaint i,cnt,newcnt,cflg,ipos,len,mk,wx,thk,col;
 char oper[12],chars[250];
 char *c1,*c2,*ccmd;
 size_t sz;
@@ -1394,6 +1394,29 @@ char shparg[4096];
 
     errrc:
     gaprnt (0,"DRAW error: Syntax is DRAW REC xlo ylo xhi yhi\n");
+    return (1);
+  }
+  if (cmpwrd("circ",oper) || cmpwrd("circf",oper)) {
+    if ((cmd = nxtwrd (cmd)) == NULL) goto errcirc;
+    if (getdbl(cmd,&x) == NULL ) goto errrc;
+    if ((cmd = nxtwrd (cmd)) == NULL) goto errcirc;
+    if (getdbl(cmd,&y) == NULL ) goto errrc;
+    if ((cmd = nxtwrd (cmd)) == NULL) goto errcirc;
+    if (getdbl(cmd,&r) == NULL ) goto errrc;
+    gxwide (pcm->linthk);
+    gxcolr (pcm->lincol);
+    gxstyl (pcm->linstl);
+    if (cmpwrd("circf",oper)) 
+      gxcirc (x,y,r,1);
+    else
+      gxcirc (x,y,r,0);
+    return (0);
+
+    errcirc:
+    if (cmpwrd("circf",oper)) 
+      gaprnt (0,"DRAW error: Syntax is DRAW CIRCF x y radius\n");
+    else
+      gaprnt (0,"DRAW error: Syntax is DRAW CIRC x y radius\n");
     return (1);
   }
 
@@ -2118,7 +2141,8 @@ gaint i;
     gree(pfi->ubuf,"f160a");
     for (i=0; i<5; i++) {
       gree(pfi->grvals[i],"f161");
-      gree(pfi->abvals[i],"f162");
+      /* gradspy defined objects don't need to free abvals */
+      if (pfi->type!=5) gree(pfi->abvals[i],"f162"); 
     }
     gree(pfi,"f163");
     gree(pdf,"f164");
@@ -2710,9 +2734,9 @@ char name[20];
   prev = &(pcm->pdf1);
   while (pcurr!=NULL) {
     if (cmpwrd(name,pcurr->abbrv)) {
-      gaprnt (2,"Name already DEFINEd:  ");
+      gaprnt (2,"Name already DEFINEd: '");
       gaprnt (2,name);
-      gaprnt (2,".   Will be deleted and replaced.\n");
+      gaprnt (2,"' will be deleted and replaced\n");
       pfic = pcurr->pfi;
       gree(pfic->rbuf,"f93");
       gree(pfic->ubuf,"f93a");
@@ -4251,8 +4275,12 @@ gadouble minvals[4], maxvals[4],dval;
           if (pfi->type==4) {
             snprintf (pout,1255,"Gridded Defined Variable: %s \n",pdf->abbrv); 
 	    gaprnt (2,pout);
+          } else if (pfi->type==5) {
+	    /* a variable 'put' here by gradspy */
+            snprintf (pout,1255,"Gridded Defined Variable from GradsPy: %s \n",pdf->abbrv); 
+	    gaprnt (2,pout);
           } else {
-	    /* one day there may be more than one type of defined variable */
+	    /* one day there may be more than two types of defined variables */
             gaprnt (0,"Logic error when querying a defined variable\n");
             return(0);
 	  }
@@ -8805,13 +8833,21 @@ struct dbfld *parsedbfld (char *ch) {
 
    Station data expressions are not supported.
 
+   gasetup() is called by the "put" gradspy method to create a defined object and 
+   populate it with data passed from Python. Everything GrADS needs should be in the 
+   pygagrid structure.
+
 */
 
 #include "gradspy.h"
 
 /* function prototypes */
-int gadoexpr (char *, struct pygagrid *);
-void gapyfre (struct pygagrid *);
+int   gadoexpr (char *, struct pygagrid *);
+int   gasetup  (char *, struct pygagrid *);
+void  gapyfre  (struct pygagrid *);
+gaint defpylev (gadouble *, struct gafile *, gaint);
+gaint defpylin (gadouble, gadouble, struct gafile *, gaint);
+
 
 int gadoexpr (char *expr, struct pygagrid *pypgr) {
   struct gastat *pst;
@@ -8820,10 +8856,8 @@ int gadoexpr (char *expr, struct pygagrid *pypgr) {
   struct gagrid *pgr;
   struct dt dtim; 
   gadouble (*conv) (gadouble *, gadouble);
-  gadouble (*iconv) (gadouble *, gadouble);
-  gadouble (*jconv) (gadouble *, gadouble);
-  gadouble *ivals, *jvals, *g, *s, abs, mynan;
-  int rc,ccc,i,j,vcnt,nvals,verb=1;
+  gadouble *g, *s, mynan;
+  int rc,i,vcnt,nvals;
   char *ch,*u;
   
   /* Initialize */
@@ -8975,27 +9009,29 @@ int gadoexpr (char *expr, struct pygagrid *pypgr) {
   else *s = mynan; 
 
   /* Level */
-  conv = pfi->gr2ab[2];
-  pypgr->zstrt = conv(pfi->grvals[2],pgr->dimmin[2]); /* initial world coordinate value */
-  if (pfi->linear[2]) 
-    pypgr->zincr = *(pfi->grvals[2]);                 /* valid grid increment */
-  else     
-    pypgr->zincr = -1;                                /* negative grid increment */
-  /* allocate memory for Z coordinate values */
-  nvals = 1;
-  if (pypgr->zsz > 1) nvals = pypgr->zsz;   
-  pypgr->zvals = (double *)malloc(nvals*sizeof(double));
-  if (pypgr->zvals==NULL) { 
-    printf("Error in gadoexpr: memory allocation failed for zvals\n"); goto reterr; }
-  /* write world coordinate values, use NaN if dimension isn't varying */
+  pypgr->zvals = (double *)malloc(pypgr->zsz*sizeof(double));   
+  if (pypgr->zvals==NULL) { printf("Error in gadoexpr: memory allocation failed for zvals\n"); goto reterr; }
   s = pypgr->zvals; 
-  if (pypgr->zsz > 1) {                           
-    for (i=pgr->dimmin[2]; i<=pgr->dimmax[2]; i++) {
-      *s = conv(pfi->grvals[2],(gadouble)i);
-      s++;
+
+  if (pypgr->zsz > 1) {
+    conv = pfi->gr2ab[2];
+    pypgr->zstrt = conv(pfi->grvals[2],pgr->dimmin[2]); /* initial world coordinate value */
+    if (pfi->linear[2]) {
+      pypgr->zincr = *(pfi->grvals[2]);                 /* valid grid increment */
     }
-  } 
-  else *s = mynan; 
+    else {    
+      pypgr->zincr = -1;                                /* set negative grid increment */
+      for (i=pgr->dimmin[2]; i<=pgr->dimmax[2]; i++) {
+	*s = conv(pfi->grvals[2],(gadouble)i);
+	s++;
+      }
+    }
+  }
+  else {
+    pypgr->zstrt = 1;
+    pypgr->zincr = 1;
+    *s = mynan;
+  }
 
   /* Time */
   gr2t (pfi->grvals[3],pgr->dimmin[3],&dtim);    /* get the initial time metadata */
@@ -9005,16 +9041,20 @@ int gadoexpr (char *expr, struct pygagrid *pypgr) {
   pypgr->shr = dtim.hr;
   pypgr->smn = dtim.mn;
   pypgr->tcal = pfi->calendar;
-  if (*(pfi->grvals[3]+5)!=0) 
+  if (*(pfi->grvals[3]+5)!=0) {
     pypgr->ttyp = 0; /* increment is months  */
-  else 
+    pypgr->tincr = *(pfi->grvals[3]+5); 
+  }
+  else {
     pypgr->ttyp = 1; /* increment is minutes */
-
+    pypgr->tincr = *(pfi->grvals[3]+6); 
+  }
   /* Ensemble */
   pypgr->estrt = pgr->dimmin[4]; 
 
   /* everything is ok, return code is the number of varying dimensions */
   return (vcnt);
+
 
 reterr:
   /* In case of error, memory is released here; caller does not need to call gapyfre. */
@@ -9046,4 +9086,271 @@ struct gastat *pst;
     gree(pst,"f104");
     pst=NULL;
   }
+}
+
+/* This routine is called by the Python extension module 'put'
+   It sets up a new defined variable using data and metadata 
+   that are passed through in the pygagrid structure */
+
+gaint gasetup (char *ch, struct pygagrid *pypgr) {
+struct gafile *pypfi,*pfi;
+struct gadefn *pypdf,*pdf,*opdf;
+struct gacmn  *pcm=NULL;
+gaint i,j,gsz,rc,ev1,ev2,add;
+char name[20];
+gadouble *g,*tvals=NULL,*evals=NULL;
+gadouble *pygrid=NULL;
+char *pymask=NULL;
+
+  pypfi = pfi = NULL;
+  pcm = savpcm;
+  
+  /* Make sure a file is open */
+  if (pcm->pfid==NULL) { 
+    printf("Error: No files open. Please open a file, any file, then try again. \n");
+    goto reterr; 
+  }
+
+  /* Parse the name argument */
+  i=0;
+  while ((*ch>='a' && *ch<='z') || (*ch>='0' && *ch<='9' )) {
+    name[i] = *ch;
+    ch++; i++;
+    if (i>16) break;
+  }
+  name[i] = '\0';
+  
+  /* initialize a file structure for the new defined grid. 
+     Use getpfi, but don't put it in the chain of open file structures */
+  pypfi = getpfi();
+  if (pypfi==NULL) { gaprnt (0,"Error: getpfi failed\n"); goto reterr; }
+  pypfi->type = 5;  /* new type created for Python deposits */
+
+  /* Set up the X, Y, and Z dimensions.  
+     If the increment is negative and the size is > 1, the dimension is non-linear */
+  
+  pypfi->dnum[0] = pypgr->xsz;
+  if (pypgr->xsz > 1 && pypgr->xincr < 0) 
+    rc = defpylev (pypgr->xvals, pypfi, 0);
+  else
+    rc = defpylin (pypgr->xstrt, pypgr->xincr, pypfi, 0);
+  if (rc) {
+    gaprnt (0,"Error: Unable to allocate memory for X axis metadata\n");
+    goto reterr; 
+  }
+
+  pypfi->dnum[1] = pypgr->ysz;
+  if ( pypgr->ysz > 1 && pypgr->yincr < 0) 
+    rc = defpylev (pypgr->yvals, pypfi, 1);
+  else
+    rc = defpylin (pypgr->ystrt, pypgr->yincr, pypfi, 1);
+  if (rc) {
+    gaprnt (0,"Error setting up Y axis metadata\n");
+    goto reterr; 
+  }
+
+  pypfi->dnum[2] = pypgr->zsz;
+  if (pypgr->zsz > 1 && pypgr->zincr < 0) 
+    rc = defpylev (pypgr->zvals, pypfi, 2);
+  else
+    rc = defpylin (pypgr->zstrt, pypgr->zincr, pypfi, 2);
+  if (rc) {
+    gaprnt (0,"Error setting up Z axis metadata\n");
+    goto reterr; 
+  }
+
+  /* set up T dimension */
+  pypfi->dnum[3] = pypgr->tsz;
+  tvals = (gadouble *)galloc(sizeof(gadouble)*8,"pyvals3");
+  if (tvals == NULL) {
+    gaprnt (0,"Error: Unable to allocate memory for T axis metadata\n");
+    goto reterr; 
+  }
+  *(tvals)   = pypgr->syr;
+  *(tvals+1) = pypgr->smo;
+  *(tvals+2) = pypgr->sdy;
+  *(tvals+3) = pypgr->shr;
+  *(tvals+4) = pypgr->smn;
+  if (pypgr->ttyp == 1) {
+    *(tvals+5) = pypgr->tincr;
+    *(tvals+6) = 0;
+  }
+  else {
+    *(tvals+5) = 0;
+    *(tvals+6) = pypgr->tincr;
+  }
+  *(tvals+7) = -999.9;
+  pypfi->grvals[3] = tvals;
+  pypfi->abvals[3] = tvals;
+  pypfi->calendar = pypgr->tcal;
+  pypfi->linear[3] = 1;
+
+  /* set up E dimension */
+  pypfi->dnum[4] = pypgr->esz;
+  ev1 = ev2 = 1;
+  rc = defpylin (ev1, ev2, pypfi, 4);
+  if (rc) {
+    gaprnt (0,"Error: Unable to allocate memory for E axis metadata\n");
+    goto reterr; 
+  }
+ 
+  /* allocate memory for grid and undef mask */
+  gsz = pypgr->xsz * pypgr->ysz * pypgr->zsz * pypgr->tsz * pypgr->esz;
+  pygrid = (gadouble *)galloc(gsz*sizeof(gadouble),"pygrid");  
+  if (pygrid==NULL) {
+    gaprnt (0,"Error: Unable to allocate memory for data grid\n");
+    snprintf(pout,1255,"       Size of request was %d grid elements\n",gsz);
+    gaprnt (0,pout);
+    goto reterr;
+  }
+  pymask = (char *)galloc(gsz*sizeof(char),"pymask");  
+  if (pymask==NULL) {
+    gaprnt (0,"Error: Unable to allocate memory for data mask\n");
+    snprintf(pout,1255,"       Size of request was %d grid elements\n",gsz);
+    gaprnt (0,pout);
+    goto reterr;
+  }
+
+  /* copy grid values and set the undef mask */
+  g = pypgr->grid;
+  for (i=0; i<gsz; i++) {
+    *(pygrid+i) = *(g+i);
+    *(pymask+i) = isnan(*(g+i)) ? 0 : 1 ;
+  }
+  pypfi->rbuf = pygrid;
+  pypfi->ubuf = pymask;
+
+  snprintf(pout,1255,"Put memory allocation size = %ld bytes\n",(size_t)(gsz*sizeof(gadouble)));
+  gaprnt (2,pout);
+
+  /* Now we will add our new object to the chain of define blocks.
+     First, check for an existing defined object with the same name */
+  pdf = pcm->pdf1;
+  opdf = NULL;
+  while (pdf!=NULL) {
+    if (cmpwrd(name,pdf->abbrv)) break;
+    opdf = pdf;
+    pdf = pdf->pforw;
+  }
+  if (pdf!=NULL) {
+    /* name was found, pdf is pointing to the object we need to delete */
+    snprintf(pout,1255,"Name already DEFINEd: '%s' will be deleted and replaced\n",name);
+    gaprnt (2,pout);
+    if (opdf==NULL) {
+      /* pdf was the first in the chain, so we promote the forward link to anchor */
+      pcm->pdf1 = pdf->pforw;
+    }
+    else {
+      /* attach the forward link to the previous link */
+      opdf->pforw = pdf->pforw;
+    }
+    /* now we can delete pdf */
+    pfi = pdf->pfi;
+    gree(pfi->rbuf,"g159");
+    gree(pfi->ubuf,"g160");
+    for (i=0; i<5; i++) {
+      if (pfi->grvals[i]!=NULL) {
+	gree(pfi->grvals[i],"g161");
+	if (pfi->type!=5) gree(pfi->abvals[i],"g161");
+      }
+    }
+    gree(pfi,"g163");
+    gree(pdf,"g164");
+  }
+
+  /* Allocate the structure for a defined variable */
+  pypdf = NULL;
+  pypdf = (struct gadefn *)galloc(sizeof(struct gadefn),"pypdf");
+  if (pypdf==NULL) {
+    gaprnt (0,"Error: failed to allocate memory for a gadefn structure \n");
+    goto reterr;
+  }
+  getwrd(pypdf->abbrv,name,19);  /* copy the name */
+  pypdf->pfi = pypfi;            /* set the gafile pointer */
+  pypdf->pforw = NULL;
+
+  /* chain it up */
+  if (pcm->pdf1==NULL) {
+    pcm->pdf1 = pypdf; /* new structure is the anchor */
+    pdf = pcm->pdf1;
+  }
+  else {
+    pdf = pcm->pdf1;
+    while (pdf->pforw != NULL) pdf = pdf->pforw;
+    pdf->pforw = pypdf; 
+  }  
+
+  return(0);
+
+reterr:
+  if (pypdf)  gree(pypdf,"a");
+  if (pygrid) gree(pygrid,"b");
+  if (pymask) gree(pymask,"c");
+  if (tvals)  gree(evals,"d");
+  if (evals)  gree(evals,"e");
+  return(1);
+}
+
+/* This is the equivalent of deflin(), without the parsing.
+   Return codes:  -1 is memory allocation error, 0 for success */
+
+gaint defpylin (gadouble v1, gadouble v2, struct gafile *pfi, gaint dim) {
+gadouble *vals,temp;
+size_t sz;
+char name[8];
+
+  sz = sizeof(gadouble)*6;
+  sprintf(name,"pyvals%d",dim);  
+  vals = (gadouble *)galloc(sz,name);
+  if (vals==NULL) return (-1);
+  *(vals)   = v2;
+  *(vals+1) = v1 - v2;
+  *(vals+2) = -999.9;
+  *(vals+3) = 1.0/v2;
+  *(vals+4) = -1.0 * ( (v1-v2)/v2 );
+  *(vals+5) = -999.9;
+
+  pfi->grvals[dim] = vals;
+  pfi->abvals[dim] = vals+3;
+  pfi->ab2gr[dim] = liconv;
+  pfi->gr2ab[dim] = liconv;
+  pfi->linear[dim] = 1;
+
+  /* No harm in adding the wrap test, while we're here.
+     Python defined objects can wrap, GrADS defined objects do not */
+  if (dim==0) {
+    temp = v1+((gadouble)(pfi->dnum[dim]))*v2;
+    temp=temp-360.0;
+    if (fabs(temp-v1)<0.01) pfi->wrap = 1;
+  }
+  return (0);
+}
+
+/* This is the equivalent of deflev(), without the parsing. 
+   Return codes:  -1 is memory allocation error, 0 for success */
+
+gaint defpylev (gadouble *pylevs, struct gafile *pfi, gaint dim) {
+gadouble *vvs,*vals;
+gaint i;
+char name[8];
+size_t sz;
+
+  sz = (pfi->dnum[dim]+5)*sizeof(gadouble);
+  sprintf(name,"pyvals%d",dim);  
+  vals = (gadouble *)galloc(sz,name);
+  if (vals==NULL) return (-1);
+  vvs = vals;
+  *vvs = (gadouble)pfi->dnum[dim]; 
+  vvs++;
+  for (i=0; i<pfi->dnum[dim]; i++) { 
+    *vvs = *(pylevs+i); 
+    vvs++; 
+  }
+  *vvs = -999.9;
+  pfi->abvals[dim] = vals;
+  pfi->grvals[dim] = vals;
+  pfi->ab2gr[dim] = lev2gr;
+  pfi->gr2ab[dim] = gr2lev;
+  pfi->linear[dim] = 0;
+  return (0);
 }

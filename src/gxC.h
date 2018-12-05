@@ -59,6 +59,7 @@ void gxCpop (void);
 void gxCpush (void);
 gadouble gxCqchl (char, gaint, gadouble);
 void gxCrec (gadouble, gadouble, gadouble, gadouble);
+void gxCcirc (gadouble, gadouble, gadouble, gaint);
 void gxCrsiz (gaint, gaint);
 void gxCselfont (gaint);
 void gxCsfc (cairo_surface_t *);

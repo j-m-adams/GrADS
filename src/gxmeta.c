@@ -282,6 +282,31 @@ signed char *ch;
   mbuflast->used++;
 }
 
+/* Metafile buffer, command plus three double args */
+
+void hout3 (gaint cmd, gadouble x, gadouble y, gadouble r) {
+gaint rc;
+signed char *ch;
+  if (mbuferror) return;
+  if (mbuflast->len - mbuflast->used <7) {
+    rc = mbufget();
+    if (rc) {
+      gxmbuferr();
+      return;
+    }
+  }
+  ch = (signed char *)(mbuflast->buff+mbuflast->used);
+  *ch = (signed char)99;
+  *(ch+1) = (signed char)cmd;
+  mbuflast->used++;
+  *(mbuflast->buff+mbuflast->used) = (float)x;
+  mbuflast->used++;
+  *(mbuflast->buff+mbuflast->used) = (float)y;
+  mbuflast->used++;
+  *(mbuflast->buff+mbuflast->used) = (float)r;
+  mbuflast->used++;
+}
+
 /* Add a single character to the metafile buffer, along with the font number (less
    than 100), location (x,y), and size/rotation specs (4 floats).  Uses -21 as a
    cmd value.   */
@@ -653,6 +678,34 @@ char ccc,*uch;
 	else
 	  dsubs->gxdclip(r,s,x,y);          /* for hardware */
         ppp += 4;
+      }
+
+      /* -24 is for a filled circle. It has three args. */ 
+ 
+      else if (cmd==-24){
+        buff = pmbuf->buff + ppp;
+        x = (gadouble)(*buff);
+        y = (gadouble)(*(buff+1));
+        r = (gadouble)(*(buff+2));
+	if (pflg) 
+	  psubs->gxpcirc(x,y,r,1);          /* for printing */
+	else
+	  dsubs->gxdcirc(x,y,r,1);          /* for hardware */
+        ppp += 3;
+      }
+      
+      /* -25 is for an open circle. It has three args. */ 
+ 
+      else if (cmd==-25){
+        buff = pmbuf->buff + ppp;
+        x = (gadouble)(*buff);
+        y = (gadouble)(*(buff+1));
+        r = (gadouble)(*(buff+2));
+	if (pflg) 
+	  psubs->gxpcirc(x,y,r,0);          /* for printing */
+	else
+	  dsubs->gxdcirc(x,y,r,0);          /* for hardware */
+        ppp += 3;
       }
 
       /* Any other command would be invalid */

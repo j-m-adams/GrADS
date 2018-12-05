@@ -89,6 +89,9 @@ void gxpwid (gaint wid) {  /* new line thickness */
 void gxprec (gadouble x1, gadouble x2, gadouble y1, gadouble y2) {  /* filled rectangle */ 
   gxCrec (x1,x2,y1,y2);
 }
+void gxpcirc (gadouble x, gadouble y, gadouble r, gaint flg) {  /* open/filled circle */ 
+  gxCcirc (x,y,r,flg);
+}
 void gxpbpoly (void) {  /* start a polygon fill */
   gxCbfil(); 
 }

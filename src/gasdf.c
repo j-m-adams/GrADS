@@ -1442,8 +1442,9 @@ gaint isdvar(struct gafile *pfi, struct gavar *var,
 	  var->vardimids[i] != ydimid && 
 	  var->vardimids[i] != zdimid && 
 	  var->vardimids[i] != tdimid && 
-	  var->vardimids[i] != edimid) 
+	  var->vardimids[i] != edimid) {
 	return Failure;
+      }
     }
 
     /* Set the number of vertical levels for var */
