@@ -8314,7 +8314,8 @@ char *filename={"grads.sdfwrite.nc"};
   else
     rc = nc_create(filename, NC_CLOBBER, &i);
   if (rc) {
-    gaprnt (0,"ncwrite error from nc_create: \n ");
+    snprintf(pout,1255,"ncwrite error from nc_create (filename is %s): \n",filename);
+    gaprnt (0,pout);
     handle_error(rc);
     goto err;
   }

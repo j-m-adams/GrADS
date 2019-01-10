@@ -409,8 +409,9 @@ const char *error;
 
   Py_InitModule3("gradspy", gradspy_funcs,"GrADS extension modlues for Python");
 
-/*   handle = dlopen ("libgradspy.so",    RTLD_LAZY | RTLD_GLOBAL );  /\* for linux *\/ */
-  handle = dlopen ("libgradspy.dylib", RTLD_LAZY | RTLD_GLOBAL );  /* for mac   */
+  /* Is there a more elegant way to handle the different shared object file names for linux and macOS ? */
+  handle = dlopen ("libgradspy.so",    RTLD_LAZY | RTLD_GLOBAL ); 
+  /* handle = dlopen ("libgradspy.dylib", RTLD_LAZY | RTLD_GLOBAL );  */
   if (!handle) {
     fputs (dlerror(), stderr);
     fputs ("\n", stderr);
