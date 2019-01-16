@@ -593,6 +593,7 @@
                         '_LT_AC_LANG_RC_CONFIG' => 1,
                         'AC_CHECK_GEOTIFF_LIB' => 1,
                         'LT_PROG_GO' => 1,
+                        '_LT_DLL_DEF_P' => 1,
                         'LT_SYS_MODULE_PATH' => 1,
                         'LT_WITH_LTDL' => 1,
                         'AC_LIBTOOL_POSTDEP_PREDEP' => 1,

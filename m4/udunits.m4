@@ -25,8 +25,7 @@ AC_DEFUN([AC_CHECK_UDUNITS],
       [UDUNITS_PATH_INC="$UDUNITS_PATH/include"])  
   ])
   
-  echo JMA uZ$UDUNITS_PATH_LIBDIR
-  
+ 
   ac_udunits_lib_ok='no'
   ac_udunits_save_LDFLAGS=$LDFLAGS
   UDUNITS_LIBS=

@@ -409,69 +409,82 @@ else
 fi
 
 
-# check in supplibs directory for the additional dependent libs
-if test "Z$ga_supplib_dir" != "Z" ; then 
-  echo looking in $ga_supplib_dir for additional dependent libs
+# check in supplibs and other systems directories for the additional dependent libs
 
-  # png15
-  echo 
-  echo png
-  echo ---
-  GA_SET_FLAGS([])
+# png15
+echo 
+echo png
+echo ---
+GA_SET_FLAGS([])
+AC_CHECK_LIB([png15], [main], [have_png=yes])
+GA_UNSET_FLAGS
+if test "$have_png" != "yes" ; then
   AC_CHECK_LIB([png15], [main], [have_png=yes])
-  GA_UNSET_FLAGS
+fi
 
-  # zlib
-  echo 
-  echo zlib
-  echo ----
-  GA_SET_FLAGS([])
+# zlib
+echo 
+echo zlib
+echo ----
+GA_SET_FLAGS([])
+AC_CHECK_HEADER([zlib.h], 
+[ AC_CHECK_LIB([z], [compress], [have_zlib=yes])
+])
+GA_UNSET_FLAGS
+if test "$have_zlib" != "yes" ; then
   AC_CHECK_HEADER([zlib.h], 
-  [ AC_CHECK_LIB([z], [compress], [have_zlib=yes])
+    [ AC_CHECK_LIB([z], [compress], [have_zlib=yes])
   ])
-  GA_UNSET_FLAGS
+fi
 
-  # jpeg
-  echo 
-  echo jpeg
-  echo ----
-  GA_SET_FLAGS([])
+# jpeg
+echo 
+echo jpeg
+echo ----
+GA_SET_FLAGS([])
+AC_CHECK_LIB([jpeg], [main], [have_jpeg=yes])
+GA_UNSET_FLAGS
+if test "$have_jpeg" != "yes" ; then
   AC_CHECK_LIB([jpeg], [main], [have_jpeg=yes])
-  GA_UNSET_FLAGS
+fi
 
-  # jasper
-  echo 
-  echo jasper
-  echo ------
-  GA_SET_FLAGS([jasper])
-  AC_CHECK_HEADER([jasper.h],
+# jasper
+echo 
+echo jasper
+echo ------
+GA_SET_FLAGS([jasper])
+AC_CHECK_HEADER([jasper.h],
+[ AC_CHECK_LIB([jasper], [main], [have_jasper=yes])
+])
+GA_UNSET_FLAGS
+if test "$have_jasper" != "yes" ; then
+  AC_CHECK_HEADER([jasper/jasper.h],
   [ AC_CHECK_LIB([jasper], [main], [have_jasper=yes])
   ])
-  GA_UNSET_FLAGS
-
-  # xml2
-  echo 
-  echo xml2
-  echo ----
-  if test "$have_zlib" = "yes" ; then
-    GA_SET_FLAGS([libxml2],[],[],[-lz])
-    AC_CHECK_LIB([xml2], [main], [have_xml2=yes])
-    GA_UNSET_FLAGS
-  fi
-
-  # curl (needed for netcdf4 and gadap)
-  echo 
-  echo curl
-  echo ----
-  GA_SET_FLAGS([])
-  AC_CHECK_LIB([curl], [main], 
-  [ have_curl=yes 
-    # this will be used to check if curl is https-enabled
-    CURL_CONFIG=${ga_supplib_dir}/bin/curl-config
-  ])
-  GA_UNSET_FLAGS	
-
 fi
+
+
+# xml2
+echo 
+echo xml2
+echo ----
+if test "$have_zlib" = "yes" ; then
+  GA_SET_FLAGS([libxml2],[],[],[-lz])
+  AC_CHECK_LIB([xml2], [main], [have_xml2=yes])
+  GA_UNSET_FLAGS
+  if test "$have_xml2" != "yes" ; then
+    AC_CHECK_LIB([xml2], [main], [have_xml2=yes])
+  fi
+fi
+
+# curl (needed for netcdf4 and gadap)
+echo 
+echo curl
+echo ----
+GA_SET_FLAGS([])
+AC_CHECK_LIB([curl], [main], [ have_curl=yes ])
+GA_UNSET_FLAGS	
+
 
 # * * * GD * * *
 echo 
@@ -566,8 +579,8 @@ if test "Z$ga_supplib_dir" != "Z" ; then
       [ AC_CHECK_LIB(freetype,main,
       [ AC_CHECK_LIB(Xrender,main,
       [ AC_CHECK_LIB(cairo,main,
-        [ use_cairo="yes"
-          have_cairo="yes"
+        [ use_cairo=yes
+          have_cairo=yes
           GA_SET_INCLUDE_VAR([cairo_inc], [cairo freetype2])
 #          GA_SET_LIB_VAR(cairo_libs, [cairo Xrender fontconfig freetype pixman-1 png15 xml2 z])
           GA_SET_DYNLIB_VAR(cairo_libs, [cairo])
@@ -585,11 +598,17 @@ fi
 # check in system locations
 if test "$use_cairo" != "yes" -a "$ga_dyn_supplibs" = "yes" ; then
   echo looking in other system locations
-  GA_CHECK_LIB_CAIRO([
-    use_cairo='yes'
+  if test "z$CAIRO_CFLAGS" != "z" -a "z$CAIRO_LIBS" != "z" ; then
+    use_cairo=yes
     cairo_inc=$CAIRO_CFLAGS
     cairo_libs=$CAIRO_LIBS
-  ])
+  else
+    GA_CHECK_LIB_CAIRO([
+      use_cairo=yes
+      cairo_inc=$CAIRO_CFLAGS
+      cairo_libs=$CAIRO_LIBS
+    ])
+  fi
 fi
 # set output variables
 if test "$use_cairo" != "yes" ; then

@@ -1390,7 +1390,7 @@ m4trace:m4/ga_lib_readline.m4:53: -1- AC_DEFUN([GA_LIB_READLINE], [
   AC_CACHE_CHECK([for a readline compatible library],
                  vl_cv_lib_readline, [
     ORIG_LIBS="$LIBS"
-    for readline_lib in readline edit editline; do
+    for readline_lib in readline edit ; do
       for termcap_lib in "" termcap curses ncurses; do
         if test -z "$termcap_lib"; then
           TRY_LIB="-l$readline_lib"
@@ -2181,7 +2181,7 @@ m4trace:m4/libsx.m4:4: -1- AC_DEFUN([GA_CHECK_LIBSX], [
   LIBS=$ac_save_LIBS
   LDFLAGS=$ac_save_LDFLAGS
 ])
-m4trace:m4/libtool.m4:69: -1- AC_DEFUN([LT_INIT], [AC_PREREQ([2.58])dnl We use AC_INCLUDES_DEFAULT
+m4trace:m4/libtool.m4:61: -1- AC_DEFUN([LT_INIT], [AC_PREREQ([2.62])dnl We use AC_PATH_PROGS_FEATURE_CHECK
 AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 AC_BEFORE([$0], [LT_LANG])dnl
 AC_BEFORE([$0], [LT_OUTPUT])dnl
@@ -2205,7 +2205,7 @@ dnl Parse OPTIONS
 _LT_SET_OPTIONS([$0], [$1])
 
 # This can be used to rebuild libtool when needed
-LIBTOOL_DEPS="$ltmain"
+LIBTOOL_DEPS=$ltmain
 
 # Always use our own libtool.
 LIBTOOL='$(SHELL) $(top_builddir)/libtool'
@@ -2216,15 +2216,15 @@ _LT_SETUP
 # Only expand once:
 m4_define([LT_INIT])
 ])
-m4trace:m4/libtool.m4:107: -1- AU_DEFUN([AC_PROG_LIBTOOL], [m4_if($#, 0, [LT_INIT], [LT_INIT($@)])])
-m4trace:m4/libtool.m4:107: -1- AC_DEFUN([AC_PROG_LIBTOOL], [AC_DIAGNOSE([obsolete], [The macro `AC_PROG_LIBTOOL' is obsolete.
+m4trace:m4/libtool.m4:99: -1- AU_DEFUN([AC_PROG_LIBTOOL], [m4_if($#, 0, [LT_INIT], [LT_INIT($@)])])
+m4trace:m4/libtool.m4:99: -1- AC_DEFUN([AC_PROG_LIBTOOL], [AC_DIAGNOSE([obsolete], [The macro `AC_PROG_LIBTOOL' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_INIT], [LT_INIT($@)])])
-m4trace:m4/libtool.m4:108: -1- AU_DEFUN([AM_PROG_LIBTOOL], [m4_if($#, 0, [LT_INIT], [LT_INIT($@)])])
-m4trace:m4/libtool.m4:108: -1- AC_DEFUN([AM_PROG_LIBTOOL], [AC_DIAGNOSE([obsolete], [The macro `AM_PROG_LIBTOOL' is obsolete.
+m4trace:m4/libtool.m4:100: -1- AU_DEFUN([AM_PROG_LIBTOOL], [m4_if($#, 0, [LT_INIT], [LT_INIT($@)])])
+m4trace:m4/libtool.m4:100: -1- AC_DEFUN([AM_PROG_LIBTOOL], [AC_DIAGNOSE([obsolete], [The macro `AM_PROG_LIBTOOL' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_INIT], [LT_INIT($@)])])
-m4trace:m4/libtool.m4:609: -1- AC_DEFUN([LT_OUTPUT], [: ${CONFIG_LT=./config.lt}
+m4trace:m4/libtool.m4:619: -1- AC_DEFUN([LT_OUTPUT], [: ${CONFIG_LT=./config.lt}
 AC_MSG_NOTICE([creating $CONFIG_LT])
 _LT_GENERATED_FILE_INIT(["$CONFIG_LT"],
 [# Run this file to recreate a libtool stub with the current configuration.])
@@ -2238,7 +2238,7 @@ exec AS_MESSAGE_LOG_FD>>config.log
 } >&AS_MESSAGE_LOG_FD
 
 lt_cl_help="\
-\`$as_me' creates a local libtool stub from the current configuration,
+'$as_me' creates a local libtool stub from the current configuration,
 for use in further configure time tests before the real libtool is
 generated.
 
@@ -2260,7 +2260,7 @@ Copyright (C) 2011 Free Software Foundation, Inc.
 This config.lt script is free software; the Free Software Foundation
 gives unlimited permision to copy, distribute and modify it."
 
-while test $[#] != 0
+while test 0 != $[#]
 do
   case $[1] in
     --version | --v* | -V )
@@ -2273,10 +2273,10 @@ do
       lt_cl_silent=: ;;
 
     -*) AC_MSG_ERROR([unrecognized option: $[1]
-Try \`$[0] --help' for more information.]) ;;
+Try '$[0] --help' for more information.]) ;;
 
     *) AC_MSG_ERROR([unrecognized argument: $[1]
-Try \`$[0] --help' for more information.]) ;;
+Try '$[0] --help' for more information.]) ;;
   esac
   shift
 done
@@ -2302,15 +2302,15 @@ chmod +x "$CONFIG_LT"
 # open by configure.  Here we exec the FD to /dev/null, effectively closing
 # config.log, so it can be properly (re)opened and appended to by config.lt.
 lt_cl_success=:
-test "$silent" = yes &&
+test yes = "$silent" &&
   lt_config_lt_args="$lt_config_lt_args --quiet"
 exec AS_MESSAGE_LOG_FD>/dev/null
 $SHELL "$CONFIG_LT" $lt_config_lt_args || lt_cl_success=false
 exec AS_MESSAGE_LOG_FD>>config.log
 $lt_cl_success || AS_EXIT(1)
 ])
-m4trace:m4/libtool.m4:790: -1- AC_DEFUN([LT_SUPPORTED_TAG], [])
-m4trace:m4/libtool.m4:801: -1- AC_DEFUN([LT_LANG], [AC_BEFORE([$0], [LT_OUTPUT])dnl
+m4trace:m4/libtool.m4:812: -1- AC_DEFUN([LT_SUPPORTED_TAG], [])
+m4trace:m4/libtool.m4:823: -1- AC_DEFUN([LT_LANG], [AC_BEFORE([$0], [LT_OUTPUT])dnl
 m4_case([$1],
   [C],			[_LT_LANG(C)],
   [C++],		[_LT_LANG(CXX)],
@@ -2323,38 +2323,39 @@ m4_case([$1],
     [_LT_LANG($1)],
     [m4_fatal([$0: unsupported language: "$1"])])])dnl
 ])
-m4trace:m4/libtool.m4:893: -1- AU_DEFUN([AC_LIBTOOL_CXX], [LT_LANG(C++)])
-m4trace:m4/libtool.m4:893: -1- AC_DEFUN([AC_LIBTOOL_CXX], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_CXX' is obsolete.
+m4trace:m4/libtool.m4:915: -1- AU_DEFUN([AC_LIBTOOL_CXX], [LT_LANG(C++)])
+m4trace:m4/libtool.m4:915: -1- AC_DEFUN([AC_LIBTOOL_CXX], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_CXX' is obsolete.
 You should run autoupdate.])dnl
 LT_LANG(C++)])
-m4trace:m4/libtool.m4:894: -1- AU_DEFUN([AC_LIBTOOL_F77], [LT_LANG(Fortran 77)])
-m4trace:m4/libtool.m4:894: -1- AC_DEFUN([AC_LIBTOOL_F77], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_F77' is obsolete.
+m4trace:m4/libtool.m4:916: -1- AU_DEFUN([AC_LIBTOOL_F77], [LT_LANG(Fortran 77)])
+m4trace:m4/libtool.m4:916: -1- AC_DEFUN([AC_LIBTOOL_F77], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_F77' is obsolete.
 You should run autoupdate.])dnl
 LT_LANG(Fortran 77)])
-m4trace:m4/libtool.m4:895: -1- AU_DEFUN([AC_LIBTOOL_FC], [LT_LANG(Fortran)])
-m4trace:m4/libtool.m4:895: -1- AC_DEFUN([AC_LIBTOOL_FC], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_FC' is obsolete.
+m4trace:m4/libtool.m4:917: -1- AU_DEFUN([AC_LIBTOOL_FC], [LT_LANG(Fortran)])
+m4trace:m4/libtool.m4:917: -1- AC_DEFUN([AC_LIBTOOL_FC], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_FC' is obsolete.
 You should run autoupdate.])dnl
 LT_LANG(Fortran)])
-m4trace:m4/libtool.m4:896: -1- AU_DEFUN([AC_LIBTOOL_GCJ], [LT_LANG(Java)])
-m4trace:m4/libtool.m4:896: -1- AC_DEFUN([AC_LIBTOOL_GCJ], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_GCJ' is obsolete.
+m4trace:m4/libtool.m4:918: -1- AU_DEFUN([AC_LIBTOOL_GCJ], [LT_LANG(Java)])
+m4trace:m4/libtool.m4:918: -1- AC_DEFUN([AC_LIBTOOL_GCJ], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_GCJ' is obsolete.
 You should run autoupdate.])dnl
 LT_LANG(Java)])
-m4trace:m4/libtool.m4:897: -1- AU_DEFUN([AC_LIBTOOL_RC], [LT_LANG(Windows Resource)])
-m4trace:m4/libtool.m4:897: -1- AC_DEFUN([AC_LIBTOOL_RC], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_RC' is obsolete.
+m4trace:m4/libtool.m4:919: -1- AU_DEFUN([AC_LIBTOOL_RC], [LT_LANG(Windows Resource)])
+m4trace:m4/libtool.m4:919: -1- AC_DEFUN([AC_LIBTOOL_RC], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_RC' is obsolete.
 You should run autoupdate.])dnl
 LT_LANG(Windows Resource)])
-m4trace:m4/libtool.m4:1225: -1- AC_DEFUN([_LT_WITH_SYSROOT], [AC_MSG_CHECKING([for sysroot])
+m4trace:m4/libtool.m4:1247: -1- AC_DEFUN([_LT_WITH_SYSROOT], [AC_MSG_CHECKING([for sysroot])
 AC_ARG_WITH([sysroot],
-[  --with-sysroot[=DIR] Search for dependent libraries within DIR
-                        (or the compiler's sysroot if not specified).],
+[AS_HELP_STRING([--with-sysroot@<:@=DIR@:>@],
+  [Search for dependent libraries within DIR (or the compiler's sysroot
+   if not specified).])],
 [], [with_sysroot=no])
 
 dnl lt_sysroot will always be passed unquoted.  We quote it here
 dnl in case the user passed a directory name.
 lt_sysroot=
-case ${with_sysroot} in #(
+case $with_sysroot in #(
  yes)
-   if test "$GCC" = yes; then
+   if test yes = "$GCC"; then
      lt_sysroot=`$CC --print-sysroot 2>/dev/null`
    fi
    ;; #(
@@ -2364,21 +2365,21 @@ case ${with_sysroot} in #(
  no|'')
    ;; #(
  *)
-   AC_MSG_RESULT([${with_sysroot}])
+   AC_MSG_RESULT([$with_sysroot])
    AC_MSG_ERROR([The sysroot must be an absolute path.])
    ;;
 esac
 
  AC_MSG_RESULT([${lt_sysroot:-no}])
 _LT_DECL([], [lt_sysroot], [0], [The root where to search for ]dnl
-[dependent libraries, and in which our libraries should be installed.])])
-m4trace:m4/libtool.m4:1502: -1- AC_DEFUN([_LT_COMPILER_OPTION], [m4_require([_LT_FILEUTILS_DEFAULTS])dnl
+[dependent libraries, and where our libraries should be installed.])])
+m4trace:m4/libtool.m4:1578: -1- AC_DEFUN([_LT_COMPILER_OPTION], [m4_require([_LT_FILEUTILS_DEFAULTS])dnl
 m4_require([_LT_DECL_SED])dnl
 AC_CACHE_CHECK([$1], [$2],
   [$2=no
    m4_if([$4], , [ac_outfile=conftest.$ac_objext], [ac_outfile=$4])
    echo "$lt_simple_compile_test_code" > conftest.$ac_ext
-   lt_compiler_flag="$3"
+   lt_compiler_flag="$3"  ## exclude from sc_useless_quotes_in_assignment
    # Insert the option either (1) after the last *FLAGS variable, or
    # (2) before a word containing "conftest.", or (3) at the end.
    # Note that $ac_compile itself does not contain backslashes and begins
@@ -2405,21 +2406,21 @@ AC_CACHE_CHECK([$1], [$2],
    $RM conftest*
 ])
 
-if test x"[$]$2" = xyes; then
+if test yes = "[$]$2"; then
     m4_if([$5], , :, [$5])
 else
     m4_if([$6], , :, [$6])
 fi
 ])
-m4trace:m4/libtool.m4:1544: -1- AU_DEFUN([AC_LIBTOOL_COMPILER_OPTION], [m4_if($#, 0, [_LT_COMPILER_OPTION], [_LT_COMPILER_OPTION($@)])])
-m4trace:m4/libtool.m4:1544: -1- AC_DEFUN([AC_LIBTOOL_COMPILER_OPTION], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_COMPILER_OPTION' is obsolete.
+m4trace:m4/libtool.m4:1620: -1- AU_DEFUN([AC_LIBTOOL_COMPILER_OPTION], [m4_if($#, 0, [_LT_COMPILER_OPTION], [_LT_COMPILER_OPTION($@)])])
+m4trace:m4/libtool.m4:1620: -1- AC_DEFUN([AC_LIBTOOL_COMPILER_OPTION], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_COMPILER_OPTION' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [_LT_COMPILER_OPTION], [_LT_COMPILER_OPTION($@)])])
-m4trace:m4/libtool.m4:1553: -1- AC_DEFUN([_LT_LINKER_OPTION], [m4_require([_LT_FILEUTILS_DEFAULTS])dnl
+m4trace:m4/libtool.m4:1629: -1- AC_DEFUN([_LT_LINKER_OPTION], [m4_require([_LT_FILEUTILS_DEFAULTS])dnl
 m4_require([_LT_DECL_SED])dnl
 AC_CACHE_CHECK([$1], [$2],
   [$2=no
-   save_LDFLAGS="$LDFLAGS"
+   save_LDFLAGS=$LDFLAGS
    LDFLAGS="$LDFLAGS $3"
    echo "$lt_simple_link_test_code" > conftest.$ac_ext
    if (eval $ac_link 2>conftest.err) && test -s conftest$ac_exeext; then
@@ -2438,25 +2439,25 @@ AC_CACHE_CHECK([$1], [$2],
      fi
    fi
    $RM -r conftest*
-   LDFLAGS="$save_LDFLAGS"
+   LDFLAGS=$save_LDFLAGS
 ])
 
-if test x"[$]$2" = xyes; then
+if test yes = "[$]$2"; then
     m4_if([$4], , :, [$4])
 else
     m4_if([$5], , :, [$5])
 fi
 ])
-m4trace:m4/libtool.m4:1588: -1- AU_DEFUN([AC_LIBTOOL_LINKER_OPTION], [m4_if($#, 0, [_LT_LINKER_OPTION], [_LT_LINKER_OPTION($@)])])
-m4trace:m4/libtool.m4:1588: -1- AC_DEFUN([AC_LIBTOOL_LINKER_OPTION], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_LINKER_OPTION' is obsolete.
+m4trace:m4/libtool.m4:1664: -1- AU_DEFUN([AC_LIBTOOL_LINKER_OPTION], [m4_if($#, 0, [_LT_LINKER_OPTION], [_LT_LINKER_OPTION($@)])])
+m4trace:m4/libtool.m4:1664: -1- AC_DEFUN([AC_LIBTOOL_LINKER_OPTION], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_LINKER_OPTION' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [_LT_LINKER_OPTION], [_LT_LINKER_OPTION($@)])])
-m4trace:m4/libtool.m4:1595: -1- AC_DEFUN([LT_CMD_MAX_LEN], [AC_REQUIRE([AC_CANONICAL_HOST])dnl
+m4trace:m4/libtool.m4:1671: -1- AC_DEFUN([LT_CMD_MAX_LEN], [AC_REQUIRE([AC_CANONICAL_HOST])dnl
 # find the maximum length of command line arguments
 AC_MSG_CHECKING([the maximum length of command line arguments])
 AC_CACHE_VAL([lt_cv_sys_max_cmd_len], [dnl
   i=0
-  teststring="ABCD"
+  teststring=ABCD
 
   case $build_os in
   msdosdjgpp*)
@@ -2496,7 +2497,7 @@ AC_CACHE_VAL([lt_cv_sys_max_cmd_len], [dnl
     lt_cv_sys_max_cmd_len=8192;
     ;;
 
-  netbsd* | freebsd* | openbsd* | darwin* | dragonfly*)
+  bitrig* | darwin* | dragonfly* | freebsd* | netbsd* | openbsd*)
     # This has been around since 386BSD, at least.  Likely further.
     if test -x /sbin/sysctl; then
       lt_cv_sys_max_cmd_len=`/sbin/sysctl -n kern.argmax`
@@ -2546,22 +2547,23 @@ AC_CACHE_VAL([lt_cv_sys_max_cmd_len], [dnl
     ;;
   *)
     lt_cv_sys_max_cmd_len=`(getconf ARG_MAX) 2> /dev/null`
-    if test -n "$lt_cv_sys_max_cmd_len"; then
+    if test -n "$lt_cv_sys_max_cmd_len" && \
+       test undefined != "$lt_cv_sys_max_cmd_len"; then
       lt_cv_sys_max_cmd_len=`expr $lt_cv_sys_max_cmd_len \/ 4`
       lt_cv_sys_max_cmd_len=`expr $lt_cv_sys_max_cmd_len \* 3`
     else
       # Make teststring a little bigger before we do anything with it.
       # a 1K string should be a reasonable start.
-      for i in 1 2 3 4 5 6 7 8 ; do
+      for i in 1 2 3 4 5 6 7 8; do
         teststring=$teststring$teststring
       done
       SHELL=${SHELL-${CONFIG_SHELL-/bin/sh}}
       # If test is not a shell built-in, we'll probably end up computing a
       # maximum length that is only half of the actual maximum length, but
       # we can't tell.
-      while { test "X"`env echo "$teststring$teststring" 2>/dev/null` \
+      while { test X`env echo "$teststring$teststring" 2>/dev/null` \
 	         = "X$teststring$teststring"; } >/dev/null 2>&1 &&
-	      test $i != 17 # 1/2 MB should be enough
+	      test 17 != "$i" # 1/2 MB should be enough
       do
         i=`expr $i + 1`
         teststring=$teststring$teststring
@@ -2577,7 +2579,7 @@ AC_CACHE_VAL([lt_cv_sys_max_cmd_len], [dnl
     ;;
   esac
 ])
-if test -n $lt_cv_sys_max_cmd_len ; then
+if test -n "$lt_cv_sys_max_cmd_len"; then
   AC_MSG_RESULT($lt_cv_sys_max_cmd_len)
 else
   AC_MSG_RESULT(none)
@@ -2586,12 +2588,12 @@ max_cmd_len=$lt_cv_sys_max_cmd_len
 _LT_DECL([], [max_cmd_len], [0],
     [What is the maximum length of a command?])
 ])
-m4trace:m4/libtool.m4:1733: -1- AU_DEFUN([AC_LIBTOOL_SYS_MAX_CMD_LEN], [m4_if($#, 0, [LT_CMD_MAX_LEN], [LT_CMD_MAX_LEN($@)])])
-m4trace:m4/libtool.m4:1733: -1- AC_DEFUN([AC_LIBTOOL_SYS_MAX_CMD_LEN], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_SYS_MAX_CMD_LEN' is obsolete.
+m4trace:m4/libtool.m4:1810: -1- AU_DEFUN([AC_LIBTOOL_SYS_MAX_CMD_LEN], [m4_if($#, 0, [LT_CMD_MAX_LEN], [LT_CMD_MAX_LEN($@)])])
+m4trace:m4/libtool.m4:1810: -1- AC_DEFUN([AC_LIBTOOL_SYS_MAX_CMD_LEN], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_SYS_MAX_CMD_LEN' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_CMD_MAX_LEN], [LT_CMD_MAX_LEN($@)])])
-m4trace:m4/libtool.m4:1844: -1- AC_DEFUN([LT_SYS_DLOPEN_SELF], [m4_require([_LT_HEADER_DLFCN])dnl
-if test "x$enable_dlopen" != xyes; then
+m4trace:m4/libtool.m4:1921: -1- AC_DEFUN([LT_SYS_DLOPEN_SELF], [m4_require([_LT_HEADER_DLFCN])dnl
+if test yes != "$enable_dlopen"; then
   enable_dlopen=unknown
   enable_dlopen_self=unknown
   enable_dlopen_self_static=unknown
@@ -2601,44 +2603,52 @@ else
 
   case $host_os in
   beos*)
-    lt_cv_dlopen="load_add_on"
+    lt_cv_dlopen=load_add_on
     lt_cv_dlopen_libs=
     lt_cv_dlopen_self=yes
     ;;
 
   mingw* | pw32* | cegcc*)
-    lt_cv_dlopen="LoadLibrary"
+    lt_cv_dlopen=LoadLibrary
     lt_cv_dlopen_libs=
     ;;
 
   cygwin*)
-    lt_cv_dlopen="dlopen"
+    lt_cv_dlopen=dlopen
     lt_cv_dlopen_libs=
     ;;
 
   darwin*)
-  # if libdl is installed we need to link against it
+    # if libdl is installed we need to link against it
     AC_CHECK_LIB([dl], [dlopen],
-		[lt_cv_dlopen="dlopen" lt_cv_dlopen_libs="-ldl"],[
-    lt_cv_dlopen="dyld"
+		[lt_cv_dlopen=dlopen lt_cv_dlopen_libs=-ldl],[
+    lt_cv_dlopen=dyld
     lt_cv_dlopen_libs=
     lt_cv_dlopen_self=yes
     ])
     ;;
 
+  tpf*)
+    # Don't try to run any link tests for TPF.  We know it's impossible
+    # because TPF is a cross-compiler, and we know how we open DSOs.
+    lt_cv_dlopen=dlopen
+    lt_cv_dlopen_libs=
+    lt_cv_dlopen_self=no
+    ;;
+
   *)
     AC_CHECK_FUNC([shl_load],
-	  [lt_cv_dlopen="shl_load"],
+	  [lt_cv_dlopen=shl_load],
       [AC_CHECK_LIB([dld], [shl_load],
-	    [lt_cv_dlopen="shl_load" lt_cv_dlopen_libs="-ldld"],
+	    [lt_cv_dlopen=shl_load lt_cv_dlopen_libs=-ldld],
 	[AC_CHECK_FUNC([dlopen],
-	      [lt_cv_dlopen="dlopen"],
+	      [lt_cv_dlopen=dlopen],
 	  [AC_CHECK_LIB([dl], [dlopen],
-		[lt_cv_dlopen="dlopen" lt_cv_dlopen_libs="-ldl"],
+		[lt_cv_dlopen=dlopen lt_cv_dlopen_libs=-ldl],
 	    [AC_CHECK_LIB([svld], [dlopen],
-		  [lt_cv_dlopen="dlopen" lt_cv_dlopen_libs="-lsvld"],
+		  [lt_cv_dlopen=dlopen lt_cv_dlopen_libs=-lsvld],
 	      [AC_CHECK_LIB([dld], [dld_link],
-		    [lt_cv_dlopen="dld_link" lt_cv_dlopen_libs="-ldld"])
+		    [lt_cv_dlopen=dld_link lt_cv_dlopen_libs=-ldld])
 	      ])
 	    ])
 	  ])
@@ -2647,21 +2657,21 @@ else
     ;;
   esac
 
-  if test "x$lt_cv_dlopen" != xno; then
-    enable_dlopen=yes
-  else
+  if test no = "$lt_cv_dlopen"; then
     enable_dlopen=no
+  else
+    enable_dlopen=yes
   fi
 
   case $lt_cv_dlopen in
   dlopen)
-    save_CPPFLAGS="$CPPFLAGS"
-    test "x$ac_cv_header_dlfcn_h" = xyes && CPPFLAGS="$CPPFLAGS -DHAVE_DLFCN_H"
+    save_CPPFLAGS=$CPPFLAGS
+    test yes = "$ac_cv_header_dlfcn_h" && CPPFLAGS="$CPPFLAGS -DHAVE_DLFCN_H"
 
-    save_LDFLAGS="$LDFLAGS"
+    save_LDFLAGS=$LDFLAGS
     wl=$lt_prog_compiler_wl eval LDFLAGS=\"\$LDFLAGS $export_dynamic_flag_spec\"
 
-    save_LIBS="$LIBS"
+    save_LIBS=$LIBS
     LIBS="$lt_cv_dlopen_libs $LIBS"
 
     AC_CACHE_CHECK([whether a program can dlopen itself],
@@ -2671,7 +2681,7 @@ else
 	    lt_cv_dlopen_self=no, lt_cv_dlopen_self=cross)
     ])
 
-    if test "x$lt_cv_dlopen_self" = xyes; then
+    if test yes = "$lt_cv_dlopen_self"; then
       wl=$lt_prog_compiler_wl eval LDFLAGS=\"\$LDFLAGS $lt_prog_compiler_static\"
       AC_CACHE_CHECK([whether a statically linked program can dlopen itself],
 	  lt_cv_dlopen_self_static, [dnl
@@ -2681,9 +2691,9 @@ else
       ])
     fi
 
-    CPPFLAGS="$save_CPPFLAGS"
-    LDFLAGS="$save_LDFLAGS"
-    LIBS="$save_LIBS"
+    CPPFLAGS=$save_CPPFLAGS
+    LDFLAGS=$save_LDFLAGS
+    LIBS=$save_LIBS
     ;;
   esac
 
@@ -2704,34 +2714,34 @@ _LT_DECL([dlopen_self], [enable_dlopen_self], [0],
 _LT_DECL([dlopen_self_static], [enable_dlopen_self_static], [0],
 	 [Whether dlopen of statically linked programs is supported])
 ])
-m4trace:m4/libtool.m4:1961: -1- AU_DEFUN([AC_LIBTOOL_DLOPEN_SELF], [m4_if($#, 0, [LT_SYS_DLOPEN_SELF], [LT_SYS_DLOPEN_SELF($@)])])
-m4trace:m4/libtool.m4:1961: -1- AC_DEFUN([AC_LIBTOOL_DLOPEN_SELF], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_DLOPEN_SELF' is obsolete.
+m4trace:m4/libtool.m4:2046: -1- AU_DEFUN([AC_LIBTOOL_DLOPEN_SELF], [m4_if($#, 0, [LT_SYS_DLOPEN_SELF], [LT_SYS_DLOPEN_SELF($@)])])
+m4trace:m4/libtool.m4:2046: -1- AC_DEFUN([AC_LIBTOOL_DLOPEN_SELF], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_DLOPEN_SELF' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_SYS_DLOPEN_SELF], [LT_SYS_DLOPEN_SELF($@)])])
-m4trace:m4/libtool.m4:2934: -1- AC_DEFUN([_LT_PATH_TOOL_PREFIX], [m4_require([_LT_DECL_EGREP])dnl
+m4trace:m4/libtool.m4:3155: -1- AC_DEFUN([_LT_PATH_TOOL_PREFIX], [m4_require([_LT_DECL_EGREP])dnl
 AC_MSG_CHECKING([for $1])
 AC_CACHE_VAL(lt_cv_path_MAGIC_CMD,
 [case $MAGIC_CMD in
 [[\\/*] |  ?:[\\/]*])
-  lt_cv_path_MAGIC_CMD="$MAGIC_CMD" # Let the user override the test with a path.
+  lt_cv_path_MAGIC_CMD=$MAGIC_CMD # Let the user override the test with a path.
   ;;
 *)
-  lt_save_MAGIC_CMD="$MAGIC_CMD"
-  lt_save_ifs="$IFS"; IFS=$PATH_SEPARATOR
+  lt_save_MAGIC_CMD=$MAGIC_CMD
+  lt_save_ifs=$IFS; IFS=$PATH_SEPARATOR
 dnl $ac_dummy forces splitting on constant user-supplied paths.
 dnl POSIX.2 word splitting is done only on the output of word expansions,
 dnl not every word.  This closes a longstanding sh security hole.
   ac_dummy="m4_if([$2], , $PATH, [$2])"
   for ac_dir in $ac_dummy; do
-    IFS="$lt_save_ifs"
+    IFS=$lt_save_ifs
     test -z "$ac_dir" && ac_dir=.
-    if test -f $ac_dir/$1; then
-      lt_cv_path_MAGIC_CMD="$ac_dir/$1"
+    if test -f "$ac_dir/$1"; then
+      lt_cv_path_MAGIC_CMD=$ac_dir/"$1"
       if test -n "$file_magic_test_file"; then
 	case $deplibs_check_method in
 	"file_magic "*)
 	  file_magic_regex=`expr "$deplibs_check_method" : "file_magic \(.*\)"`
-	  MAGIC_CMD="$lt_cv_path_MAGIC_CMD"
+	  MAGIC_CMD=$lt_cv_path_MAGIC_CMD
 	  if eval $file_magic_cmd \$file_magic_test_file 2> /dev/null |
 	    $EGREP "$file_magic_regex" > /dev/null; then
 	    :
@@ -2754,11 +2764,11 @@ _LT_EOF
       break
     fi
   done
-  IFS="$lt_save_ifs"
-  MAGIC_CMD="$lt_save_MAGIC_CMD"
+  IFS=$lt_save_ifs
+  MAGIC_CMD=$lt_save_MAGIC_CMD
   ;;
 esac])
-MAGIC_CMD="$lt_cv_path_MAGIC_CMD"
+MAGIC_CMD=$lt_cv_path_MAGIC_CMD
 if test -n "$MAGIC_CMD"; then
   AC_MSG_RESULT($MAGIC_CMD)
 else
@@ -2767,11 +2777,11 @@ fi
 _LT_DECL([], [MAGIC_CMD], [0],
 	 [Used to examine libraries when file_magic_cmd begins with "file"])dnl
 ])
-m4trace:m4/libtool.m4:2996: -1- AU_DEFUN([AC_PATH_TOOL_PREFIX], [m4_if($#, 0, [_LT_PATH_TOOL_PREFIX], [_LT_PATH_TOOL_PREFIX($@)])])
-m4trace:m4/libtool.m4:2996: -1- AC_DEFUN([AC_PATH_TOOL_PREFIX], [AC_DIAGNOSE([obsolete], [The macro `AC_PATH_TOOL_PREFIX' is obsolete.
+m4trace:m4/libtool.m4:3217: -1- AU_DEFUN([AC_PATH_TOOL_PREFIX], [m4_if($#, 0, [_LT_PATH_TOOL_PREFIX], [_LT_PATH_TOOL_PREFIX($@)])])
+m4trace:m4/libtool.m4:3217: -1- AC_DEFUN([AC_PATH_TOOL_PREFIX], [AC_DIAGNOSE([obsolete], [The macro `AC_PATH_TOOL_PREFIX' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [_LT_PATH_TOOL_PREFIX], [_LT_PATH_TOOL_PREFIX($@)])])
-m4trace:m4/libtool.m4:3019: -1- AC_DEFUN([LT_PATH_LD], [AC_REQUIRE([AC_PROG_CC])dnl
+m4trace:m4/libtool.m4:3240: -1- AC_DEFUN([LT_PATH_LD], [AC_REQUIRE([AC_PROG_CC])dnl
 AC_REQUIRE([AC_CANONICAL_HOST])dnl
 AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 m4_require([_LT_DECL_SED])dnl
@@ -2781,16 +2791,16 @@ m4_require([_LT_PROG_ECHO_BACKSLASH])dnl
 AC_ARG_WITH([gnu-ld],
     [AS_HELP_STRING([--with-gnu-ld],
 	[assume the C compiler uses GNU ld @<:@default=no@:>@])],
-    [test "$withval" = no || with_gnu_ld=yes],
+    [test no = "$withval" || with_gnu_ld=yes],
     [with_gnu_ld=no])dnl
 
 ac_prog=ld
-if test "$GCC" = yes; then
+if test yes = "$GCC"; then
   # Check if gcc -print-prog-name=ld gives a path.
   AC_MSG_CHECKING([for ld used by $CC])
   case $host in
   *-*-mingw*)
-    # gcc leaves a trailing carriage return which upsets mingw
+    # gcc leaves a trailing carriage return, which upsets mingw
     ac_prog=`($CC -print-prog-name=ld) 2>&5 | tr -d '\015'` ;;
   *)
     ac_prog=`($CC -print-prog-name=ld) 2>&5` ;;
@@ -2804,7 +2814,7 @@ if test "$GCC" = yes; then
       while $ECHO "$ac_prog" | $GREP "$re_direlt" > /dev/null 2>&1; do
 	ac_prog=`$ECHO $ac_prog| $SED "s%$re_direlt%/%"`
       done
-      test -z "$LD" && LD="$ac_prog"
+      test -z "$LD" && LD=$ac_prog
       ;;
   "")
     # If it fails, then pretend we aren't using GCC.
@@ -2815,37 +2825,37 @@ if test "$GCC" = yes; then
     with_gnu_ld=unknown
     ;;
   esac
-elif test "$with_gnu_ld" = yes; then
+elif test yes = "$with_gnu_ld"; then
   AC_MSG_CHECKING([for GNU ld])
 else
   AC_MSG_CHECKING([for non-GNU ld])
 fi
 AC_CACHE_VAL(lt_cv_path_LD,
 [if test -z "$LD"; then
-  lt_save_ifs="$IFS"; IFS=$PATH_SEPARATOR
+  lt_save_ifs=$IFS; IFS=$PATH_SEPARATOR
   for ac_dir in $PATH; do
-    IFS="$lt_save_ifs"
+    IFS=$lt_save_ifs
     test -z "$ac_dir" && ac_dir=.
     if test -f "$ac_dir/$ac_prog" || test -f "$ac_dir/$ac_prog$ac_exeext"; then
-      lt_cv_path_LD="$ac_dir/$ac_prog"
+      lt_cv_path_LD=$ac_dir/$ac_prog
       # Check to see if the program is GNU ld.  I'd rather use --version,
       # but apparently some variants of GNU ld only accept -v.
       # Break only if it was the GNU/non-GNU ld that we prefer.
       case `"$lt_cv_path_LD" -v 2>&1 </dev/null` in
       *GNU* | *'with BFD'*)
-	test "$with_gnu_ld" != no && break
+	test no != "$with_gnu_ld" && break
 	;;
       *)
-	test "$with_gnu_ld" != yes && break
+	test yes != "$with_gnu_ld" && break
 	;;
       esac
     fi
   done
-  IFS="$lt_save_ifs"
+  IFS=$lt_save_ifs
 else
-  lt_cv_path_LD="$LD" # Let the user override the test with a path.
+  lt_cv_path_LD=$LD # Let the user override the test with a path.
 fi])
-LD="$lt_cv_path_LD"
+LD=$lt_cv_path_LD
 if test -n "$LD"; then
   AC_MSG_RESULT($LD)
 else
@@ -2857,45 +2867,50 @@ AC_SUBST([LD])
 
 _LT_TAGDECL([], [LD], [1], [The linker used to build libraries])
 ])
-m4trace:m4/libtool.m4:3108: -1- AU_DEFUN([AM_PROG_LD], [m4_if($#, 0, [LT_PATH_LD], [LT_PATH_LD($@)])])
-m4trace:m4/libtool.m4:3108: -1- AC_DEFUN([AM_PROG_LD], [AC_DIAGNOSE([obsolete], [The macro `AM_PROG_LD' is obsolete.
+m4trace:m4/libtool.m4:3329: -1- AU_DEFUN([AM_PROG_LD], [m4_if($#, 0, [LT_PATH_LD], [LT_PATH_LD($@)])])
+m4trace:m4/libtool.m4:3329: -1- AC_DEFUN([AM_PROG_LD], [AC_DIAGNOSE([obsolete], [The macro `AM_PROG_LD' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_PATH_LD], [LT_PATH_LD($@)])])
-m4trace:m4/libtool.m4:3109: -1- AU_DEFUN([AC_PROG_LD], [m4_if($#, 0, [LT_PATH_LD], [LT_PATH_LD($@)])])
-m4trace:m4/libtool.m4:3109: -1- AC_DEFUN([AC_PROG_LD], [AC_DIAGNOSE([obsolete], [The macro `AC_PROG_LD' is obsolete.
+m4trace:m4/libtool.m4:3330: -1- AU_DEFUN([AC_PROG_LD], [m4_if($#, 0, [LT_PATH_LD], [LT_PATH_LD($@)])])
+m4trace:m4/libtool.m4:3330: -1- AC_DEFUN([AC_PROG_LD], [AC_DIAGNOSE([obsolete], [The macro `AC_PROG_LD' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_PATH_LD], [LT_PATH_LD($@)])])
-m4trace:m4/libtool.m4:3403: -1- AC_DEFUN([LT_PATH_NM], [AC_REQUIRE([AC_PROG_CC])dnl
+m4trace:m4/libtool.m4:3659: -1- AC_DEFUN([LT_PATH_NM], [AC_REQUIRE([AC_PROG_CC])dnl
 AC_CACHE_CHECK([for BSD- or MS-compatible name lister (nm)], lt_cv_path_NM,
 [if test -n "$NM"; then
   # Let the user override the test.
-  lt_cv_path_NM="$NM"
+  lt_cv_path_NM=$NM
 else
-  lt_nm_to_check="${ac_tool_prefix}nm"
+  lt_nm_to_check=${ac_tool_prefix}nm
   if test -n "$ac_tool_prefix" && test "$build" = "$host"; then
     lt_nm_to_check="$lt_nm_to_check nm"
   fi
   for lt_tmp_nm in $lt_nm_to_check; do
-    lt_save_ifs="$IFS"; IFS=$PATH_SEPARATOR
+    lt_save_ifs=$IFS; IFS=$PATH_SEPARATOR
     for ac_dir in $PATH /usr/ccs/bin/elf /usr/ccs/bin /usr/ucb /bin; do
-      IFS="$lt_save_ifs"
+      IFS=$lt_save_ifs
       test -z "$ac_dir" && ac_dir=.
-      tmp_nm="$ac_dir/$lt_tmp_nm"
-      if test -f "$tmp_nm" || test -f "$tmp_nm$ac_exeext" ; then
+      tmp_nm=$ac_dir/$lt_tmp_nm
+      if test -f "$tmp_nm" || test -f "$tmp_nm$ac_exeext"; then
 	# Check to see if the nm accepts a BSD-compat flag.
-	# Adding the `sed 1q' prevents false positives on HP-UX, which says:
+	# Adding the 'sed 1q' prevents false positives on HP-UX, which says:
 	#   nm: unknown option "B" ignored
 	# Tru64's nm complains that /dev/null is an invalid object file
-	case `"$tmp_nm" -B /dev/null 2>&1 | sed '1q'` in
-	*/dev/null* | *'Invalid file or object type'*)
+	# MSYS converts /dev/null to NUL, MinGW nm treats NUL as empty
+	case $build_os in
+	mingw*) lt_bad_file=conftest.nm/nofile ;;
+	*) lt_bad_file=/dev/null ;;
+	esac
+	case `"$tmp_nm" -B $lt_bad_file 2>&1 | sed '1q'` in
+	*$lt_bad_file* | *'Invalid file or object type'*)
 	  lt_cv_path_NM="$tmp_nm -B"
-	  break
+	  break 2
 	  ;;
 	*)
 	  case `"$tmp_nm" -p /dev/null 2>&1 | sed '1q'` in
 	  */dev/null*)
 	    lt_cv_path_NM="$tmp_nm -p"
-	    break
+	    break 2
 	    ;;
 	  *)
 	    lt_cv_path_NM=${lt_cv_path_NM="$tmp_nm"} # keep the first match, but
@@ -2906,21 +2921,21 @@ else
 	esac
       fi
     done
-    IFS="$lt_save_ifs"
+    IFS=$lt_save_ifs
   done
   : ${lt_cv_path_NM=no}
 fi])
-if test "$lt_cv_path_NM" != "no"; then
-  NM="$lt_cv_path_NM"
+if test no != "$lt_cv_path_NM"; then
+  NM=$lt_cv_path_NM
 else
   # Didn't find any BSD compatible name lister, look for dumpbin.
   if test -n "$DUMPBIN"; then :
     # Let the user override the test.
   else
     AC_CHECK_TOOLS(DUMPBIN, [dumpbin "link -dump"], :)
-    case `$DUMPBIN -symbols /dev/null 2>&1 | sed '1q'` in
+    case `$DUMPBIN -symbols -headers /dev/null 2>&1 | sed '1q'` in
     *COFF*)
-      DUMPBIN="$DUMPBIN -symbols"
+      DUMPBIN="$DUMPBIN -symbols -headers"
       ;;
     *)
       DUMPBIN=:
@@ -2928,8 +2943,8 @@ else
     esac
   fi
   AC_SUBST([DUMPBIN])
-  if test "$DUMPBIN" != ":"; then
-    NM="$DUMPBIN"
+  if test : != "$DUMPBIN"; then
+    NM=$DUMPBIN
   fi
 fi
 test -z "$NM" && NM=nm
@@ -2952,146 +2967,154 @@ AC_CACHE_CHECK([the name lister ($NM) interface], [lt_cv_nm_interface],
   fi
   rm -f conftest*])
 ])
-m4trace:m4/libtool.m4:3493: -1- AU_DEFUN([AM_PROG_NM], [m4_if($#, 0, [LT_PATH_NM], [LT_PATH_NM($@)])])
-m4trace:m4/libtool.m4:3493: -1- AC_DEFUN([AM_PROG_NM], [AC_DIAGNOSE([obsolete], [The macro `AM_PROG_NM' is obsolete.
+m4trace:m4/libtool.m4:3754: -1- AU_DEFUN([AM_PROG_NM], [m4_if($#, 0, [LT_PATH_NM], [LT_PATH_NM($@)])])
+m4trace:m4/libtool.m4:3754: -1- AC_DEFUN([AM_PROG_NM], [AC_DIAGNOSE([obsolete], [The macro `AM_PROG_NM' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_PATH_NM], [LT_PATH_NM($@)])])
-m4trace:m4/libtool.m4:3494: -1- AU_DEFUN([AC_PROG_NM], [m4_if($#, 0, [LT_PATH_NM], [LT_PATH_NM($@)])])
-m4trace:m4/libtool.m4:3494: -1- AC_DEFUN([AC_PROG_NM], [AC_DIAGNOSE([obsolete], [The macro `AC_PROG_NM' is obsolete.
+m4trace:m4/libtool.m4:3755: -1- AU_DEFUN([AC_PROG_NM], [m4_if($#, 0, [LT_PATH_NM], [LT_PATH_NM($@)])])
+m4trace:m4/libtool.m4:3755: -1- AC_DEFUN([AC_PROG_NM], [AC_DIAGNOSE([obsolete], [The macro `AC_PROG_NM' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_PATH_NM], [LT_PATH_NM($@)])])
-m4trace:m4/libtool.m4:3564: -1- AC_DEFUN([LT_LIB_M], [AC_REQUIRE([AC_CANONICAL_HOST])dnl
+m4trace:m4/libtool.m4:3826: -1- AC_DEFUN([_LT_DLL_DEF_P], [dnl
+  test DEF = "`$SED -n dnl
+    -e '\''s/^[[	 ]]*//'\'' dnl Strip leading whitespace
+    -e '\''/^\(;.*\)*$/d'\'' dnl      Delete empty lines and comments
+    -e '\''s/^\(EXPORTS\|LIBRARY\)\([[	 ]].*\)*$/DEF/p'\'' dnl
+    -e q dnl                          Only consider the first "real" line
+    $1`" dnl
+])
+m4trace:m4/libtool.m4:3840: -1- AC_DEFUN([LT_LIB_M], [AC_REQUIRE([AC_CANONICAL_HOST])dnl
 LIBM=
 case $host in
 *-*-beos* | *-*-cegcc* | *-*-cygwin* | *-*-haiku* | *-*-pw32* | *-*-darwin*)
   # These system don't have libm, or don't need it
   ;;
 *-ncr-sysv4.3*)
-  AC_CHECK_LIB(mw, _mwvalidcheckl, LIBM="-lmw")
+  AC_CHECK_LIB(mw, _mwvalidcheckl, LIBM=-lmw)
   AC_CHECK_LIB(m, cos, LIBM="$LIBM -lm")
   ;;
 *)
-  AC_CHECK_LIB(m, cos, LIBM="-lm")
+  AC_CHECK_LIB(m, cos, LIBM=-lm)
   ;;
 esac
 AC_SUBST([LIBM])
 ])
-m4trace:m4/libtool.m4:3583: -1- AU_DEFUN([AC_CHECK_LIBM], [m4_if($#, 0, [LT_LIB_M], [LT_LIB_M($@)])])
-m4trace:m4/libtool.m4:3583: -1- AC_DEFUN([AC_CHECK_LIBM], [AC_DIAGNOSE([obsolete], [The macro `AC_CHECK_LIBM' is obsolete.
+m4trace:m4/libtool.m4:3859: -1- AU_DEFUN([AC_CHECK_LIBM], [m4_if($#, 0, [LT_LIB_M], [LT_LIB_M($@)])])
+m4trace:m4/libtool.m4:3859: -1- AC_DEFUN([AC_CHECK_LIBM], [AC_DIAGNOSE([obsolete], [The macro `AC_CHECK_LIBM' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_LIB_M], [LT_LIB_M($@)])])
-m4trace:m4/libtool.m4:7626: -1- AC_DEFUN([LT_PROG_GCJ], [m4_ifdef([AC_PROG_GCJ], [AC_PROG_GCJ],
+m4trace:m4/libtool.m4:8122: -1- AC_DEFUN([LT_PROG_GCJ], [m4_ifdef([AC_PROG_GCJ], [AC_PROG_GCJ],
   [m4_ifdef([A][M_PROG_GCJ], [A][M_PROG_GCJ],
     [AC_CHECK_TOOL(GCJ, gcj,)
-      test "x${GCJFLAGS+set}" = xset || GCJFLAGS="-g -O2"
+      test set = "${GCJFLAGS+set}" || GCJFLAGS="-g -O2"
       AC_SUBST(GCJFLAGS)])])[]dnl
 ])
-m4trace:m4/libtool.m4:7635: -1- AU_DEFUN([LT_AC_PROG_GCJ], [m4_if($#, 0, [LT_PROG_GCJ], [LT_PROG_GCJ($@)])])
-m4trace:m4/libtool.m4:7635: -1- AC_DEFUN([LT_AC_PROG_GCJ], [AC_DIAGNOSE([obsolete], [The macro `LT_AC_PROG_GCJ' is obsolete.
+m4trace:m4/libtool.m4:8131: -1- AU_DEFUN([LT_AC_PROG_GCJ], [m4_if($#, 0, [LT_PROG_GCJ], [LT_PROG_GCJ($@)])])
+m4trace:m4/libtool.m4:8131: -1- AC_DEFUN([LT_AC_PROG_GCJ], [AC_DIAGNOSE([obsolete], [The macro `LT_AC_PROG_GCJ' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_PROG_GCJ], [LT_PROG_GCJ($@)])])
-m4trace:m4/libtool.m4:7642: -1- AC_DEFUN([LT_PROG_GO], [AC_CHECK_TOOL(GOC, gccgo,)
+m4trace:m4/libtool.m4:8138: -1- AC_DEFUN([LT_PROG_GO], [AC_CHECK_TOOL(GOC, gccgo,)
 ])
-m4trace:m4/libtool.m4:7649: -1- AC_DEFUN([LT_PROG_RC], [AC_CHECK_TOOL(RC, windres,)
+m4trace:m4/libtool.m4:8145: -1- AC_DEFUN([LT_PROG_RC], [AC_CHECK_TOOL(RC, windres,)
 ])
-m4trace:m4/libtool.m4:7654: -1- AU_DEFUN([LT_AC_PROG_RC], [m4_if($#, 0, [LT_PROG_RC], [LT_PROG_RC($@)])])
-m4trace:m4/libtool.m4:7654: -1- AC_DEFUN([LT_AC_PROG_RC], [AC_DIAGNOSE([obsolete], [The macro `LT_AC_PROG_RC' is obsolete.
+m4trace:m4/libtool.m4:8150: -1- AU_DEFUN([LT_AC_PROG_RC], [m4_if($#, 0, [LT_PROG_RC], [LT_PROG_RC($@)])])
+m4trace:m4/libtool.m4:8150: -1- AC_DEFUN([LT_AC_PROG_RC], [AC_DIAGNOSE([obsolete], [The macro `LT_AC_PROG_RC' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_PROG_RC], [LT_PROG_RC($@)])])
-m4trace:m4/libtool.m4:7774: -1- AU_DEFUN([LT_AC_PROG_SED], [m4_if($#, 0, [AC_PROG_SED], [AC_PROG_SED($@)])])
-m4trace:m4/libtool.m4:7774: -1- AC_DEFUN([LT_AC_PROG_SED], [AC_DIAGNOSE([obsolete], [The macro `LT_AC_PROG_SED' is obsolete.
+m4trace:m4/libtool.m4:8270: -1- AU_DEFUN([LT_AC_PROG_SED], [m4_if($#, 0, [AC_PROG_SED], [AC_PROG_SED($@)])])
+m4trace:m4/libtool.m4:8270: -1- AC_DEFUN([LT_AC_PROG_SED], [AC_DIAGNOSE([obsolete], [The macro `LT_AC_PROG_SED' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [AC_PROG_SED], [AC_PROG_SED($@)])])
 m4trace:m4/ltoptions.m4:14: -1- AC_DEFUN([LTOPTIONS_VERSION], [m4_if([1])])
-m4trace:m4/ltoptions.m4:111: -1- AU_DEFUN([AC_LIBTOOL_DLOPEN], [_LT_SET_OPTION([LT_INIT], [dlopen])
+m4trace:m4/ltoptions.m4:113: -1- AU_DEFUN([AC_LIBTOOL_DLOPEN], [_LT_SET_OPTION([LT_INIT], [dlopen])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you
-put the `dlopen' option into LT_INIT's first parameter.])
+put the 'dlopen' option into LT_INIT's first parameter.])
 ])
-m4trace:m4/ltoptions.m4:111: -1- AC_DEFUN([AC_LIBTOOL_DLOPEN], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_DLOPEN' is obsolete.
+m4trace:m4/ltoptions.m4:113: -1- AC_DEFUN([AC_LIBTOOL_DLOPEN], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_DLOPEN' is obsolete.
 You should run autoupdate.])dnl
 _LT_SET_OPTION([LT_INIT], [dlopen])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you
-put the `dlopen' option into LT_INIT's first parameter.])
+put the 'dlopen' option into LT_INIT's first parameter.])
 ])
-m4trace:m4/ltoptions.m4:146: -1- AU_DEFUN([AC_LIBTOOL_WIN32_DLL], [AC_REQUIRE([AC_CANONICAL_HOST])dnl
+m4trace:m4/ltoptions.m4:148: -1- AU_DEFUN([AC_LIBTOOL_WIN32_DLL], [AC_REQUIRE([AC_CANONICAL_HOST])dnl
 _LT_SET_OPTION([LT_INIT], [win32-dll])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you
-put the `win32-dll' option into LT_INIT's first parameter.])
+put the 'win32-dll' option into LT_INIT's first parameter.])
 ])
-m4trace:m4/ltoptions.m4:146: -1- AC_DEFUN([AC_LIBTOOL_WIN32_DLL], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_WIN32_DLL' is obsolete.
+m4trace:m4/ltoptions.m4:148: -1- AC_DEFUN([AC_LIBTOOL_WIN32_DLL], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_WIN32_DLL' is obsolete.
 You should run autoupdate.])dnl
 AC_REQUIRE([AC_CANONICAL_HOST])dnl
 _LT_SET_OPTION([LT_INIT], [win32-dll])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you
-put the `win32-dll' option into LT_INIT's first parameter.])
+put the 'win32-dll' option into LT_INIT's first parameter.])
 ])
-m4trace:m4/ltoptions.m4:195: -1- AC_DEFUN([AC_ENABLE_SHARED], [_LT_SET_OPTION([LT_INIT], m4_if([$1], [no], [disable-])[shared])
+m4trace:m4/ltoptions.m4:197: -1- AC_DEFUN([AC_ENABLE_SHARED], [_LT_SET_OPTION([LT_INIT], m4_if([$1], [no], [disable-])[shared])
 ])
-m4trace:m4/ltoptions.m4:199: -1- AC_DEFUN([AC_DISABLE_SHARED], [_LT_SET_OPTION([LT_INIT], [disable-shared])
+m4trace:m4/ltoptions.m4:201: -1- AC_DEFUN([AC_DISABLE_SHARED], [_LT_SET_OPTION([LT_INIT], [disable-shared])
 ])
-m4trace:m4/ltoptions.m4:203: -1- AU_DEFUN([AM_ENABLE_SHARED], [AC_ENABLE_SHARED($@)])
-m4trace:m4/ltoptions.m4:203: -1- AC_DEFUN([AM_ENABLE_SHARED], [AC_DIAGNOSE([obsolete], [The macro `AM_ENABLE_SHARED' is obsolete.
+m4trace:m4/ltoptions.m4:205: -1- AU_DEFUN([AM_ENABLE_SHARED], [AC_ENABLE_SHARED($@)])
+m4trace:m4/ltoptions.m4:205: -1- AC_DEFUN([AM_ENABLE_SHARED], [AC_DIAGNOSE([obsolete], [The macro `AM_ENABLE_SHARED' is obsolete.
 You should run autoupdate.])dnl
 AC_ENABLE_SHARED($@)])
-m4trace:m4/ltoptions.m4:204: -1- AU_DEFUN([AM_DISABLE_SHARED], [AC_DISABLE_SHARED($@)])
-m4trace:m4/ltoptions.m4:204: -1- AC_DEFUN([AM_DISABLE_SHARED], [AC_DIAGNOSE([obsolete], [The macro `AM_DISABLE_SHARED' is obsolete.
+m4trace:m4/ltoptions.m4:206: -1- AU_DEFUN([AM_DISABLE_SHARED], [AC_DISABLE_SHARED($@)])
+m4trace:m4/ltoptions.m4:206: -1- AC_DEFUN([AM_DISABLE_SHARED], [AC_DIAGNOSE([obsolete], [The macro `AM_DISABLE_SHARED' is obsolete.
 You should run autoupdate.])dnl
 AC_DISABLE_SHARED($@)])
-m4trace:m4/ltoptions.m4:249: -1- AC_DEFUN([AC_ENABLE_STATIC], [_LT_SET_OPTION([LT_INIT], m4_if([$1], [no], [disable-])[static])
+m4trace:m4/ltoptions.m4:251: -1- AC_DEFUN([AC_ENABLE_STATIC], [_LT_SET_OPTION([LT_INIT], m4_if([$1], [no], [disable-])[static])
 ])
-m4trace:m4/ltoptions.m4:253: -1- AC_DEFUN([AC_DISABLE_STATIC], [_LT_SET_OPTION([LT_INIT], [disable-static])
+m4trace:m4/ltoptions.m4:255: -1- AC_DEFUN([AC_DISABLE_STATIC], [_LT_SET_OPTION([LT_INIT], [disable-static])
 ])
-m4trace:m4/ltoptions.m4:257: -1- AU_DEFUN([AM_ENABLE_STATIC], [AC_ENABLE_STATIC($@)])
-m4trace:m4/ltoptions.m4:257: -1- AC_DEFUN([AM_ENABLE_STATIC], [AC_DIAGNOSE([obsolete], [The macro `AM_ENABLE_STATIC' is obsolete.
+m4trace:m4/ltoptions.m4:259: -1- AU_DEFUN([AM_ENABLE_STATIC], [AC_ENABLE_STATIC($@)])
+m4trace:m4/ltoptions.m4:259: -1- AC_DEFUN([AM_ENABLE_STATIC], [AC_DIAGNOSE([obsolete], [The macro `AM_ENABLE_STATIC' is obsolete.
 You should run autoupdate.])dnl
 AC_ENABLE_STATIC($@)])
-m4trace:m4/ltoptions.m4:258: -1- AU_DEFUN([AM_DISABLE_STATIC], [AC_DISABLE_STATIC($@)])
-m4trace:m4/ltoptions.m4:258: -1- AC_DEFUN([AM_DISABLE_STATIC], [AC_DIAGNOSE([obsolete], [The macro `AM_DISABLE_STATIC' is obsolete.
+m4trace:m4/ltoptions.m4:260: -1- AU_DEFUN([AM_DISABLE_STATIC], [AC_DISABLE_STATIC($@)])
+m4trace:m4/ltoptions.m4:260: -1- AC_DEFUN([AM_DISABLE_STATIC], [AC_DIAGNOSE([obsolete], [The macro `AM_DISABLE_STATIC' is obsolete.
 You should run autoupdate.])dnl
 AC_DISABLE_STATIC($@)])
-m4trace:m4/ltoptions.m4:303: -1- AU_DEFUN([AC_ENABLE_FAST_INSTALL], [_LT_SET_OPTION([LT_INIT], m4_if([$1], [no], [disable-])[fast-install])
+m4trace:m4/ltoptions.m4:305: -1- AU_DEFUN([AC_ENABLE_FAST_INSTALL], [_LT_SET_OPTION([LT_INIT], m4_if([$1], [no], [disable-])[fast-install])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you put
-the `fast-install' option into LT_INIT's first parameter.])
+the 'fast-install' option into LT_INIT's first parameter.])
 ])
-m4trace:m4/ltoptions.m4:303: -1- AC_DEFUN([AC_ENABLE_FAST_INSTALL], [AC_DIAGNOSE([obsolete], [The macro `AC_ENABLE_FAST_INSTALL' is obsolete.
+m4trace:m4/ltoptions.m4:305: -1- AC_DEFUN([AC_ENABLE_FAST_INSTALL], [AC_DIAGNOSE([obsolete], [The macro `AC_ENABLE_FAST_INSTALL' is obsolete.
 You should run autoupdate.])dnl
 _LT_SET_OPTION([LT_INIT], m4_if([$1], [no], [disable-])[fast-install])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you put
-the `fast-install' option into LT_INIT's first parameter.])
+the 'fast-install' option into LT_INIT's first parameter.])
 ])
-m4trace:m4/ltoptions.m4:310: -1- AU_DEFUN([AC_DISABLE_FAST_INSTALL], [_LT_SET_OPTION([LT_INIT], [disable-fast-install])
+m4trace:m4/ltoptions.m4:312: -1- AU_DEFUN([AC_DISABLE_FAST_INSTALL], [_LT_SET_OPTION([LT_INIT], [disable-fast-install])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you put
-the `disable-fast-install' option into LT_INIT's first parameter.])
+the 'disable-fast-install' option into LT_INIT's first parameter.])
 ])
-m4trace:m4/ltoptions.m4:310: -1- AC_DEFUN([AC_DISABLE_FAST_INSTALL], [AC_DIAGNOSE([obsolete], [The macro `AC_DISABLE_FAST_INSTALL' is obsolete.
+m4trace:m4/ltoptions.m4:312: -1- AC_DEFUN([AC_DISABLE_FAST_INSTALL], [AC_DIAGNOSE([obsolete], [The macro `AC_DISABLE_FAST_INSTALL' is obsolete.
 You should run autoupdate.])dnl
 _LT_SET_OPTION([LT_INIT], [disable-fast-install])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you put
-the `disable-fast-install' option into LT_INIT's first parameter.])
+the 'disable-fast-install' option into LT_INIT's first parameter.])
 ])
-m4trace:m4/ltoptions.m4:358: -1- AU_DEFUN([AC_LIBTOOL_PICMODE], [_LT_SET_OPTION([LT_INIT], [pic-only])
+m4trace:m4/ltoptions.m4:411: -1- AU_DEFUN([AC_LIBTOOL_PICMODE], [_LT_SET_OPTION([LT_INIT], [pic-only])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you
-put the `pic-only' option into LT_INIT's first parameter.])
+put the 'pic-only' option into LT_INIT's first parameter.])
 ])
-m4trace:m4/ltoptions.m4:358: -1- AC_DEFUN([AC_LIBTOOL_PICMODE], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_PICMODE' is obsolete.
+m4trace:m4/ltoptions.m4:411: -1- AC_DEFUN([AC_LIBTOOL_PICMODE], [AC_DIAGNOSE([obsolete], [The macro `AC_LIBTOOL_PICMODE' is obsolete.
 You should run autoupdate.])dnl
 _LT_SET_OPTION([LT_INIT], [pic-only])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you
-put the `pic-only' option into LT_INIT's first parameter.])
+put the 'pic-only' option into LT_INIT's first parameter.])
 ])
 m4trace:m4/ltsugar.m4:13: -1- AC_DEFUN([LTSUGAR_VERSION], [m4_if([0.1])])
-m4trace:m4/ltversion.m4:18: -1- AC_DEFUN([LTVERSION_VERSION], [macro_version='2.4.2'
-macro_revision='1.3337'
+m4trace:m4/ltversion.m4:18: -1- AC_DEFUN([LTVERSION_VERSION], [macro_version='2.4.6'
+macro_revision='2.4.6'
 _LT_DECL(, macro_version, 0, [Which release of libtool.m4 was used?])
 _LT_DECL(, macro_revision, 0)
 ])
@@ -3489,8 +3512,7 @@ m4trace:m4/udunits.m4:3: -1- AC_DEFUN([AC_CHECK_UDUNITS], [
       [UDUNITS_PATH_INC="$UDUNITS_PATH/include"])  
   ])
   
-  echo JMA uZ$UDUNITS_PATH_LIBDIR
-  
+ 
   ac_udunits_lib_ok='no'
   ac_udunits_save_LDFLAGS=$LDFLAGS
   UDUNITS_LIBS=
@@ -3559,7 +3581,7 @@ m4trace:m4/udunits.m4:3: -1- AC_DEFUN([AC_CHECK_UDUNITS], [
   AC_SUBST([UDUNITS_CFLAGS])
   AC_SUBST([UDUNITS_LDFLAGS])
 ])
-m4trace:m4/udunits.m4:99: -1- AC_DEFUN([AC_CHECK_UDUNITS_LIB], [
+m4trace:m4/udunits.m4:98: -1- AC_DEFUN([AC_CHECK_UDUNITS_LIB], [
   UDUNITS_LIBS=
   ac_udunits_save_LIBS=$LIBS
 
@@ -3574,7 +3596,7 @@ m4trace:m4/udunits.m4:99: -1- AC_DEFUN([AC_CHECK_UDUNITS_LIB], [
   [m4_if([$1], [], [:], [$1])],
   [m4_if([$2], [], [:], [$2])])
 ])
-m4trace:m4/udunits.m4:116: -1- AC_DEFUN([AC_CHECK_LIB_NOCACHE_UDUNITS], [
+m4trace:m4/udunits.m4:115: -1- AC_DEFUN([AC_CHECK_LIB_NOCACHE_UDUNITS], [
   AS_TR_SH([ac_check_lib_nocache_ok_$1_$2])='no'
   AS_TR_SH([ac_check_lib_nocache_$1_$2_LIBS])=$LIBS
   LIBS="-l$1 $5 $LIBS"
@@ -3591,7 +3613,7 @@ m4trace:m4/udunits.m4:116: -1- AC_DEFUN([AC_CHECK_LIB_NOCACHE_UDUNITS], [
   [m4_if([$3], [], [:], [$3])],
   [m4_if([$4], [], [:], [$4])])
 ])
-m4trace:m4/udunits.m4:135: -1- AC_DEFUN([AC_CHECK_HEADER_NOCACHE_UDUNITS], [
+m4trace:m4/udunits.m4:134: -1- AC_DEFUN([AC_CHECK_HEADER_NOCACHE_UDUNITS], [
   AS_TR_SH([ac_check_header_nocache_compile_$1])='no'
   AS_TR_SH([ac_check_header_nocache_preproc_$1])='no'
   AC_MSG_CHECKING([for $1 with compiler])
@@ -3906,13 +3928,16 @@ m4trace:configure.ac:63: -1- _LT_COMPILER_OPTION([if $compiler PIC flag $_LT_TAG
      _LT_TAGVAR(lt_prog_compiler_can_build_shared, )=no])
 m4trace:configure.ac:63: -1- _LT_LINKER_OPTION([if $compiler static flag $lt_tmp_static_flag works], [lt_cv_prog_compiler_static_works], [$lt_tmp_static_flag], [], [_LT_TAGVAR(lt_prog_compiler_static, )=])
 m4trace:configure.ac:63: -1- m4_pattern_allow([^MANIFEST_TOOL$])
+m4trace:configure.ac:63: -1- _LT_DLL_DEF_P([$export_symbols])
+m4trace:configure.ac:63: -1- _LT_DLL_DEF_P([$export_symbols])
 m4trace:configure.ac:63: -1- _LT_REQUIRED_DARWIN_CHECKS
 m4trace:configure.ac:63: -1- m4_pattern_allow([^DSYMUTIL$])
 m4trace:configure.ac:63: -1- m4_pattern_allow([^NMEDIT$])
 m4trace:configure.ac:63: -1- m4_pattern_allow([^LIPO$])
 m4trace:configure.ac:63: -1- m4_pattern_allow([^OTOOL$])
 m4trace:configure.ac:63: -1- m4_pattern_allow([^OTOOL64$])
-m4trace:configure.ac:63: -1- _LT_LINKER_OPTION([if $CC understands -b], [lt_cv_prog_compiler__b], [-b], [_LT_TAGVAR(archive_cmds, )='$CC -b ${wl}+h ${wl}$soname ${wl}+b ${wl}$install_libdir -o $lib $libobjs $deplibs $compiler_flags'], [_LT_TAGVAR(archive_cmds, )='$LD -b +h $soname +b $install_libdir -o $lib $libobjs $deplibs $linker_flags'])
+m4trace:configure.ac:63: -1- _LT_LINKER_OPTION([if $CC understands -b], [lt_cv_prog_compiler__b], [-b], [_LT_TAGVAR(archive_cmds, )='$CC -b $wl+h $wl$soname $wl+b $wl$install_libdir -o $lib $libobjs $deplibs $compiler_flags'], [_LT_TAGVAR(archive_cmds, )='$LD -b +h $soname +b $install_libdir -o $lib $libobjs $deplibs $linker_flags'])
+m4trace:configure.ac:63: -1- m4_pattern_allow([^LT_SYS_LIBRARY_PATH$])
 m4trace:configure.ac:63: -1- LT_SYS_DLOPEN_SELF
 m4trace:configure.ac:63: -1- m4_pattern_allow([^CPP$])
 m4trace:configure.ac:63: -1- m4_pattern_allow([^CPPFLAGS$])
@@ -3921,7 +3946,7 @@ m4trace:configure.ac:63: -1- m4_pattern_allow([^STDC_HEADERS$])
 m4trace:configure.ac:63: -1- m4_pattern_allow([^HAVE_DLFCN_H$])
 m4trace:configure.ac:64: -1- AC_PROG_LIBTOOL
 m4trace:configure.ac:64: -1- _m4_warn([obsolete], [The macro `AC_PROG_LIBTOOL' is obsolete.
-You should run autoupdate.], [m4/libtool.m4:107: AC_PROG_LIBTOOL is expanded from...
+You should run autoupdate.], [m4/libtool.m4:99: AC_PROG_LIBTOOL is expanded from...
 configure.ac:64: the top level])
 m4trace:configure.ac:64: -1- LT_INIT
 m4trace:configure.ac:82: -1- m4_pattern_allow([^AWK$])
@@ -3949,12 +3974,15 @@ m4trace:configure.ac:84: -1- _LT_LINKER_BOILERPLATE
 m4trace:configure.ac:84: -1- _LT_CC_BASENAME([$compiler])
 m4trace:configure.ac:84: -1- LT_PATH_LD
 m4trace:configure.ac:84: -1- m4_pattern_allow([^LD$])
+m4trace:configure.ac:84: -1- _LT_DLL_DEF_P([$export_symbols])
+m4trace:configure.ac:84: -1- _LT_DLL_DEF_P([$export_symbols])
 m4trace:configure.ac:84: -1- _LT_COMPILER_OPTION([if $compiler PIC flag $_LT_TAGVAR(lt_prog_compiler_pic, CXX) works], [_LT_TAGVAR(lt_cv_prog_compiler_pic_works, CXX)], [$_LT_TAGVAR(lt_prog_compiler_pic, CXX)@&t@m4_if([CXX],[],[ -DPIC],[m4_if([CXX],[CXX],[ -DPIC],[])])], [], [case $_LT_TAGVAR(lt_prog_compiler_pic, CXX) in
      "" | " "*) ;;
      *) _LT_TAGVAR(lt_prog_compiler_pic, CXX)=" $_LT_TAGVAR(lt_prog_compiler_pic, CXX)" ;;
      esac], [_LT_TAGVAR(lt_prog_compiler_pic, CXX)=
      _LT_TAGVAR(lt_prog_compiler_can_build_shared, CXX)=no])
 m4trace:configure.ac:84: -1- _LT_LINKER_OPTION([if $compiler static flag $lt_tmp_static_flag works], [lt_cv_prog_compiler_static_works_CXX], [$lt_tmp_static_flag], [], [_LT_TAGVAR(lt_prog_compiler_static, CXX)=])
+m4trace:configure.ac:84: -1- m4_pattern_allow([^LT_SYS_LIBRARY_PATH$])
 m4trace:configure.ac:86: -1- m4_pattern_allow([^LN_S$])
 m4trace:configure.ac:153: -1- m4_pattern_allow([^GRADS_CRAY$])
 m4trace:configure.ac:155: -1- m4_pattern_allow([^GRADS_CRAY$])
@@ -4039,27 +4067,27 @@ m4trace:configure.ac:398: -1- m4_pattern_allow([^SHP_LIBS$])
 m4trace:configure.ac:405: -1- m4_pattern_allow([^USESHP$])
 m4trace:configure.ac:407: -1- m4_pattern_allow([^USESHP$])
 m4trace:configure.ac:408: -1- m4_pattern_allow([^shp_libs$])
-m4trace:configure.ac:420: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:422: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:428: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:432: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:438: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:440: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:446: -1- GA_SET_FLAGS([jasper])
-m4trace:configure.ac:450: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:457: -1- GA_SET_FLAGS([libxml2], [], [], [-lz])
+m4trace:configure.ac:418: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:420: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:429: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:433: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:444: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:446: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:455: -1- GA_SET_FLAGS([jasper])
 m4trace:configure.ac:459: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:466: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:472: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:472: -1- GA_SET_FLAGS([libxml2], [], [], [-lz])
+m4trace:configure.ac:474: -1- GA_UNSET_FLAGS
 m4trace:configure.ac:484: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:485: -1- GA_SET_DYNLIB_VAR([gd_libs], [gd])
-m4trace:configure.ac:494: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:500: -1- GA_CHECK_LIB_GD([ use_gd=yes 
+m4trace:configure.ac:486: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:497: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:498: -1- GA_SET_DYNLIB_VAR([gd_libs], [gd])
+m4trace:configure.ac:507: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:513: -1- GA_CHECK_LIB_GD([ use_gd=yes 
     gd_inc="$GD_CFLAGS"
     gd_libs="$GD_LIBS"
     gd_ldflags="$GD_LDFLAGS"
   ])
-m4trace:configure.ac:500: -1- PKG_CHECK_MODULES([GD], [gdlib], [ga_pkgconfig_gd=yes], [
+m4trace:configure.ac:513: -1- PKG_CHECK_MODULES([GD], [gdlib], [ga_pkgconfig_gd=yes], [
     # look for gdlib-config
     AC_PATH_PROG([GD_CONFIG],[gdlib-config],[no])
     if test "$GD_CONFIG" != "no"; then
@@ -4069,126 +4097,126 @@ m4trace:configure.ac:500: -1- PKG_CHECK_MODULES([GD], [gdlib], [ga_pkgconfig_gd=
       ga_config_gd=yes
     fi
   ])
-m4trace:configure.ac:500: -1- PKG_PROG_PKG_CONFIG
-m4trace:configure.ac:500: -1- m4_pattern_forbid([^_?PKG_[A-Z_]+$])
-m4trace:configure.ac:500: -1- m4_pattern_allow([^PKG_CONFIG(_PATH)?$])
-m4trace:configure.ac:500: -1- m4_pattern_allow([^PKG_CONFIG$])
-m4trace:configure.ac:500: -1- m4_pattern_allow([^PKG_CONFIG$])
-m4trace:configure.ac:500: -1- m4_pattern_allow([^GD_CFLAGS$])
-m4trace:configure.ac:500: -1- m4_pattern_allow([^GD_LIBS$])
-m4trace:configure.ac:500: -1- PKG_CHECK_EXISTS([gdlib], [pkg_cv_[]GD_CFLAGS=`$PKG_CONFIG --[]cflags "gdlib" 2>/dev/null`], [pkg_failed=yes])
-m4trace:configure.ac:500: -1- PKG_CHECK_EXISTS([gdlib], [pkg_cv_[]GD_LIBS=`$PKG_CONFIG --[]libs "gdlib" 2>/dev/null`], [pkg_failed=yes])
-m4trace:configure.ac:500: -1- _PKG_SHORT_ERRORS_SUPPORTED
-m4trace:configure.ac:500: -1- m4_pattern_allow([^GD_CONFIG$])
-m4trace:configure.ac:500: -1- m4_pattern_allow([^GD_CONFIG$])
-m4trace:configure.ac:509: -1- m4_pattern_allow([^USEGD$])
-m4trace:configure.ac:511: -1- m4_pattern_allow([^USEGD$])
-m4trace:configure.ac:512: -1- m4_pattern_allow([^gd_inc$])
-m4trace:configure.ac:513: -1- m4_pattern_allow([^gd_libs$])
-m4trace:configure.ac:514: -1- m4_pattern_allow([^gd_ldflags$])
-m4trace:configure.ac:524: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:525: -1- GA_SET_DYNLIB_VAR([grib2_libs], [grib2c jasper png15 z])
-m4trace:configure.ac:532: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:538: -1- GA_CHECK_LIB_GRIB2([ use_grib2=yes 
+m4trace:configure.ac:513: -1- PKG_PROG_PKG_CONFIG
+m4trace:configure.ac:513: -1- m4_pattern_forbid([^_?PKG_[A-Z_]+$])
+m4trace:configure.ac:513: -1- m4_pattern_allow([^PKG_CONFIG(_PATH)?$])
+m4trace:configure.ac:513: -1- m4_pattern_allow([^PKG_CONFIG$])
+m4trace:configure.ac:513: -1- m4_pattern_allow([^PKG_CONFIG$])
+m4trace:configure.ac:513: -1- m4_pattern_allow([^GD_CFLAGS$])
+m4trace:configure.ac:513: -1- m4_pattern_allow([^GD_LIBS$])
+m4trace:configure.ac:513: -1- PKG_CHECK_EXISTS([gdlib], [pkg_cv_[]GD_CFLAGS=`$PKG_CONFIG --[]cflags "gdlib" 2>/dev/null`], [pkg_failed=yes])
+m4trace:configure.ac:513: -1- PKG_CHECK_EXISTS([gdlib], [pkg_cv_[]GD_LIBS=`$PKG_CONFIG --[]libs "gdlib" 2>/dev/null`], [pkg_failed=yes])
+m4trace:configure.ac:513: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:513: -1- m4_pattern_allow([^GD_CONFIG$])
+m4trace:configure.ac:513: -1- m4_pattern_allow([^GD_CONFIG$])
+m4trace:configure.ac:522: -1- m4_pattern_allow([^USEGD$])
+m4trace:configure.ac:524: -1- m4_pattern_allow([^USEGD$])
+m4trace:configure.ac:525: -1- m4_pattern_allow([^gd_inc$])
+m4trace:configure.ac:526: -1- m4_pattern_allow([^gd_libs$])
+m4trace:configure.ac:527: -1- m4_pattern_allow([^gd_ldflags$])
+m4trace:configure.ac:537: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:538: -1- GA_SET_DYNLIB_VAR([grib2_libs], [grib2c jasper png15 z])
+m4trace:configure.ac:545: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:551: -1- GA_CHECK_LIB_GRIB2([ use_grib2=yes 
     grib2_libs=$G2_LIBS
   ])
-m4trace:configure.ac:538: -1- m4_pattern_allow([^G2_LIBS$])
-m4trace:configure.ac:545: -1- m4_pattern_allow([^GRIB2$])
-m4trace:configure.ac:547: -1- m4_pattern_allow([^GRIB2$])
-m4trace:configure.ac:548: -1- m4_pattern_allow([^grib2_libs$])
-m4trace:configure.ac:560: -1- GA_SET_FLAGS([cairo freetype2])
-m4trace:configure.ac:561: -1- GA_SET_INCLUDE_VAR([cairo_inc], [cairo freetype2])
-m4trace:configure.ac:561: -1- GA_SET_DYNLIB_VAR([cairo_libs], [cairo])
-m4trace:configure.ac:582: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:588: -1- GA_CHECK_LIB_CAIRO([
-    use_cairo='yes'
-    cairo_inc=$CAIRO_CFLAGS
-    cairo_libs=$CAIRO_LIBS
-  ])
-m4trace:configure.ac:588: -1- PKG_CHECK_MODULES([CAIRO], [cairo], [cairo_pkgconfig=yes])
-m4trace:configure.ac:588: -1- m4_pattern_allow([^CAIRO_CFLAGS$])
-m4trace:configure.ac:588: -1- m4_pattern_allow([^CAIRO_LIBS$])
-m4trace:configure.ac:588: -1- PKG_CHECK_EXISTS([cairo], [pkg_cv_[]CAIRO_CFLAGS=`$PKG_CONFIG --[]cflags "cairo" 2>/dev/null`], [pkg_failed=yes])
-m4trace:configure.ac:588: -1- PKG_CHECK_EXISTS([cairo], [pkg_cv_[]CAIRO_LIBS=`$PKG_CONFIG --[]libs "cairo" 2>/dev/null`], [pkg_failed=yes])
-m4trace:configure.ac:588: -1- _PKG_SHORT_ERRORS_SUPPORTED
-m4trace:configure.ac:596: -1- m4_pattern_allow([^USECAIRO$])
-m4trace:configure.ac:598: -1- m4_pattern_allow([^USECAIRO$])
-m4trace:configure.ac:599: -1- m4_pattern_allow([^cairo_inc$])
-m4trace:configure.ac:600: -1- m4_pattern_allow([^cairo_libs$])
-m4trace:configure.ac:611: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:612: -1- GA_SET_DYNLIB_VAR([hdf5_libs], [hdf5])
-m4trace:configure.ac:622: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:628: -1- AC_CHECK_HDF5([
+m4trace:configure.ac:551: -1- m4_pattern_allow([^G2_LIBS$])
+m4trace:configure.ac:558: -1- m4_pattern_allow([^GRIB2$])
+m4trace:configure.ac:560: -1- m4_pattern_allow([^GRIB2$])
+m4trace:configure.ac:561: -1- m4_pattern_allow([^grib2_libs$])
+m4trace:configure.ac:573: -1- GA_SET_FLAGS([cairo freetype2])
+m4trace:configure.ac:574: -1- GA_SET_INCLUDE_VAR([cairo_inc], [cairo freetype2])
+m4trace:configure.ac:574: -1- GA_SET_DYNLIB_VAR([cairo_libs], [cairo])
+m4trace:configure.ac:595: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:606: -1- GA_CHECK_LIB_CAIRO([
+      use_cairo=yes
+      cairo_inc=$CAIRO_CFLAGS
+      cairo_libs=$CAIRO_LIBS
+    ])
+m4trace:configure.ac:606: -1- PKG_CHECK_MODULES([CAIRO], [cairo], [cairo_pkgconfig=yes])
+m4trace:configure.ac:606: -1- m4_pattern_allow([^CAIRO_CFLAGS$])
+m4trace:configure.ac:606: -1- m4_pattern_allow([^CAIRO_LIBS$])
+m4trace:configure.ac:606: -1- PKG_CHECK_EXISTS([cairo], [pkg_cv_[]CAIRO_CFLAGS=`$PKG_CONFIG --[]cflags "cairo" 2>/dev/null`], [pkg_failed=yes])
+m4trace:configure.ac:606: -1- PKG_CHECK_EXISTS([cairo], [pkg_cv_[]CAIRO_LIBS=`$PKG_CONFIG --[]libs "cairo" 2>/dev/null`], [pkg_failed=yes])
+m4trace:configure.ac:606: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:615: -1- m4_pattern_allow([^USECAIRO$])
+m4trace:configure.ac:617: -1- m4_pattern_allow([^USECAIRO$])
+m4trace:configure.ac:618: -1- m4_pattern_allow([^cairo_inc$])
+m4trace:configure.ac:619: -1- m4_pattern_allow([^cairo_libs$])
+m4trace:configure.ac:630: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:631: -1- GA_SET_DYNLIB_VAR([hdf5_libs], [hdf5])
+m4trace:configure.ac:641: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:647: -1- AC_CHECK_HDF5([
     use_hdf5='yes'
     hdf5_inc=$HDF5_CFLAGS
     hdf5_libs="$HDF5_LIBS"
   ])
-m4trace:configure.ac:628: -1- AC_CHECK_HDF5_LIB([ac_hdf5_lib_ok='yes'])
-m4trace:configure.ac:628: -1- AC_CHECK_LIB_NOCACHE_HDF5([z], [compress], [ AC_CHECK_LIB_NOCACHE_HDF5([jpeg],[main],
+m4trace:configure.ac:647: -1- AC_CHECK_HDF5_LIB([ac_hdf5_lib_ok='yes'])
+m4trace:configure.ac:647: -1- AC_CHECK_LIB_NOCACHE_HDF5([z], [compress], [ AC_CHECK_LIB_NOCACHE_HDF5([jpeg],[main],
     [ AC_CHECK_LIB_NOCACHE_HDF5([hdf5],[H5Fopen],
       [ ac_hdf5_lib="yes"
           HDF5_LIBS="-lhdf5 -ljpeg -lz $HDF5_LIBS"
       ],[],[-lhdf5 -ljpeg -lz])
     ])
   ])
-m4trace:configure.ac:628: -1- AC_CHECK_LIB_NOCACHE_HDF5([jpeg], [main], [ AC_CHECK_LIB_NOCACHE_HDF5([hdf5],[H5Fopen],
+m4trace:configure.ac:647: -1- AC_CHECK_LIB_NOCACHE_HDF5([jpeg], [main], [ AC_CHECK_LIB_NOCACHE_HDF5([hdf5],[H5Fopen],
       [ ac_hdf5_lib="yes"
           HDF5_LIBS="-lhdf5 -ljpeg -lz $HDF5_LIBS"
       ],[],[-lhdf5 -ljpeg -lz])
     ])
-m4trace:configure.ac:628: -1- AC_CHECK_LIB_NOCACHE_HDF5([hdf5], [H5Fopen], [ ac_hdf5_lib="yes"
+m4trace:configure.ac:647: -1- AC_CHECK_LIB_NOCACHE_HDF5([hdf5], [H5Fopen], [ ac_hdf5_lib="yes"
           HDF5_LIBS="-lhdf5 -ljpeg -lz $HDF5_LIBS"
       ], [], [-lhdf5 -ljpeg -lz])
-m4trace:configure.ac:628: -1- AC_CHECK_HDF5_LIB([ac_hdf5_lib_ok='yes'])
-m4trace:configure.ac:628: -1- AC_CHECK_LIB_NOCACHE_HDF5([z], [compress], [ AC_CHECK_LIB_NOCACHE_HDF5([jpeg],[main],
+m4trace:configure.ac:647: -1- AC_CHECK_HDF5_LIB([ac_hdf5_lib_ok='yes'])
+m4trace:configure.ac:647: -1- AC_CHECK_LIB_NOCACHE_HDF5([z], [compress], [ AC_CHECK_LIB_NOCACHE_HDF5([jpeg],[main],
     [ AC_CHECK_LIB_NOCACHE_HDF5([hdf5],[H5Fopen],
       [ ac_hdf5_lib="yes"
           HDF5_LIBS="-lhdf5 -ljpeg -lz $HDF5_LIBS"
       ],[],[-lhdf5 -ljpeg -lz])
     ])
   ])
-m4trace:configure.ac:628: -1- AC_CHECK_LIB_NOCACHE_HDF5([jpeg], [main], [ AC_CHECK_LIB_NOCACHE_HDF5([hdf5],[H5Fopen],
+m4trace:configure.ac:647: -1- AC_CHECK_LIB_NOCACHE_HDF5([jpeg], [main], [ AC_CHECK_LIB_NOCACHE_HDF5([hdf5],[H5Fopen],
       [ ac_hdf5_lib="yes"
           HDF5_LIBS="-lhdf5 -ljpeg -lz $HDF5_LIBS"
       ],[],[-lhdf5 -ljpeg -lz])
     ])
-m4trace:configure.ac:628: -1- AC_CHECK_LIB_NOCACHE_HDF5([hdf5], [H5Fopen], [ ac_hdf5_lib="yes"
+m4trace:configure.ac:647: -1- AC_CHECK_LIB_NOCACHE_HDF5([hdf5], [H5Fopen], [ ac_hdf5_lib="yes"
           HDF5_LIBS="-lhdf5 -ljpeg -lz $HDF5_LIBS"
       ], [], [-lhdf5 -ljpeg -lz])
-m4trace:configure.ac:628: -1- AC_CHECK_HEADER_NOCACHE_HDF5([hdf5.h], [ac_hdf5_h='yes'])
-m4trace:configure.ac:628: -1- AC_CHECK_HEADER_NOCACHE_HDF5([hdf5.h], [ac_hdf5_h='yes'])
-m4trace:configure.ac:628: -1- m4_pattern_allow([^HDF5_LIBS$])
-m4trace:configure.ac:628: -1- m4_pattern_allow([^HDF5_CFLAGS$])
-m4trace:configure.ac:628: -1- m4_pattern_allow([^HDF5_LDFLAGS$])
-m4trace:configure.ac:636: -1- m4_pattern_allow([^USEHDF5$])
-m4trace:configure.ac:638: -1- m4_pattern_allow([^USEHDF5$])
-m4trace:configure.ac:639: -1- m4_pattern_allow([^hdf5_inc$])
-m4trace:configure.ac:640: -1- m4_pattern_allow([^hdf5_libs$])
-m4trace:configure.ac:650: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:656: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:661: -1- AC_CHECK_UDUNITS([
+m4trace:configure.ac:647: -1- AC_CHECK_HEADER_NOCACHE_HDF5([hdf5.h], [ac_hdf5_h='yes'])
+m4trace:configure.ac:647: -1- AC_CHECK_HEADER_NOCACHE_HDF5([hdf5.h], [ac_hdf5_h='yes'])
+m4trace:configure.ac:647: -1- m4_pattern_allow([^HDF5_LIBS$])
+m4trace:configure.ac:647: -1- m4_pattern_allow([^HDF5_CFLAGS$])
+m4trace:configure.ac:647: -1- m4_pattern_allow([^HDF5_LDFLAGS$])
+m4trace:configure.ac:655: -1- m4_pattern_allow([^USEHDF5$])
+m4trace:configure.ac:657: -1- m4_pattern_allow([^USEHDF5$])
+m4trace:configure.ac:658: -1- m4_pattern_allow([^hdf5_inc$])
+m4trace:configure.ac:659: -1- m4_pattern_allow([^hdf5_libs$])
+m4trace:configure.ac:669: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:675: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:680: -1- AC_CHECK_UDUNITS([
     have_udunits=yes
 #    udunits_inc="$UDUNITS_CFLAGS"
 #    udunits_libs="$UDUNITS_LIBS"
   ])
-m4trace:configure.ac:661: -1- AC_CHECK_UDUNITS_LIB([ac_udunits_lib_ok="yes"])
-m4trace:configure.ac:661: -1- AC_CHECK_LIB_NOCACHE_UDUNITS([udunits], [main], [ ac_udunits_lib="yes"
+m4trace:configure.ac:680: -1- AC_CHECK_UDUNITS_LIB([ac_udunits_lib_ok="yes"])
+m4trace:configure.ac:680: -1- AC_CHECK_LIB_NOCACHE_UDUNITS([udunits], [main], [ ac_udunits_lib="yes"
     UDUNITS_LIBS="-ludunits $UDUNITS_LIBS"
   ])
-m4trace:configure.ac:661: -1- AC_CHECK_UDUNITS_LIB([ac_udunits_lib_ok="yes"])
-m4trace:configure.ac:661: -1- AC_CHECK_LIB_NOCACHE_UDUNITS([udunits], [main], [ ac_udunits_lib="yes"
+m4trace:configure.ac:680: -1- AC_CHECK_UDUNITS_LIB([ac_udunits_lib_ok="yes"])
+m4trace:configure.ac:680: -1- AC_CHECK_LIB_NOCACHE_UDUNITS([udunits], [main], [ ac_udunits_lib="yes"
     UDUNITS_LIBS="-ludunits $UDUNITS_LIBS"
   ])
-m4trace:configure.ac:661: -1- AC_CHECK_HEADER_NOCACHE_UDUNITS([udunits.h], [ac_udunits_h="yes"])
-m4trace:configure.ac:661: -1- AC_CHECK_HEADER_NOCACHE_UDUNITS([udunits.h], [ac_udunits_h="yes"])
-m4trace:configure.ac:661: -1- m4_pattern_allow([^UDUNITS_LIBS$])
-m4trace:configure.ac:661: -1- m4_pattern_allow([^UDUNITS_CFLAGS$])
-m4trace:configure.ac:661: -1- m4_pattern_allow([^UDUNITS_LDFLAGS$])
-m4trace:configure.ac:676: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:677: -1- GA_SET_DYNLIB_VAR([hdf_libs], [mfhdf df jpeg z udunits])
-m4trace:configure.ac:686: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:692: -1- AC_CHECK_HDF4_NETCDF([use_hdf=yes], [use_hdf=yes])
-m4trace:configure.ac:692: -1- AC_CHECK_HDF4([
+m4trace:configure.ac:680: -1- AC_CHECK_HEADER_NOCACHE_UDUNITS([udunits.h], [ac_udunits_h="yes"])
+m4trace:configure.ac:680: -1- AC_CHECK_HEADER_NOCACHE_UDUNITS([udunits.h], [ac_udunits_h="yes"])
+m4trace:configure.ac:680: -1- m4_pattern_allow([^UDUNITS_LIBS$])
+m4trace:configure.ac:680: -1- m4_pattern_allow([^UDUNITS_CFLAGS$])
+m4trace:configure.ac:680: -1- m4_pattern_allow([^UDUNITS_LDFLAGS$])
+m4trace:configure.ac:695: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:696: -1- GA_SET_DYNLIB_VAR([hdf_libs], [mfhdf df jpeg z udunits])
+m4trace:configure.ac:705: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:711: -1- AC_CHECK_HDF4_NETCDF([use_hdf=yes], [use_hdf=yes])
+m4trace:configure.ac:711: -1- AC_CHECK_HDF4([
     ac_hdf4_netcdf_save_LDFLAGS=$LDFLAGS
     ac_hdf4_netcdf_save_LIBS=$LIBS
     LIBS="$LIBS $HDF4_LIBS"
@@ -4228,12 +4256,12 @@ dnl    ac_hdf4_netcdf_save_NC_CFLAGS=$NC_CFLAGS
     CPPFLAGS=$ac_hdf4_netcdf_save_CPPFLAGS
 dnl    NC_CFLAGS=$ac_hdf4_netcdf_save_NC_CFLAG
   ])
-m4trace:configure.ac:692: -1- AC_CHECK_HDF4_LIB([ac_hdf4_lib_ok='yes'])
-m4trace:configure.ac:692: -1- AC_CHECK_LIB_NOCACHE_HDF4([sz], [SZ_BufftoBuffCompress], [
+m4trace:configure.ac:711: -1- AC_CHECK_HDF4_LIB([ac_hdf4_lib_ok='yes'])
+m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([sz], [SZ_BufftoBuffCompress], [
       LIBS="$LIBS -lsz"
       HDF4_LIBS='-lsz'
   ])
-m4trace:configure.ac:692: -1- AC_CHECK_LIB_NOCACHE_HDF4([z], [deflate], [ AC_CHECK_LIB_NOCACHE_HDF4([jpeg],[jpeg_start_compress],
+m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([z], [deflate], [ AC_CHECK_LIB_NOCACHE_HDF4([jpeg],[jpeg_start_compress],
     [ AC_CHECK_LIB_NOCACHE_HDF4([df],[Hopen],
       [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
         [ ac_hdf4_lib="yes"
@@ -4242,27 +4270,27 @@ m4trace:configure.ac:692: -1- AC_CHECK_LIB_NOCACHE_HDF4([z], [deflate], [ AC_CHE
       ],[],[-ljpeg -lz])
     ])
   ])
-m4trace:configure.ac:692: -1- AC_CHECK_LIB_NOCACHE_HDF4([jpeg], [jpeg_start_compress], [ AC_CHECK_LIB_NOCACHE_HDF4([df],[Hopen],
+m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([jpeg], [jpeg_start_compress], [ AC_CHECK_LIB_NOCACHE_HDF4([df],[Hopen],
       [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
         [ ac_hdf4_lib="yes"
           HDF4_LIBS="-lmfhdf -ldf -ljpeg -lz $HDF4_LIBS"
         ],[],[-ldf -ljpeg -lz])
       ],[],[-ljpeg -lz])
     ])
-m4trace:configure.ac:692: -1- AC_CHECK_LIB_NOCACHE_HDF4([df], [Hopen], [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
+m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([df], [Hopen], [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
         [ ac_hdf4_lib="yes"
           HDF4_LIBS="-lmfhdf -ldf -ljpeg -lz $HDF4_LIBS"
         ],[],[-ldf -ljpeg -lz])
       ], [], [-ljpeg -lz])
-m4trace:configure.ac:692: -1- AC_CHECK_LIB_NOCACHE_HDF4([mfhdf], [SDstart], [ ac_hdf4_lib="yes"
+m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([mfhdf], [SDstart], [ ac_hdf4_lib="yes"
           HDF4_LIBS="-lmfhdf -ldf -ljpeg -lz $HDF4_LIBS"
         ], [], [-ldf -ljpeg -lz])
-m4trace:configure.ac:692: -1- AC_CHECK_HDF4_LIB([ac_hdf4_lib_ok='yes'])
-m4trace:configure.ac:692: -1- AC_CHECK_LIB_NOCACHE_HDF4([sz], [SZ_BufftoBuffCompress], [
+m4trace:configure.ac:711: -1- AC_CHECK_HDF4_LIB([ac_hdf4_lib_ok='yes'])
+m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([sz], [SZ_BufftoBuffCompress], [
       LIBS="$LIBS -lsz"
       HDF4_LIBS='-lsz'
   ])
-m4trace:configure.ac:692: -1- AC_CHECK_LIB_NOCACHE_HDF4([z], [deflate], [ AC_CHECK_LIB_NOCACHE_HDF4([jpeg],[jpeg_start_compress],
+m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([z], [deflate], [ AC_CHECK_LIB_NOCACHE_HDF4([jpeg],[jpeg_start_compress],
     [ AC_CHECK_LIB_NOCACHE_HDF4([df],[Hopen],
       [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
         [ ac_hdf4_lib="yes"
@@ -4271,41 +4299,41 @@ m4trace:configure.ac:692: -1- AC_CHECK_LIB_NOCACHE_HDF4([z], [deflate], [ AC_CHE
       ],[],[-ljpeg -lz])
     ])
   ])
-m4trace:configure.ac:692: -1- AC_CHECK_LIB_NOCACHE_HDF4([jpeg], [jpeg_start_compress], [ AC_CHECK_LIB_NOCACHE_HDF4([df],[Hopen],
+m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([jpeg], [jpeg_start_compress], [ AC_CHECK_LIB_NOCACHE_HDF4([df],[Hopen],
       [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
         [ ac_hdf4_lib="yes"
           HDF4_LIBS="-lmfhdf -ldf -ljpeg -lz $HDF4_LIBS"
         ],[],[-ldf -ljpeg -lz])
       ],[],[-ljpeg -lz])
     ])
-m4trace:configure.ac:692: -1- AC_CHECK_LIB_NOCACHE_HDF4([df], [Hopen], [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
+m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([df], [Hopen], [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
         [ ac_hdf4_lib="yes"
           HDF4_LIBS="-lmfhdf -ldf -ljpeg -lz $HDF4_LIBS"
         ],[],[-ldf -ljpeg -lz])
       ], [], [-ljpeg -lz])
-m4trace:configure.ac:692: -1- AC_CHECK_LIB_NOCACHE_HDF4([mfhdf], [SDstart], [ ac_hdf4_lib="yes"
+m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([mfhdf], [SDstart], [ ac_hdf4_lib="yes"
           HDF4_LIBS="-lmfhdf -ldf -ljpeg -lz $HDF4_LIBS"
         ], [], [-ldf -ljpeg -lz])
-m4trace:configure.ac:692: -1- AC_CHECK_HEADER_NOCACHE_HDF4([mfhdf.h], [ac_hdf4_h='yes'])
-m4trace:configure.ac:692: -1- AC_CHECK_HEADER_NOCACHE_HDF4([mfhdf.h], [ac_hdf4_h='yes'])
-m4trace:configure.ac:692: -1- m4_pattern_allow([^HAVE_HDF4_NETCDF_H$])
-m4trace:configure.ac:692: -1- AC_CHECK_NETCDF_HEADER([], [ac_hdf4_netcdf_h='yes'])
-m4trace:configure.ac:692: -1- AC_CHECK_NETCDF_3_HEADER([], [ac_netcdf_h='yes'], [ac_netcdf_h='no'])
-m4trace:configure.ac:692: -1- m4_pattern_allow([^NC_NETCDF_3_CPPFLAG$])
-m4trace:configure.ac:692: -1- m4_pattern_allow([^HDF4_LIBS$])
-m4trace:configure.ac:692: -1- m4_pattern_allow([^HDF4_CFLAGS$])
-m4trace:configure.ac:692: -1- m4_pattern_allow([^HDF4_LDFLAGS$])
-m4trace:configure.ac:692: -1- m4_pattern_allow([^HDF_HAVE_NETCDF$])
-m4trace:configure.ac:692: -1- m4_pattern_allow([^HDF_NETCDF_NAME$])
-m4trace:configure.ac:692: -1- m4_pattern_allow([^HDF_NETCDF_NAME$])
-m4trace:configure.ac:700: -1- m4_pattern_allow([^USEHDF$])
-m4trace:configure.ac:702: -1- m4_pattern_allow([^USEHDF$])
-m4trace:configure.ac:703: -1- m4_pattern_allow([^hdf_inc$])
-m4trace:configure.ac:704: -1- m4_pattern_allow([^hdf_libs$])
-m4trace:configure.ac:717: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:718: -1- GA_SET_DYNLIB_VAR([nc_libs], [udunits netcdf])
-m4trace:configure.ac:718: -1- GA_SET_DYNLIB_VAR([nc_libs], [udunits netcdf hdf5_hl hdf5 curl z])
-m4trace:configure.ac:744: -1- AC_CHECK_NETCDF([
+m4trace:configure.ac:711: -1- AC_CHECK_HEADER_NOCACHE_HDF4([mfhdf.h], [ac_hdf4_h='yes'])
+m4trace:configure.ac:711: -1- AC_CHECK_HEADER_NOCACHE_HDF4([mfhdf.h], [ac_hdf4_h='yes'])
+m4trace:configure.ac:711: -1- m4_pattern_allow([^HAVE_HDF4_NETCDF_H$])
+m4trace:configure.ac:711: -1- AC_CHECK_NETCDF_HEADER([], [ac_hdf4_netcdf_h='yes'])
+m4trace:configure.ac:711: -1- AC_CHECK_NETCDF_3_HEADER([], [ac_netcdf_h='yes'], [ac_netcdf_h='no'])
+m4trace:configure.ac:711: -1- m4_pattern_allow([^NC_NETCDF_3_CPPFLAG$])
+m4trace:configure.ac:711: -1- m4_pattern_allow([^HDF4_LIBS$])
+m4trace:configure.ac:711: -1- m4_pattern_allow([^HDF4_CFLAGS$])
+m4trace:configure.ac:711: -1- m4_pattern_allow([^HDF4_LDFLAGS$])
+m4trace:configure.ac:711: -1- m4_pattern_allow([^HDF_HAVE_NETCDF$])
+m4trace:configure.ac:711: -1- m4_pattern_allow([^HDF_NETCDF_NAME$])
+m4trace:configure.ac:711: -1- m4_pattern_allow([^HDF_NETCDF_NAME$])
+m4trace:configure.ac:719: -1- m4_pattern_allow([^USEHDF$])
+m4trace:configure.ac:721: -1- m4_pattern_allow([^USEHDF$])
+m4trace:configure.ac:722: -1- m4_pattern_allow([^hdf_inc$])
+m4trace:configure.ac:723: -1- m4_pattern_allow([^hdf_libs$])
+m4trace:configure.ac:736: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:737: -1- GA_SET_DYNLIB_VAR([nc_libs], [udunits netcdf])
+m4trace:configure.ac:737: -1- GA_SET_DYNLIB_VAR([nc_libs], [udunits netcdf hdf5_hl hdf5 curl z])
+m4trace:configure.ac:763: -1- AC_CHECK_NETCDF([
         use_nc=yes 
         # the macro doesn't test for nc4 options so we do it here
         NC_CONFIG="`pkg-config --variable=prefix netcdf`/bin/nc-config"
@@ -4317,37 +4345,37 @@ m4trace:configure.ac:744: -1- AC_CHECK_NETCDF([
         nc_inc="$NC_CFLAGS $UDUNITS_CFLAGS"
         nc_libs="$NC_LIBS $UDUNITS_LIBS"
       ])
-m4trace:configure.ac:744: -1- m4_pattern_allow([^NC_LDFLAGS$])
-m4trace:configure.ac:744: -1- m4_pattern_allow([^NC_LIBS$])
-m4trace:configure.ac:744: -1- AC_CHECK_NETCDF_HEADER([$NC_PATH_INC], [ac_netcdf_header='yes'], [ac_netcdf_header='no'], [$ac_check_nc_interface])
-m4trace:configure.ac:744: -1- AC_CHECK_NETCDF_3_HEADER([$NC_PATH_INC], [ac_netcdf_h='yes'], [ac_netcdf_h='no'])
-m4trace:configure.ac:744: -1- m4_pattern_allow([^NC_NETCDF_3_CPPFLAG$])
-m4trace:configure.ac:744: -1- AC_CHECK_NETCDF_HEADER([$ac_netcdf_incdir], [ac_netcdf_header='yes'], [ac_netcdf_header='no'], [$ac_check_nc_interface])
-m4trace:configure.ac:744: -1- AC_CHECK_NETCDF_3_HEADER([$ac_netcdf_incdir], [ac_netcdf_h='yes'], [ac_netcdf_h='no'])
-m4trace:configure.ac:744: -1- m4_pattern_allow([^NC_NETCDF_3_CPPFLAG$])
-m4trace:configure.ac:744: -1- m4_pattern_allow([^NC_CFLAGS$])
-m4trace:configure.ac:762: -1- m4_pattern_allow([^USENETCDF$])
-m4trace:configure.ac:763: -1- m4_pattern_allow([^HAVENETCDF4$])
-m4trace:configure.ac:764: -1- m4_pattern_allow([^USEDAP$])
-m4trace:configure.ac:766: -1- m4_pattern_allow([^USENETCDF$])
-m4trace:configure.ac:768: -1- m4_pattern_allow([^HAVENETCDF4$])
-m4trace:configure.ac:770: -1- m4_pattern_allow([^HAVENETCDF4$])
-m4trace:configure.ac:772: -1- m4_pattern_allow([^USEDAP$])
-m4trace:configure.ac:774: -1- m4_pattern_allow([^USEDAP$])
-m4trace:configure.ac:777: -1- m4_pattern_allow([^nc_inc$])
-m4trace:configure.ac:778: -1- m4_pattern_allow([^nc_libs$])
-m4trace:configure.ac:790: -1- GA_SET_FLAGS([], [], [], [-lz])
-m4trace:configure.ac:791: -1- GA_SET_DYNLIB_VAR([gadap_libs], [gadap dapclient dap curl xml2 z])
-m4trace:configure.ac:802: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:808: -1- GA_CHECK_LIB_GADAP([ use_gadap=yes 
+m4trace:configure.ac:763: -1- m4_pattern_allow([^NC_LDFLAGS$])
+m4trace:configure.ac:763: -1- m4_pattern_allow([^NC_LIBS$])
+m4trace:configure.ac:763: -1- AC_CHECK_NETCDF_HEADER([$NC_PATH_INC], [ac_netcdf_header='yes'], [ac_netcdf_header='no'], [$ac_check_nc_interface])
+m4trace:configure.ac:763: -1- AC_CHECK_NETCDF_3_HEADER([$NC_PATH_INC], [ac_netcdf_h='yes'], [ac_netcdf_h='no'])
+m4trace:configure.ac:763: -1- m4_pattern_allow([^NC_NETCDF_3_CPPFLAG$])
+m4trace:configure.ac:763: -1- AC_CHECK_NETCDF_HEADER([$ac_netcdf_incdir], [ac_netcdf_header='yes'], [ac_netcdf_header='no'], [$ac_check_nc_interface])
+m4trace:configure.ac:763: -1- AC_CHECK_NETCDF_3_HEADER([$ac_netcdf_incdir], [ac_netcdf_h='yes'], [ac_netcdf_h='no'])
+m4trace:configure.ac:763: -1- m4_pattern_allow([^NC_NETCDF_3_CPPFLAG$])
+m4trace:configure.ac:763: -1- m4_pattern_allow([^NC_CFLAGS$])
+m4trace:configure.ac:781: -1- m4_pattern_allow([^USENETCDF$])
+m4trace:configure.ac:782: -1- m4_pattern_allow([^HAVENETCDF4$])
+m4trace:configure.ac:783: -1- m4_pattern_allow([^USEDAP$])
+m4trace:configure.ac:785: -1- m4_pattern_allow([^USENETCDF$])
+m4trace:configure.ac:787: -1- m4_pattern_allow([^HAVENETCDF4$])
+m4trace:configure.ac:789: -1- m4_pattern_allow([^HAVENETCDF4$])
+m4trace:configure.ac:791: -1- m4_pattern_allow([^USEDAP$])
+m4trace:configure.ac:793: -1- m4_pattern_allow([^USEDAP$])
+m4trace:configure.ac:796: -1- m4_pattern_allow([^nc_inc$])
+m4trace:configure.ac:797: -1- m4_pattern_allow([^nc_libs$])
+m4trace:configure.ac:809: -1- GA_SET_FLAGS([], [], [], [-lz])
+m4trace:configure.ac:810: -1- GA_SET_DYNLIB_VAR([gadap_libs], [gadap dapclient dap curl xml2 z])
+m4trace:configure.ac:821: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:827: -1- GA_CHECK_LIB_GADAP([ use_gadap=yes 
       gadap_libs=$GADAP_LIBS
     ])
-m4trace:configure.ac:808: -1- m4_pattern_allow([^GADAP_LIBS$])
-m4trace:configure.ac:815: -1- m4_pattern_allow([^USEGADAP$])
-m4trace:configure.ac:817: -1- m4_pattern_allow([^USEGADAP$])
-m4trace:configure.ac:818: -1- m4_pattern_allow([^gadap_inc$])
-m4trace:configure.ac:819: -1- m4_pattern_allow([^gadap_libs$])
-m4trace:configure.ac:832: -1- GA_CHECK_GUI([
+m4trace:configure.ac:827: -1- m4_pattern_allow([^GADAP_LIBS$])
+m4trace:configure.ac:834: -1- m4_pattern_allow([^USEGADAP$])
+m4trace:configure.ac:836: -1- m4_pattern_allow([^USEGADAP$])
+m4trace:configure.ac:837: -1- m4_pattern_allow([^gadap_inc$])
+m4trace:configure.ac:838: -1- m4_pattern_allow([^gadap_libs$])
+m4trace:configure.ac:851: -1- GA_CHECK_GUI([
     use_gui=yes
     GA_SET_LIB_VAR(gui_libs, [sx])
     if test z"$gui_libs_Xext" != 'z'; then
@@ -4355,84 +4383,84 @@ m4trace:configure.ac:832: -1- GA_CHECK_GUI([
     fi
     gui_libs="$gui_libs -lXaw -lXpm -lXmu -lXt"
   ])
-m4trace:configure.ac:832: -1- GA_SET_FLAGS([X11/neXtaw libsx], [$X_CFLAGS], [$X_LIBS], [$X_PRE_LIBS -lX11 $X_EXTRA_LIBS])
-m4trace:configure.ac:832: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:832: -1- GA_SET_LIB_VAR([gui_libs], [sx])
-m4trace:configure.ac:841: -1- GA_CHECK_LIBSX([use_gui=yes;use_freq=yes], [use_gui=yes;use_freq=no])
-m4trace:configure.ac:841: -1- GA_CHECK_XAW([ga_xaw_found='yes'], [ga_xaw_found='no'])
-m4trace:configure.ac:841: -1- PKG_CHECK_MODULES([XAW7], [xaw7], [], [ac_pkgconfig_xaw7=no])
-m4trace:configure.ac:841: -1- m4_pattern_allow([^XAW7_CFLAGS$])
-m4trace:configure.ac:841: -1- m4_pattern_allow([^XAW7_LIBS$])
-m4trace:configure.ac:841: -1- PKG_CHECK_EXISTS([xaw7], [pkg_cv_[]XAW7_CFLAGS=`$PKG_CONFIG --[]cflags "xaw7" 2>/dev/null`], [pkg_failed=yes])
-m4trace:configure.ac:841: -1- PKG_CHECK_EXISTS([xaw7], [pkg_cv_[]XAW7_LIBS=`$PKG_CONFIG --[]libs "xaw7" 2>/dev/null`], [pkg_failed=yes])
-m4trace:configure.ac:841: -1- _PKG_SHORT_ERRORS_SUPPORTED
-m4trace:configure.ac:841: -1- m4_pattern_allow([^XAW_LIBS$])
-m4trace:configure.ac:841: -1- m4_pattern_allow([^XAW_XLIBS$])
-m4trace:configure.ac:841: -1- m4_pattern_allow([^XAW_CFLAGS$])
-m4trace:configure.ac:841: -1- m4_pattern_allow([^HAVE_SIMPLEGETFILE$])
-m4trace:configure.ac:841: -1- m4_pattern_allow([^GETFILE_SHORT_PROTOTYPE$])
-m4trace:configure.ac:841: -1- m4_pattern_allow([^GA_LIBSX_LIBS$])
-m4trace:configure.ac:849: -1- m4_pattern_allow([^USEGUI$])
-m4trace:configure.ac:851: -1- m4_pattern_allow([^USEGUI$])
-m4trace:configure.ac:855: -1- m4_pattern_allow([^grads_xlibs$])
-m4trace:configure.ac:858: -1- m4_pattern_allow([^USEFREQ$])
-m4trace:configure.ac:860: -1- m4_pattern_allow([^USEFREQ$])
-m4trace:configure.ac:862: -1- GA_SET_INCLUDE_VAR([gui_inc], [libsx])
-m4trace:configure.ac:863: -1- m4_pattern_allow([^gui_inc$])
-m4trace:configure.ac:864: -1- m4_pattern_allow([^gui_libs$])
-m4trace:configure.ac:873: -1- m4_pattern_allow([^GRADS_VERSION$])
-m4trace:configure.ac:876: -1- AM_CONDITIONAL([READLINE], [ test "$use_readline"  = "yes"  ])
-m4trace:configure.ac:876: -1- m4_pattern_allow([^READLINE_TRUE$])
-m4trace:configure.ac:876: -1- m4_pattern_allow([^READLINE_FALSE$])
-m4trace:configure.ac:876: -1- _AM_SUBST_NOTMAKE([READLINE_TRUE])
-m4trace:configure.ac:876: -1- _AM_SUBST_NOTMAKE([READLINE_FALSE])
-m4trace:configure.ac:877: -1- AM_CONDITIONAL([USEGUI], [ test "$use_gui"  = "yes"  ])
-m4trace:configure.ac:877: -1- m4_pattern_allow([^USEGUI_TRUE$])
-m4trace:configure.ac:877: -1- m4_pattern_allow([^USEGUI_FALSE$])
-m4trace:configure.ac:877: -1- _AM_SUBST_NOTMAKE([USEGUI_TRUE])
-m4trace:configure.ac:877: -1- _AM_SUBST_NOTMAKE([USEGUI_FALSE])
-m4trace:configure.ac:878: -1- AM_CONDITIONAL([GEOTIFF], [ test "$use_geotiff"  = "yes"  ])
-m4trace:configure.ac:878: -1- m4_pattern_allow([^GEOTIFF_TRUE$])
-m4trace:configure.ac:878: -1- m4_pattern_allow([^GEOTIFF_FALSE$])
-m4trace:configure.ac:878: -1- _AM_SUBST_NOTMAKE([GEOTIFF_TRUE])
-m4trace:configure.ac:878: -1- _AM_SUBST_NOTMAKE([GEOTIFF_FALSE])
-m4trace:configure.ac:879: -1- AM_CONDITIONAL([USESHP], [ test "$use_shp"  = "yes"  ])
-m4trace:configure.ac:879: -1- m4_pattern_allow([^USESHP_TRUE$])
-m4trace:configure.ac:879: -1- m4_pattern_allow([^USESHP_FALSE$])
-m4trace:configure.ac:879: -1- _AM_SUBST_NOTMAKE([USESHP_TRUE])
-m4trace:configure.ac:879: -1- _AM_SUBST_NOTMAKE([USESHP_FALSE])
-m4trace:configure.ac:880: -1- AM_CONDITIONAL([USEGADAP], [ test "$use_gadap" = "yes"  ])
-m4trace:configure.ac:880: -1- m4_pattern_allow([^USEGADAP_TRUE$])
-m4trace:configure.ac:880: -1- m4_pattern_allow([^USEGADAP_FALSE$])
-m4trace:configure.ac:880: -1- _AM_SUBST_NOTMAKE([USEGADAP_TRUE])
-m4trace:configure.ac:880: -1- _AM_SUBST_NOTMAKE([USEGADAP_FALSE])
-m4trace:configure.ac:881: -1- AM_CONDITIONAL([USEDAP], [ test "$use_dap" = "yes"  ])
-m4trace:configure.ac:881: -1- m4_pattern_allow([^USEDAP_TRUE$])
-m4trace:configure.ac:881: -1- m4_pattern_allow([^USEDAP_FALSE$])
-m4trace:configure.ac:881: -1- _AM_SUBST_NOTMAKE([USEDAP_TRUE])
-m4trace:configure.ac:881: -1- _AM_SUBST_NOTMAKE([USEDAP_FALSE])
-m4trace:configure.ac:882: -1- AM_CONDITIONAL([USEHDF], [ test "$use_hdf" = "yes"  ])
-m4trace:configure.ac:882: -1- m4_pattern_allow([^USEHDF_TRUE$])
-m4trace:configure.ac:882: -1- m4_pattern_allow([^USEHDF_FALSE$])
-m4trace:configure.ac:882: -1- _AM_SUBST_NOTMAKE([USEHDF_TRUE])
-m4trace:configure.ac:882: -1- _AM_SUBST_NOTMAKE([USEHDF_FALSE])
-m4trace:configure.ac:883: -1- AM_CONDITIONAL([USEGD], [ test "$use_gd" = "yes"  ])
-m4trace:configure.ac:883: -1- m4_pattern_allow([^USEGD_TRUE$])
-m4trace:configure.ac:883: -1- m4_pattern_allow([^USEGD_FALSE$])
-m4trace:configure.ac:883: -1- _AM_SUBST_NOTMAKE([USEGD_TRUE])
-m4trace:configure.ac:883: -1- _AM_SUBST_NOTMAKE([USEGD_FALSE])
-m4trace:configure.ac:884: -1- AM_CONDITIONAL([USECAIRO], [ test "$use_cairo" = "yes"  ])
-m4trace:configure.ac:884: -1- m4_pattern_allow([^USECAIRO_TRUE$])
-m4trace:configure.ac:884: -1- m4_pattern_allow([^USECAIRO_FALSE$])
-m4trace:configure.ac:884: -1- _AM_SUBST_NOTMAKE([USECAIRO_TRUE])
-m4trace:configure.ac:884: -1- _AM_SUBST_NOTMAKE([USECAIRO_FALSE])
-m4trace:configure.ac:887: -1- m4_pattern_allow([^host_ldadd$])
-m4trace:configure.ac:902: -1- m4_pattern_allow([^LIB@&t@OBJS$])
-m4trace:configure.ac:902: -1- m4_pattern_allow([^LTLIBOBJS$])
-m4trace:configure.ac:902: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
-m4trace:configure.ac:902: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
-m4trace:configure.ac:902: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
-m4trace:configure.ac:902: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
-m4trace:configure.ac:902: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
-m4trace:configure.ac:902: -1- _AC_AM_CONFIG_HEADER_HOOK(["$ac_file"])
-m4trace:configure.ac:902: -1- _LT_PROG_LTMAIN
+m4trace:configure.ac:851: -1- GA_SET_FLAGS([X11/neXtaw libsx], [$X_CFLAGS], [$X_LIBS], [$X_PRE_LIBS -lX11 $X_EXTRA_LIBS])
+m4trace:configure.ac:851: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:851: -1- GA_SET_LIB_VAR([gui_libs], [sx])
+m4trace:configure.ac:860: -1- GA_CHECK_LIBSX([use_gui=yes;use_freq=yes], [use_gui=yes;use_freq=no])
+m4trace:configure.ac:860: -1- GA_CHECK_XAW([ga_xaw_found='yes'], [ga_xaw_found='no'])
+m4trace:configure.ac:860: -1- PKG_CHECK_MODULES([XAW7], [xaw7], [], [ac_pkgconfig_xaw7=no])
+m4trace:configure.ac:860: -1- m4_pattern_allow([^XAW7_CFLAGS$])
+m4trace:configure.ac:860: -1- m4_pattern_allow([^XAW7_LIBS$])
+m4trace:configure.ac:860: -1- PKG_CHECK_EXISTS([xaw7], [pkg_cv_[]XAW7_CFLAGS=`$PKG_CONFIG --[]cflags "xaw7" 2>/dev/null`], [pkg_failed=yes])
+m4trace:configure.ac:860: -1- PKG_CHECK_EXISTS([xaw7], [pkg_cv_[]XAW7_LIBS=`$PKG_CONFIG --[]libs "xaw7" 2>/dev/null`], [pkg_failed=yes])
+m4trace:configure.ac:860: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:860: -1- m4_pattern_allow([^XAW_LIBS$])
+m4trace:configure.ac:860: -1- m4_pattern_allow([^XAW_XLIBS$])
+m4trace:configure.ac:860: -1- m4_pattern_allow([^XAW_CFLAGS$])
+m4trace:configure.ac:860: -1- m4_pattern_allow([^HAVE_SIMPLEGETFILE$])
+m4trace:configure.ac:860: -1- m4_pattern_allow([^GETFILE_SHORT_PROTOTYPE$])
+m4trace:configure.ac:860: -1- m4_pattern_allow([^GA_LIBSX_LIBS$])
+m4trace:configure.ac:868: -1- m4_pattern_allow([^USEGUI$])
+m4trace:configure.ac:870: -1- m4_pattern_allow([^USEGUI$])
+m4trace:configure.ac:874: -1- m4_pattern_allow([^grads_xlibs$])
+m4trace:configure.ac:877: -1- m4_pattern_allow([^USEFREQ$])
+m4trace:configure.ac:879: -1- m4_pattern_allow([^USEFREQ$])
+m4trace:configure.ac:881: -1- GA_SET_INCLUDE_VAR([gui_inc], [libsx])
+m4trace:configure.ac:882: -1- m4_pattern_allow([^gui_inc$])
+m4trace:configure.ac:883: -1- m4_pattern_allow([^gui_libs$])
+m4trace:configure.ac:892: -1- m4_pattern_allow([^GRADS_VERSION$])
+m4trace:configure.ac:895: -1- AM_CONDITIONAL([READLINE], [ test "$use_readline"  = "yes"  ])
+m4trace:configure.ac:895: -1- m4_pattern_allow([^READLINE_TRUE$])
+m4trace:configure.ac:895: -1- m4_pattern_allow([^READLINE_FALSE$])
+m4trace:configure.ac:895: -1- _AM_SUBST_NOTMAKE([READLINE_TRUE])
+m4trace:configure.ac:895: -1- _AM_SUBST_NOTMAKE([READLINE_FALSE])
+m4trace:configure.ac:896: -1- AM_CONDITIONAL([USEGUI], [ test "$use_gui"  = "yes"  ])
+m4trace:configure.ac:896: -1- m4_pattern_allow([^USEGUI_TRUE$])
+m4trace:configure.ac:896: -1- m4_pattern_allow([^USEGUI_FALSE$])
+m4trace:configure.ac:896: -1- _AM_SUBST_NOTMAKE([USEGUI_TRUE])
+m4trace:configure.ac:896: -1- _AM_SUBST_NOTMAKE([USEGUI_FALSE])
+m4trace:configure.ac:897: -1- AM_CONDITIONAL([GEOTIFF], [ test "$use_geotiff"  = "yes"  ])
+m4trace:configure.ac:897: -1- m4_pattern_allow([^GEOTIFF_TRUE$])
+m4trace:configure.ac:897: -1- m4_pattern_allow([^GEOTIFF_FALSE$])
+m4trace:configure.ac:897: -1- _AM_SUBST_NOTMAKE([GEOTIFF_TRUE])
+m4trace:configure.ac:897: -1- _AM_SUBST_NOTMAKE([GEOTIFF_FALSE])
+m4trace:configure.ac:898: -1- AM_CONDITIONAL([USESHP], [ test "$use_shp"  = "yes"  ])
+m4trace:configure.ac:898: -1- m4_pattern_allow([^USESHP_TRUE$])
+m4trace:configure.ac:898: -1- m4_pattern_allow([^USESHP_FALSE$])
+m4trace:configure.ac:898: -1- _AM_SUBST_NOTMAKE([USESHP_TRUE])
+m4trace:configure.ac:898: -1- _AM_SUBST_NOTMAKE([USESHP_FALSE])
+m4trace:configure.ac:899: -1- AM_CONDITIONAL([USEGADAP], [ test "$use_gadap" = "yes"  ])
+m4trace:configure.ac:899: -1- m4_pattern_allow([^USEGADAP_TRUE$])
+m4trace:configure.ac:899: -1- m4_pattern_allow([^USEGADAP_FALSE$])
+m4trace:configure.ac:899: -1- _AM_SUBST_NOTMAKE([USEGADAP_TRUE])
+m4trace:configure.ac:899: -1- _AM_SUBST_NOTMAKE([USEGADAP_FALSE])
+m4trace:configure.ac:900: -1- AM_CONDITIONAL([USEDAP], [ test "$use_dap" = "yes"  ])
+m4trace:configure.ac:900: -1- m4_pattern_allow([^USEDAP_TRUE$])
+m4trace:configure.ac:900: -1- m4_pattern_allow([^USEDAP_FALSE$])
+m4trace:configure.ac:900: -1- _AM_SUBST_NOTMAKE([USEDAP_TRUE])
+m4trace:configure.ac:900: -1- _AM_SUBST_NOTMAKE([USEDAP_FALSE])
+m4trace:configure.ac:901: -1- AM_CONDITIONAL([USEHDF], [ test "$use_hdf" = "yes"  ])
+m4trace:configure.ac:901: -1- m4_pattern_allow([^USEHDF_TRUE$])
+m4trace:configure.ac:901: -1- m4_pattern_allow([^USEHDF_FALSE$])
+m4trace:configure.ac:901: -1- _AM_SUBST_NOTMAKE([USEHDF_TRUE])
+m4trace:configure.ac:901: -1- _AM_SUBST_NOTMAKE([USEHDF_FALSE])
+m4trace:configure.ac:902: -1- AM_CONDITIONAL([USEGD], [ test "$use_gd" = "yes"  ])
+m4trace:configure.ac:902: -1- m4_pattern_allow([^USEGD_TRUE$])
+m4trace:configure.ac:902: -1- m4_pattern_allow([^USEGD_FALSE$])
+m4trace:configure.ac:902: -1- _AM_SUBST_NOTMAKE([USEGD_TRUE])
+m4trace:configure.ac:902: -1- _AM_SUBST_NOTMAKE([USEGD_FALSE])
+m4trace:configure.ac:903: -1- AM_CONDITIONAL([USECAIRO], [ test "$use_cairo" = "yes"  ])
+m4trace:configure.ac:903: -1- m4_pattern_allow([^USECAIRO_TRUE$])
+m4trace:configure.ac:903: -1- m4_pattern_allow([^USECAIRO_FALSE$])
+m4trace:configure.ac:903: -1- _AM_SUBST_NOTMAKE([USECAIRO_TRUE])
+m4trace:configure.ac:903: -1- _AM_SUBST_NOTMAKE([USECAIRO_FALSE])
+m4trace:configure.ac:906: -1- m4_pattern_allow([^host_ldadd$])
+m4trace:configure.ac:921: -1- m4_pattern_allow([^LIB@&t@OBJS$])
+m4trace:configure.ac:921: -1- m4_pattern_allow([^LTLIBOBJS$])
+m4trace:configure.ac:921: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
+m4trace:configure.ac:921: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
+m4trace:configure.ac:921: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
+m4trace:configure.ac:921: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
+m4trace:configure.ac:921: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
+m4trace:configure.ac:921: -1- _AC_AM_CONFIG_HEADER_HOOK(["$ac_file"])
+m4trace:configure.ac:921: -1- _LT_PROG_LTMAIN
