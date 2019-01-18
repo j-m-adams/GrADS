@@ -3,6 +3,9 @@
 /* This is the source file for the GrADS Python extension. 
    It gets compiled with the command 'python setup.py install'
    Originally authored by Brian Doty and Jennifer Adams in April 2018.
+
+   http://python3porting.com/cextensions.html
+   https://docs.python.org/3/howto/cporting.html
 */
 
 
@@ -41,11 +44,12 @@ char *arglist[50];
     arglist[0] = ganame;
     for (i=0; i<siz; i++) {
       item = PyTuple_GetItem(args,i);
-      if (PyBytes_Check(item) != 1) {
+
+      if (PyUnicode_Check(item) != 1) {
          PyErr_SetString(PyExc_TypeError, "start error: args must be strings");
          return NULL;
       } 
-      arglist[i+1] = PyBytes_AsString(item);
+      arglist[i+1] = (char*)PyUnicode_AsUTF8(item);
     }
     rc = (*pgainit)(siz+1,arglist); /* Call gamain */
     if (rc == 0) gapystart = 1;     /* If all ok, set the flag */
@@ -391,7 +395,6 @@ rtrn:
   return(rval);
 }
 
-
 /* The 'get' method takes the name of a defined variables and returns the data and metadata in a Python tuple.
 
    The returned tuple has seven elements (one integer and six PyObjects):
@@ -566,60 +569,80 @@ static PyMethodDef gradspy_funcs[] = {
     {NULL}
 };
 
+static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT,
+    "gradspy",                             /* m_name */
+    "GrADS extension modules for Python",  /* m_doc */
+    -1,                                    /* m_size */
+    gradspy_funcs,                         /* m_methods */
+    NULL,                                  /* m_reload */
+    NULL,                                  /* m_traverse */
+    NULL,                                  /* m_clear */
+    NULL,                                  /* m_free */
+};
+
+
+
 /* This routine gets called when gradspy is imported into Python */
 
-void initgradspy(void) {
-void *handle;
-const char *error;
+/* In Python 3 the value of PyMODINIT_FUNC is a PyObject*. In Python 2 it was void.
+   We return NULL if an error happened or return the module object if initialization succeeded.  */
+
+PyMODINIT_FUNC PyInit_gradspy(void) {
+
+  PyObject *m;
+  void *handle;
+  const char *error;
 
   gapyerror = 0;
 
-  Py_InitModule3("gradspy", gradspy_funcs,"GrADS extension modlues for Python");
-
+  m = PyModule_Create(&moduledef);
+  if (m == NULL) goto err;
+  
   /* Is there a more elegant way to handle the different shared object file names for linux and macOS ? */
   handle = dlopen ("libgradspy.so",    RTLD_LAZY | RTLD_GLOBAL );
   /* handle = dlopen ("libgradspy.dylib", RTLD_LAZY | RTLD_GLOBAL ); */
   if (!handle) {
     fputs (dlerror(), stderr);
     fputs ("\n", stderr);
-    gapyerror = 1;
+    goto err; 
   } 
   else {
     pgainit = dlsym(handle, "gamain");    /* starts GrADS */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
-      gapyerror = 1;
+      goto err;
     } 
     pdocmd = dlsym(handle, "gagsdo");     /* executes a command */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
-      gapyerror = 1;
+      goto err;
     }
     pdoexpr = dlsym(handle, "gadoexpr");  /* evaluates an expression */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
-      gapyerror = 1;
+      goto err;
     }
     psetup = dlsym(handle, "gasetup");    /* creates a defined grid object */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
-      gapyerror = 1;
+      goto err;
     }
     pdoget = dlsym(handle, "gadoget");    /* retreives a defined variable */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
-      gapyerror = 1;
+      goto err;
     }
     pyfre = dlsym(handle, "gapyfre");     /* releases memory after data is copied to Python */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
-      gapyerror = 1;
+      goto err;
     }
     /* This call makes sure that the module which implements the array
        type has been imported, and initializes a pointer array through
@@ -627,4 +650,9 @@ const char *error;
     import_array();
 
   }
+  return m;
+
+ err:
+  gapyerror = 1;
+  return NULL;
 }
