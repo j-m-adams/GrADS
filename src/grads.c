@@ -340,7 +340,7 @@ int main (int argc, char *argv[])  {
 #endif
   if (ipcflg) printf("\n<RC> %d </RC>\n</IPC>\n",rc);
   
-/* This is for pygrads */
+/* This is for GradsPy */
 #ifdef SHRDOBJ
   gapysavpcm(&gcmn);
   return(0);  

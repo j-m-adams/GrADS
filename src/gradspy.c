@@ -53,7 +53,8 @@ char *arglist[50];
     return Py_BuildValue("i", rc);  
 }
 
-/* This method executes a grads command.
+/* The 'cmd' method executes a grads command.
+
    It calls subroutine gagsdo in gauser.c and returns any resulting text */
 
 static PyObject* cmd(PyObject* self,PyObject *args) {
@@ -78,7 +79,8 @@ static PyObject* cmd(PyObject* self,PyObject *args) {
   return resstr;
 }
 
-/* This method evaluates a grads expression and returns the result in a Python tuple.
+/* The 'result' method evaluates a grads expression and returns the result in a Python tuple.
+
    The returned tuple has seven elements (one integer and six PyObjects):
    1. The return code contains the number of varying dimensions (rank) 
       of the result grid; if it is negative, an error occurred.
@@ -226,8 +228,7 @@ static PyObject* result(PyObject* self, PyObject *args) {
 }
 
 
-/* The 'put' method complements the 'result' method: it takes a name and a Python tuple 
-   (with the similar structure) as arguments and creates a defined object within GrADS.
+/* The 'put' method takes a Python tuple as an argument and creates a defined object within GrADS.
 
    The tuple has seven elements (one string, one integer, and six PyObjects):
    0. The variable's name (alphanumeric, lowercase, starts with a letter, <=16 chars)
@@ -391,11 +392,178 @@ rtrn:
   return(rval);
 }
 
+
+/* The 'get' method takes the name of a defined variables and returns the data and metadata in a Python tuple.
+
+   The returned tuple has seven elements (one integer and six PyObjects):
+   1. The return code contains the number of varying dimensions (rank) 
+      of the result grid; if it is negative, an error occurred.
+   2. 2D NumPy array containing the result grid (with NaN for missing data values) 
+   3. 1D NumPy array of X coordinate values (NaN if X is not varying) 
+   4. 1D NumPy array of Y coordinate values (NaN if Y is not varying)
+   5. 1D NumPy array of Z coordinate values (NaN if Z is not varying)
+   6. 1D NumPy array of grid metadata (integers)
+   7. 1D NumPy array of grid metadata (doubles) 
+*/
+
+static PyObject* get(PyObject* self, PyObject *args) {
+  PyArrayObject *res,*xvals,*yvals,*zvals,*iinfo,*dinfo,*junk;
+  PyObject *rval;
+  struct pygagrid pygr;
+  double *r,*s,*t;
+  char *vname,*ch;
+  off_t gsz,ig;
+  int i,*ir,*is,rc;
+  npy_intp dims[5],dim[1];
+  int nd,pydim,gadims[5];
+  
+  if (gapyerror) {
+    PyErr_SetString(PyExc_TypeError, "get error: prior initialization error");
+    return NULL;
+  }
+  if (!gapystart) {
+    PyErr_SetString(PyExc_TypeError, "get error: start method failed or not called");
+    return NULL;
+  }
+
+  /* Calls GrADS routine gadoget() to copy defined variable data and metadata into pygr */
+  PyArg_ParseTuple (args,"s",&vname); 
+  rc = (*pdoget)(vname,&pygr);
+
+  /* Check for an error */
+  if (rc<0) {
+    /* something went wrong, so we return the tuple with a negative return code, 
+       and the remaining elements contain a single value: nan */
+    dims[0] = 1;
+    dims[1] = 1;
+    nd = 2;
+    res = (PyArrayObject *) PyArray_SimpleNew(nd,dims,NPY_DOUBLE);
+    r = (double *)PyArray_DATA(res);
+    *r = strtod("nan",&ch);
+    dim[0] = 1;
+    nd = 1;
+    junk = (PyArrayObject *) PyArray_SimpleNew(nd,dim,NPY_DOUBLE);
+    r = (double *)PyArray_DATA(junk);
+    *r = strtod("nan",&ch);
+    rval =  Py_BuildValue("iNNNNNN",rc,res,junk,junk,junk,junk,junk); 
+    return(rval);
+  }
+
+  /* set up a PyArray for the result grid, copy data from pygr structure */
+  /* this is where the order of dimensions gets reversed */
+  
+  gadims[0] = pygr.xsz; 
+  gadims[1] = pygr.ysz;
+  gadims[2] = pygr.zsz;
+  gadims[3] = pygr.tsz;
+  gadims[4] = pygr.esz;
+  pydim=0;
+  gsz = 1;
+  for (i=4; i>=0; i--) {
+    if (gadims[i] > 1) {
+      dims[pydim] = gadims[i];
+      gsz = gsz * dims[pydim];
+      pydim++;
+    }
+  }
+  nd = rc;  /* number of varying dims */
+
+  res = (PyArrayObject *) PyArray_SimpleNew(nd,dims,NPY_DOUBLE);
+  r = (double *)PyArray_DATA(res);
+  s = r; 
+  t = pygr.grid;
+  for (ig=0; ig<gsz; ig++) {
+    *s = *(t+ig);
+    s++;
+  }
+
+  /* set up a PyArray for the X coordinate values, copy data from pygr structure */
+  dim[0] = pygr.xsz;
+  nd = 1;
+  xvals = (PyArrayObject *) PyArray_SimpleNew(nd,dim,NPY_DOUBLE);
+  r = (double *)PyArray_DATA(xvals);
+  s = r; 
+  t = pygr.xvals;
+  for (i=0; i<pygr.xsz; i++) {
+    *s = *(t+i);
+    s++; 
+  } 
+  
+  /* set up another PyArray for the Y coordinate values, copy data from pygr structure */
+  dim[0] = pygr.ysz; 
+  yvals = (PyArrayObject *) PyArray_SimpleNew(nd,dim,NPY_DOUBLE);
+  r = (double *)PyArray_DATA(yvals);
+  s = r; 
+  t = pygr.yvals;
+  for (i=0; i<pygr.ysz; i++) {
+    *s = *(t+i);
+    s++; 
+  } 
+  
+  /* set up a PyArray for the Z coordinate values, copy data from pygr structure */
+  dim[0] = pygr.zsz; 
+  zvals = (PyArrayObject *) PyArray_SimpleNew(nd,dim,NPY_DOUBLE);
+  r = (double *)PyArray_DATA(zvals);
+  s = r; 
+  t = pygr.zvals;
+  for (i=0; i<pygr.zsz; i++) {
+    *s = *(t+i);
+    s++; 
+  } 
+
+  /* Set up a PyArray for metadata: 14 integers copied from pygr */
+  dim[0] = 14;
+  iinfo = (PyArrayObject *) PyArray_SimpleNew(nd,dim,NPY_INT);
+  ir = (int *)PyArray_DATA(iinfo);
+  is = ir; 
+  *(is+0)  = pygr.xsz;      /* X (lon)  size (1 if not varying) */
+  *(is+1)  = pygr.ysz;      /* Y (lat)  size (1 if not varying) */
+  *(is+2)  = pygr.zsz;      /* Z (lev)  size (1 if not varying) */
+  *(is+3)  = pygr.tsz;      /* T (time) size (1 if not varying) */  
+  *(is+4)  = pygr.esz;      /* E (ens)  size (1 if not varying) */
+  *(is+5)  = pygr.syr;      /* T start time -- year   */			  
+  *(is+6)  = pygr.smo;      /* T start time -- month  */
+  *(is+7)  = pygr.sdy;      /* T start time -- day    */
+  *(is+8)  = pygr.shr;      /* T start time -- hour   */
+  *(is+9)  = pygr.smn;      /* T start time -- minute */	  
+  *(is+10) = pygr.tincr;    /* T increment */		  
+  *(is+11) = pygr.ttyp;     /* type of T increment (0==months, 1==minutes) */
+  *(is+12) = pygr.tcal;     /* T calendar type (0==normal, 1==365-day) */
+  *(is+13) = pygr.estrt;    /* E start (E increment is always 1) */
+
+
+  /* Set up another PyArray for more metadata: 6 doubles copied from pygr */
+  dim[0] = 6;
+  dinfo = (PyArrayObject *) PyArray_SimpleNew(nd,dim,NPY_DOUBLE);
+  r = (double *)PyArray_DATA(dinfo);
+  s = r; 
+  *(s+0) = pygr.xstrt;      /* X start value (if linear) */
+  *(s+1) = pygr.xincr;      /* X increment (negative if non-linear) */
+  *(s+2) = pygr.ystrt;      /* Y start value (if linear) */
+  *(s+3) = pygr.yincr;      /* Y increment (negative if non-linear) */
+  *(s+4) = pygr.zstrt;      /* Z start value (if linear) */
+  *(s+5) = pygr.zincr;      /* Z increment (negative if non-linear) */
+  
+
+  /* We're done copying data, so we can release the pygr structure on the GrADS side.
+     In the 'get' method, pygr->gastatptr is NULL, so we won't delete the defined grid,
+     only the three arrays of xvals, yvals, and zvals that were allocated in gadoget(). */
+  (*pyfre)(&pygr);
+  
+  /* Returns the tuple containing the return code, the result, and the metadata back to Python. 
+     This routine passes "ownership" of the object reference to our result back to Python
+     by decrementing the reference count of the numpy result object */
+  rval =  Py_BuildValue("iNNNNNN",rc,res,xvals,yvals,zvals,iinfo,dinfo);
+  return(rval);
+}
+
+
 static PyMethodDef gradspy_funcs[] = {
     {"start",  (PyCFunction)start,  METH_VARARGS, "Start GrADS with desired switches and arguments"},
     {"cmd",    (PyCFunction)cmd,    METH_VARARGS, "Issue a command to GrADS"},
     {"result", (PyCFunction)result, METH_VARARGS, "Retrieve a grid using a GrADS expression"},
     {"put",    (PyCFunction)put,    METH_VARARGS, "Create a defined grid object in GrADS"},
+    {"get",    (PyCFunction)get,    METH_VARARGS, "Retrieve a defined grid object from GrADS"},
     {NULL}
 };
 
@@ -410,8 +578,8 @@ const char *error;
   Py_InitModule3("gradspy", gradspy_funcs,"GrADS extension modlues for Python");
 
   /* Is there a more elegant way to handle the different shared object file names for linux and macOS ? */
-  handle = dlopen ("libgradspy.so",    RTLD_LAZY | RTLD_GLOBAL ); 
-  /* handle = dlopen ("libgradspy.dylib", RTLD_LAZY | RTLD_GLOBAL );  */
+  /* handle = dlopen ("libgradspy.so",    RTLD_LAZY | RTLD_GLOBAL );  */
+  handle = dlopen ("libgradspy.dylib", RTLD_LAZY | RTLD_GLOBAL );
   if (!handle) {
     fputs (dlerror(), stderr);
     fputs ("\n", stderr);
@@ -441,6 +609,13 @@ const char *error;
     }
     
     psetup = dlsym(handle, "gasetup");    /* creates a defined grid object */
+    if ((error = dlerror()) != NULL)  {
+      fputs(error, stderr);
+      fputs ("\n", stderr);
+      gapyerror = 1;
+    }
+    
+    pdoget = dlsym(handle, "gadoget");  /* retreives a defined variable */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);

@@ -8821,29 +8821,36 @@ struct dbfld *parsedbfld (char *ch) {
 }
 #endif
  
-/* Invoked by gradspy.c, these routines are for passing data from GrADS to Python */
+/* Invoked by gradspy.c, these routines are for passing data between GrADS and Python 
 
-/* Notes:  
+   Notes:  
 
-   gadoexpr() is called by the "result" gradspy method to evaluate an expression and 
-   return the result and other metadata, which is hung off a "pygagrid" structure.  
+   gadoexpr() is called by the "result" gradspy method.
+   It evaluates an expression (a string provided by the Python user) and returns
+   the resulting grid and other metadata, which is hung off a "pygagrid" structure.  
    The caller (gradspy.c) owns this structure. After copying the data from the
-   pygagrid structure, the caller then invokes gapyfre() to free up all the grads storage.
+   pygagrid structure, the caller then invokes gapyfre() to free up all the GrADS storage.
+   Because gadoexpr() calls gaexpr() directly, there is a maximum of two varying dimensions.  
 
-   Because this routine calls gaexpr(), there is a maximum of two varying dimensions.  
+   gadoget() is called by the "get" gradspy method.
+   It takes a defined variable name (a string provided by the Python user) and copies the data 
+   and metadata into Python. The defined object remains in GrADS memory, but gapyfre() is called
+   to release memory allocated to store the grid coordinate values in the pygagrid structure. 
 
-   Station data expressions are not supported.
+   gasetup() is called by the "put" gradspy method.
+   It create a defined object in GrADS with data and metadata passed from Python. 
+   It gets everything GrADS it needs from the pygagrid structure.
 
-   gasetup() is called by the "put" gradspy method to create a defined object and 
-   populate it with data passed from Python. Everything GrADS needs should be in the 
-   pygagrid structure.
+   gapyfre() releases any memory that was hung off the pygagrid structure. 
 
+   Station data are not supported in any of these routines.
 */
 
 #include "gradspy.h"
 
 /* function prototypes */
 int   gadoexpr (char *, struct pygagrid *);
+int   gadoget  (char *, struct pygagrid *);
 int   gasetup  (char *, struct pygagrid *);
 void  gapyfre  (struct pygagrid *);
 gaint defpylev (gadouble *, struct gafile *, gaint);
@@ -9070,6 +9077,197 @@ reterr:
   return(-999);
 
 }
+
+
+int gadoget (char *vnm, struct pygagrid *pypgr) {
+  struct gafile *pfi;
+  struct gacmn *pcm;
+  struct gagrid *pgr;
+  struct gadefn *pdf;
+  struct dt dtim; 
+  gadouble (*conv) (gadouble *, gadouble);
+  gadouble *g, *s, mynan;
+  int rc,i,vcnt,nvals;
+  size_t gsz;
+  char *ch,*u,name[20];
+  
+  /* Initialize */
+  mynan = strtod("nan",&ch);
+  pypgr->gastatptr = NULL;
+  pypgr->grid = NULL;
+  pypgr->isiz = 0;
+  pypgr->jsiz = 0;
+  pypgr->idim = -1;
+  pypgr->jdim = -1;
+  pypgr->xsz = 1; 
+  pypgr->ysz = 1; 
+  pypgr->zsz = 1; 
+  pypgr->tsz = 1; 
+  pypgr->esz = 1;
+  pypgr->xstrt = mynan; 
+  pypgr->ystrt = mynan; 
+  pypgr->zstrt = mynan;
+  pypgr->xincr = mynan; 
+  pypgr->yincr = mynan; 
+  pypgr->zincr = mynan;
+  pypgr->syr = 0; 
+  pypgr->smo = 0; 
+  pypgr->sdy = 0; 
+  pypgr->shr = 0; 
+  pypgr->smn = 0;
+  pypgr->tincr = 0; 
+  pypgr->ttyp = 0; 
+  pypgr->tcal = 0;
+  pypgr->estrt = 0;
+  pypgr->xvals = NULL; 
+  pypgr->yvals = NULL; 
+  pypgr->zvals = NULL;
+
+  pcm = savpcm;
+  pfi = NULL;
+
+  /* copy defined variable name */
+  i=0;
+  while (*(vnm+i)!=' ' && *(vnm+i)!='\n' && *(vnm+i)!='\0' && i<19) {
+    name[i] = *(vnm+i);
+    i++;
+  }
+  name[i] = '\0';
+
+  /* See if the name is a defined grid */
+  pdf = pcm->pdf1;
+  while (pdf!=NULL && !cmpwrd(name,pdf->abbrv)) pdf = pdf->pforw;
+  if (pdf==NULL) {
+    printf("Error in gadoget: defined grid %s not found\n",name);
+    goto reterr;
+  }
+
+  /* Get the gafile structure for this variable */
+  pfi = pdf->pfi;
+  
+  /* Get the number of varying dimensions, set dimension sizes */
+  vcnt = 0;
+  gsz = 1;
+  for (i=0; i<5; i++) {
+    if (pfi->dnum[i] > 1) vcnt++;
+    gsz = gsz * (size_t)pfi->dnum[i];
+  }
+
+  /* update sizes of the varying dimensions */
+  pypgr->xsz = pfi->dnum[0];
+  pypgr->ysz = pfi->dnum[1];
+  pypgr->zsz = pfi->dnum[2];
+  pypgr->tsz = pfi->dnum[3];
+  pypgr->esz = pfi->dnum[4];
+
+  /* populate missing data values with NaN */
+  u = pfi->ubuf;
+  g = pfi->rbuf;
+  for (i=0; i<gsz; i++) if (*(u+i)==0) *(g+i) = mynan;
+  /* set the grid pointer in the pypgr structure */
+  pypgr->grid = pfi->rbuf;
+
+  /* Longitude */
+  conv = pfi->gr2ab[0];
+  pypgr->xstrt = conv(pfi->grvals[0],1.0);            /* initial world coordinate value */
+  if (pfi->linear[0]) 
+    pypgr->xincr = *(pfi->grvals[0]);                 /* valid grid increment */
+  else 
+    pypgr->xincr = -1;                                /* negative grid increment */
+  /* allocate memory for X coordinate values */
+  nvals = 1;
+  if (pypgr->xsz > 1) nvals = pypgr->xsz;
+  pypgr->xvals = (double *)malloc(nvals*sizeof(double));
+  if (pypgr->xvals==NULL) { printf("Error in gadoget: memory allocation failed for xvals\n"); goto reterr; }
+  s = pypgr->xvals;
+  /* write world coordinate values, use NaN if dimension isn't varying */
+  if (pypgr->xsz > 1) {                           
+    for (i=1; i<=pypgr->xsz; i++) {
+      *s = conv(pfi->grvals[0],(gadouble)(i));
+      s++;
+    }
+  } 
+  else *s = mynan;
+
+  /* Latitude */
+  conv = pfi->gr2ab[1];
+  pypgr->ystrt = conv(pfi->grvals[1],1.0);            /* initial world coordinate value */
+  if (pfi->linear[1]) 
+    pypgr->yincr = *(pfi->grvals[1]);                 /* valid grid increment */
+  else 
+    pypgr->yincr = -1;                                /* negative grid increment */
+  /* allocate memory for Y coordinate values */
+  nvals = 1;
+  if (pypgr->ysz > 1) nvals = pypgr->ysz;
+  pypgr->yvals = (double *)malloc(nvals*sizeof(double));
+  if (pypgr->yvals==NULL) { printf("Error in gadoget: memory allocation failed for yvals\n"); goto reterr; }
+  s = pypgr->yvals;
+  /* write world coordinate values, use NaN if dimension isn't varying  */
+  if (pypgr->ysz > 1) {                           
+    for (i=1; i<=pypgr->ysz; i++) {
+      *s = conv(pfi->grvals[1],(gadouble)i);
+      s++;
+    }
+  } 
+  else *s = mynan; 
+
+  /* Level */
+  pypgr->zvals = (double *)malloc(pypgr->zsz*sizeof(double));   
+  if (pypgr->zvals==NULL) { printf("Error in gadoget: memory allocation failed for zvals\n"); goto reterr; }
+  s = pypgr->zvals; 
+  /* write world coordinate values, use NaN if dimension isn't varying  */
+  if (pypgr->zsz > 1) {
+    conv = pfi->gr2ab[2];
+    pypgr->zstrt = conv(pfi->grvals[2],1.0);            /* initial world coordinate value */
+    if (pfi->linear[2]) {
+      pypgr->zincr = *(pfi->grvals[2]);                 /* valid grid increment */
+    }
+    else {    
+      pypgr->zincr = -1;                                /* set negative grid increment */
+      for (i=1; i<=pypgr->zsz; i++) {
+	*s = conv(pfi->grvals[2],(gadouble)i);
+	s++;
+      }
+    }
+  }
+  else {
+    pypgr->zstrt = 1;
+    pypgr->zincr = 1;
+    *s = mynan;
+  }
+
+  /* Time */
+  gr2t (pfi->grvals[3],1.0,&dtim);    /* get the initial time metadata */
+  pypgr->syr = dtim.yr;
+  pypgr->smo = dtim.mo;
+  pypgr->sdy = dtim.dy;
+  pypgr->shr = dtim.hr;
+  pypgr->smn = dtim.mn;
+  pypgr->tcal = pfi->calendar;
+  if (*(pfi->grvals[3]+5)!=0) {
+    pypgr->ttyp = 0; /* increment is months  */
+    pypgr->tincr = *(pfi->grvals[3]+5); 
+  }
+  else {
+    pypgr->ttyp = 1; /* increment is minutes */
+    pypgr->tincr = *(pfi->grvals[3]+6); 
+  }
+  /* Ensemble */
+  pypgr->estrt = 1.0;
+
+  /* everything is ok, return code is the number of varying dimensions */
+  return (vcnt);
+
+
+reterr:
+  /* In case of error, memory is released here; caller does not need to call gapyfre. */
+  if (pypgr->xvals != NULL) { free(pypgr->xvals); pypgr->xvals=NULL; }
+  if (pypgr->yvals != NULL) { free(pypgr->yvals); pypgr->yvals=NULL; }
+  if (pypgr->zvals != NULL) { free(pypgr->zvals); pypgr->zvals=NULL; }
+  return(-999);
+
+}
+
 
 /* This routine is called by the Python extension code to 
    free the pst (and associated storage) once the data is copied. */
