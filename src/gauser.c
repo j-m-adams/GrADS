@@ -2911,6 +2911,20 @@ gadouble minvals[4], maxvals[4],dval;
     snprintf(pout,1255,"pcm->lincol is %d\n",pcm->lincol);
     gaprnt(2,pout);
   }
+  else if (cmpwrd(arg,"col")) {
+    /* Check if user provided a color number */
+    if ((arg = nxtwrd (arg)) == NULL ) fn = -1;
+    else {
+      if (intprs(arg,&fn) == NULL ) fn = -1; 
+    }
+    if (fn > -1) {
+      /* get color info from graphics database */
+      /* get rgb values for this color */
+      gxdbqcol(fn, &dbq);
+      snprintf(pout,1255,"Color #%d  R,G,B,A = %3d %3d %3d %3d\n",fn,dbq.red,dbq.green,dbq.blue,dbq.alpha);
+      gaprnt(2,pout);
+    }
+  }
   else if (cmpwrd(arg,"undef")) {
     snprintf(pout,1255,"Output undef value is set to %12f\n",pcm->undef);
     gaprnt(2,pout);
@@ -3612,7 +3626,7 @@ gadouble minvals[4], maxvals[4],dval;
       snprintf(pout,1255,"X is fixed     Lon = %g  X = %g\n",pcm->dmin[0],v1);
     } else {
       snprintf(pout,1255,"X is varying   Lon = %g to %g   X = %g to %g\n",
-           pcm->dmin[0],pcm->dmax[0],v1,v2);
+	       pcm->dmin[0],pcm->dmax[0],v1,v2);
     }
     gaprnt (2,pout);
     /* Latitude  */
@@ -8838,7 +8852,7 @@ struct dbfld *parsedbfld (char *ch) {
    to release memory allocated to store the grid coordinate values in the pygagrid structure. 
 
    gasetup() is called by the "put" gradspy method.
-   It create a defined object in GrADS with data and metadata passed from Python. 
+   It creates a defined object in GrADS with data and metadata passed from Python. 
    It gets everything GrADS it needs from the pygagrid structure.
 
    gapyfre() releases any memory that was hung off the pygagrid structure. 
@@ -9370,13 +9384,13 @@ char *pymask=NULL;
   *(tvals+2) = pypgr->sdy;
   *(tvals+3) = pypgr->shr;
   *(tvals+4) = pypgr->smn;
-  if (pypgr->ttyp == 1) {
-    *(tvals+5) = pypgr->tincr;
+  if (pypgr->ttyp == 0) {
+    *(tvals+5) = pypgr->tincr; /* increment is months */
     *(tvals+6) = 0;
   }
   else {
     *(tvals+5) = 0;
-    *(tvals+6) = pypgr->tincr;
+    *(tvals+6) = pypgr->tincr; /* increment is minutes */
   }
   *(tvals+7) = -999.9;
   pypfi->grvals[3] = tvals;

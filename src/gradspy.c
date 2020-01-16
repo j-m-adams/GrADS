@@ -1,8 +1,11 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* This is the source file for the GrADS Python extension. 
    It gets compiled with the command 'python setup.py install'
    Originally authored by Brian Doty and Jennifer Adams in April 2018.
+
+   http://python3porting.com/cextensions.html
+   https://docs.python.org/3/howto/cporting.html
 */
 
 
@@ -41,11 +44,12 @@ char *arglist[50];
     arglist[0] = ganame;
     for (i=0; i<siz; i++) {
       item = PyTuple_GetItem(args,i);
-      if (PyBytes_Check(item) != 1) {
+
+      if (PyUnicode_Check(item) != 1) {
          PyErr_SetString(PyExc_TypeError, "start error: args must be strings");
          return NULL;
       } 
-      arglist[i+1] = PyBytes_AsString(item);
+      arglist[i+1] = (char*)PyUnicode_AsUTF8(item);
     }
     rc = (*pgainit)(siz+1,arglist); /* Call gamain */
     if (rc == 0) gapystart = 1;     /* If all ok, set the flag */
@@ -87,7 +91,7 @@ static PyObject* cmd(PyObject* self,PyObject *args) {
    3. 1D NumPy array of X coordinate values (NaN if X is not varying) 
    4. 1D NumPy array of Y coordinate values (NaN if Y is not varying)
    5. 1D NumPy array of Z coordinate values (NaN if Z is not varying)
-   6. 1D NumPy array of grid metadata (integers)
+   6. 1D NumPy array of grid metadata (longs)
    7. 1D NumPy array of grid metadata (doubles) 
 */
 
@@ -97,8 +101,9 @@ static PyObject* result(PyObject* self, PyObject *args) {
   struct pygagrid pygr;
   double *r,*s,*t;
   char *expr,*ch;
-  int i,j,*ir,*is,rc;
-  npy_intp dims[2],dim[1];
+  int i,j,rc;
+  long *lr,*ls;
+  npy_intp dims[2],dim[1]; 
   int nd;
   
   if (gapyerror) {
@@ -182,25 +187,25 @@ static PyObject* result(PyObject* self, PyObject *args) {
     s++; 
   } 
 
-  /* Set up a PyArray for metadata: 14 integers copied from pygr */
+  /* Set up a PyArray for metadata: 14 integers copied from pygr, cast to longs  */
   dim[0] = 14;
-  iinfo = (PyArrayObject *) PyArray_SimpleNew(nd,dim,NPY_INT);
-  ir = (int *)PyArray_DATA(iinfo);
-  is = ir; 
-  *(is+0)  = pygr.xsz;      /* X (lon)  size (1 if not varying) */
-  *(is+1)  = pygr.ysz;      /* Y (lat)  size (1 if not varying) */
-  *(is+2)  = pygr.zsz;      /* Z (lev)  size (1 if not varying) */
-  *(is+3)  = pygr.tsz;      /* T (time) size (1 if not varying) */  
-  *(is+4)  = pygr.esz;      /* E (ens)  size (1 if not varying) */
-  *(is+5)  = pygr.syr;      /* T start time -- year   */			  
-  *(is+6)  = pygr.smo;      /* T start time -- month  */
-  *(is+7)  = pygr.sdy;      /* T start time -- day    */
-  *(is+8)  = pygr.shr;      /* T start time -- hour   */
-  *(is+9)  = pygr.smn;      /* T start time -- minute */	  
-  *(is+10) = pygr.tincr;    /* T increment */		  
-  *(is+11) = pygr.ttyp;     /* type of T increment (0==months, 1==minutes) */
-  *(is+12) = pygr.tcal;     /* T calendar type (0==normal, 1==365-day) */
-  *(is+13) = pygr.estrt;    /* E start (E increment is always 1) */
+  iinfo = (PyArrayObject *) PyArray_SimpleNew(nd,dim,NPY_LONG); 
+  lr = (long *)PyArray_DATA(iinfo);
+  ls = lr; 
+  *(ls+0)  = (long)pygr.xsz;      /* X (lon)  size (1 if not varying) */
+  *(ls+1)  = (long)pygr.ysz;      /* Y (lat)  size (1 if not varying) */
+  *(ls+2)  = (long)pygr.zsz;      /* Z (lev)  size (1 if not varying) */
+  *(ls+3)  = (long)pygr.tsz;      /* T (time) size (1 if not varying) */  
+  *(ls+4)  = (long)pygr.esz;      /* E (ens)  size (1 if not varying) */
+  *(ls+5)  = (long)pygr.syr;      /* T start time -- year   */			  
+  *(ls+6)  = (long)pygr.smo;      /* T start time -- month  */
+  *(ls+7)  = (long)pygr.sdy;      /* T start time -- day    */
+  *(ls+8)  = (long)pygr.shr;      /* T start time -- hour   */
+  *(ls+9)  = (long)pygr.smn;      /* T start time -- minute */	  
+  *(ls+10) = (long)pygr.tincr;    /* T increment */		  
+  *(ls+11) = (long)pygr.ttyp;     /* type of T increment (0==months, 1==minutes) */
+  *(ls+12) = (long)pygr.tcal;     /* T calendar type (0==normal, 1==365-day) */
+  *(ls+13) = (long)pygr.estrt;    /* E start (E increment is always 1) */
 
 
   /* Set up another PyArray for more metadata: 6 doubles copied from pygr */
@@ -229,7 +234,7 @@ static PyObject* result(PyObject* self, PyObject *args) {
 
 /* The 'put' method takes a Python tuple as an argument and creates a defined object within GrADS.
 
-   The tuple has seven elements (one string, one integer, and six PyObjects):
+   The tuple has seven elements (one string and six PyObjects):
    0. The variable's name (alphanumeric, lowercase, starts with a letter, <=16 chars)
    1. The NumPy array containing the data grid (with NaN for missing data values) 
    2. 1D NumPy array of X coordinate values (NaN if X is not varying) 
@@ -242,8 +247,6 @@ static PyObject* result(PyObject* self, PyObject *args) {
 static PyObject* put(PyObject* self, PyObject *args) {
 
   PyArrayObject *grid,*xvals,*yvals,*zvals,*iinfo,*dinfo;
-  /* PyArrayObject **grid,**xvals,**yvals,**zvals,**iinfo,**dinfo; */
-  /* PyObject *grid,*xvals,*yvals,*zvals,*iinfo,*dinfo; */
   PyObject *rval;
   struct pygagrid pygr;
   double mynan;
@@ -267,7 +270,6 @@ static PyObject* put(PyObject* self, PyObject *args) {
   rc = PyArg_ParseTuple(args,"(sOOOOOO)",&name,&grid,&xvals,&yvals,&zvals,&iinfo,&dinfo);
 
   if (!rc) {
-    /* PyErr_SetString(PyExc_TypeError, "put error: PyArg_ParseTuple failed"); */
     rc=1; goto rtrn;
   }
  
@@ -311,7 +313,7 @@ static PyObject* put(PyObject* self, PyObject *args) {
   idata =   (long*)PyArray_DATA(iinfo);
   ddata = (double*)PyArray_DATA(dinfo);
 
-  /* Copy 14 integers from iinfo into pygr */
+  /* Copy 14 integers from idata into pygr */
   pygr.xsz   = (int)idata[0] ;     /* X (lon)  size (1 if not varying) */
   pygr.ysz   = (int)idata[1] ;     /* Y (lat)  size (1 if not varying) */
   pygr.zsz   = (int)idata[2] ;     /* Z (lev)  size (1 if not varying) */
@@ -323,7 +325,7 @@ static PyObject* put(PyObject* self, PyObject *args) {
   pygr.shr   = (int)idata[8] ;     /* T start time -- hour   */
   pygr.smn   = (int)idata[9] ;     /* T start time -- minute */
   pygr.tincr = (int)idata[10];     /* T increment */
-  pygr.ttyp  = (int)idata[11];     /* type of T increment (1==months, 0==minutes) */
+  pygr.ttyp  = (int)idata[11];     /* type of T increment (0==months, 1==minutes) */
   pygr.tcal  = (int)idata[12];     /* T calendar type (0==normal, 1==365-day) */
   pygr.estrt = (int)idata[13];     /* E start (E increment is always 1) */
 
@@ -377,10 +379,8 @@ static PyObject* put(PyObject* self, PyObject *args) {
     for (i=0; i<pygr.zsz; i++) *(zlevs+i) = *(zdata+i);
   }
 
-  /* Hand the data and metadata to GraDS */
+  /* Hand the data and metadata to GrADS */
   rc = (*psetup)(name,&pygr);
-  /* if (rc) PyErr_SetString(PyExc_TypeError, "put error: gasetup failed"); */
-
 
 rtrn:
   if (buf) free(buf);
@@ -390,7 +390,6 @@ rtrn:
   rval =  Py_BuildValue("i",rc); 
   return(rval);
 }
-
 
 /* The 'get' method takes the name of a defined variables and returns the data and metadata in a Python tuple.
 
@@ -412,7 +411,8 @@ static PyObject* get(PyObject* self, PyObject *args) {
   double *r,*s,*t;
   char *vname,*ch;
   off_t gsz,ig;
-  int i,*ir,*is,rc;
+  int i,rc;
+  long *lr,*ls;
   npy_intp dims[5],dim[1];
   int nd,pydim,gadims[5];
   
@@ -510,25 +510,25 @@ static PyObject* get(PyObject* self, PyObject *args) {
     s++; 
   } 
 
-  /* Set up a PyArray for metadata: 14 integers copied from pygr */
+  /* Set up a PyArray for metadata: 14 integers copied from pygr, cast to longs */
   dim[0] = 14;
-  iinfo = (PyArrayObject *) PyArray_SimpleNew(nd,dim,NPY_INT);
-  ir = (int *)PyArray_DATA(iinfo);
-  is = ir; 
-  *(is+0)  = pygr.xsz;      /* X (lon)  size (1 if not varying) */
-  *(is+1)  = pygr.ysz;      /* Y (lat)  size (1 if not varying) */
-  *(is+2)  = pygr.zsz;      /* Z (lev)  size (1 if not varying) */
-  *(is+3)  = pygr.tsz;      /* T (time) size (1 if not varying) */  
-  *(is+4)  = pygr.esz;      /* E (ens)  size (1 if not varying) */
-  *(is+5)  = pygr.syr;      /* T start time -- year   */			  
-  *(is+6)  = pygr.smo;      /* T start time -- month  */
-  *(is+7)  = pygr.sdy;      /* T start time -- day    */
-  *(is+8)  = pygr.shr;      /* T start time -- hour   */
-  *(is+9)  = pygr.smn;      /* T start time -- minute */	  
-  *(is+10) = pygr.tincr;    /* T increment */		  
-  *(is+11) = pygr.ttyp;     /* type of T increment (0==months, 1==minutes) */
-  *(is+12) = pygr.tcal;     /* T calendar type (0==normal, 1==365-day) */
-  *(is+13) = pygr.estrt;    /* E start (E increment is always 1) */
+  iinfo = (PyArrayObject *) PyArray_SimpleNew(nd,dim,NPY_LONG);
+  lr = (long *)PyArray_DATA(iinfo);
+  ls = lr; 
+  *(ls+0)  = (long)pygr.xsz;      /* X (lon)  size (1 if not varying) */
+  *(ls+1)  = (long)pygr.ysz;      /* Y (lat)  size (1 if not varying) */
+  *(ls+2)  = (long)pygr.zsz;      /* Z (lev)  size (1 if not varying) */
+  *(ls+3)  = (long)pygr.tsz;      /* T (time) size (1 if not varying) */  
+  *(ls+4)  = (long)pygr.esz;      /* E (ens)  size (1 if not varying) */
+  *(ls+5)  = (long)pygr.syr;      /* T start time -- year   */			  
+  *(ls+6)  = (long)pygr.smo;      /* T start time -- month  */
+  *(ls+7)  = (long)pygr.sdy;      /* T start time -- day    */
+  *(ls+8)  = (long)pygr.shr;      /* T start time -- hour   */
+  *(ls+9)  = (long)pygr.smn;      /* T start time -- minute */	  
+  *(ls+10) = (long)pygr.tincr;    /* T increment */		  
+  *(ls+11) = (long)pygr.ttyp;     /* type of T increment (0==months, 1==minutes) */
+  *(ls+12) = (long)pygr.tcal;     /* T calendar type (0==normal, 1==365-day) */
+  *(ls+13) = (long)pygr.estrt;    /* E start (E increment is always 1) */
 
 
   /* Set up another PyArray for more metadata: 6 doubles copied from pygr */
@@ -566,60 +566,80 @@ static PyMethodDef gradspy_funcs[] = {
     {NULL}
 };
 
+static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT,
+    "gradspy",                             /* m_name */
+    "GrADS extension modules for Python",  /* m_doc */
+    -1,                                    /* m_size */
+    gradspy_funcs,                         /* m_methods */
+    NULL,                                  /* m_reload */
+    NULL,                                  /* m_traverse */
+    NULL,                                  /* m_clear */
+    NULL,                                  /* m_free */
+};
+
+
+
 /* This routine gets called when gradspy is imported into Python */
 
-void initgradspy(void) {
-void *handle;
-const char *error;
+/* In Python 3 the value of PyMODINIT_FUNC is a PyObject*. In Python 2 it was void.
+   We return NULL if an error happened or return the module object if initialization succeeded.  */
+
+PyMODINIT_FUNC PyInit_gradspy(void) {
+
+  PyObject *m;
+  void *handle;
+  const char *error;
 
   gapyerror = 0;
 
-  Py_InitModule3("gradspy", gradspy_funcs,"GrADS extension modlues for Python");
-
-  /* Is there a more elegant way to handle the different shared object file names for linux and macOS ? */
+  m = PyModule_Create(&moduledef);
+  if (m == NULL) goto err;
+  
+  /* Is there a more elegant way to handle the different shared object file names for linux and macOS? --JMA */
   handle = dlopen ("libgradspy.so",    RTLD_LAZY | RTLD_GLOBAL );
   /* handle = dlopen ("libgradspy.dylib", RTLD_LAZY | RTLD_GLOBAL ); */
   if (!handle) {
     fputs (dlerror(), stderr);
     fputs ("\n", stderr);
-    gapyerror = 1;
+    goto err; 
   } 
   else {
     pgainit = dlsym(handle, "gamain");    /* starts GrADS */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
-      gapyerror = 1;
+      goto err;
     } 
     pdocmd = dlsym(handle, "gagsdo");     /* executes a command */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
-      gapyerror = 1;
+      goto err;
     }
     pdoexpr = dlsym(handle, "gadoexpr");  /* evaluates an expression */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
-      gapyerror = 1;
+      goto err;
     }
     psetup = dlsym(handle, "gasetup");    /* creates a defined grid object */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
-      gapyerror = 1;
+      goto err;
     }
     pdoget = dlsym(handle, "gadoget");    /* retreives a defined variable */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
-      gapyerror = 1;
+      goto err;
     }
     pyfre = dlsym(handle, "gapyfre");     /* releases memory after data is copied to Python */
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
-      gapyerror = 1;
+      goto err;
     }
     /* This call makes sure that the module which implements the array
        type has been imported, and initializes a pointer array through
@@ -627,4 +647,9 @@ const char *error;
     import_array();
 
   }
+  return m;
+
+ err:
+  gapyerror = 1;
+  return NULL;
 }
