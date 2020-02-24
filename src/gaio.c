@@ -1640,7 +1640,8 @@ gaint diag=0;
   /* move file pointer to the start of the grib record */
   rc = fseeko(pfi->infile,seek,SEEK_SET);
   if (rc) {
-    gaprnt(0,"GRIB2 I/O error: fseeko failed \n");
+    snprintf(pout,1255,"GRIB2 I/O error: fseeko failed (seek = %ld)\n",(long)seek);
+    gaprnt(0,pout);
     return(NULL);     
   }
   
