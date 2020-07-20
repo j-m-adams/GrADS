@@ -259,7 +259,7 @@ gaint gaggrd (struct gagrid *pgrid) {
       else
 	vname = pvr->abbrv;
       /* open the variable */
-      rc = h5openvar(pfi->h5id,vname,&dsid,&vid);
+      rc = h5openvar(pfi->h5id,vname,&dsid,&vid,pfi->cachesize);
       if (rc) {
 	pvr->h5vid = -888;
 	snprintf(pout,1255,"Error: Variable %s not in HDF5 file\n",vname);
@@ -276,7 +276,7 @@ gaint gaggrd (struct gagrid *pgrid) {
 	if (rc) return (rc);
       }
       /* set h5-relevant variables in the gavar structure */
-      pvr->h5vid = (gaint)vid; 
+      pvr->h5vid = vid; 
     }
   }
 #endif
@@ -501,7 +501,7 @@ gaint y,z,t,e;
 	else
 	  vname = pvr->abbrv;
 	/* open the variable */
-	rc = h5openvar(pfi->h5id,vname,&dsid,&vid);
+	rc = h5openvar(pfi->h5id,vname,&dsid,&vid,pfi->cachesize);
 	if (rc) {
 	  pvr->h5vid = -888;
 	  snprintf(pout,1255,"Error: Variable %s not in HDF5 file\n",vname);
@@ -518,7 +518,7 @@ gaint y,z,t,e;
 	  if (rc) return (rc);
 	}
 	/* set h5-relevant variables in the gavar structure */
-	pvr->h5vid = (gaint)vid; 
+	pvr->h5vid = vid; 
       }
     }
 #endif
@@ -3442,8 +3442,8 @@ return (0);
      gets the scale factor and add offset attributes 
 */
 
-gaint h5setup(void) {
 #if USEHDF5 == 1
+gaint h5setup(void) {
   hid_t vid=0, dsid, plid, tid;
   gadouble val;
   char *vname;
@@ -3541,9 +3541,9 @@ gaint h5setup(void) {
       }
     }
   }
-#endif
   return(0); 
 }
+#endif
 
 /* Opens an HDF5 variable and allocates the chunk cache 
    takes a file id and a variable name as arguments
@@ -3551,8 +3551,8 @@ gaint h5setup(void) {
 */
 
 #if USEHDF5==1
-gaint h5openvar (gaint h5id, char *vname, hid_t *dataspace, hid_t *h5varflg) {
-  hid_t fid,vid,plid,dsid;
+gaint h5openvar (hid_t h5id, char *vname, hid_t *dataspace, hid_t *h5varflg, long cachesize) {
+  hid_t vid,plid,dsid;
   size_t nslots;
   gadouble pp;
   herr_t rc;
@@ -3561,7 +3561,7 @@ gaint h5openvar (gaint h5id, char *vname, hid_t *dataspace, hid_t *h5varflg) {
   plid = H5Pcreate (H5P_DATASET_ACCESS);
   nslots = 51203;
   pp = 0.75;
-  rc = H5Pset_chunk_cache(plid, nslots, cachesf*pfi->cachesize, pp);
+  rc = H5Pset_chunk_cache(plid, nslots, cachesf*cachesize, pp);
   if (rc<0)  {
     snprintf(pout,1255,"Error: H5Pset_chunk_cache failed for variable %s \n",vname);
     gaprnt(0,pout);
@@ -3569,14 +3569,12 @@ gaint h5openvar (gaint h5id, char *vname, hid_t *dataspace, hid_t *h5varflg) {
   }
 
   /* now open the variable with the modified property list */
-  fid = (hid_t)h5id;
-  vid = H5Dopen2 (fid, vname, plid);
+  vid = H5Dopen2 (h5id, (const char*)vname, plid);
   if (vid<0) {
-    snprintf(pout,1255,"Error: H5Dopen2 failed for variable %s \n",vname);
+    snprintf(pout,1255,"Error: H5Dopen2 failed for variable %s (h5id=%lld, plid=%lld)\n",vname,h5id,plid);
     gaprnt(0,pout);
     return (1); 
   }
-
   /* close the property list */
   H5Pclose (plid);
   
@@ -3916,9 +3914,9 @@ return (0);
 
 /* Retrieves a numeric HDF5 Attribute. */
 
-gaint h5attr(gaint varid, char *vname, char *aname, gadouble *value) {
 #if USEHDF5 == 1
-hid_t vid,aid,atype,aspace,rc;    
+gaint h5attr(hid_t varid, char *vname, char *aname, gadouble *value) {
+hid_t aid,atype,aspace,rc;    
 H5T_class_t aclass;
 H5T_sign_t asign;
 size_t asize;
@@ -3934,10 +3932,8 @@ unsigned long ulval;
 float fval;
 gadouble dval;
 
-  vid=(hid_t)varid;
-
   /* get the attribute id */
-  if ((aid = H5Aopen_by_name(vid, vname, aname, H5P_DEFAULT, H5P_DEFAULT))<0) {
+  if ((aid = H5Aopen_by_name(varid, vname, aname, H5P_DEFAULT, H5P_DEFAULT))<0) {
     snprintf(pout,1255,"HDF5 attribute named \"%s\" does not exist\n",aname);
     gaprnt(2,pout);
     return(1);
@@ -4740,31 +4736,41 @@ size_t sz;
 }
 
 /* Subroutine to print out HDF5 (variable) attributes */
-gaint h5pattrs(gaint fid, char *vname, char *abbrv, gaint hdrflg, gaint fnum, char* ftit) {
 #if USEHDF5 == 1
-H5O_info_t oinfo;
-H5T_class_t aclass=-1;
-H5T_sign_t asign;
-hid_t   h5id,vid,dsid,aid,atype=-1,aspace=-1;
-hsize_t ai,stosize;
-size_t sz,asize,len=0;
-gaint   aindex,n_atts=0,rc,i,rank=-1,err=0;
-char    *aname=NULL;
-char    *cval=NULL,*string=NULL;
-unsigned char *ucval=NULL;
-short   *sval=NULL;
-unsigned short  *usval=NULL;
-gaint   *ival=NULL;
-gauint  *uival=NULL;
-long    *lval=NULL;
-unsigned long *ulval=NULL;
-gafloat  *fval=NULL;
-gadouble *dval=NULL;
+gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, char* ftit, long cachesize) {
+  H5O_info_t oinfo;
+  H5T_class_t aclass=-1;
+  H5T_sign_t asign;
+  hid_t   vid,dsid,aid,atype=-1,aspace=-1;
+  hsize_t ai,stosize;
+  size_t sz,asize,len=0;
+  gaint   aindex,n_atts=0,rc,i,rank=-1,err=0;
+  char    *aname=NULL;
+  char    *cval=NULL,*string=NULL;
+  unsigned char *ucval=NULL;
+  short   *sval=NULL;
+  unsigned short  *usval=NULL;
+  gaint   *ival=NULL;
+  gauint  *uival=NULL;
+  long    *lval=NULL;
+  unsigned long *ulval=NULL;
+  gafloat  *fval=NULL;
+  gadouble *dval=NULL;
 
+/* Get the variable id and number of attributes */
+  /* if (cmpwrd("global",abbrv)) { */
+  /*   /\* this is the first step, to get the number *\/ */
+  /*   n_atts = H5Aget_num_attrs(h5id); */
+  /*   if (n_atts>0) printf("%d global attributes\n",n_atts); */
+    /* aid = H5Aopen_by_name(h5id,(const char*)abbrv); */
+
+    /* varid = NC_GLOBAL; */
+    /* rc = nc_inq_natts(ncid,&n_atts); */
+    /* if (rc != NC_NOERR) error=1; */
+  /* } */
 
   /* Get the variable id and number of attributes */
-  h5id = (hid_t)fid;
-  rc = h5openvar(fid, vname, &vid, &dsid);
+  rc = h5openvar(h5id, vname, &dsid, &vid, cachesize);
   if (rc) err=1;
   if (!err) {
     if ((rc = H5Oget_info(vid,&oinfo))<0) err=1;
@@ -4990,9 +4996,9 @@ gadouble *dval=NULL;
   
   h5closevar(dsid,vid);
   return(n_atts);
-#endif
   return(0);
 }
+#endif
 
 /* routine to print out a string attribute that may have carriage returns in it */
 void prntwrap(char *vname, char *aname, char *str ) {
@@ -5028,7 +5034,9 @@ struct dt dtim, dtimi;
 struct gaens *ens;
 gaint i,rc,flag,endx,need_new_file;
 char *fn=NULL;
-
+#if USEHDF5 == 1
+hid_t retc=-88888;
+#endif
   *oflg = 0;
   /* make sure e and t are within range of grid dimensions */
   if (t<1 || t>pfi->dnum[3]) return(-99999);
@@ -5106,11 +5114,14 @@ char *fn=NULL;
       rc = gaophdf (pfi,1,0);
       if (rc) pfi->sdid = -999;
     }
+#if USEHDF5 == 1
     /* open hdf5 */
     else if (pfi->ncflg==3) { 
       rc = gaoph5 (pfi,1,0);
+      /* if (rc) pfi->h5id = retc; */
       if (rc) pfi->h5id = -999;
     }
+#endif
     /* open all others except BUFR */
     else if (!pfi->bufrflg) {        
       pfi->infile = fopen (fn, "rb");
@@ -5217,19 +5228,22 @@ gaint gaoph5 (struct gafile *pfil, gaint tflag, gaint eflag) {
   /* open the hdf5 file */
   if ((fapl = H5Pcreate(H5P_FILE_ACCESS))>=0) {
     if ((H5Pset_fclose_degree(fapl,H5F_CLOSE_STRONG))>=0) {
+      /* Suppress the stderr messages for H5Fopen */
+      H5Eset_auto(H5E_DEFAULT,NULL, NULL);
       if ((h5id = H5Fopen(filename, H5F_ACC_RDONLY, fapl))>=0) {
 	op=1;
-      }
-    }
-  }
-
+      } 
+    } 
+  } 
   H5Pclose(fapl);
+
   /* if file opened, set the file id in the gafile structure */
   if (op) {
-    pfil->h5id = (gaint)h5id;     
+    pfil->h5id = h5id;     
     return (0);
   }
   else {
+    /* If eflag==0 file templating is in use, so we don't inform the user of missing files */
     if (eflag) {
       snprintf(pout,1255,"Error: Unable to open HDF5 file %s \n",filename);
       gaprnt(0,pout);
@@ -5284,16 +5298,16 @@ gaint gacloseh5 (struct gafile *pfi) {
   hid_t fid;
 
   if (pfi->h5id != -999) {
-    fid = (hid_t)pfi->h5id;
+    fid = pfi->h5id;
     /* loop over all variables, make sure they are closed */
     lclvar = pfi->pvar1;
     for (i=0; i<pfi->vnum; i++) {
       rc = h5closevar(lclvar->dataspace,lclvar->h5varflg);
       if (rc) return (1);
       /* reset flags */
-      lclvar->dataspace = -999; 
-      lclvar->h5varflg = -999;  
-      lclvar++; 
+      lclvar->dataspace = -999;
+      lclvar->h5varflg = -999;
+      lclvar++;
     }
     /* now we can close the file */
     if ((H5Fclose(fid)) < 0) {

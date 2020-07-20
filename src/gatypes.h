@@ -1,4 +1,6 @@
- /************\
+/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+
+/************					\
  * Data Types * 
  \************/
 typedef double        gadouble;

@@ -1,3 +1,5 @@
+/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+
 #ifndef NC_UNSPECIFIED
 #define NC_UNSPECIFIED 0
 #endif

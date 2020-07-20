@@ -1,3 +1,5 @@
+/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+
 struct grib_var_table {
   int id;
   char name[6] ;

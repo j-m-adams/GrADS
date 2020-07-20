@@ -462,7 +462,9 @@ struct gastat {
   gaint ncflg;                 /* 1==netcdf  2==hdfsds */
   gaint ncid;                  /* netcdf file id */
   gaint sdid;                  /* hdf-sds file id */
-  gaint h5id;                  /* hdf5 file id */
+#if USEHDF5==1
+  hid_t h5id;                  /* hdf5 file id */
+#endif
   gaint packflg;               /* Data are packed with scale and offset values */
   gaint undefattrflg;          /* Undefined values are retrieved individually  */
   char *scattr;                /* scale factor attribute name for unpacking data */
@@ -689,7 +691,6 @@ struct gavar {
                                   of this variable within a time group */
   gaint ncvid;                 /* netcdf vid for this variable         */
   gaint sdvid;                 /* hdf vid for this variable            */
-  gaint h5vid;                 /* hdf5 dataset id for this variable    */
   gaint levels;                /* Number of levels for this variable.
                                   0 is special and indiates one grid is
                                   available for the surface only.      */
@@ -708,6 +709,7 @@ struct gavar {
   gaint nh5vardims;            /* Number of variable dimensions for hdf5 */
   gaint vardimids[100];        /* Variable dimension IDs. 	       */
 #if USEHDF5==1
+  hid_t h5vid;                 /* hdf5 dataset id for this variable    */
   hid_t h5varflg;              /* hdf5 variable has been opened */
   hid_t dataspace;             /* dataspace allocated for hdf5 variable */
 #endif
@@ -1007,16 +1009,16 @@ gaint gaclosehdf (struct gafile *);
 gaint gacloseh5 (struct gafile *);
 gaint gaophdf (struct gafile *, gaint, gaint);
 gaint gaoph5 (struct gafile *, gaint, gaint);
-gaint h5setup (void);
 #if USEHDF5==1
-gaint h5openvar (gaint,char*,hid_t*,hid_t*);
+gaint h5setup (void);
+gaint h5openvar (hid_t,char*,hid_t*,hid_t*,long);
 gaint h5closevar (hid_t, hid_t);
+gaint h5pattrs(hid_t, char *, char *, gaint, gaint, char *, long);
+gaint h5attr(hid_t, char *, char *, gadouble *);
 #endif
-gaint h5attr(gaint, char *, char *, gadouble *);
 gaint hdfattr (gaint, char *, gadouble *);
 gaint ncpattrs(gaint, char *, char *, gaint, gaint, char *);
 gaint hdfpattrs(gaint, char *, char *, gaint, gaint, char *);
-gaint h5pattrs(gaint, char *, char *, gaint, gaint, char *);
 void prntwrap(char *, char *, char *);
 #if GRIB2
 struct g2buff * g2check (gaint, gaint, gaint);

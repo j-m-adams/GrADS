@@ -1,3 +1,5 @@
+/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+
 /*  If map data sets change, these constants also change */
 
 static int hcntt[4] = {57995,13355,57661,21047};

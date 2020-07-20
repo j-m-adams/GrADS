@@ -1407,9 +1407,9 @@ char shparg[4096];
     gxcolr (pcm->lincol);
     gxstyl (pcm->linstl);
     if (cmpwrd("circf",oper)) 
-      gxcirc (x,y,r,1);
+      gxcirc (x,y,r,1); /* closed circle */
     else
-      gxcirc (x,y,r,0);
+      gxcirc (x,y,r,0); /* open circle */
     return (0);
 
     errcirc:
@@ -2843,8 +2843,9 @@ gaint ncid=0, rc, error, n_atts, n_gatts;
 gaint sdid=0;
 #endif
 #if USEHDF5 == 1
-gaint h5id=-999;
-hid_t fid=0;
+hid_t h5id=-999;
+hid_t fid=-999;
+hid_t fapl=-999;
 #endif
 #if USESHP==1
 SHPHandle shpid=NULL;
@@ -3309,7 +3310,7 @@ gadouble minvals[4], maxvals[4],dval;
         for (i=0;i<pvar->nvardims;i++) printf("%-4d ",pvar->vardimids[i]); printf("\n");
 	if (pfi->ncflg==1) printf(" ncvid=%d \n",pvar->ncvid);
 	if (pfi->ncflg==2) printf(" sdvid=%d \n",pvar->sdvid);
-	if (pfi->ncflg==3) printf(" h5vid=%d \n",pvar->h5vid);
+	if (pfi->ncflg==3) printf(" h5vid=%lld \n",pvar->h5vid);
 	printf(" scale=%f \n",pvar->scale);
 	printf(" add=%f \n",pvar->add);
       }
@@ -4580,38 +4581,58 @@ gadouble minvals[4], maxvals[4],dval;
 	h5id=-999;
 	gr2t(pfi->grvals[3], 1.0, &tdefi);
 	tfile = gafndt(pfi->name, &tdefi, &tdefi, pfi->abvals[3], pfi->pchsub1, pfi->ens1,1,1,&flag);
-	fid = H5Fopen(tfile,H5F_ACC_RDONLY, H5P_DEFAULT);
-	if (fid>0) {
-	  h5id = (gaint)fid;
-	  closethisfilelater=1;
-	} else {
-	  for (i=2; i<=pfi->dnum[3]; i++) {
-	    h5id=-999;
-	    gr2t(pfi->grvals[3], (gadouble)i, &tdef);
-	    tfile2 = gafndt(pfi->name, &tdef, &tdefi, pfi->abvals[3], pfi->pchsub1, pfi->ens1,1,1,&flag);
-	    if (strcmp(tfile,tfile2)!=0) {
-	      gree(tfile,"f215");
-	      tfile = tfile2;
-	      fid = H5Fopen(tfile2,H5F_ACC_RDONLY, H5P_DEFAULT); 
-	      if (fid>0) {
-		h5id = (gaint)fid;
-		closethisfilelater=1;
-		break;
+        /* open the hdf5 file */
+	if ((fapl = H5Pcreate(H5P_FILE_ACCESS))>=0) {
+	  if ((H5Pset_fclose_degree(fapl,H5F_CLOSE_STRONG))>=0) {
+	    /* Suppress the stderr messages for H5Fopen */
+	    H5Eset_auto(H5E_DEFAULT,NULL, NULL);
+	    if ((fid = H5Fopen(tfile, H5F_ACC_RDONLY, fapl))>=0) {
+	      /* first file worked */
+	      h5id = fid;
+	      closethisfilelater=1;
+	    }
+	    else {
+	      /* try other files in the template set */
+	      for (i=2; i<=pfi->dnum[3]; i++) {
+		h5id=-999;
+		gr2t(pfi->grvals[3], (gadouble)i, &tdef);
+		tfile2 = gafndt(pfi->name, &tdef, &tdefi, pfi->abvals[3], pfi->pchsub1, pfi->ens1,1,1,&flag);
+		if (strcmp(tfile,tfile2)!=0) {
+		  gree(tfile,"f215");
+		  tfile = tfile2;
+		  /* Suppress the stderr messages for H5Fopen */
+		  H5Eset_auto(H5E_DEFAULT,NULL, NULL);
+		  H5Pclose(fapl);
+		  if ((fapl = H5Pcreate(H5P_FILE_ACCESS))>=0) {
+		    if ((H5Pset_fclose_degree(fapl,H5F_CLOSE_STRONG))>=0) {
+		      /* Turn off error handling to suppress the error messages for H5Fopen */
+		      H5Eset_auto(H5E_DEFAULT,NULL, NULL);
+		      if ((fid = H5Fopen(tfile2, H5F_ACC_RDONLY, fapl))>=0) {
+			h5id = fid;
+			closethisfilelater=1;
+			break;
+		      }
+		    }
+		  }
+		}
 	      }
 	    }
 	  }
 	}
+	/* we've got an open file now, we can close the property list */
+	H5Pclose(fapl);
 	gree(tfile,"f216");
-      } 
+
+      }  /* end of dealing with template set */ 
       else {
 	/* Copy the hdf5 file id from the file structure to the local variable h5id */
 	h5id = pfi->h5id;
 	closethisfilelater=0;
       }
-      
-      /* Retrieve HDF5 global attributes (nothing to do yet) */
-/*       n_gatts = h5pattrs(h5id, "foo", "global", hdrflg, fnum, pfi->title); */
-/*       if (hdrflg && n_gatts>0) hdrflg=0; */
+      /* JMA Write code to check for global attributes in HDF5 files */
+      /* Retrieve HDF5 global attributes */
+      /* n_gatts = h5pattrs(h5id, "foo", "global", hdrflg, fnum, pfi->title, pfi->cachesize); */
+      /* if (hdrflg && n_gatts>0) hdrflg=0; */
 #endif
     }
 
@@ -4652,7 +4673,7 @@ gadouble minvals[4], maxvals[4],dval;
 #if USEHDF5 ==1
 	/* Print HDF5 variable attributes */
 	if (pfi->ncflg==3) {
-	  n_atts = h5pattrs(h5id, varnam, pvar->abbrv, hdrflg, fnum, pfi->title); 
+	  n_atts = h5pattrs(h5id, varnam, pvar->abbrv, hdrflg, fnum, pfi->title, pfi->cachesize); 
 	  if (hdrflg && n_atts>0) hdrflg=0; 
 	}
 #endif

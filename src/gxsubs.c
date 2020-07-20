@@ -904,27 +904,6 @@ void gxrset (gaint level) {
   if (level > 1) { fconv=NULL; bconv=NULL; }
 }
 
-/* Plot a circle. flg=0 for open, flg=1 for filled. */
-
-void gxcirc (gadouble x, gadouble y, gadouble r, gaint flg) {
-gadouble xr,xr2,yr,rad;
-  if (x<=clminx || x>=clmaxx || y<=clminy || y>=clmaxy) return;
-  gxvcon (x,y,&xr,&yr);
-  gxvcon (x+r,y,&xr2,&y);
-  if (xr2>=xr)
-    rad = xr2-xr;
-  else
-    rad = xr-xr2;
-  if (flg)
-    hout3(-24,xr,yr,rad);
-  else
-    hout3(-25,xr,yr,rad);
-  if (intflg) {
-    dsubs.gxdcirc (xr, yr, rad, flg);
-  }
-}
-
-
 /* Plot a color filled rectangle.  */
 
 void gxrecf (gadouble xlo, gadouble xhi, gadouble ylo, gadouble yhi) {
@@ -976,6 +955,26 @@ gaint gxqclr (void) {
 
 gaint gxqstl (void) {
   return (lstyle);
+}
+
+/* Plot a circle. flg=0 for open, flg=1 for filled. */
+
+void gxcirc (gadouble x, gadouble y, gadouble r, gaint flg) {
+gadouble xr,xr2,yr,rad;
+  if (x<=clminx || x>=clmaxx || y<=clminy || y>=clmaxy) return;
+  gxvcon (x,y,&xr,&yr);
+  gxvcon (x+r,y,&xr2,&y);
+  if (xr2>=xr)
+    rad = xr2-xr;
+  else
+    rad = xr-xr2;
+  if (flg)
+    hout3(-24,xr,yr,rad);
+  else
+    hout3(-25,xr,yr,rad);
+  if (intflg) {
+    dsubs.gxdcirc (xr, yr, rad, flg);
+  }
 }
 
 /* Draw markers 1-5. */

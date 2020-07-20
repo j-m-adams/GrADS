@@ -597,8 +597,8 @@ PyMODINIT_FUNC PyInit_gradspy(void) {
   if (m == NULL) goto err;
   
   /* Is there a more elegant way to handle the different shared object file names for linux and macOS? --JMA */
-  handle = dlopen ("libgradspy.so",    RTLD_LAZY | RTLD_GLOBAL );
-  /* handle = dlopen ("libgradspy.dylib", RTLD_LAZY | RTLD_GLOBAL ); */
+  /* handle = dlopen ("libgradspy.so",    RTLD_LAZY | RTLD_GLOBAL ); */
+  handle = dlopen ("libgradspy.dylib", RTLD_LAZY | RTLD_GLOBAL );
   if (!handle) {
     fputs (dlerror(), stderr);
     fputs ("\n", stderr);

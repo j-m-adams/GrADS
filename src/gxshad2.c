@@ -1,5 +1,4 @@
-/*  Copyright (C) 1988-2018 by the Institute of Global Environment and Society (IGES).  
-    See file COPYRIGHT for more information.   */
+/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information.*/
 
 /* Authored by B. Doty  2010,2011 */
 

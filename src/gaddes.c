@@ -2856,7 +2856,9 @@ size_t sz;
   pfi->bufrflg = 0;      /* Assume not bufr */
   pfi->ncid = -999;      /* No netcdf file open */
   pfi->sdid = -999;      /* No hdfsds file open */
-  pfi->h5id = -999;      /* No hdf5 file open */
+#if USEHDF5==1
+  pfi->h5id = (hid_t)-999;      /* No hdf5 file open */
+#endif
   pfi->fhdr = 0;         /* Assume no file header */
   pfi->xyhdr=0;          /* Assume no xyheader */
   pfi->xytrlr=0;         /* Assume no xytrailer */
