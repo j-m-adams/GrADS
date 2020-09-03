@@ -3938,9 +3938,14 @@ gadouble dval;
     gaprnt(2,pout);
     return(1);
   } 
-  /* get the attribute rank, make sure it is 1 */
+  /* get the attribute rank, make sure it is not greater than 1 */
   if ((aspace = H5Aget_space(aid))<0) { gaprnt(2,"H5Aget_space failed\n"); return (1); }
-  if ((rank   = H5Sget_simple_extent_ndims(aspace))!=1) { gaprnt(2,"rank != 1\n"); return (1); }
+  rank = H5Sget_simple_extent_ndims(aspace);
+  if (rank > 1 || rank < 0) {
+    snprintf(pout,1255,"rank of attribute named %s must be 0 or 1, but is %d \n",aname,rank);
+    gaprnt(2,pout);
+    return (1);
+  }
   /* get the attribute type, class, and size */
   if ((atype  = H5Aget_type(aid))<0) { gaprnt(2,"H5Aget_type failed\n"); return (1); } 
   if ((aclass = H5Tget_class(atype))<0) { gaprnt(2,"H5Tget_class failed\n"); return (1); } 
