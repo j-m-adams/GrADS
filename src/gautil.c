@@ -2031,7 +2031,7 @@ void gahswp (struct rpthdr *hdr) {
 gaint dayweek (struct dt *dtime) {
 struct dt anch;
 gaint i,j;
-  if (dtime->yr<1950 || dtime->yr>2020) return(7);
+  if (dtime->yr<1950 || dtime->yr>2150) return(7);
   anch.yr = 1950;
   anch.mo = 1;
   anch.dy = 1;

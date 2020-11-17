@@ -539,7 +539,7 @@ gaint y,z,t,e;
   if (pfi->ncflg==1) {              
     rc = gancsetup();
     if (rc) return(rc);
-     rc = gancrow (x, y, z, tt, ee, len, gr, gru);
+    rc = gancrow (x, y, z, tt, ee, len, gr, gru);
     return(rc);
   }
   /* HDF-SDS */
