@@ -46,7 +46,7 @@ libgxpGD_la_SOURCES    = gxprintGD.c gxGD.c
 endif
 
 libgxdummy_la_SOURCES  = gxdummy.c
-libgxdX11_la_SOURCES   = gxX11.c gxdxwd.c
+libgxdX11_la_SOURCES   = gxX11.c 
 
 ## GrADS source files to be compiled
 grads_SOURCES =	grads.c  gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
@@ -57,7 +57,7 @@ grads_SOURCES =	grads.c  gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
 
 ## These may not always be compiled but must be listed in order to go in the distribution 
 EXTRA_grads_SOURCES = gagmap.c gagui.c gsgui.c dodstn.c \
-                      gxprintGD.c gxGD.c gxdxwd.c gxX11.c \
+                      gxprintGD.c gxGD.c gxX11.c \
                       gxprint.c gxC.c gxX.c gxdummy.c 
 
 
@@ -84,7 +84,7 @@ DISTCLEANFILES = buildinfo.h config.h
 
 supp_include_dir	= $(SUPPLIBS)/include
 supp_lib_dir		= $(SUPPLIBS)/lib
-LDADD			= -L$(supp_lib_dir) $(geotiff_ldflags) $(gd_ldflags)
+LDADD			= -L$(supp_lib_dir) $(geotiff_ldflags) $(shp_ldflags) $(gd_ldflags)
 
 common_ldadd            = $(LDADD) $(host_ldadd) 
 X11_ldadd               = $(X_LIBS) $(X_PRE_LIBS) -lX11 -lXext $(X_EXTRA_LIBS)

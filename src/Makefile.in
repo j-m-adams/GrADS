@@ -135,7 +135,8 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
-am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
 am__DEPENDENCIES_3 = $(am__DEPENDENCIES_2) $(am__DEPENDENCIES_1)
 libgradspy_la_DEPENDENCIES = $(am__DEPENDENCIES_3) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -173,9 +174,7 @@ am__v_lt_1 =
 libgradspy_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libgradspy_la_CFLAGS) \
 	$(CFLAGS) $(libgradspy_la_LDFLAGS) $(LDFLAGS) -o $@
-am__DEPENDENCIES_4 = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
-libgxdCairo_la_DEPENDENCIES = $(am__DEPENDENCIES_4) \
+libgxdCairo_la_DEPENDENCIES = $(am__DEPENDENCIES_2) \
 	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_1)
 am__libgxdCairo_la_SOURCES_DIST = gxX.c gxC.c
 @USECAIRO_TRUE@am_libgxdCairo_la_OBJECTS = libgxdCairo_la-gxX.lo \
@@ -186,8 +185,8 @@ libgxdCairo_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(AM_CFLAGS) $(CFLAGS) $(libgxdCairo_la_LDFLAGS) $(LDFLAGS) -o \
 	$@
 @USECAIRO_TRUE@am_libgxdCairo_la_rpath = -rpath $(libdir)
-libgxdX11_la_DEPENDENCIES = $(am__DEPENDENCIES_4)
-am_libgxdX11_la_OBJECTS = libgxdX11_la-gxX11.lo libgxdX11_la-gxdxwd.lo
+libgxdX11_la_DEPENDENCIES = $(am__DEPENDENCIES_2)
+am_libgxdX11_la_OBJECTS = libgxdX11_la-gxX11.lo
 libgxdX11_la_OBJECTS = $(am_libgxdX11_la_OBJECTS)
 libgxdX11_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
@@ -221,7 +220,8 @@ am_bufrscan_OBJECTS = bufrscan.$(OBJEXT) gabufr.$(OBJEXT) \
 	gabufrtbl.$(OBJEXT) gamach.$(OBJEXT)
 bufrscan_OBJECTS = $(am_bufrscan_OBJECTS)
 bufrscan_LDADD = $(LDADD)
-bufrscan_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+bufrscan_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
 am__grads_SOURCES_DIST = grads.c gxsubs.c gxmeta.c gxchpl.c gxcntr.c \
 	gxstrm.c gxdb.c gxwmap.c gxshad.c gxshad2.c gaexpr.c gafunc.c \
 	gautil.c gagx.c gscrpt.c gamach.c gatxt.c galloc.c gaddes.c \
@@ -427,12 +427,14 @@ RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
+SHP_CFLAGS = @SHP_CFLAGS@
+SHP_LDFLAGS = @SHP_LDFLAGS@
 SHP_LIBS = @SHP_LIBS@
 STRIP = @STRIP@
 SUPPLIBS = @SUPPLIBS@
-UDUNITS_CFLAGS = @UDUNITS_CFLAGS@
-UDUNITS_LDFLAGS = @UDUNITS_LDFLAGS@
-UDUNITS_LIBS = @UDUNITS_LIBS@
+UDUNITS2_CFLAGS = @UDUNITS2_CFLAGS@
+UDUNITS2_LDFLAGS = @UDUNITS2_LDFLAGS@
+UDUNITS2_LIBS = @UDUNITS2_LIBS@
 VERSION = @VERSION@
 XAW7_CFLAGS = @XAW7_CFLAGS@
 XAW7_LIBS = @XAW7_LIBS@
@@ -511,6 +513,8 @@ psdir = @psdir@
 readline_libs = @readline_libs@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
+shp_inc = @shp_inc@
+shp_ldflags = @shp_ldflags@
 shp_libs = @shp_libs@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
@@ -527,7 +531,7 @@ lib_LTLIBRARIES = $(lt_gd) $(lt_cairo) libgxdX11.la libgxdummy.la libgradspy.la
 @USECAIRO_TRUE@libgxdCairo_la_SOURCES = gxX.c gxC.c
 @USEGD_TRUE@libgxpGD_la_SOURCES = gxprintGD.c gxGD.c
 libgxdummy_la_SOURCES = gxdummy.c
-libgxdX11_la_SOURCES = gxX11.c gxdxwd.c
+libgxdX11_la_SOURCES = gxX11.c 
 grads_SOURCES = grads.c  gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
 		gxwmap.c gxshad.c gxshad2.c gaexpr.c gafunc.c gautil.c gagx.c \
 		gscrpt.c gamach.c gatxt.c   galloc.c gaddes.c gacfg.c  gaio.c \
@@ -535,7 +539,7 @@ grads_SOURCES = grads.c  gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
                 $(src_gui) $(src_gadap) 
 
 EXTRA_grads_SOURCES = gagmap.c gagui.c gsgui.c dodstn.c \
-                      gxprintGD.c gxGD.c gxdxwd.c gxX11.c \
+                      gxprintGD.c gxGD.c gxX11.c \
                       gxprint.c gxC.c gxX.c gxdummy.c 
 
 hdr_core = grads.h  gatypes.h bitmaps.h bitmaps2.h gvt.h wx.h gs.h
@@ -545,7 +549,7 @@ noinst_HEADERS = $(hdr_core) $(hdr_ga) $(hdr_gx)
 DISTCLEANFILES = buildinfo.h config.h
 supp_include_dir = $(SUPPLIBS)/include
 supp_lib_dir = $(SUPPLIBS)/lib
-LDADD = -L$(supp_lib_dir) $(geotiff_ldflags) $(gd_ldflags)
+LDADD = -L$(supp_lib_dir) $(geotiff_ldflags) $(shp_ldflags) $(gd_ldflags)
 common_ldadd = $(LDADD) $(host_ldadd) 
 X11_ldadd = $(X_LIBS) $(X_PRE_LIBS) -lX11 -lXext $(X_EXTRA_LIBS)
 AM_CPPFLAGS = -I. -I$(supp_include_dir) $(gui_inc) $(nc_inc) \
@@ -893,9 +897,6 @@ libgxdCairo_la-gxC.lo: gxC.c
 
 libgxdX11_la-gxX11.lo: gxX11.c
 	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgxdX11_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgxdX11_la-gxX11.lo `test -f 'gxX11.c' || echo '$(srcdir)/'`gxX11.c
-
-libgxdX11_la-gxdxwd.lo: gxdxwd.c
-	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgxdX11_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgxdX11_la-gxdxwd.lo `test -f 'gxdxwd.c' || echo '$(srcdir)/'`gxdxwd.c
 
 libgxdummy_la-gxdummy.lo: gxdummy.c
 	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgxdummy_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgxdummy_la-gxdummy.lo `test -f 'gxdummy.c' || echo '$(srcdir)/'`gxdummy.c

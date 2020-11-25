@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* Authored by B. Doty */
 
@@ -340,9 +340,9 @@ struct gxdsubs* getdsubs() {
 void gxcfg (char *gxdopt, char *gxpopt) {
   const char *dname,*pname;
   dname=(const char *)gaqupb(gxdopt,3);
-  printf(" -+- GX Display \"%s\"  %s  ",gxdopt,dname); dsubs.gxdcfg(); printf("\n");
+  printf("  +  GX Display \"%s\"  %s  ",gxdopt,dname); dsubs.gxdcfg(); printf("\n");
   pname=(const char *)gaqupb(gxpopt,4);
-  printf(" -+- GX Print   \"%s\"  %s  ",gxpopt,pname); psubs.gxpcfg(); printf("\n");
+  printf("  +  GX Print   \"%s\"  %s  ",gxpopt,pname); psubs.gxpcfg(); printf("\n");
 }
 
 /* Terminate graphics output */

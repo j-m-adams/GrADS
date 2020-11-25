@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* qqq resolve gxdraw vs gxsdrw issue for cterp off */
 /* qqq clip labels and masking outside of parea */

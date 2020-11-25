@@ -334,18 +334,16 @@ echo -------
 # check in supplibs directory 
 if test "Z$ga_supplib_dir" != "Z" ; then 
   echo looking in $ga_supplib_dir
-  GA_SET_FLAGS([],[],[-ltiff])
+  GA_SET_FLAGS([],[],[],[-ltiff])
   AC_CHECK_HEADER(geotiff.h,
   [ AC_CHECK_HEADER(geotiffio.h,
     [ AC_CHECK_HEADER(xtiffio.h, 
-      [ AC_CHECK_LIB([tiff], [main], 
-        [ AC_CHECK_LIB([geotiff], [main], 
-          [ have_geotiff=yes
-            have_tiff=yes
-#            GA_SET_LIB_VAR([geotiff_libs], [tiff geotiff])
-            GA_SET_DYNLIB_VAR([geotiff_libs], [tiff geotiff])
-            use_geotiff=yes
-          ])
+      [ AC_CHECK_LIB([geotiff], [main], 
+        [ have_geotiff=yes
+          have_tiff=yes
+#          GA_SET_LIB_VAR([geotiff_libs], [tiff geotiff])
+          GA_SET_DYNLIB_VAR([geotiff_libs], [tiff geotiff])
+          use_geotiff=yes
         ])
       ])
     ])
@@ -355,8 +353,8 @@ fi
 # check in system locations
 if test "$use_geotiff" != "yes" -a "$ga_dyn_supplibs" = "yes" ; then
   echo looking in other system locations
-  AC_CHECK_GEOTIFF([
-    LDFLAGS="$LDFLAGS $GEOTIFF_LDFLAGS"
+  AC_CHECK_GEOTIFF(
+  [ LDFLAGS="$LDFLAGS $GEOTIFF_LDFLAGS"
     geotiff_inc="$GEOTIFF_CFLAGS"
     geotiff_libs="$GEOTIFF_LIBS"
     geotiff_ldflags="$GEOTIFF_LDFLAGS"
@@ -372,6 +370,7 @@ else
   AC_SUBST(geotiff_libs)
   AC_SUBST(geotiff_ldflags)
 fi
+
 
 
 # * * * SHAPELIB * * *
@@ -395,9 +394,12 @@ fi
 # check in system locations
 if test "$use_shp" != "yes" -a "$ga_dyn_supplibs" = "yes" ; then
   echo looking in other system locations
-  GA_CHECK_LIB_SHP(
-  [ use_shp=yes 
-    shp_libs=$SHP_LIBS
+  GA_CHECK_LIB_SHP([
+    use_shp=yes 
+    LDFLAGS="$LDFLAGS $SHP_LDFLAGS"
+    shp_inc="$SHP_CFLAGS"
+    shp_libs="$SHP_LIBS"
+    shp_ldflags="$SHP_LDFLAGS"
   ])
 fi
 # set output variables
@@ -406,6 +408,8 @@ if test "$use_shp" != "yes" ; then
 else
   AC_DEFINE(USESHP, 1, [Enable shapefile])
   AC_SUBST(shp_libs)
+  AC_SUBST(shp_inc)
+  AC_SUBST(shp_ldflags)
 fi
 
 
@@ -667,8 +671,8 @@ echo -------
 if test "Z$ga_supplib_dir" != "Z" ; then 
   echo looking in $ga_supplib_dir 
   GA_SET_FLAGS([])
-  AC_CHECK_HEADER([udunits.h], 
-  [ AC_CHECK_LIB([udunits], [utInit], 
+  AC_CHECK_HEADER([udunits2.h], 
+  [ AC_CHECK_LIB([udunits2], [main], 
     [ have_udunits=yes 
     ])
   ])
@@ -677,10 +681,8 @@ fi
 # check in system locations
 if test "$have_udunits" = "no" -a "$ga_dyn_supplibs" = "yes" ; then
   echo looking in other system locations
-  AC_CHECK_UDUNITS([
+  AC_CHECK_UDUNITS2([
     have_udunits=yes
-#    udunits_inc="$UDUNITS_CFLAGS"
-#    udunits_libs="$UDUNITS_LIBS"
   ])
 fi
 
@@ -692,14 +694,12 @@ echo ----
 if test "Z$ga_supplib_dir" != "Z" ; then 
   if test "$have_zlib" = "yes" -a "$have_jpeg" = "yes" -a "$have_udunits" = "yes" ; then
     echo looking in $ga_supplib_dir 
-    GA_SET_FLAGS([])
+    GA_SET_FLAGS([], [], [], [-ldf])
     AC_CHECK_HEADER([mfhdf.h],
-    [ AC_CHECK_LIB([df], [main], 
-      [ AC_CHECK_LIB([mfhdf], [main],
-        [ use_hdf=yes 
-#          GA_SET_LIB_VAR([hdf_libs], [mfhdf df jpeg z udunits])
-          GA_SET_DYNLIB_VAR([hdf_libs], [mfhdf df jpeg z udunits])
-        ])
+    [ AC_CHECK_LIB([mfhdf], [main],
+      [ use_hdf=yes 
+#        GA_SET_LIB_VAR([hdf_libs], [mfhdf df jpeg z udunits])
+        GA_SET_DYNLIB_VAR([hdf_libs], [mfhdf df jpeg z udunits2])
       ])
     ])
     GA_UNSET_FLAGS
@@ -742,7 +742,7 @@ if test "$have_udunits" = "yes" ; then
 	if test ! -f "$NC_CONFIG" || test ! -x "$NC_CONFIG"; then
           use_nc4="no"
 #          GA_SET_LIB_VAR(nc_libs, [udunits netcdf])
-          GA_SET_DYNLIB_VAR(nc_libs, [udunits netcdf])
+          GA_SET_DYNLIB_VAR(nc_libs, [udunits2 netcdf])
         else
           # check if netcdf lib has hdf5 and if dap-enabled
           nchdf5=`$NC_CONFIG --has-hdf5`
@@ -750,7 +750,7 @@ if test "$have_udunits" = "yes" ; then
           if test "$nchdf5" = "yes" -a "$have_curl" = "yes" ; then
             use_nc4="yes"
 #            GA_SET_LIB_VAR(nc_libs, [udunits netcdf hdf5_hl hdf5 curl z])
-            GA_SET_DYNLIB_VAR(nc_libs, [udunits netcdf hdf5_hl hdf5 curl z])
+            GA_SET_DYNLIB_VAR(nc_libs, [udunits2 netcdf hdf5_hl hdf5 curl z])
           fi
         fi
       ])

@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* Include ./configure's header file */
 #ifdef HAVE_CONFIG_H
@@ -23,9 +23,6 @@
 
 /*  gxbcol:  Assign best rgb to color number from standard colormap */
 gaint gxbcol (XStandardColormap*, XColor *);
-void set_display_screen (Display *, gaint);
-void Window_Dump(Window,FILE *);
-void Pixmap_Dump(Window, FILE *, gaint, gaint, gaint, gaint);
 void gxdrbb (gaint, gaint, gadouble, gadouble, gadouble, gadouble, gaint);
 void gxrswd (gaint);
 
@@ -815,41 +812,6 @@ gaint i;
   return;
 }
 
-void gxdbb(filename) /* dump back buffer */
-    char *filename ; 
-{ 
-    FILE *xwdfile ; 
-
-    if (dblmode) { 
-        set_display_screen(display, snum) ; 
-        xwdfile = fopen(filename, "w") ; 
-	if (!xwdfile) { 
-	    fprintf(stderr, "Couldn't open outxwd argument for writing.\n") ; 
-	    return ; 
-	} 
-        fflush(stderr) ; 
-	Window_Dump(win, xwdfile) ; 
-	Pixmap_Dump(pmap, xwdfile, 0, 0, width, height) ; 
-	fclose(xwdfile) ; 
-    } 
-} 
-
-void gxdfb(filename) /* dump front buffer */
-    char *filename ; 
-{ 
-    FILE *xwdfile ; 
-
-    set_display_screen(display, snum) ; 
-    xwdfile = fopen(filename, "w") ; 
-    if (!xwdfile) { 
-        fprintf(stderr, "Couldn't open outxwd argument for writing.\n") ; 
-	return ; 
-    } 
-    fflush(stderr) ; 
-    Window_Dump(win, xwdfile) ; 
-    Pixmap_Dump(win, xwdfile, 0, 0, width, height) ; 
-    fclose(xwdfile) ; 
-} 
 
 void gxdswp (void) {
   if (dblmode) {
@@ -2083,18 +2045,18 @@ Window pop;
 GC gcp;
 
   pch = (char *)malloc(512);
+  tch = (char *)malloc(512);
+  rch = (char *)malloc(512);
   if (pch==NULL) {
     printf ("Memory Allocation Error: Dialog Box\n");
     *(rch+0)='\0';
     return (rch);
   }
-  tch = (char *)malloc(512);
   if (tch==NULL) {
     printf ("Memory Allocation Error: Dialog Box\n");
     *(rch+0)='\0';
     return (rch);
   }
-  rch = (char *)malloc(512);
   if (rch==NULL) {
     printf ("Memory Allocation Error: Dialog Box\n");
     *(rch+0)='\0';

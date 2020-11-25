@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* Authored by B. Doty */
 
@@ -468,36 +468,16 @@ FILE *pdefid=NULL;
     else if (rc==10) gacln(pcm,3);  /* clears user-provided shapefile attributes */
     goto retrn;
   }
-
   else if (cmpwrd("swap",cmd)) {
     if (pcm->dbflg) gxfrme(2);
     gacln(pcm,1);
     goto retrn;
   } 
-
   else if (cmpwrd("outxwd", cmd)) { 
-    if (pcm->batflg) {
-      gaprnt(0,"The outxwd command does not work in batch mode\n");
-      retcod = 1;
-      goto retrn;
-    }
-    char *fname, name_file_xwd[256] ; 
-    fname = nxtwrd(com) ; 
-    if (fname) { 
-      if (sscanf(fname, "%s", name_file_xwd) == 1) { 
-	if (pcm->dbflg) { 
-	  dsubs->gxdbb(name_file_xwd) ; 
-	} else { 
-	  dsubs->gxdfb(name_file_xwd) ; 
-	} 
-      } 
-    } else { 
-      gaprnt(0,"command outxwd: missing output filename\n") ; 
-    } 
-    gacln(pcm,1) ; 
+    gaprnt(0,"The outxwd command has been retired. Use \"gxprint\" instead.\n");
+    retcod = 1;
     goto retrn;
-  } 
-
+  }
   else if (cmpwrd("q",cmd)||cmpwrd("query",cmd)) {
     retcod = gaqury (cmd, com, pcm);
     goto retrn;
@@ -2836,12 +2816,10 @@ long *lptr=NULL;
 gafloat *fptr=NULL;
 gadouble *dptr=NULL;
 size_t sz;
-#if (USENETCDF == 1 || USEHDF == 1)
 struct dt tdef, tdefi;
 char *tfile, *tfile2;
 gaint ncid=0, rc, error, n_atts, n_gatts;
 gaint sdid=0;
-#endif
 #if USEHDF5 == 1
 hid_t h5id=-999;
 hid_t fid=-999;

@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /*  
    Reads the metadata from a Self-Describing File 
@@ -28,24 +28,25 @@
 #include <math.h>
 #include <ctype.h>
 #include "grads.h"
+#include "gasdf.h"
 #if USENETCDF==1
 #include "netcdf.h"
 #include "gasdf_std_time.h"
 #endif
-#include "udunits.h"
-#include "gasdf.h"
 #if USEHDF == 1
 #include "mfhdf.h"
 #endif
+#include "udunits2.h"
 
 
 extern struct gamfcmn mfcmn ;
 extern FILE *descr ;
 
-char *gxgnam(char *) ;     /* This is also in gx.h */
-static char pout[1256];    /* Build error msgs here */
-gaint utISinit = 0 ;
-
+char *gxgnam(char *);          /* This is also in gx.h */
+static char pout[1256];        /* Build error msgs here */
+static gaint utSysInit = 0;    /* Flag for udunits2 system initialization */
+static ut_system *utSys=NULL;  /* Pointer to udunits2 system */
+static ut_unit *second=NULL, *feet=NULL, *pascals=NULL, *kelvins=NULL;  /* known unit pointers */
 
 /* STNDALN requires gaxdfopen routine and others contained therein, 
    which turns out to be everything except the gasdfopen() routine. 
@@ -63,6 +64,9 @@ gaint gasdfopen (char *args, struct gacmn *pcm) {
   char pathname[4096];
   GASDFPARMS parms ;
 
+  /* initialize the udunits2 unit system */
+  if (initUnitSys() == Failure) return Failure;
+ 
   /* allocate memory for the gafile structure */
   pfi = getpfi();
   if (pfi == NULL) {
@@ -149,6 +153,9 @@ gaint gaxdfopen (char *args, struct gacmn *pcm) {
   gaint flag;
   GASDFPARMS parms ;
 
+  /* initialize the udunits2 unit system */
+  if (initUnitSys() == Failure) return Failure;
+ 
   /* allocate memory for gafile structure */
   pfi = getpfi();
   if (pfi == NULL) {
@@ -247,8 +254,51 @@ gaint gaxdfopen (char *args, struct gacmn *pcm) {
   if (pfi->pa2mb) {
     gaprnt(1,"Notice: Z coordinate pressure values have been converted from Pa to mb\n");
   }
+
+  /* release memory */
   freeparms(&parms);
+
   return Success;
+}
+
+/* Initialize the udunit2 unit system */
+gaint initUnitSys(void) {
+  char *utname;
+  gaint rc;
+
+  if (!utSysInit) {
+    utname = gxgnam("udunits2.xml") ;
+    if (utname != NULL) {
+      /* Suppress error messages */
+      ut_set_error_message_handler(ut_ignore);
+
+      /* Initialize the udunits2 unit-system */
+      if ((utSys = ut_read_xml(utname)) == NULL) {
+	gaprnt(0, "Error: UDUNITS2 package initialization failure.\n") ;
+	return Failure ;
+      }
+      /* set up some known units that we'll check against in other subroutines */
+      if ((second = ut_get_unit_by_name(utSys, "second")) == NULL) {
+	gaprnt(0, "Error: The udunits library doesn't know 'second'\n") ;
+	return Failure;
+      }
+      if ((feet = ut_get_unit_by_name(utSys, "feet")) == NULL) {
+	gaprnt(0, "Error: The udunits library doesn't know 'feet'\n") ;
+	return Failure;
+      }
+      if ((pascals = ut_get_unit_by_name(utSys, "pascals")) == NULL) {
+	gaprnt(0, "Error: The udunits library doesn't know 'pascals'\n") ;
+	return Failure;
+      }
+      if ((kelvins = ut_get_unit_by_name(utSys, "kelvins")) == NULL) {
+	gaprnt(0, "Error: The udunits library doesn't know 'kelvins'\n") ;
+	return Failure;
+      }
+      utSysInit = 1 ;
+    }
+  }
+  return Success;
+
 }
 
 
@@ -263,36 +313,27 @@ struct sdfnames *varnames;
 struct gaens *ens;
 struct dt dt2,tdef,tdefi,tdefe;
 gadouble v1,v2,*zvals,*tvals=NULL,*evals=NULL;
-gadouble time1,time2,lat1,lat2,lev1,lev2,incrfactor,sf;
+gadouble time1,time2,lat1,lat2,lev1,lev2,incrfactor,sf,sec,res,time1val;
 gafloat dsec;
 size_t len_time_units,trunc_point,sz ;
 gaint len,noname,notinit,nolength;
-gaint i,j,c,rc,flag,fwflg,numdvars,e,t;
+gaint i,j,c,rc,flag,fwflg,numdvars,e,t,ckflg=0;
 gaint iyr,imo,idy,ihr,imn,isec,ispress,isDatavar ;
 gaint xdimid,ydimid,zdimid,tdimid,edimid ;
 gaint istart,icount,havesf,haveao;
-char *ch,*utname,*pos=NULL,*pos1=NULL,*pos2=NULL; 
+char *ch,*pos=NULL,*pos1=NULL,*pos2=NULL; 
 char *time_units=NULL,*trunc_units=NULL,*temp_str ;
-utUnit timeunit ;
+ut_unit *fromUnit=NULL,*toUnit=NULL;
+cv_converter *converter=NULL;
 
   /* Enable griping, disable aborting, from within NetCDF library */
 #if USENETCDF==1
   ncopts = NC_VERBOSE ;
 #endif
-  if (!utISinit) {
-    utname = gxgnam("udunits.dat") ;
-    if (utname != NULL) {
-      if (utInit(utname)) {
-	gaprnt(0, "gadsdf: UDUNITS package initialization failure.\n") ;
-	return Failure ;
-      }
-    }
-    utISinit = 1 ;
-  } 
 
   /* Grab the metadata */
   if (read_metadata(pfi) == Failure) {
-    gaprnt(0, "gadsdf: Couldn't ingest SDF metadata.\n") ;
+    gaprnt(0, "Error: Couldn't ingest SDF metadata.\n") ;
     return Failure ;
   }
   if (!parms.isxdf) {
@@ -418,7 +459,7 @@ utUnit timeunit ;
     /* find an X axis */
       rc = findX(pfi, &Xcoord);
       if ((rc==Failure) || (Xcoord == NULL)) {
-	gaprnt(0, "gadsdf: SDF file has no discernable X coordinate.\n") ;
+	gaprnt(0, "Error: SDF file has no discernable X coordinate.\n") ;
 	gaprnt(0,"  To open this file with GrADS, use a descriptor file with an XDEF entry.\n");
 	gaprnt(0,"  Documentation is at http://cola.gmu.edu/grads/gadoc/SDFdescriptorfile.html\n"); 
 	return Failure ;
@@ -428,7 +469,7 @@ utUnit timeunit ;
       /* find the axis named in the descriptor file */
       Xcoord = find_var(pfi, parms.xdimname) ;
       if (!Xcoord) {
-	snprintf(pout,1255, "gadsdf: Can't find variable %s for X coordinate.\n",parms.xdimname);
+	snprintf(pout,1255, "Error: Can't find variable %s for X coordinate.\n",parms.xdimname);
 	gaprnt(0,pout);
 	return Failure ;
       }
@@ -443,7 +484,7 @@ utUnit timeunit ;
 
     /* set the axis values */
     if ((sdfdeflev(pfi, Xcoord, XINDEX, 0)) == Failure)  {
-      gaprnt(0, "gadsdf: Failed to define X coordinate values.\n") ;
+      gaprnt(0, "Error: Failed to define X coordinate values.\n") ;
       return Failure;
     }
 
@@ -452,7 +493,7 @@ utUnit timeunit ;
   if (parms.isxdf && (!parms.xsrch)) {
     xdimid = find_dim(pfi, parms.xdimname) ;
     if (xdimid == -1) {
-      snprintf(pout,1255, "gadsdf: Lon dimension %s is not an SDF dimension.\n",parms.xdimname);
+      snprintf(pout,1255, "Error: Lon dimension %s is not an SDF dimension.\n",parms.xdimname);
       gaprnt(0,pout);
       return Failure;
     }
@@ -471,7 +512,7 @@ utUnit timeunit ;
       rc=0;
       rc = findY(pfi, &Ycoord);
       if ((rc==Failure) || (Ycoord == NULL)) {
-	gaprnt(0, "gadsdf: SDF file has no discernable Y coordinate.\n") ;
+	gaprnt(0, "Error: SDF file has no discernable Y coordinate.\n") ;
 	gaprnt(0,"  To open this file with GrADS, use a descriptor file with a YDEF entry.\n");
 	gaprnt(0,"  Documentation is at http://cola.gmu.edu/grads/gadoc/SDFdescriptorfile.html\n"); 
 	return Failure ;
@@ -481,7 +522,7 @@ utUnit timeunit ;
       /* find the axis named in the descriptor file */
       Ycoord = find_var(pfi, parms.ydimname) ;
       if (!Ycoord) {
-	snprintf(pout,1255, "gadsdf: Can't find variable %s for Y coordinate.\n",parms.ydimname);
+	snprintf(pout,1255, "Error: Can't find variable %s for Y coordinate.\n",parms.ydimname);
 	gaprnt(0,pout);
 	return Failure ;
       }
@@ -499,13 +540,13 @@ utUnit timeunit ;
       istart = 0;
       icount = 1; 
       if (read_one_dimension(pfi, Ycoord, istart, icount, &lat1) == Failure) {
-	gaprnt(0, "gadsdf: Error reading first latitude value in SDF file.\n") ;
+	gaprnt(0, "Error: Unable to read first latitude value in SDF file.\n") ;
 	return Failure;
       }
       istart = 1;
       icount = 1;
       if (read_one_dimension(pfi, Ycoord, istart, icount, &lat2) == Failure) {
-	gaprnt(0, "gadsdf: Error reading second latitude value in SDF file.\n") ;
+	gaprnt(0, "Error: Unable to read second latitude value in SDF file.\n") ;
 	return Failure;
       }
       /* Set yrev flag */
@@ -514,7 +555,7 @@ utUnit timeunit ;
     
     /* Read the axis values */
     if ((sdfdeflev(pfi, Ycoord, YINDEX, pfi->yrflg)) == Failure)  {
-      gaprnt(0, "gadsdf: Failed to define Y coordinate values.\n") ;
+      gaprnt(0, "Error: Failed to define Y coordinate values.\n") ;
       return Failure;
     }
 
@@ -523,7 +564,7 @@ utUnit timeunit ;
   if (parms.isxdf && (!parms.ysrch)) {
     ydimid = find_dim(pfi, parms.ydimname) ;
     if (ydimid == -1) {
-      snprintf(pout,1255,"gadsdf: Lat dimension %s is not an SDF dimension.\n",parms.ydimname);
+      snprintf(pout,1255,"Error: Lat dimension %s is not an SDF dimension.\n",parms.ydimname);
       gaprnt(0,pout);
       return Failure;
     }
@@ -546,7 +587,7 @@ utUnit timeunit ;
       /* find the axis named in the descriptor file */
       Zcoord = find_var(pfi, parms.zdimname) ;
       if (!Zcoord) {
-	snprintf(pout,1255,"gadsdf: Can't find variable %s for Z coordinate.\n",parms.zdimname);
+	snprintf(pout,1255,"Error: Can't find variable %s for Z coordinate.\n",parms.zdimname);
 	gaprnt(0,pout);
 	return Failure ;
       }
@@ -556,7 +597,7 @@ utUnit timeunit ;
       pfi->dnum[ZINDEX] = 1 ;
       sz = sizeof(gadouble)*6;
       if ((zvals = (gadouble *)galloc(sz,"zvals")) == NULL) {
-	gaprnt(0,"gadsdf: Unable to allocate memory for dummy Z coordinate axis values\n");
+	gaprnt(0,"Error: Unable to allocate memory for dummy Z coordinate axis values\n");
 	goto err1;
       }
       *(zvals) = 1.0;
@@ -584,13 +625,13 @@ utUnit timeunit ;
 	istart = 0;
 	icount = 1; 
 	if (read_one_dimension(pfi, Zcoord, istart, icount, &lev1) == Failure) {
-	  gaprnt(0, "gadsdf: Error reading first Zcoord value in SDF file.\n") ;
+	  gaprnt(0, "Error: Unable to read first Zcoord value in SDF file.\n") ;
 	  return Failure;
 	}
 	istart = 1;
 	icount = 1;
 	if (read_one_dimension(pfi, Zcoord, istart, icount, &lev2) == Failure) {
-	  gaprnt(0, "gadsdf: Error reading second Zcoord value in SDF file.\n") ;
+	  gaprnt(0, "Error: Unable to read second Zcoord value in SDF file.\n") ;
 	  return Failure;
 	}
 	/* Set zrev flag */
@@ -612,7 +653,7 @@ utUnit timeunit ;
       } 
       /* Read the axis values */
       if ((sdfdeflev(pfi, Zcoord, ZINDEX, pfi->zrflg)) == Failure)  {
-	gaprnt(0, "gadsdf: Failed to define Z coordinate values.\n") ;
+	gaprnt(0, "Error: Failed to define Z coordinate values.\n") ;
 	return Failure;
       }
     }
@@ -621,7 +662,7 @@ utUnit timeunit ;
   if (parms.isxdf && (!parms.zsrch)) {
     zdimid = find_dim(pfi, parms.zdimname) ;
     if (zdimid == -1) {
-      snprintf(pout,1255, "gadsdf: Lev dimension %s is not an SDF dimension.\n",parms.zdimname);
+      snprintf(pout,1255, "Error: Lev dimension %s is not an SDF dimension.\n",parms.zdimname);
       gaprnt(0,pout);
       return Failure;
     }
@@ -643,7 +684,7 @@ utUnit timeunit ;
       /* find the axis named in the descriptor file */
       Tcoord = find_var(pfi, parms.tdimname) ;
       if (!Tcoord) {
-	snprintf(pout,1255, "gadsdf: Can't find variable %s for T coordinate.\n",parms.tdimname);
+	snprintf(pout,1255, "Error: Can't find variable %s for T coordinate.\n",parms.tdimname);
 	gaprnt(0,pout);
 	return Failure ;
       }
@@ -653,7 +694,7 @@ utUnit timeunit ;
       pfi->dnum[TINDEX] = 1 ;
       sz = sizeof(gadouble)*8;
       if ((tvals = (gadouble *) galloc(sz,"tvals1")) == NULL) {
-	gaprnt(0, "gadsdf: memory allocation failed for dummy time coordinate info.\n") ;
+	gaprnt(0, "Error: memory allocation failed for dummy time coordinate info.\n") ;
 	return Failure ;
       }
       tvals[0] = 1.0 ; /* initial year */
@@ -684,7 +725,7 @@ utUnit timeunit ;
 	    (!strncasecmp((char *)attr->value,"365_day",     7)) ||
 	    (!strncasecmp((char *)attr->value,"noleap",      6))) {
 	  
-	  gaprnt(0,"SDF Error: 365 day calendars are no longer supported by sdfopen.\n"); 
+	  gaprnt(0,"Error: 365 day calendars are not supported by sdfopen.\n"); 
 	  gaprnt(0,"  To open this file with GrADS, use a descriptor file with \n");
 	  gaprnt(0,"  a complete TDEF entry and OPTIONS 365_day_calendar. \n");
 	  gaprnt(0,"  Documentation is at http://cola.gmu.edu/grads/gadoc/SDFdescriptorfile.html\n"); 
@@ -703,21 +744,21 @@ utUnit timeunit ;
       timeunits_attr = NULL;
       timeunits_attr = find_att(Tcoord->longnm, pfi->attr, "units") ;
       if (!timeunits_attr) {
-	gaprnt(0, "gadsdf: Couldn't find units attribute for Time coordinate.\n") ;
+	gaprnt(0, "Error: Couldn't find units attribute for Time coordinate.\n") ;
 	return Failure;
       }
       /* Read first two values to deduce time increment */
       istart = 0;
       icount = 1; 
       if (read_one_dimension(pfi, Tcoord, istart, icount, &time1) == Failure) {
-	gaprnt(0, "gadsdf: Error reading first time value in SDF file.\n") ;
+	gaprnt(0, "Error: Unable to read first time value in SDF file.\n") ;
 	return Failure;
       }
       if (pfi->dnum[TINDEX] > 1)  {
 	istart = 1;
 	icount = 1;
 	if (read_one_dimension(pfi, Tcoord, istart, icount, &time2) == Failure) {
-	  gaprnt(0, "gadsdf: Error reading second time values in SDF file.\n") ;
+	  gaprnt(0, "Error: Unable to read second time values in SDF file.\n") ;
 	  return Failure;
 	}
       } 
@@ -726,10 +767,10 @@ utUnit timeunit ;
       }
       sz = sizeof(gadouble)*8;
       if ((tvals = (gadouble *) galloc(sz,"tvals2")) == NULL) {
-	gaprnt(0,"Error finding storage to define time coordinate in SDF file.\n") ;
+	gaprnt(0,"Error: Unable to allocate memory for time coordinate in SDF file.\n") ;
 	return Failure; 
       }
-	
+
       /* Handle YYMMDDHH time */
       if ((timeunits_attr->nctype==1) && 
 	  (timeunits_attr->len < 10) &&  
@@ -753,7 +794,7 @@ utUnit timeunit ;
 	    tvals[5] = 0.0 ;
 	    tvals[6] = (dt2.dy * 1440.0) + (dt2.hr * 60.0) + dt2.mn ;
 	    if (tvals[6] < 1.0) {
-	      gaprnt(0, "gadsdf: Time unit has too small an increment (min. 1 minute).\n") ;
+	      gaprnt(0, "Error: Time unit has too small an increment (min. 1 minute).\n") ;
 	      goto err2;
 	    }
 	  }
@@ -767,7 +808,7 @@ utUnit timeunit ;
       /* Handle YYYYMMDDHHMMSS time */
       else if (pfi->time_type == CDC) {
 	if (!decode_standard_time(time1, &iyr, &imo, &idy, &ihr, &imn, &dsec)) {
-	  gaprnt(0, "gadsdf: Error deciphering initial time value in SDF file.\n") ;
+	  gaprnt(0, "Error: Unable to decipher initial time value in SDF file.\n") ;
 	  goto err2;
 	}
 	if (iyr <= 0) iyr = 1 ;
@@ -784,12 +825,12 @@ utUnit timeunit ;
 	  deltat_attr = NULL;
 	  deltat_attr = find_att(Tcoord->longnm, pfi->attr, "delta_t") ;
 	  if (!deltat_attr) {
-	    gaprnt(0, "gadsdf: Error in determining time increment in SDF file.\n") ;
+	    gaprnt(0, "Error: Unable to find 'delta_t' attribute in SDF file.\n") ;
 	    goto err2;
 	  }
 	  ch = (char *) deltat_attr->value ;
 	  if (!decode_delta_t(ch, &dt2.yr, &dt2.mo, &dt2.dy, &dt2.hr, &dt2.mn, &isec)) {
-	    gaprnt(0, "gadsdf: Error deciphering time increment in SDF file.\n") ;
+	    gaprnt(0, "Error: Unable to decipher 'delta_t' attribute in SDF file.\n") ;
 	    goto err2;
 	  }
 	  if ((dt2.yr > 0) || (dt2.mo > 0)) {
@@ -799,7 +840,7 @@ utUnit timeunit ;
 	    tvals[5] = 0.0 ;
 	    tvals[6] = (dt2.dy * 1440.0) + (dt2.hr * 60.0) + dt2.mn ;
 	    if (tvals[6] < 1.0) {
-	      gaprnt(0, "gadsdf: Time unit has too small an increment (min. 1 minute).\n") ;
+	      gaprnt(0, "Error: Time increment 'delta_t' is too small (min. 1 minute).\n") ;
 	      goto err2;
 	    }
 	  }
@@ -819,7 +860,7 @@ utUnit timeunit ;
 	  sz = len_time_units;
 	  time_units = (char *) galloc(sz,"time_un1") ;
 	  if (time_units==NULL) {
-	    gaprnt(0, "gadsdf: Memory allocation error for time_units\n") ;
+	    gaprnt(0, "Error: Memory allocation error for time_units\n") ;
 	    goto err2;
 	  }
 	  strcpy(time_units, (char *) timeunits_attr->value);
@@ -830,21 +871,41 @@ utUnit timeunit ;
 	  sz = len_time_units;
 	  time_units = (char *) galloc(sz,"time_un2") ;
 	  if (time_units==NULL) {
-	    gaprnt(0, "gadsdf: Memory allocation error for time_units\n");
+	    gaprnt(0, "Error: Memory allocation error for time_units\n");
 	    goto err2;
 	  }
 	  strcpy(time_units, (char *) timeunits_attr->value);
 	} 
 	/* convert unit string to a udunits format */
-	if (utScan(time_units, &timeunit)) {
-	  gaprnt(0, "gadsdf: Error parsing time_units for SDF file.\n") ;
+	fromUnit = ut_parse(utSys, time_units, UT_ASCII);
+        if (fromUnit == NULL) {
+	  snprintf(pout,1255, "Error: Unable to parse time units (%s) from SDF file.\n",time_units) ;
+	  gaprnt(0,pout);
 	  goto err2;
 	}
+
 	/* convert udunits-formatted time to integer values for yr, mo, etc. */
-	if (utCalendar (time1, &timeunit, &iyr, &imo, &idy, &ihr, &imn, &dsec)) {
-	  gaprnt(0,"gadsdf: Error decoding initial udunits time value in SDF file.\n") ;
+	ckflg = 0;
+	toUnit = ut_offset_by_time(second, ut_encode_time(2001, 1, 1, 0, 0, 0.0));
+	if (toUnit != NULL) { 
+	  /* the check for campatibility was also done in findT */
+	  if (ut_are_convertible(fromUnit, toUnit)) { 
+	    /* convert the unit to 'seconds since 2001-1-1 00:00:0.0' */
+	    converter = ut_get_converter(fromUnit, toUnit);
+	    if (converter != NULL) {
+	      time1val = cv_convert_double(converter,time1); 
+	      /* decode the converted value to integer values for yr, mo, dy, et al. */
+	      ut_decode_time(time1val, &iyr, &imo, &idy, &ihr, &imn, &sec, &res);
+	      cv_free(converter);
+	      ckflg = 1;
+	    }
+	  }
+	}
+	if (!ckflg) {
+	  gaprnt(0,"Error: Unable to decode initial time value in SDF file.\n") ;
 	  goto err2;
 	}
+
 	if (imo == 0) imo = 1 ;
 	if (idy == 0) idy = 1 ;
 	tvals[0] = iyr ;
@@ -864,18 +925,22 @@ utUnit timeunit ;
 	  sz = trunc_point+1;
           trunc_units = (char *) galloc(sz,"trunc_units");
 	  if (trunc_units==NULL) {
-	    gaprnt(0,"gadsdf: Memory Allocation Error for trunc_units\n");
+	    gaprnt(0,"Error: Memory Allocation Error for trunc_units\n");
 	    goto err2;
 	  }
 	  strncpy(trunc_units, time_units, trunc_point) ;
 	  trunc_units[trunc_point] = '\0' ;
 	  istart = 1 ;
 	  incrfactor = time2 - time1 ;
-	    
-	  if (compare_units("year", trunc_units) == Success) /* match is 1 */ {
+
+	  /* printf("JMA time1 is %02d:%02dZ %4d-%02d-%02d  incr = %g %s\n", */
+	  /* 	 ihr,imn,iyr,imo,idy,incrfactor,trunc_units); */
+	
+	  if (compare_units("year", trunc_units) == Success) {
 	    tvals[5] = 12.0 * incrfactor;
 	    if (tvals[5] < 1.0) {
-	      gaprnt(0, "gadsdf: Time unit has too small an increment (min. 1 minute).\n") ;
+	      snprintf(pout,1255,"Error: Yearly time unit has too small an increment: %g (%g months)\n",incrfactor,tvals[5]) ;
+	      gaprnt(0, pout);
 	      goto err2;
 	    }
 	    tvals[6] = 0.0 ;
@@ -890,7 +955,7 @@ utUnit timeunit ;
 	      tvals[5] = incrfactor;
 	      tvals[6] = 0.0 ;
 	      if (tvals[5] < 1.0) {
-		gaprnt(0, "gadsdf: Fractional months are ill-defined and not supported by GrADS\n") ;
+		gaprnt(0, "Error: Fractional months are ill-defined and not supported by GrADS\n") ;
 		goto err2;
 	      }
 	    } 
@@ -900,7 +965,8 @@ utUnit timeunit ;
 		/* round this to the nearest minute */
 		tvals[6]=floor(tvals[6]+0.5);
 		if (tvals[6] < 1.0) {
-		  gaprnt(0, "gadsdf: Time unit has too small an increment (min. 1 minute).\n") ;
+		  snprintf(pout,1255,"Error: Daily time unit has too small an increment %g (%g minutes)\n",incrfactor,tvals[6]);
+		  gaprnt(0, pout);
 		  goto err2;
 		}
 	      } 
@@ -911,7 +977,8 @@ utUnit timeunit ;
 		tvals[5] = ((gaint) (incrfactor + 0.5)) / 28;
 		tvals[6] = 0.0 ;
 		if (tvals[5] < 1.0) {
-		  gaprnt(0, "gadsdf: Time unit has too small an increment (min. 1 minute).\n") ;
+		  snprintf(pout,1255,"Error: Daily time unit has too small an increment %g (%g months)\n",incrfactor,tvals[5]);
+		  gaprnt(0, pout);
 		  goto err2;
 		}
 	      } 
@@ -925,7 +992,8 @@ utUnit timeunit ;
 	      if (incrfactor < (28.0 * 24.0)) {
 		tvals[6] = incrfactor * 60.0 ;
 		if (tvals[6] < 1.0) {
-		  gaprnt(0, "gadsdf: Time unit has too small an increment (min. 1 minute).\n") ;
+		  snprintf(pout,1255,"Error: Hourly time unit has too small an increment %g (%g minutes)\n",incrfactor,tvals[6]);
+		  gaprnt(0, pout);
 		  goto err2;
 		}
 	      } 
@@ -940,7 +1008,8 @@ utUnit timeunit ;
 		  tvals[6] = 0.0 ;
 		}
 		if (tvals[5] < 1.0) {
-		  gaprnt(0, "gadsdf: Time unit has too small an increment (min. 1 minute).\n") ;
+		  snprintf(pout,1255,"Error: Hourly time unit has too small an increment %g (%g months)\n",incrfactor,tvals[5]);
+		  gaprnt(0, pout);
 		  goto err2;
 		}
 	      }
@@ -950,7 +1019,8 @@ utUnit timeunit ;
 		tvals[5] = 0.0 ;
 		tvals[6] = incrfactor ;
 		if (tvals[6] < 1.0) {
-		  gaprnt(0, "gadsdf: Time unit has too small an increment (min. 1 minute).\n") ;
+		  snprintf(pout,1255,"Error: Minutes time unit has too small an increment: %g (must be >= 1)\n",incrfactor) ;
+		  gaprnt(0,pout);
 		  goto err2;
 		}
 	      } 
@@ -960,14 +1030,16 @@ utUnit timeunit ;
 		  tvals[6] = 0.0 ;
 		} 
 		else {
-		  gaprnt(0,"gadsdf: Time increment is too large for 'minutes since' time units attribute\n");
+		  snprintf(pout,1255,"Error: Time increment %g is too large for 'minutes since' time units attribute\n",incrfactor);
+		  gaprnt(0,pout);
 		  goto err2;
 		}
 	      }
 	    } 
 	    else if (compare_units("seconds", trunc_units) == Success) {
 	      if (incrfactor < 60.0) {
-		gaprnt(0, "gadsdf: Time unit has too small an increment (min. 1 minute).\n") ;
+		snprintf(pout,1255, "Error: Time increment %g is too small for 'seconds since' time units attribute (must be >= 60)\n",incrfactor) ;
+		gaprnt(0, pout);
 		goto err2;
 	      } 
 	      else {
@@ -982,14 +1054,15 @@ utUnit timeunit ;
 		    tvals[6] = 0.0 ;
 		  } 
 		  else {
-		    gaprnt(0,"gadsdf: Time increment is too large for 'seconds since' time units attribute\n");
+		    snprintf(pout,1255,"Error: Time increment %g is too large for 'seconds since' time units attribute\n",incrfactor);
+		    gaprnt(0,pout);
 		    goto err2;
 		  }
 		}
 	      }
 	    } 
 	    else {
-	      gaprnt(0, "gadsdf: Error parsing time units in SDF file.\n") ;
+	      gaprnt(0,"Error: Unable to parse time units in SDF file.\n") ;
 	      goto err2;
 	    }
 	  } /* finer than years resolution */
@@ -998,6 +1071,8 @@ utUnit timeunit ;
 	  /* only one time step */
 	  tvals[5] = 0.0 ;
 	  tvals[6] = 1.0 ; /* one time-step files get a (meaningless) delta t of one minute */
+	  /* printf("JMA time1 is %02d:%02dZ %4d-%02d-%02d\n",ihr,imn,iyr,imo,idy); */
+
 	} 
 	if (time_units)  gree(time_units,"f1");
 	if (trunc_units) gree(trunc_units,"f2") ;
@@ -1017,7 +1092,7 @@ utUnit timeunit ;
     if (parms.tdimname != NULL) {
       tdimid = find_dim(pfi, parms.tdimname) ;
       if (tdimid == -1) {
-	snprintf(pout,1255, "gadsdf: Time dimension %s is not an SDF dimension.\n",parms.tdimname);
+	snprintf(pout,1255, "Error: Time dimension %s is not an SDF dimension.\n",parms.tdimname);
 	gaprnt(0,pout);
 	return Failure;
       }
@@ -1042,7 +1117,7 @@ utUnit timeunit ;
       /* find the axis named in the descriptor file */
       Ecoord = find_var(pfi, parms.edimname) ;
       if (!Ecoord) {
-	snprintf(pout,1255,"gadsdf: Can't find variable %s for Ensemble coordinate.\n",parms.edimname);
+	snprintf(pout,1255,"Error: Can't find variable %s for Ensemble coordinate.\n",parms.edimname);
 	gaprnt(0,pout);
 	return Failure ;
       }
@@ -1054,7 +1129,7 @@ utUnit timeunit ;
 	/* set up linear scaling */
 	sz = sizeof(gadouble)*6;
 	if ((evals = (gadouble *)galloc(sz,"evals")) == NULL) {
-	  gaprnt(0,"gadsdf: memory allocation failed for default ensemble dimension scaling values\n");
+	  gaprnt(0,"Error: memory allocation failed for default ensemble dimension scaling values\n");
 	  goto err1;
 	}
 	v1=v2=1;
@@ -1072,7 +1147,7 @@ utUnit timeunit ;
 	/* allocate a single ensemble structure */
 	sz = sizeof(struct gaens);
 	if ((ens = (struct gaens *)galloc(sz,"ens1")) == NULL) {
-	  gaprnt(0,"gadsdf: memory allocation failed for default E axis values\n");
+	  gaprnt(0,"Error: memory allocation failed for default E axis values\n");
 	  goto err1;
 	}
 	pfi->ens1 = ens;
@@ -1097,7 +1172,7 @@ utUnit timeunit ;
 	/* set up linear scaling */
 	sz = sizeof(gadouble)*6;
 	if ((evals = (gadouble *)galloc(sz,"evals1")) == NULL) {
-	  gaprnt(0,"gadsdf: memory allocation failed for ensemble dimension scaling values\n");
+	  gaprnt(0,"Error: memory allocation failed for ensemble dimension scaling values\n");
 	  goto err1;
 	}
 	v1=v2=1;
@@ -1116,7 +1191,7 @@ utUnit timeunit ;
 	/* allocate an array of ensemble structures */
 	sz = pfi->dnum[EINDEX] * sizeof(struct gaens); 
 	if ((ens = (struct gaens *)galloc(sz,"ens2")) == NULL) {
-	  gaprnt(0,"gadsdf: memory allocation failed for E axis values\n");
+	  gaprnt(0,"Error: memory allocation failed for E axis values\n");
 	  goto err1;
 	}
 	pfi->ens1 = ens;
@@ -1206,7 +1281,7 @@ utUnit timeunit ;
   if (parms.isxdf && (!parms.esrch)) {
     edimid = find_dim(pfi, parms.edimname) ;
     if (edimid == -1) {
-      snprintf(pout,1255,"gadsdf: Ensemble dimension %s is not an SDF dimension.\n",parms.edimname);
+      snprintf(pout,1255,"Error: Ensemble dimension %s is not an SDF dimension.\n",parms.edimname);
       gaprnt(0,pout);
       return Failure;
     }
@@ -1328,14 +1403,14 @@ utUnit timeunit ;
     i++; pvar++;
   }                                                                                      
   if (numdvars == 0) {
-    gaprnt(0,"gadsdf: SDF file does not have any non-coordinate variables.\n") ;
+    gaprnt(0,"Error: SDF file does not have any non-coordinate variables.\n") ;
     return Failure;
   } 
   else {
     /* allocate a new array of gavar structures */
     sz = numdvars*sizeof(struct gavar);
     if ((newpvar = (struct gavar *) galloc(sz,"newpvar")) == NULL) {
-      gaprnt(0, "gadsdf: unable to allocate memory for data variable array.\n");
+      gaprnt(0, "Error: unable to allocate memory for data variable array.\n");
       goto err1;
     }
     savepvar=newpvar;
@@ -1382,29 +1457,52 @@ err2:
   if (tvals) gree(tvals,"f7");
   return Failure;
 err1:
-  gaprnt (0,"gadsdf: Memory allocation error\n");
+  gaprnt (0,"Error: Memory allocation error\n");
   return Failure;
 
-}
+} /* end of gadsdf() */
 
-int compare_units(char *test_unit, char *trunc_unit) {
-  utUnit testing_unit, truncated_unit ;
-  gaint rc ;
-  gadouble slope, intercept ;
-    
-  rc = utScan(test_unit, &testing_unit) ;
-  if (rc != 0) return Failure ;
+gaint compare_units(char *known_name, char *trunc_unit) {
+  ut_unit *knownUnit=NULL, *thisUnit=NULL ;
+  cv_converter *converter=NULL;
+  gadouble slope, intercept;
+  gaint rc;    
 
-  rc = utScan(trunc_unit, &truncated_unit) ;
-  if (rc != 0) return Failure;
+  /* Remove leading/trailing blanks */
+  trunc_unit = ut_trim(trunc_unit, UT_ASCII);
 
-  rc = utConvert(&truncated_unit, &testing_unit, &slope, &intercept) ;
-  if (rc != 0) return Failure;
-
-  if (dequal(slope, 1.0, (gadouble)1.0e-8)==0 && dequal(intercept, 0.0, (gadouble)1.0e-8)==0) 
-    return Success;
+  /* parse strings and get unit objects */
+  knownUnit = ut_parse(utSys, known_name, UT_ASCII);
+  thisUnit  = ut_parse(utSys, trunc_unit, UT_ASCII);
+  if (thisUnit == NULL || knownUnit==NULL) {
+    rc = Failure;
+    goto retrn;
+  }
+  /* make sure units are convertible */
+  if (ut_are_convertible(thisUnit, knownUnit)) { 
+    if ((converter = ut_get_converter(thisUnit, knownUnit)) == NULL) {
+      rc = Failure;
+      goto retrn;
+    }
+    intercept = cv_convert_double(converter, 0.0);
+    slope     = cv_convert_double(converter, 1.0) - intercept;
+    /* check slope and intercept */
+    if (dequal(slope,     1.0, (gadouble)1.0e-8)==0 && 
+	dequal(intercept, 0.0, (gadouble)1.0e-8)==0) {
+      rc = Success;
+      goto retrn;
+    }
+    else
+      rc = Failure;
+  } 
   else 
-    return Failure;
+    rc = Failure;
+
+ retrn:
+  if (knownUnit) ut_free(knownUnit);
+  if (thisUnit)  ut_free(thisUnit);
+  if (converter) cv_free(converter);
+  return rc;
 }
 
 
@@ -1860,7 +1958,7 @@ gaint findY(struct gafile *pfi, struct gavar **Ycoordptr) {
       }
     }
     i++; lclvar++;
-  }
+  }  
   return Failure;
 }
 
@@ -1874,22 +1972,8 @@ gaint findY(struct gafile *pfi, struct gavar **Ycoordptr) {
 gaint findZ(struct gafile *pfi, struct gavar **Zcoordptr, gaint *ispressptr) {
   struct gaattr *attr;
   struct gavar  *lclvar ;
-  gaint iscoordvar, i, j, match;
-  struct utUnit feet, thisguy, pascals, kelvins ;
-  gadouble slope, intcept ;
-
-  if (utScan("feet", &feet) != 0) {
-    gaprnt(0, "The udunits library doesn't know feet; giving up...\n") ;
-    return Failure;
-  }
-  if (utScan("pascals", &pascals) != 0) {
-    gaprnt(0, "The udunits library doesn't know pascals; giving up...\n") ;
-    return Failure;
-  }
-  if (utScan("kelvins", &kelvins) != 0) {
-    gaprnt(0, "The udunits library doesn't know kelvins; giving up...\n") ;
-    return Failure;
-  }
+  gaint iscoordvar, i, j, match, rc;
+  ut_unit *thisguy=NULL;
 
   i=0;
   lclvar=pfi->pvar1;
@@ -1917,7 +2001,8 @@ gaint findZ(struct gafile *pfi, struct gavar **Zcoordptr, gaint *ispressptr) {
 	if (match) {
 	  *Zcoordptr = lclvar ;
 	  *ispressptr = 1 ;
-	  return Success ;
+	  rc = Success;
+	  goto retrn;
 	}
 	match=0;
 	if (!strncasecmp(attr->value, "sigma_level", 11)) match=1;
@@ -1929,29 +2014,33 @@ gaint findZ(struct gafile *pfi, struct gavar **Zcoordptr, gaint *ispressptr) {
 	if (match) {
  	  *Zcoordptr = lclvar ;
 	  *ispressptr = 0 ;
-	  return Success ;
+	  rc = Success;
+	  goto retrn;
 	}
-	/* if we can convert the units to feet, then it could be depth */
-	if (utScan(attr->value, &thisguy) == 0) {
-	  if (utConvert(&thisguy, &feet, &slope, &intcept) == 0) {
+	if ((thisguy = ut_parse(utSys, attr->value, UT_ASCII)) != NULL) {
+          /* if we can convert the units to feet, then it could be depth */
+	  if (ut_are_convertible(thisguy, feet)) {
 	    *Zcoordptr = lclvar ;
 	    *ispressptr = 0 ;
-	    return Success;
+	    rc = Success;
+	    goto retrn;
 	  }
 	  /* if we can convert the units to pascals, then it could be pressure */
-	  if (utConvert(&thisguy, &pascals, &slope, &intcept) == 0) {
+	  if (ut_are_convertible(thisguy, pascals)) {
 	    pfi->pa2mb = 1; 
 	    *Zcoordptr = lclvar ;
 	    *ispressptr = 1 ;
-	    return Success;
+	    rc = Success;
+	    goto retrn;
 	  }
 	  /* if we can convert the units to kelvins, then it could be isothermic */
-	  if (utConvert(&thisguy, &kelvins, &slope, &intcept) == 0) {
+	  if (ut_are_convertible(thisguy, kelvins)) {
 	    *Zcoordptr = lclvar ;
 	    *ispressptr = 0 ;
-	    return Success;
+	    rc = Success;
+	    goto retrn;
 	  }
-	} /* if utScan-able */
+	} /* if unit can be parsed */
       }
       /* look for "axis" attribute */
       attr=NULL;
@@ -1963,13 +2052,18 @@ gaint findZ(struct gafile *pfi, struct gavar **Zcoordptr, gaint *ispressptr) {
 	if (match) {
 	  *Zcoordptr = lclvar ;
           *ispressptr = 0 ;
-	  return Success ;  
+	  rc = Success;
+	  goto retrn;
 	}
       }
     }
     i++; lclvar++;
   } 
-  return Failure;
+  rc = Failure;
+
+ retrn:
+  if (rc == Failure && thisguy) ut_free(thisguy);
+  return rc;
 }
 
 /* find a coordinate variable 
@@ -1979,8 +2073,8 @@ gaint findZ(struct gafile *pfi, struct gavar **Zcoordptr, gaint *ispressptr) {
 gaint findT(struct gafile *pfi, struct gavar **Tcoordptr) {
   struct gaattr *attr ;
   struct gavar *lclvar ;
-  gaint iscoordvar, i, j, match;
-  utUnit timeunit ;
+  gaint iscoordvar, i, j, rc, match;
+  ut_unit *attrUnit=NULL, *timeUnit=NULL;
 
   i=0;
   lclvar=pfi->pvar1;
@@ -2004,12 +2098,19 @@ gaint findT(struct gafile *pfi, struct gavar **Tcoordptr) {
 	if (!strncasecmp((char*)attr->value, "yymmddhh",        8)) match=1;
 	if (match) {
 	  *Tcoordptr = lclvar ;
-	  return Success ;
+	  rc = Success;
+	  goto retrn;
 	}
-	if ((utScan((char*)attr->value, &timeunit)) == 0) { 
-	  if (utIsTime(&timeunit)) { /* will now supply default unit */
+	/* Use udunits to check if this is a time unit */
+	attrUnit = ut_parse(utSys, (char*)attr->value, UT_ASCII);
+	timeUnit = ut_offset_by_time(second, ut_encode_time(2001, 1, 1, 0, 0, 0.0));
+
+	if (attrUnit != NULL && timeUnit != NULL) {
+	  if (ut_are_convertible(attrUnit, timeUnit)) { 
+	    /* we can convert it to known time unit, so we have a T coordinate */
 	    *Tcoordptr = lclvar ;
-	    return Success ;
+	    rc = Success;
+	    goto retrn;
 	  }
 	}
       }
@@ -2022,13 +2123,19 @@ gaint findT(struct gafile *pfi, struct gavar **Tcoordptr) {
 	if (!strncmp(attr->value, "t", 1)) match=1;
 	if (match) {
 	  *Tcoordptr = lclvar ;
-	  return Success ;  
+	  rc = Success;
+	  goto retrn;
 	}
       }
     }
     i++; lclvar++;
   } 
-  return Failure ;
+  rc = Failure ;
+
+ retrn:
+  if (attrUnit) ut_free(attrUnit);
+  if (timeUnit) ut_free(timeUnit);
+  return rc;
 }
 
 /* check for ensemble coordinate variable with attribute "axis" or "grads_dim" equal to "e" */
@@ -2454,7 +2561,7 @@ err2:
 err1:
   close_sdf (pfi);
   return Failure;
-}
+} /* end of read_metadata() */
 
 /* Close a SDF file. */
 void close_sdf (struct gafile *pfi) { 
@@ -2469,12 +2576,12 @@ void close_sdf (struct gafile *pfi) {
 gaint set_time_type (struct gafile *pfi) {
 #if USENETCDF==1
   struct gavar *time, *lclvar;
-  utUnit timeunit ;
+  ut_unit *timeUnit, *checkUnit;
   struct gaattr *attr;
   gaint i,flag;
 
   time = NULL;
-  time = find_var (pfi, cdc_vars[TIME_IX]);
+  time = find_var(pfi, cdc_vars[TIME_IX]);
   if (time == NULL) {
     i=0; flag=1;
     lclvar = pfi->pvar1;  
@@ -2483,11 +2590,15 @@ gaint set_time_type (struct gafile *pfi) {
 	attr = NULL;
 	attr = find_att(lclvar->longnm, pfi->attr, cdc_time_atts[T_UNITS_IX]);
 	if (attr != NULL) {
-	  if ((utScan((char*)attr->value, &timeunit)) == 0) { 
-	    if (utIsTime(&timeunit)) {
+          if ((timeUnit = ut_parse(utSys, (char*)attr->value, UT_ASCII)) != NULL) {
+	    /* if we can convert this unit to seconds, then it's a time unit */
+	    checkUnit = ut_offset_by_time(second, ut_encode_time(2001, 1, 1, 0, 0, 0.0));
+	    if (ut_are_convertible(timeUnit, checkUnit)) { 
 	      time = lclvar ;
 	      flag=0;
 	    }
+	    ut_free(timeUnit);
+	    ut_free(checkUnit);
 	  }
 	}
       }
@@ -3926,7 +4037,7 @@ size_t sz;
     /* set up linear scaling */
     sz = sizeof(gadouble)*6;
     if ((evals = (gadouble *)galloc(sz,"evals")) == NULL) {
-      gaprnt(0,"gadsdf: memory allocation failed for default ensemble dimension scaling values\n");
+      gaprnt(0,"Error: memory allocation failed for default ensemble dimension scaling values\n");
       goto err1;
     }
     v1=v2=1;
@@ -3944,7 +4055,7 @@ size_t sz;
     /* allocate a single ensemble structure */
     sz = sizeof(struct gaens);
     if ((ens = (struct gaens *)galloc(sz,"ens1")) == NULL) {
-      gaprnt(0,"gadsdf: memory allocation failed for default E axis values\n");
+      gaprnt(0,"Error: memory allocation failed for default E axis values\n");
       goto err1;
     }
     pfi->ens1 = ens;

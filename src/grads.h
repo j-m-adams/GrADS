@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,6 +11,9 @@
 #endif
 #if USEHDF5==1
 #include <hdf5.h>
+#endif
+#if USENETCDF==1
+#include <udunits2.h>
 #endif
 #include "gabufr.h"
 
@@ -1302,6 +1305,7 @@ gaint gadxdf(struct gafile *, GASDFPARMS *);
 gaint gadsdf(struct gafile *, GASDFPARMS);
 gaint sdfdeflev(struct gafile *, struct gavar *, gaint, gaint) ;
 gaint getncvnm (struct sdfnames *, char *);
+gaint initUnitSys(void);    
 #endif
 
 void *galloc(size_t,char *);

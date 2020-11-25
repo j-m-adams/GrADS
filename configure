@@ -679,9 +679,9 @@ HDF4_LDFLAGS
 HDF4_CFLAGS
 HDF4_LIBS
 NC_NETCDF_3_CPPFLAG
-UDUNITS_LDFLAGS
-UDUNITS_CFLAGS
-UDUNITS_LIBS
+UDUNITS2_LDFLAGS
+UDUNITS2_CFLAGS
+UDUNITS2_LIBS
 hdf5_libs
 hdf5_inc
 HDF5_LDFLAGS
@@ -700,7 +700,11 @@ GD_CONFIG
 GD_LIBS
 GD_CFLAGS
 PKG_CONFIG
+shp_ldflags
+shp_inc
 shp_libs
+SHP_LDFLAGS
+SHP_CFLAGS
 SHP_LIBS
 geotiff_ldflags
 geotiff_libs
@@ -849,12 +853,15 @@ enable_dyn_supplibs
 with_geotiff
 with_geotiff_include
 with_geotiff_libdir
+with_shp
+with_shp_include
+with_shp_libdir
 with_hdf5
 with_hdf5_include
 with_hdf5_libdir
-with_udunits
-with_udunits_include
-with_udunits_libdir
+with_udunits2
+with_udunits2_include
+with_udunits2_libdir
 with_hdf4
 with_hdf4_include
 with_hdf4_libdir
@@ -1542,14 +1549,17 @@ Optional Packages:
                           geotiff include directory
   --with-geotiff-libdir=ARG
                           geotiff library directory
+  --with-shp=ARG          shapefile directory
+  --with-shp-include=ARG  shapefile include directory
+  --with-shp-libdir=ARG   shapefile library directory
   --with-hdf5=ARG         hdf5 directory
   --with-hdf5-include=ARG hdf5 include directory
   --with-hdf5-libdir=ARG  hdf5 library directory
-  --with-udunits=ARG      udunits directory
-  --with-udunits-include=ARG
-                          udunits include directory
-  --with-udunits-libdir=ARG
-                          udunits library directory
+  --with-udunits2=ARG     udunits2 directory
+  --with-udunits2-include=ARG
+                          udunits2 include directory
+  --with-udunits2-libdir=ARG
+                          udunits2 library directory
   --with-hdf4=ARG         hdf4 directory
   --with-hdf4-include=ARG hdf 4 include directory
   --with-hdf4-libdir=ARG  hdf 4 library directory
@@ -17994,8 +18004,8 @@ if test "Z$ga_supplib_dir" != "Z" ; then
   CPPFLAGS="-I${ga_supplib_dir}/include"
   :
   CPPFLAGS="$CPPFLAGS "
-  LDFLAGS="-L${ga_supplib_dir}/lib -ltiff"
-  LIBS="$LIBS "
+  LDFLAGS="-L${ga_supplib_dir}/lib "
+  LIBS="$LIBS -ltiff"
 
   ac_fn_c_check_header_mongrel "$LINENO" "geotiff.h" "ac_cv_header_geotiff_h" "$ac_includes_default"
 if test "x$ac_cv_header_geotiff_h" = xyes; then :
@@ -18003,37 +18013,6 @@ if test "x$ac_cv_header_geotiff_h" = xyes; then :
 if test "x$ac_cv_header_geotiffio_h" = xyes; then :
    ac_fn_c_check_header_mongrel "$LINENO" "xtiffio.h" "ac_cv_header_xtiffio_h" "$ac_includes_default"
 if test "x$ac_cv_header_xtiffio_h" = xyes; then :
-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -ltiff" >&5
-$as_echo_n "checking for main in -ltiff... " >&6; }
-if ${ac_cv_lib_tiff_main+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ltiff  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-return main ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_tiff_main=yes
-else
-  ac_cv_lib_tiff_main=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_tiff_main" >&5
-$as_echo "$ac_cv_lib_tiff_main" >&6; }
-if test "x$ac_cv_lib_tiff_main" = xyes; then :
    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lgeotiff" >&5
 $as_echo_n "checking for main in -lgeotiff... " >&6; }
 if ${ac_cv_lib_geotiff_main+:} false; then :
@@ -18066,18 +18045,15 @@ fi
 $as_echo "$ac_cv_lib_geotiff_main" >&6; }
 if test "x$ac_cv_lib_geotiff_main" = xyes; then :
    have_geotiff=yes
-            have_tiff=yes
-#            GA_SET_LIB_VAR([geotiff_libs], [tiff geotiff])
+          have_tiff=yes
+#          GA_SET_LIB_VAR([geotiff_libs], [tiff geotiff])
 
   ga_lib_prefix='-l'
   for ga_lib_name in tiff geotiff ; do
       geotiff_libs="$geotiff_libs ${ga_lib_prefix}${ga_lib_name}"
   done
 
-            use_geotiff=yes
-
-fi
-
+          use_geotiff=yes
 
 fi
 
@@ -18508,8 +18484,7 @@ fi
   CPPFLAGS=$ac_geotiff_save_CPPFLAGS
 
   if test "$ac_geotiff_h" = 'yes' -a "$ac_geotiff_lib_ok" = 'yes'; then :
-
-    LDFLAGS="$LDFLAGS $GEOTIFF_LDFLAGS"
+   LDFLAGS="$LDFLAGS $GEOTIFF_LDFLAGS"
     geotiff_inc="$GEOTIFF_CFLAGS"
     geotiff_libs="$GEOTIFF_LIBS"
     geotiff_ldflags="$GEOTIFF_LDFLAGS"
@@ -18537,6 +18512,7 @@ $as_echo "#define GEOTIFF 1" >>confdefs.h
 
 
 fi
+
 
 
 # * * * SHAPELIB * * *
@@ -18619,17 +18595,67 @@ fi
 if test "$use_shp" != "yes" -a "$ga_dyn_supplibs" = "yes" ; then
   echo looking in other system locations
 
-  ga_check_shp="no"
-  ac_fn_c_check_header_mongrel "$LINENO" "shapefil.h" "ac_cv_header_shapefil_h" "$ac_includes_default"
-if test "x$ac_cv_header_shapefil_h" = xyes; then :
-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lshp" >&5
-$as_echo_n "checking for main in -lshp... " >&6; }
-if ${ac_cv_lib_shp_main+:} false; then :
-  $as_echo_n "(cached) " >&6
+# set up help strings and parse user-provided paths
+
+# Check whether --with-shp was given.
+if test "${with_shp+set}" = set; then :
+  withval=$with_shp; SHP_PATH=$withval
 else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lshp  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+  SHP_PATH=""
+fi
+
+
+
+# Check whether --with-shp_include was given.
+if test "${with_shp_include+set}" = set; then :
+  withval=$with_shp_include; SHP_PATH_INC=$withval
+else
+  SHP_PATH_INC=""
+fi
+
+
+
+# Check whether --with-shp_libdir was given.
+if test "${with_shp_libdir+set}" = set; then :
+  withval=$with_shp_libdir; SHP_PATH_LIBDIR=$withval
+else
+  SHP_PATH_LIBDIR=""
+fi
+
+
+# add /lib and /include to user-provided path
+  if test "z$SHP_PATH" != "z"; then :
+
+    if test "z$SHP_PATH_LIBDIR" = "z"; then :
+  SHP_PATH_LIBDIR="$SHP_PATH/lib"
+fi
+    if test "z$SHP_PATH_INC" = "z"; then :
+  SHP_PATH_INC="$SHP_PATH/include"
+fi
+
+fi
+
+# initialize, save existing $LDFLAGS
+  ac_shp_lib_ok='no'
+  ac_shp_save_LDFLAGS=$LDFLAGS
+  SHP_LIBS=
+
+# look for the library
+  if test -d "$SHP_PATH_LIBDIR"; then :
+
+      SHP_LDFLAGS="-L$SHP_PATH_LIBDIR"
+      LDFLAGS="$LDFLAGS $SHP_LDFLAGS"
+
+  SHP_LIBS=
+  ac_shp_lib='no'
+  ac_shp_save_LIBS=$LIBS
+
+  ac_check_lib_nocache_ok_shp_main='no'
+  ac_check_lib_nocache_shp_main_LIBS=$LIBS
+  LIBS="-lshp  $LIBS"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lshp" >&5
+$as_echo_n "checking for main in -lshp... " >&6; }
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 
@@ -18642,34 +18668,264 @@ return main ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_shp_main=yes
+
+    ac_check_lib_nocache_ok_shp_main='yes'
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
 else
-  ac_cv_lib_shp_main=no
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_shp_main" >&5
-$as_echo "$ac_cv_lib_shp_main" >&6; }
-if test "x$ac_cv_lib_shp_main" = xyes; then :
+  LIBS=$ac_check_lib_nocache_shp_main_LIBS
+  if test $ac_check_lib_nocache_ok_shp_main = 'yes'; then :
 
-      ga_check_shp="yes"
-      SHP_LIBS="-lshp"
+    ac_shp_lib="yes"
+    SHP_LIBS="-lshp $SHP_LIBS"
 
-fi
-
-
+else
+  :
 fi
 
+  LIBS=$ac_shp_save_LIBS
 
-  if test $ga_check_shp = "yes" ; then
-      use_shp=yes
-    shp_libs=$SHP_LIBS
+  if test "$ac_shp_lib" = 'yes'; then :
+  ac_shp_lib_ok='yes'
+else
+  :
+fi
 
-  else
-     :
-  fi
+
+else
+
+      for ac_shp_libdir in "" /usr/lib64 /usr/local/lib \
+       /usr/lib /usr/local/lib64 ; do
+        if test ! -d "$ac_shp_libdir"; then :
+  SHP_LDFLAGS=
+else
+
+             { $as_echo "$as_me:${as_lineno-$LINENO}: searching for shapefile library in $ac_shp_libdir" >&5
+$as_echo "$as_me: searching for shapefile library in $ac_shp_libdir" >&6;}
+             SHP_LDFLAGS="-L$ac_shp_libdir"
+
+fi
+        LDFLAGS="$LDFLAGS $SHP_LDFLAGS"
+
+  SHP_LIBS=
+  ac_shp_lib='no'
+  ac_shp_save_LIBS=$LIBS
+
+  ac_check_lib_nocache_ok_shp_main='no'
+  ac_check_lib_nocache_shp_main_LIBS=$LIBS
+  LIBS="-lshp  $LIBS"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lshp" >&5
+$as_echo_n "checking for main in -lshp... " >&6; }
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+return main ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+
+    ac_check_lib_nocache_ok_shp_main='yes'
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+  LIBS=$ac_check_lib_nocache_shp_main_LIBS
+  if test $ac_check_lib_nocache_ok_shp_main = 'yes'; then :
+
+    ac_shp_lib="yes"
+    SHP_LIBS="-lshp $SHP_LIBS"
+
+else
+  :
+fi
+
+  LIBS=$ac_shp_save_LIBS
+
+  if test "$ac_shp_lib" = 'yes'; then :
+  ac_shp_lib_ok='yes'
+else
+  :
+fi
+
+        if test $ac_shp_lib_ok = 'yes'; then :
+  break
+fi
+        LDFLAGS=$ac_shp_save_LDFLAGS
+      done
+
+fi
+  LDFLAGS=$ac_shp_save_LDFLAGS
+
+# look for the include file
+  ac_shp_h='no'
+  SHP_CFLAGS=
+  ac_shp_save_CPPFLAGS=$CPPFLAGS
+  if test -d "$SHP_PATH_INC"; then :
+
+       SHP_CFLAGS="-I$SHP_PATH_INC"
+       CPPFLAGS="$CPPFLAGS $SHP_CFLAGS"
+
+  ac_check_header_nocache_compile_shapefil_h='no'
+  ac_check_header_nocache_preproc_shapefil_h='no'
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for shapefil.h with compiler" >&5
+$as_echo_n "checking for shapefil.h with compiler... " >&6; }
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <shapefil.h>
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+      ac_check_header_nocache_compile_shapefil_h='yes'
+
+else
+
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for shapefil.h with preprocessor" >&5
+$as_echo_n "checking for shapefil.h with preprocessor... " >&6; }
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <shapefil.h>
+_ACEOF
+if ac_fn_c_try_cpp "$LINENO"; then :
+
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+      ac_check_header_nocache_preproc_shapefil_h='yes'
+
+else
+
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+      if test "$ac_check_header_nocache_compile_shapefil_h" = 'yes'; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: trusting compiler result, ignoring preprocessor error" >&5
+$as_echo "$as_me: WARNING: trusting compiler result, ignoring preprocessor error" >&2;}
+fi
+
+fi
+rm -f conftest.err conftest.i conftest.$ac_ext
+  if test "$ac_check_header_nocache_compile_shapefil_h" = 'yes'; then :
+  ac_shp_h='yes'
+else
+  :
+fi
+
+
+else
+
+      for ac_shp_incdir in /usr/include \
+       /usr/local/include /usr/local/include/libshp ; do
+        if test ! -d "$ac_shp_incdir"; then :
+  SHP_CFLAGS=
+else
+
+             { $as_echo "$as_me:${as_lineno-$LINENO}: searching for shapefil.h in $ac_shp_incdir" >&5
+$as_echo "$as_me: searching for shapefil.h in $ac_shp_incdir" >&6;}
+             SHP_CFLAGS="-I$ac_shp_incdir"
+             CPPFLAGS="$CPPFLAGS $SHP_CFLAGS"
+
+  ac_check_header_nocache_compile_shapefil_h='no'
+  ac_check_header_nocache_preproc_shapefil_h='no'
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for shapefil.h with compiler" >&5
+$as_echo_n "checking for shapefil.h with compiler... " >&6; }
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <shapefil.h>
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+      ac_check_header_nocache_compile_shapefil_h='yes'
+
+else
+
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for shapefil.h with preprocessor" >&5
+$as_echo_n "checking for shapefil.h with preprocessor... " >&6; }
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <shapefil.h>
+_ACEOF
+if ac_fn_c_try_cpp "$LINENO"; then :
+
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+      ac_check_header_nocache_preproc_shapefil_h='yes'
+
+else
+
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+      if test "$ac_check_header_nocache_compile_shapefil_h" = 'yes'; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: trusting compiler result, ignoring preprocessor error" >&5
+$as_echo "$as_me: WARNING: trusting compiler result, ignoring preprocessor error" >&2;}
+fi
+
+fi
+rm -f conftest.err conftest.i conftest.$ac_ext
+  if test "$ac_check_header_nocache_compile_shapefil_h" = 'yes'; then :
+  ac_shp_h='yes'
+else
+  :
+fi
+
+             if test $ac_shp_h = 'yes'; then :
+  break
+fi
+             CPPFLAGS=$ac_shp_save_CPPFLAGS
+
+fi
+      done
+
+fi
+  CPPFLAGS=$ac_shp_save_CPPFLAGS
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: ac_shp_h is $ac_shp_h and ac_shp_lib_ok is $ac_shp_lib_ok " >&5
+$as_echo "$as_me: ac_shp_h is $ac_shp_h and ac_shp_lib_ok is $ac_shp_lib_ok " >&6;}
+  if test "$ac_shp_h" = 'yes' -a "$ac_shp_lib_ok" = 'yes'; then :
+
+    use_shp=yes
+    LDFLAGS="$LDFLAGS $SHP_LDFLAGS"
+    shp_inc="$SHP_CFLAGS"
+    shp_libs="$SHP_LIBS"
+    shp_ldflags="$SHP_LDFLAGS"
+
+else
+  :
+fi
+
+
 
 
 
@@ -18682,6 +18938,8 @@ $as_echo "#define USESHP 0" >>confdefs.h
 else
 
 $as_echo "#define USESHP 1" >>confdefs.h
+
+
 
 
 fi
@@ -21058,45 +21316,39 @@ if test "Z$ga_supplib_dir" != "Z" ; then
   LDFLAGS="-L${ga_supplib_dir}/lib "
   LIBS="$LIBS "
 
-  ac_fn_c_check_header_mongrel "$LINENO" "udunits.h" "ac_cv_header_udunits_h" "$ac_includes_default"
-if test "x$ac_cv_header_udunits_h" = xyes; then :
-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for utInit in -ludunits" >&5
-$as_echo_n "checking for utInit in -ludunits... " >&6; }
-if ${ac_cv_lib_udunits_utInit+:} false; then :
+  ac_fn_c_check_header_mongrel "$LINENO" "udunits2.h" "ac_cv_header_udunits2_h" "$ac_includes_default"
+if test "x$ac_cv_header_udunits2_h" = xyes; then :
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -ludunits2" >&5
+$as_echo_n "checking for main in -ludunits2... " >&6; }
+if ${ac_cv_lib_udunits2_main+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-ludunits  $LIBS"
+LIBS="-ludunits2  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char utInit ();
+
 int
 main ()
 {
-return utInit ();
+return main ();
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_udunits_utInit=yes
+  ac_cv_lib_udunits2_main=yes
 else
-  ac_cv_lib_udunits_utInit=no
+  ac_cv_lib_udunits2_main=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_udunits_utInit" >&5
-$as_echo "$ac_cv_lib_udunits_utInit" >&6; }
-if test "x$ac_cv_lib_udunits_utInit" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_udunits2_main" >&5
+$as_echo "$ac_cv_lib_udunits2_main" >&6; }
+if test "x$ac_cv_lib_udunits2_main" = xyes; then :
    have_udunits=yes
 
 fi
@@ -21117,62 +21369,62 @@ if test "$have_udunits" = "no" -a "$ga_dyn_supplibs" = "yes" ; then
   echo looking in other system locations
 
 
-# Check whether --with-udunits was given.
-if test "${with_udunits+set}" = set; then :
-  withval=$with_udunits; UDUNITS_PATH=$withval
+# Check whether --with-udunits2 was given.
+if test "${with_udunits2+set}" = set; then :
+  withval=$with_udunits2; UDUNITS2_PATH=$withval
 else
-  UDUNITS_PATH=""
+  UDUNITS2_PATH=""
 fi
 
 
 
-# Check whether --with-udunits_include was given.
-if test "${with_udunits_include+set}" = set; then :
-  withval=$with_udunits_include; UDUNITS_PATH_INC=$withval
+# Check whether --with-udunits2_include was given.
+if test "${with_udunits2_include+set}" = set; then :
+  withval=$with_udunits2_include; UDUNITS2_PATH_INC=$withval
 else
-  UDUNITS_PATH_INC=""
+  UDUNITS2_PATH_INC=""
 fi
 
 
 
-# Check whether --with-udunits_libdir was given.
-if test "${with_udunits_libdir+set}" = set; then :
-  withval=$with_udunits_libdir; UDUNITS_PATH_LIBDIR=$withval
+# Check whether --with-udunits2_libdir was given.
+if test "${with_udunits2_libdir+set}" = set; then :
+  withval=$with_udunits2_libdir; UDUNITS2_PATH_LIBDIR=$withval
 else
-  UDUNITS_PATH_LIBDIR=""
+  UDUNITS2_PATH_LIBDIR=""
 fi
 
 
-  if test "z$UDUNITS_PATH" != "z"; then :
+  if test "z$UDUNITS2_PATH" != "z"; then :
 
-    if test "z$UDUNITS_PATH_LIBDIR" = "z"; then :
-  UDUNITS_PATH_LIBDIR="$UDUNITS_PATH/lib"
+    if test "z$UDUNITS2_PATH_LIBDIR" = "z"; then :
+  UDUNITS2_PATH_LIBDIR="$UDUNITS2_PATH/lib"
 fi
-    if test "z$UDUNITS_PATH_INC" = "z"; then :
-  UDUNITS_PATH_INC="$UDUNITS_PATH/include"
-fi
-
+    if test "z$UDUNITS2_PATH_INC" = "z"; then :
+  UDUNITS2_PATH_INC="$UDUNITS2_PATH/include"
 fi
 
+fi
 
-  ac_udunits_lib_ok='no'
-  ac_udunits_save_LDFLAGS=$LDFLAGS
-  UDUNITS_LIBS=
-  if test "z$UDUNITS_PATH_LIBDIR" != "z"; then :
 
-      UDUNITS_LDFLAGS="-L$UDUNITS_PATH_LIBDIR"
-      LDFLAGS="$LDFLAGS $UDUNITS_LDFLAGS"
+  ac_udunits2_lib_ok='no'
+  ac_udunits2_save_LDFLAGS=$LDFLAGS
+  UDUNITS2_LIBS=
+  if test "z$UDUNITS2_PATH_LIBDIR" != "z"; then :
 
-  UDUNITS_LIBS=
-  ac_udunits_save_LIBS=$LIBS
+      UDUNITS2_LDFLAGS="-L$UDUNITS2_PATH_LIBDIR"
+      LDFLAGS="$LDFLAGS $UDUNITS2_LDFLAGS"
 
-  ac_udunits_lib='no'
+  UDUNITS2_LIBS=
+  ac_udunits2_save_LIBS=$LIBS
 
-  ac_check_lib_nocache_ok_udunits_main='no'
-  ac_check_lib_nocache_udunits_main_LIBS=$LIBS
-  LIBS="-ludunits  $LIBS"
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -ludunits" >&5
-$as_echo_n "checking for main in -ludunits... " >&6; }
+  ac_udunits2_lib='no'
+
+  ac_check_lib_nocache_ok_udunits2_main='no'
+  ac_check_lib_nocache_udunits2_main_LIBS=$LIBS
+  LIBS="-ludunits2  $LIBS"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -ludunits2" >&5
+$as_echo_n "checking for main in -ludunits2... " >&6; }
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -21187,7 +21439,7 @@ return main ();
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
 
-    ac_check_lib_nocache_ok_udunits_main="yes"
+    ac_check_lib_nocache_ok_udunits2_main="yes"
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -21199,19 +21451,19 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-  LIBS=$ac_check_lib_nocache_udunits_main_LIBS
-  if test $ac_check_lib_nocache_ok_udunits_main = "yes"; then :
-   ac_udunits_lib="yes"
-    UDUNITS_LIBS="-ludunits $UDUNITS_LIBS"
+  LIBS=$ac_check_lib_nocache_udunits2_main_LIBS
+  if test $ac_check_lib_nocache_ok_udunits2_main = "yes"; then :
+   ac_udunits2_lib="yes"
+    UDUNITS2_LIBS="-ludunits2 $UDUNITS2_LIBS"
 
 else
   :
 fi
 
-  LIBS=$ac_udunits_save_LIBS
+  LIBS=$ac_udunits2_save_LIBS
 
-  if test "$ac_udunits_lib" = "yes"; then :
-  ac_udunits_lib_ok="yes"
+  if test "$ac_udunits2_lib" = "yes"; then :
+  ac_udunits2_lib_ok="yes"
 else
   :
 fi
@@ -21219,33 +21471,33 @@ fi
 
 else
 
-      for ac_udunits_libdir in "" /usr/lib64 /usr/lib /usr/local/lib \
+      for ac_udunits2_libdir in "" /usr/lib64 /usr/lib /usr/local/lib \
        /usr/libudunits/lib64 /usr/local/lib64/libudunits \
        /usr/local/udunits/lib /usr/local/libudunits/lib \
        /usr/udunits/lib /usr/local/lib/udunits /opt/lib/udunits \
        /usr/libudunits/lib /usr/local/lib/libudunits /opt/lib/libudunits \
        /usr/lib/udunits /usr/lib/libudunits ; do
-        if test "z$ac_udunits_libdir" = "z"; then :
-  UDUNITS_LDFLAGS=
+        if test "z$ac_udunits2_libdir" = "z"; then :
+  UDUNITS2_LDFLAGS=
 else
 
-             { $as_echo "$as_me:${as_lineno-$LINENO}: searching udunits libraries in $ac_udunits_libdir" >&5
-$as_echo "$as_me: searching udunits libraries in $ac_udunits_libdir" >&6;}
-             UDUNITS_LDFLAGS="-L$ac_udunits_libdir"
+             { $as_echo "$as_me:${as_lineno-$LINENO}: searching udunits2 libraries in $ac_udunits2_libdir" >&5
+$as_echo "$as_me: searching udunits2 libraries in $ac_udunits2_libdir" >&6;}
+             UDUNITS2_LDFLAGS="-L$ac_udunits2_libdir"
 
 fi
-        LDFLAGS="$LDFLAGS $UDUNITS_LDFLAGS"
+        LDFLAGS="$LDFLAGS $UDUNITS2_LDFLAGS"
 
-  UDUNITS_LIBS=
-  ac_udunits_save_LIBS=$LIBS
+  UDUNITS2_LIBS=
+  ac_udunits2_save_LIBS=$LIBS
 
-  ac_udunits_lib='no'
+  ac_udunits2_lib='no'
 
-  ac_check_lib_nocache_ok_udunits_main='no'
-  ac_check_lib_nocache_udunits_main_LIBS=$LIBS
-  LIBS="-ludunits  $LIBS"
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -ludunits" >&5
-$as_echo_n "checking for main in -ludunits... " >&6; }
+  ac_check_lib_nocache_ok_udunits2_main='no'
+  ac_check_lib_nocache_udunits2_main_LIBS=$LIBS
+  LIBS="-ludunits2  $LIBS"
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -ludunits2" >&5
+$as_echo_n "checking for main in -ludunits2... " >&6; }
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -21260,7 +21512,7 @@ return main ();
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
 
-    ac_check_lib_nocache_ok_udunits_main="yes"
+    ac_check_lib_nocache_ok_udunits2_main="yes"
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
@@ -21272,53 +21524,53 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-  LIBS=$ac_check_lib_nocache_udunits_main_LIBS
-  if test $ac_check_lib_nocache_ok_udunits_main = "yes"; then :
-   ac_udunits_lib="yes"
-    UDUNITS_LIBS="-ludunits $UDUNITS_LIBS"
+  LIBS=$ac_check_lib_nocache_udunits2_main_LIBS
+  if test $ac_check_lib_nocache_ok_udunits2_main = "yes"; then :
+   ac_udunits2_lib="yes"
+    UDUNITS2_LIBS="-ludunits2 $UDUNITS2_LIBS"
 
 else
   :
 fi
 
-  LIBS=$ac_udunits_save_LIBS
+  LIBS=$ac_udunits2_save_LIBS
 
-  if test "$ac_udunits_lib" = "yes"; then :
-  ac_udunits_lib_ok="yes"
+  if test "$ac_udunits2_lib" = "yes"; then :
+  ac_udunits2_lib_ok="yes"
 else
   :
 fi
 
-        if test $ac_udunits_lib_ok = "yes"; then :
+        if test $ac_udunits2_lib_ok = "yes"; then :
   break
 fi
-        LDFLAGS=$ac_udunits_save_LDFLAGS
+        LDFLAGS=$ac_udunits2_save_LDFLAGS
       done
 
 fi
-  LDFLAGS=$ac_udunits_save_LDFLAGS
+  LDFLAGS=$ac_udunits2_save_LDFLAGS
 
-  ac_udunits_h='no'
-  UDUNITS_CFLAGS=
-  ac_udunits_save_CPPFLAGS=$CPPFLAGS
-  if test "z$UDUNITS_PATH_INC" != "z"; then :
+  ac_udunits2_h='no'
+  UDUNITS2_CFLAGS=
+  ac_udunits2_save_CPPFLAGS=$CPPFLAGS
+  if test "z$UDUNITS2_PATH_INC" != "z"; then :
 
-       UDUNITS_CFLAGS="-I$UDUNITS_PATH_INC"
-       CPPFLAGS="$CPPFLAGS $UDUNITS_CFLAGS"
+       UDUNITS2_CFLAGS="-I$UDUNITS2_PATH_INC"
+       CPPFLAGS="$CPPFLAGS $UDUNITS2_CFLAGS"
 
-  ac_check_header_nocache_compile_udunits_h='no'
-  ac_check_header_nocache_preproc_udunits_h='no'
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for udunits.h with compiler" >&5
-$as_echo_n "checking for udunits.h with compiler... " >&6; }
+  ac_check_header_nocache_compile_udunits2_h='no'
+  ac_check_header_nocache_preproc_udunits2_h='no'
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for udunits2.h with compiler" >&5
+$as_echo_n "checking for udunits2.h with compiler... " >&6; }
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <udunits.h>
+#include <udunits2.h>
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
 
       { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-      ac_check_header_nocache_compile_udunits_h="yes"
+      ac_check_header_nocache_compile_udunits2_h="yes"
 
 else
 
@@ -21327,31 +21579,31 @@ $as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for udunits.h with preprocessor" >&5
-$as_echo_n "checking for udunits.h with preprocessor... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for udunits2.h with preprocessor" >&5
+$as_echo_n "checking for udunits2.h with preprocessor... " >&6; }
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <udunits.h>
+#include <udunits2.h>
 _ACEOF
 if ac_fn_c_try_cpp "$LINENO"; then :
 
       { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-      ac_check_header_nocache_preproc_udunits_h="yes"
+      ac_check_header_nocache_preproc_udunits2_h="yes"
 
 else
 
       { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-      if test "$ac_check_header_nocache_compile_udunits_h" = "yes"; then :
+      if test "$ac_check_header_nocache_compile_udunits2_h" = "yes"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: trusting compiler result, ignoring preprocessor error" >&5
 $as_echo "$as_me: WARNING: trusting compiler result, ignoring preprocessor error" >&2;}
 fi
 
 fi
 rm -f conftest.err conftest.i conftest.$ac_ext
-  if test "$ac_check_header_nocache_compile_udunits_h" = "yes"; then :
-  ac_udunits_h="yes"
+  if test "$ac_check_header_nocache_compile_udunits2_h" = "yes"; then :
+  ac_udunits2_h="yes"
 else
   :
 fi
@@ -21359,36 +21611,36 @@ fi
 
 else
 
-      for ac_udunits_incdir in /usr/include \
+      for ac_udunits2_incdir in /usr/include \
        /usr/local/udunits/include /opt/udunits/include \
        /usr/udunits/include /usr/local/include/udunits \
        /opt/include/udunits /usr/include/udunits /usr/local/libudunits/include \
        /opt/libudunits/include /usr/libudunits/include /usr/local/include/libudunits \
        /opt/include/libudunits /usr/include/libudunits ; do
-        if test "z$ac_udunits_incdir" = "z"; then :
-  UDUNITS_CFLAGS=
+        if test "z$ac_udunits2_incdir" = "z"; then :
+  UDUNITS2_CFLAGS=
 else
 
-             { $as_echo "$as_me:${as_lineno-$LINENO}: searching udunits includes in $ac_udunits_incdir" >&5
-$as_echo "$as_me: searching udunits includes in $ac_udunits_incdir" >&6;}
-             UDUNITS_CFLAGS="-I$ac_udunits_incdir"
+             { $as_echo "$as_me:${as_lineno-$LINENO}: searching udunits2 includes in $ac_udunits2_incdir" >&5
+$as_echo "$as_me: searching udunits2 includes in $ac_udunits2_incdir" >&6;}
+             UDUNITS2_CFLAGS="-I$ac_udunits2_incdir"
 
 fi
-        CPPFLAGS="$CPPFLAGS $UDUNITS_CFLAGS"
+        CPPFLAGS="$CPPFLAGS $UDUNITS2_CFLAGS"
 
-  ac_check_header_nocache_compile_udunits_h='no'
-  ac_check_header_nocache_preproc_udunits_h='no'
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for udunits.h with compiler" >&5
-$as_echo_n "checking for udunits.h with compiler... " >&6; }
+  ac_check_header_nocache_compile_udunits2_h='no'
+  ac_check_header_nocache_preproc_udunits2_h='no'
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for udunits2.h with compiler" >&5
+$as_echo_n "checking for udunits2.h with compiler... " >&6; }
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <udunits.h>
+#include <udunits2.h>
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
 
       { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-      ac_check_header_nocache_compile_udunits_h="yes"
+      ac_check_header_nocache_compile_udunits2_h="yes"
 
 else
 
@@ -21397,49 +21649,47 @@ $as_echo "no" >&6; }
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for udunits.h with preprocessor" >&5
-$as_echo_n "checking for udunits.h with preprocessor... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for udunits2.h with preprocessor" >&5
+$as_echo_n "checking for udunits2.h with preprocessor... " >&6; }
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-#include <udunits.h>
+#include <udunits2.h>
 _ACEOF
 if ac_fn_c_try_cpp "$LINENO"; then :
 
       { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-      ac_check_header_nocache_preproc_udunits_h="yes"
+      ac_check_header_nocache_preproc_udunits2_h="yes"
 
 else
 
       { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-      if test "$ac_check_header_nocache_compile_udunits_h" = "yes"; then :
+      if test "$ac_check_header_nocache_compile_udunits2_h" = "yes"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: trusting compiler result, ignoring preprocessor error" >&5
 $as_echo "$as_me: WARNING: trusting compiler result, ignoring preprocessor error" >&2;}
 fi
 
 fi
 rm -f conftest.err conftest.i conftest.$ac_ext
-  if test "$ac_check_header_nocache_compile_udunits_h" = "yes"; then :
-  ac_udunits_h="yes"
+  if test "$ac_check_header_nocache_compile_udunits2_h" = "yes"; then :
+  ac_udunits2_h="yes"
 else
   :
 fi
 
-        if test $ac_udunits_h = "yes"; then :
+        if test $ac_udunits2_h = "yes"; then :
   break
 fi
-        CPPFLAGS=$ac_udunits_save_CPPFLAGS
+        CPPFLAGS=$ac_udunits2_save_CPPFLAGS
       done
 
 fi
-  CPPFLAGS=$ac_udunits_save_CPPFLAGS
+  CPPFLAGS=$ac_udunits2_save_CPPFLAGS
 
-  if test "$ac_udunits_h" = "yes" -a "$ac_udunits_lib_ok" = "yes"; then :
+  if test "$ac_udunits2_h" = "yes" -a "$ac_udunits2_lib_ok" = "yes"; then :
 
     have_udunits=yes
-#    udunits_inc="$UDUNITS_CFLAGS"
-#    udunits_libs="$UDUNITS_LIBS"
 
 else
   :
@@ -21470,41 +21720,10 @@ if test "Z$ga_supplib_dir" != "Z" ; then
   :
   CPPFLAGS="$CPPFLAGS "
   LDFLAGS="-L${ga_supplib_dir}/lib "
-  LIBS="$LIBS "
+  LIBS="$LIBS -ldf"
 
     ac_fn_c_check_header_mongrel "$LINENO" "mfhdf.h" "ac_cv_header_mfhdf_h" "$ac_includes_default"
 if test "x$ac_cv_header_mfhdf_h" = xyes; then :
-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -ldf" >&5
-$as_echo_n "checking for main in -ldf... " >&6; }
-if ${ac_cv_lib_df_main+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ldf  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-return main ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_df_main=yes
-else
-  ac_cv_lib_df_main=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_df_main" >&5
-$as_echo "$ac_cv_lib_df_main" >&6; }
-if test "x$ac_cv_lib_df_main" = xyes; then :
    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lmfhdf" >&5
 $as_echo_n "checking for main in -lmfhdf... " >&6; }
 if ${ac_cv_lib_mfhdf_main+:} false; then :
@@ -21537,15 +21756,12 @@ fi
 $as_echo "$ac_cv_lib_mfhdf_main" >&6; }
 if test "x$ac_cv_lib_mfhdf_main" = xyes; then :
    use_hdf=yes
-#          GA_SET_LIB_VAR([hdf_libs], [mfhdf df jpeg z udunits])
+#        GA_SET_LIB_VAR([hdf_libs], [mfhdf df jpeg z udunits])
 
   ga_lib_prefix='-l'
-  for ga_lib_name in mfhdf df jpeg z udunits ; do
+  for ga_lib_name in mfhdf df jpeg z udunits2 ; do
       hdf_libs="$hdf_libs ${ga_lib_prefix}${ga_lib_name}"
   done
-
-
-fi
 
 
 fi
@@ -22603,7 +22819,7 @@ if test "x$ac_cv_lib_netcdf_main" = xyes; then :
 #          GA_SET_LIB_VAR(nc_libs, [udunits netcdf])
 
   ga_lib_prefix='-l'
-  for ga_lib_name in udunits netcdf ; do
+  for ga_lib_name in udunits2 netcdf ; do
       nc_libs="$nc_libs ${ga_lib_prefix}${ga_lib_name}"
   done
 
@@ -22616,7 +22832,7 @@ if test "x$ac_cv_lib_netcdf_main" = xyes; then :
 #            GA_SET_LIB_VAR(nc_libs, [udunits netcdf hdf5_hl hdf5 curl z])
 
   ga_lib_prefix='-l'
-  for ga_lib_name in udunits netcdf hdf5_hl hdf5 curl z ; do
+  for ga_lib_name in udunits2 netcdf hdf5_hl hdf5 curl z ; do
       nc_libs="$nc_libs ${ga_lib_prefix}${ga_lib_name}"
   done
 
