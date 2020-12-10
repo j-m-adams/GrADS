@@ -9304,11 +9304,11 @@ struct gastat *pst;
    It sets up a new defined variable using data and metadata 
    that are passed through in the pygagrid structure */
 
-gaint gasetup (char *ch, struct pygagrid *pypgr) {
+int gasetup (char *ch, struct pygagrid *pypgr) {
 struct gafile *pypfi,*pfi;
 struct gadefn *pypdf,*pdf,*opdf;
 struct gacmn  *pcm=NULL;
-gaint i,j,gsz,rc,ev1,ev2,add;
+gaint i,j,rc,ev1,ev2,add,gsz;
 char name[20];
 gadouble *g,*tvals=NULL,*evals=NULL;
 gadouble *pygrid=NULL;
@@ -9319,7 +9319,7 @@ char *pymask=NULL;
   
   /* Make sure a file is open */
   if (pcm->pfid==NULL) { 
-    printf("Error: No files open. Please open a file, any file, then try again. \n");
+    printf("Put Error: No files open. Defined variables require a file (any file) to be open. \n");
     goto reterr; 
   }
 
@@ -9335,7 +9335,7 @@ char *pymask=NULL;
   /* initialize a file structure for the new defined grid. 
      Use getpfi, but don't put it in the chain of open file structures */
   pypfi = getpfi();
-  if (pypfi==NULL) { gaprnt (0,"Error: getpfi failed\n"); goto reterr; }
+  if (pypfi==NULL) { printf("Put Error: getpfi failed\n"); goto reterr; }
   pypfi->type = 5;  /* new type created for Python deposits */
 
   /* Set up the X, Y, and Z dimensions.  
@@ -9347,7 +9347,7 @@ char *pymask=NULL;
   else
     rc = defpylin (pypgr->xstrt, pypgr->xincr, pypfi, 0);
   if (rc) {
-    gaprnt (0,"Error: Unable to allocate memory for X axis metadata\n");
+    printf ("Put Error: Unable to set up X axis metadata\n");
     goto reterr; 
   }
 
@@ -9357,7 +9357,7 @@ char *pymask=NULL;
   else
     rc = defpylin (pypgr->ystrt, pypgr->yincr, pypfi, 1);
   if (rc) {
-    gaprnt (0,"Error setting up Y axis metadata\n");
+    printf("Put Error: Unable to set up Y axis metadata\n");
     goto reterr; 
   }
 
@@ -9367,7 +9367,7 @@ char *pymask=NULL;
   else
     rc = defpylin (pypgr->zstrt, pypgr->zincr, pypfi, 2);
   if (rc) {
-    gaprnt (0,"Error setting up Z axis metadata\n");
+    printf("Put Error: Unable to set up Z axis metadata\n");
     goto reterr; 
   }
 
@@ -9375,7 +9375,7 @@ char *pymask=NULL;
   pypfi->dnum[3] = pypgr->tsz;
   tvals = (gadouble *)galloc(sizeof(gadouble)*8,"pyvals3");
   if (tvals == NULL) {
-    gaprnt (0,"Error: Unable to allocate memory for T axis metadata\n");
+    printf("Put Error: Unable to set up T axis metadata\n");
     goto reterr; 
   }
   *(tvals)   = pypgr->syr;
@@ -9402,7 +9402,7 @@ char *pymask=NULL;
   ev1 = ev2 = 1;
   rc = defpylin (ev1, ev2, pypfi, 4);
   if (rc) {
-    gaprnt (0,"Error: Unable to allocate memory for E axis metadata\n");
+    printf("Put Error: Unable to set up E axis metadata\n");
     goto reterr; 
   }
  
@@ -9410,16 +9410,14 @@ char *pymask=NULL;
   gsz = pypgr->xsz * pypgr->ysz * pypgr->zsz * pypgr->tsz * pypgr->esz;
   pygrid = (gadouble *)galloc(gsz*sizeof(gadouble),"pygrid");  
   if (pygrid==NULL) {
-    gaprnt (0,"Error: Unable to allocate memory for data grid\n");
-    snprintf(pout,1255,"       Size of request was %d grid elements\n",gsz);
-    gaprnt (0,pout);
+    printf("Put Error: Unable to allocate memory for data grid\n");
+    printf("           Size of request was %d grid elements\n",gsz);
     goto reterr;
   }
   pymask = (char *)galloc(gsz*sizeof(char),"pymask");  
   if (pymask==NULL) {
-    gaprnt (0,"Error: Unable to allocate memory for data mask\n");
-    snprintf(pout,1255,"       Size of request was %d grid elements\n",gsz);
-    gaprnt (0,pout);
+    printf("Put Error: Unable to allocate memory for data mask\n");
+    printf("           Size of request was %d grid elements\n",gsz);
     goto reterr;
   }
 
@@ -9432,9 +9430,6 @@ char *pymask=NULL;
   pypfi->rbuf = pygrid;
   pypfi->ubuf = pymask;
 
-  snprintf(pout,1255,"Put memory allocation size = %ld bytes\n",(size_t)(gsz*sizeof(gadouble)));
-  gaprnt (2,pout);
-
   /* Now we will add our new object to the chain of define blocks.
      First, check for an existing defined object with the same name */
   pdf = pcm->pdf1;
@@ -9446,8 +9441,6 @@ char *pymask=NULL;
   }
   if (pdf!=NULL) {
     /* name was found, pdf is pointing to the object we need to delete */
-    snprintf(pout,1255,"Name already DEFINEd: '%s' will be deleted and replaced\n",name);
-    gaprnt (2,pout);
     if (opdf==NULL) {
       /* pdf was the first in the chain, so we promote the forward link to anchor */
       pcm->pdf1 = pdf->pforw;
@@ -9474,7 +9467,7 @@ char *pymask=NULL;
   pypdf = NULL;
   pypdf = (struct gadefn *)galloc(sizeof(struct gadefn),"pypdf");
   if (pypdf==NULL) {
-    gaprnt (0,"Error: failed to allocate memory for a gadefn structure \n");
+    printf("Put Error: failed to allocate memory for a gadefn structure \n");
     goto reterr;
   }
   getwrd(pypdf->abbrv,name,19);  /* copy the name */
@@ -9492,7 +9485,8 @@ char *pymask=NULL;
     pdf->pforw = pypdf; 
   }  
 
-  return(0);
+  /* return the size of the memory allocation */
+  return(gsz*sizeof(gadouble));
 
 reterr:
   if (pypdf)  gree(pypdf,"a");
@@ -9500,7 +9494,7 @@ reterr:
   if (pymask) gree(pymask,"c");
   if (tvals)  gree(evals,"d");
   if (evals)  gree(evals,"e");
-  return(1);
+  return(-1);
 }
 
 /* This is the equivalent of deflin(), without the parsing.
