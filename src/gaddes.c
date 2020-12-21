@@ -1232,7 +1232,6 @@ gaint gaddes (char *name, struct gafile *pfi, gaint mflag) {
 	pvar->recoff = 0;
 	pvar->ncvid = -999;
 	pvar->sdvid = -999;
-	pvar->h5vid = -999;
 	pvar->levels = 0;
 	pvar->dfrm = 0;
 	pvar->var_t = 0;
@@ -1246,6 +1245,7 @@ gaint gaddes (char *name, struct gafile *pfi, gaint mflag) {
 	pvar->nh5vardims = 0; 
 	pvar->g2aflg = 0;
 #if USEHDF5==1
+	pvar->h5vid = -999;
 	pvar->h5varflg=-999;
 	pvar->dataspace=-999;
 #endif
