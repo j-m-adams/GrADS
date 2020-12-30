@@ -9467,7 +9467,7 @@ char *pymask=NULL;
   pypdf = NULL;
   pypdf = (struct gadefn *)galloc(sizeof(struct gadefn),"pypdf");
   if (pypdf==NULL) {
-    printf("Put Error: failed to allocate memory for a gadefn structure \n");
+    printf("Put Error: Unable to allocate memory for a defined variable structure\n");
     goto reterr;
   }
   getwrd(pypdf->abbrv,name,19);  /* copy the name */
