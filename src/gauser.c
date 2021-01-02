@@ -3288,7 +3288,9 @@ gadouble minvals[4], maxvals[4],dval;
         for (i=0;i<pvar->nvardims;i++) printf("%-4d ",pvar->vardimids[i]); printf("\n");
 	if (pfi->ncflg==1) printf(" ncvid=%d \n",pvar->ncvid);
 	if (pfi->ncflg==2) printf(" sdvid=%d \n",pvar->sdvid);
+#if USEHDF5==1
 	if (pfi->ncflg==3) printf(" h5vid=%lld \n",pvar->h5vid);
+#endif
 	printf(" scale=%f \n",pvar->scale);
 	printf(" add=%f \n",pvar->add);
       }
