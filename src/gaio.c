@@ -4045,10 +4045,8 @@ gadouble dval;
   H5Aclose(aid);
   H5Tclose(atype);
   return (0);
-
-#endif
-  return(0);
 }
+#endif
 
 
 /* Retrieves a non-character HDF-SDS Attribute. */

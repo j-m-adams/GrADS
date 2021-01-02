@@ -4145,102 +4145,102 @@ m4trace:configure.ac:221: -1- m4_pattern_allow([^SUPPLIBS$])
 m4trace:configure.ac:223: -1- m4_pattern_allow([^SUPPLIBS$])
 m4trace:configure.ac:297: -1- GA_SET_FLAGS([])
 m4trace:configure.ac:298: -1- GA_SET_DYNLIB_VAR([readline_libs], [readline])
-m4trace:configure.ac:298: -1- GA_SET_DYNLIB_VAR([readline_libs], [readline ncurses])
-m4trace:configure.ac:313: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:318: -1- GA_LIB_READLINE([use_readline=yes])
-m4trace:configure.ac:318: -1- m4_pattern_allow([^HAVE_LIBREADLINE$])
-m4trace:configure.ac:318: -1- m4_pattern_allow([^HAVE_READLINE_HISTORY$])
-m4trace:configure.ac:323: -1- m4_pattern_allow([^READLINE$])
-m4trace:configure.ac:325: -1- m4_pattern_allow([^READLINE$])
-m4trace:configure.ac:326: -1- m4_pattern_allow([^readline_libs$])
-m4trace:configure.ac:337: -1- GA_SET_FLAGS([], [], [], [-ltiff])
-m4trace:configure.ac:338: -1- GA_SET_DYNLIB_VAR([geotiff_libs], [tiff geotiff])
-m4trace:configure.ac:351: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:356: -1- AC_CHECK_GEOTIFF([ LDFLAGS="$LDFLAGS $GEOTIFF_LDFLAGS"
+m4trace:configure.ac:306: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:312: -1- GA_LIB_READLINE([use_readline=yes 
+  readline_libs="$READLINE_LIBS"])
+m4trace:configure.ac:312: -1- m4_pattern_allow([^HAVE_LIBREADLINE$])
+m4trace:configure.ac:312: -1- m4_pattern_allow([^HAVE_READLINE_HISTORY$])
+m4trace:configure.ac:317: -1- m4_pattern_allow([^READLINE$])
+m4trace:configure.ac:319: -1- m4_pattern_allow([^READLINE$])
+m4trace:configure.ac:320: -1- m4_pattern_allow([^readline_libs$])
+m4trace:configure.ac:331: -1- GA_SET_FLAGS([], [], [], [-ltiff])
+m4trace:configure.ac:332: -1- GA_SET_DYNLIB_VAR([geotiff_libs], [tiff geotiff])
+m4trace:configure.ac:345: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:350: -1- AC_CHECK_GEOTIFF([ LDFLAGS="$LDFLAGS $GEOTIFF_LDFLAGS"
     geotiff_inc="$GEOTIFF_CFLAGS"
     geotiff_libs="$GEOTIFF_LIBS"
     geotiff_ldflags="$GEOTIFF_LDFLAGS"
     use_geotiff=yes
   ])
-m4trace:configure.ac:356: -1- AC_CHECK_GEOTIFF_LIB([ac_geotiff_lib_ok='yes'])
-m4trace:configure.ac:356: -1- AC_CHECK_LIB_NOCACHE_GEOTIFF([tiff], [main], [ AC_CHECK_LIB_NOCACHE_GEOTIFF([geotiff],[main],
+m4trace:configure.ac:350: -1- AC_CHECK_GEOTIFF_LIB([ac_geotiff_lib_ok='yes'])
+m4trace:configure.ac:350: -1- AC_CHECK_LIB_NOCACHE_GEOTIFF([tiff], [main], [ AC_CHECK_LIB_NOCACHE_GEOTIFF([geotiff],[main],
     [ ac_geotiff_lib="yes"
       GEOTIFF_LIBS="-lgeotiff -ltiff $GEOTIFF_LIBS"
     ],[],[-ltiff])
   ])
-m4trace:configure.ac:356: -1- AC_CHECK_LIB_NOCACHE_GEOTIFF([geotiff], [main], [ ac_geotiff_lib="yes"
+m4trace:configure.ac:350: -1- AC_CHECK_LIB_NOCACHE_GEOTIFF([geotiff], [main], [ ac_geotiff_lib="yes"
       GEOTIFF_LIBS="-lgeotiff -ltiff $GEOTIFF_LIBS"
     ], [], [-ltiff])
-m4trace:configure.ac:356: -1- AC_CHECK_GEOTIFF_LIB([ac_geotiff_lib_ok='yes'])
-m4trace:configure.ac:356: -1- AC_CHECK_LIB_NOCACHE_GEOTIFF([tiff], [main], [ AC_CHECK_LIB_NOCACHE_GEOTIFF([geotiff],[main],
+m4trace:configure.ac:350: -1- AC_CHECK_GEOTIFF_LIB([ac_geotiff_lib_ok='yes'])
+m4trace:configure.ac:350: -1- AC_CHECK_LIB_NOCACHE_GEOTIFF([tiff], [main], [ AC_CHECK_LIB_NOCACHE_GEOTIFF([geotiff],[main],
     [ ac_geotiff_lib="yes"
       GEOTIFF_LIBS="-lgeotiff -ltiff $GEOTIFF_LIBS"
     ],[],[-ltiff])
   ])
-m4trace:configure.ac:356: -1- AC_CHECK_LIB_NOCACHE_GEOTIFF([geotiff], [main], [ ac_geotiff_lib="yes"
+m4trace:configure.ac:350: -1- AC_CHECK_LIB_NOCACHE_GEOTIFF([geotiff], [main], [ ac_geotiff_lib="yes"
       GEOTIFF_LIBS="-lgeotiff -ltiff $GEOTIFF_LIBS"
     ], [], [-ltiff])
-m4trace:configure.ac:356: -1- AC_CHECK_HEADER_NOCACHE_GEOTIFF([geotiffio.h], [ac_geotiff_h='yes'])
-m4trace:configure.ac:356: -1- AC_CHECK_HEADER_NOCACHE_GEOTIFF([geotiffio.h], [ac_geotiff_h='yes'])
-m4trace:configure.ac:356: -1- m4_pattern_allow([^GEOTIFF_LIBS$])
-m4trace:configure.ac:356: -1- m4_pattern_allow([^GEOTIFF_CFLAGS$])
-m4trace:configure.ac:356: -1- m4_pattern_allow([^GEOTIFF_LDFLAGS$])
-m4trace:configure.ac:366: -1- m4_pattern_allow([^GEOTIFF$])
-m4trace:configure.ac:368: -1- m4_pattern_allow([^GEOTIFF$])
-m4trace:configure.ac:369: -1- m4_pattern_allow([^geotiff_inc$])
-m4trace:configure.ac:370: -1- m4_pattern_allow([^geotiff_libs$])
-m4trace:configure.ac:371: -1- m4_pattern_allow([^geotiff_ldflags$])
-m4trace:configure.ac:383: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:384: -1- GA_SET_DYNLIB_VAR([shp_libs], [shp])
-m4trace:configure.ac:392: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:397: -1- GA_CHECK_LIB_SHP([
+m4trace:configure.ac:350: -1- AC_CHECK_HEADER_NOCACHE_GEOTIFF([geotiffio.h], [ac_geotiff_h='yes'])
+m4trace:configure.ac:350: -1- AC_CHECK_HEADER_NOCACHE_GEOTIFF([geotiffio.h], [ac_geotiff_h='yes'])
+m4trace:configure.ac:350: -1- m4_pattern_allow([^GEOTIFF_LIBS$])
+m4trace:configure.ac:350: -1- m4_pattern_allow([^GEOTIFF_CFLAGS$])
+m4trace:configure.ac:350: -1- m4_pattern_allow([^GEOTIFF_LDFLAGS$])
+m4trace:configure.ac:360: -1- m4_pattern_allow([^GEOTIFF$])
+m4trace:configure.ac:362: -1- m4_pattern_allow([^GEOTIFF$])
+m4trace:configure.ac:363: -1- m4_pattern_allow([^geotiff_inc$])
+m4trace:configure.ac:364: -1- m4_pattern_allow([^geotiff_libs$])
+m4trace:configure.ac:365: -1- m4_pattern_allow([^geotiff_ldflags$])
+m4trace:configure.ac:377: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:378: -1- GA_SET_DYNLIB_VAR([shp_libs], [shp])
+m4trace:configure.ac:386: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:391: -1- GA_CHECK_LIB_SHP([
     use_shp=yes 
     LDFLAGS="$LDFLAGS $SHP_LDFLAGS"
     shp_inc="$SHP_CFLAGS"
     shp_libs="$SHP_LIBS"
     shp_ldflags="$SHP_LDFLAGS"
   ])
-m4trace:configure.ac:397: -1- AC_CHECK_SHP_LIB([ac_shp_lib_ok='yes'])
-m4trace:configure.ac:397: -1- AC_CHECK_LIB_NOCACHE_SHP([shp], [main], [ 
+m4trace:configure.ac:391: -1- AC_CHECK_SHP_LIB([ac_shp_lib_ok='yes'])
+m4trace:configure.ac:391: -1- AC_CHECK_LIB_NOCACHE_SHP([shp], [main], [ 
     ac_shp_lib="yes"
     SHP_LIBS="-lshp $SHP_LIBS" 
   ])
-m4trace:configure.ac:397: -1- AC_CHECK_SHP_LIB([ac_shp_lib_ok='yes'])
-m4trace:configure.ac:397: -1- AC_CHECK_LIB_NOCACHE_SHP([shp], [main], [ 
+m4trace:configure.ac:391: -1- AC_CHECK_SHP_LIB([ac_shp_lib_ok='yes'])
+m4trace:configure.ac:391: -1- AC_CHECK_LIB_NOCACHE_SHP([shp], [main], [ 
     ac_shp_lib="yes"
     SHP_LIBS="-lshp $SHP_LIBS" 
   ])
-m4trace:configure.ac:397: -1- AC_CHECK_HEADER_NOCACHE_SHP([shapefil.h], [ac_shp_h='yes'])
-m4trace:configure.ac:397: -1- AC_CHECK_HEADER_NOCACHE_SHP([shapefil.h], [ac_shp_h='yes'])
-m4trace:configure.ac:397: -1- m4_pattern_allow([^SHP_LIBS$])
-m4trace:configure.ac:397: -1- m4_pattern_allow([^SHP_CFLAGS$])
-m4trace:configure.ac:397: -1- m4_pattern_allow([^SHP_LDFLAGS$])
-m4trace:configure.ac:407: -1- m4_pattern_allow([^USESHP$])
-m4trace:configure.ac:409: -1- m4_pattern_allow([^USESHP$])
-m4trace:configure.ac:410: -1- m4_pattern_allow([^shp_libs$])
-m4trace:configure.ac:411: -1- m4_pattern_allow([^shp_inc$])
-m4trace:configure.ac:412: -1- m4_pattern_allow([^shp_ldflags$])
-m4trace:configure.ac:422: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:424: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:433: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:437: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:448: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:450: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:459: -1- GA_SET_FLAGS([jasper])
-m4trace:configure.ac:463: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:476: -1- GA_SET_FLAGS([libxml2], [], [], [-lz])
-m4trace:configure.ac:478: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:488: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:490: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:501: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:502: -1- GA_SET_DYNLIB_VAR([gd_libs], [gd])
-m4trace:configure.ac:511: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:517: -1- GA_CHECK_LIB_GD([ use_gd=yes 
+m4trace:configure.ac:391: -1- AC_CHECK_HEADER_NOCACHE_SHP([shapefil.h], [ac_shp_h='yes'])
+m4trace:configure.ac:391: -1- AC_CHECK_HEADER_NOCACHE_SHP([shapefil.h], [ac_shp_h='yes'])
+m4trace:configure.ac:391: -1- m4_pattern_allow([^SHP_LIBS$])
+m4trace:configure.ac:391: -1- m4_pattern_allow([^SHP_CFLAGS$])
+m4trace:configure.ac:391: -1- m4_pattern_allow([^SHP_LDFLAGS$])
+m4trace:configure.ac:401: -1- m4_pattern_allow([^USESHP$])
+m4trace:configure.ac:403: -1- m4_pattern_allow([^USESHP$])
+m4trace:configure.ac:404: -1- m4_pattern_allow([^shp_libs$])
+m4trace:configure.ac:405: -1- m4_pattern_allow([^shp_inc$])
+m4trace:configure.ac:406: -1- m4_pattern_allow([^shp_ldflags$])
+m4trace:configure.ac:416: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:418: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:427: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:431: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:442: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:444: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:453: -1- GA_SET_FLAGS([jasper])
+m4trace:configure.ac:457: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:470: -1- GA_SET_FLAGS([libxml2], [], [], [-lz])
+m4trace:configure.ac:472: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:482: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:484: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:495: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:496: -1- GA_SET_DYNLIB_VAR([gd_libs], [gd])
+m4trace:configure.ac:505: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:511: -1- GA_CHECK_LIB_GD([ use_gd=yes 
     gd_inc="$GD_CFLAGS"
     gd_libs="$GD_LIBS"
     gd_ldflags="$GD_LDFLAGS"
   ])
-m4trace:configure.ac:517: -1- PKG_CHECK_MODULES([GD], [gdlib], [ga_pkgconfig_gd=yes], [
+m4trace:configure.ac:511: -1- PKG_CHECK_MODULES([GD], [gdlib], [ga_pkgconfig_gd=yes], [
     # look for gdlib-config
     AC_PATH_PROG([GD_CONFIG],[gdlib-config],[no])
     if test "$GD_CONFIG" != "no"; then
@@ -4250,124 +4250,124 @@ m4trace:configure.ac:517: -1- PKG_CHECK_MODULES([GD], [gdlib], [ga_pkgconfig_gd=
       ga_config_gd=yes
     fi
   ])
-m4trace:configure.ac:517: -1- PKG_PROG_PKG_CONFIG
-m4trace:configure.ac:517: -1- m4_pattern_forbid([^_?PKG_[A-Z_]+$])
-m4trace:configure.ac:517: -1- m4_pattern_allow([^PKG_CONFIG(_PATH)?$])
-m4trace:configure.ac:517: -1- m4_pattern_allow([^PKG_CONFIG$])
-m4trace:configure.ac:517: -1- m4_pattern_allow([^PKG_CONFIG$])
-m4trace:configure.ac:517: -1- m4_pattern_allow([^GD_CFLAGS$])
-m4trace:configure.ac:517: -1- m4_pattern_allow([^GD_LIBS$])
-m4trace:configure.ac:517: -1- PKG_CHECK_EXISTS([gdlib], [pkg_cv_[]GD_CFLAGS=`$PKG_CONFIG --[]cflags "gdlib" 2>/dev/null`], [pkg_failed=yes])
-m4trace:configure.ac:517: -1- PKG_CHECK_EXISTS([gdlib], [pkg_cv_[]GD_LIBS=`$PKG_CONFIG --[]libs "gdlib" 2>/dev/null`], [pkg_failed=yes])
-m4trace:configure.ac:517: -1- _PKG_SHORT_ERRORS_SUPPORTED
-m4trace:configure.ac:517: -1- m4_pattern_allow([^GD_CONFIG$])
-m4trace:configure.ac:517: -1- m4_pattern_allow([^GD_CONFIG$])
-m4trace:configure.ac:526: -1- m4_pattern_allow([^USEGD$])
-m4trace:configure.ac:528: -1- m4_pattern_allow([^USEGD$])
-m4trace:configure.ac:529: -1- m4_pattern_allow([^gd_inc$])
-m4trace:configure.ac:530: -1- m4_pattern_allow([^gd_libs$])
-m4trace:configure.ac:531: -1- m4_pattern_allow([^gd_ldflags$])
-m4trace:configure.ac:541: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:542: -1- GA_SET_DYNLIB_VAR([grib2_libs], [grib2c jasper png15 z])
-m4trace:configure.ac:549: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:555: -1- GA_CHECK_LIB_GRIB2([ use_grib2=yes 
+m4trace:configure.ac:511: -1- PKG_PROG_PKG_CONFIG
+m4trace:configure.ac:511: -1- m4_pattern_forbid([^_?PKG_[A-Z_]+$])
+m4trace:configure.ac:511: -1- m4_pattern_allow([^PKG_CONFIG(_PATH)?$])
+m4trace:configure.ac:511: -1- m4_pattern_allow([^PKG_CONFIG$])
+m4trace:configure.ac:511: -1- m4_pattern_allow([^PKG_CONFIG$])
+m4trace:configure.ac:511: -1- m4_pattern_allow([^GD_CFLAGS$])
+m4trace:configure.ac:511: -1- m4_pattern_allow([^GD_LIBS$])
+m4trace:configure.ac:511: -1- PKG_CHECK_EXISTS([gdlib], [pkg_cv_[]GD_CFLAGS=`$PKG_CONFIG --[]cflags "gdlib" 2>/dev/null`], [pkg_failed=yes])
+m4trace:configure.ac:511: -1- PKG_CHECK_EXISTS([gdlib], [pkg_cv_[]GD_LIBS=`$PKG_CONFIG --[]libs "gdlib" 2>/dev/null`], [pkg_failed=yes])
+m4trace:configure.ac:511: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:511: -1- m4_pattern_allow([^GD_CONFIG$])
+m4trace:configure.ac:511: -1- m4_pattern_allow([^GD_CONFIG$])
+m4trace:configure.ac:520: -1- m4_pattern_allow([^USEGD$])
+m4trace:configure.ac:522: -1- m4_pattern_allow([^USEGD$])
+m4trace:configure.ac:523: -1- m4_pattern_allow([^gd_inc$])
+m4trace:configure.ac:524: -1- m4_pattern_allow([^gd_libs$])
+m4trace:configure.ac:525: -1- m4_pattern_allow([^gd_ldflags$])
+m4trace:configure.ac:535: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:536: -1- GA_SET_DYNLIB_VAR([grib2_libs], [grib2c jasper png15 z])
+m4trace:configure.ac:543: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:549: -1- GA_CHECK_LIB_GRIB2([ use_grib2=yes 
     grib2_libs=$G2_LIBS
   ])
-m4trace:configure.ac:555: -1- m4_pattern_allow([^G2_LIBS$])
-m4trace:configure.ac:562: -1- m4_pattern_allow([^GRIB2$])
-m4trace:configure.ac:564: -1- m4_pattern_allow([^GRIB2$])
-m4trace:configure.ac:565: -1- m4_pattern_allow([^grib2_libs$])
-m4trace:configure.ac:577: -1- GA_SET_FLAGS([cairo freetype2])
-m4trace:configure.ac:578: -1- GA_SET_INCLUDE_VAR([cairo_inc], [cairo freetype2])
-m4trace:configure.ac:578: -1- GA_SET_DYNLIB_VAR([cairo_libs], [cairo])
-m4trace:configure.ac:599: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:610: -1- GA_CHECK_LIB_CAIRO([
+m4trace:configure.ac:549: -1- m4_pattern_allow([^G2_LIBS$])
+m4trace:configure.ac:556: -1- m4_pattern_allow([^GRIB2$])
+m4trace:configure.ac:558: -1- m4_pattern_allow([^GRIB2$])
+m4trace:configure.ac:559: -1- m4_pattern_allow([^grib2_libs$])
+m4trace:configure.ac:571: -1- GA_SET_FLAGS([cairo freetype2])
+m4trace:configure.ac:572: -1- GA_SET_INCLUDE_VAR([cairo_inc], [cairo freetype2])
+m4trace:configure.ac:572: -1- GA_SET_DYNLIB_VAR([cairo_libs], [cairo])
+m4trace:configure.ac:593: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:604: -1- GA_CHECK_LIB_CAIRO([
       use_cairo=yes
       cairo_inc=$CAIRO_CFLAGS
       cairo_libs=$CAIRO_LIBS
     ])
-m4trace:configure.ac:610: -1- PKG_CHECK_MODULES([CAIRO], [cairo], [cairo_pkgconfig=yes])
-m4trace:configure.ac:610: -1- m4_pattern_allow([^CAIRO_CFLAGS$])
-m4trace:configure.ac:610: -1- m4_pattern_allow([^CAIRO_LIBS$])
-m4trace:configure.ac:610: -1- PKG_CHECK_EXISTS([cairo], [pkg_cv_[]CAIRO_CFLAGS=`$PKG_CONFIG --[]cflags "cairo" 2>/dev/null`], [pkg_failed=yes])
-m4trace:configure.ac:610: -1- PKG_CHECK_EXISTS([cairo], [pkg_cv_[]CAIRO_LIBS=`$PKG_CONFIG --[]libs "cairo" 2>/dev/null`], [pkg_failed=yes])
-m4trace:configure.ac:610: -1- _PKG_SHORT_ERRORS_SUPPORTED
-m4trace:configure.ac:619: -1- m4_pattern_allow([^USECAIRO$])
-m4trace:configure.ac:621: -1- m4_pattern_allow([^USECAIRO$])
-m4trace:configure.ac:622: -1- m4_pattern_allow([^cairo_inc$])
-m4trace:configure.ac:623: -1- m4_pattern_allow([^cairo_libs$])
-m4trace:configure.ac:634: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:635: -1- GA_SET_DYNLIB_VAR([hdf5_libs], [hdf5])
-m4trace:configure.ac:645: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:651: -1- AC_CHECK_HDF5([
+m4trace:configure.ac:604: -1- PKG_CHECK_MODULES([CAIRO], [cairo], [cairo_pkgconfig=yes])
+m4trace:configure.ac:604: -1- m4_pattern_allow([^CAIRO_CFLAGS$])
+m4trace:configure.ac:604: -1- m4_pattern_allow([^CAIRO_LIBS$])
+m4trace:configure.ac:604: -1- PKG_CHECK_EXISTS([cairo], [pkg_cv_[]CAIRO_CFLAGS=`$PKG_CONFIG --[]cflags "cairo" 2>/dev/null`], [pkg_failed=yes])
+m4trace:configure.ac:604: -1- PKG_CHECK_EXISTS([cairo], [pkg_cv_[]CAIRO_LIBS=`$PKG_CONFIG --[]libs "cairo" 2>/dev/null`], [pkg_failed=yes])
+m4trace:configure.ac:604: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:613: -1- m4_pattern_allow([^USECAIRO$])
+m4trace:configure.ac:615: -1- m4_pattern_allow([^USECAIRO$])
+m4trace:configure.ac:616: -1- m4_pattern_allow([^cairo_inc$])
+m4trace:configure.ac:617: -1- m4_pattern_allow([^cairo_libs$])
+m4trace:configure.ac:628: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:629: -1- GA_SET_DYNLIB_VAR([hdf5_libs], [hdf5])
+m4trace:configure.ac:639: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:645: -1- AC_CHECK_HDF5([
     use_hdf5='yes'
     hdf5_inc=$HDF5_CFLAGS
     hdf5_libs="$HDF5_LIBS"
   ])
-m4trace:configure.ac:651: -1- AC_CHECK_HDF5_LIB([ac_hdf5_lib_ok='yes'])
-m4trace:configure.ac:651: -1- AC_CHECK_LIB_NOCACHE_HDF5([z], [compress], [ AC_CHECK_LIB_NOCACHE_HDF5([jpeg],[main],
+m4trace:configure.ac:645: -1- AC_CHECK_HDF5_LIB([ac_hdf5_lib_ok='yes'])
+m4trace:configure.ac:645: -1- AC_CHECK_LIB_NOCACHE_HDF5([z], [compress], [ AC_CHECK_LIB_NOCACHE_HDF5([jpeg],[main],
     [ AC_CHECK_LIB_NOCACHE_HDF5([hdf5],[H5Fopen],
       [ ac_hdf5_lib="yes"
           HDF5_LIBS="-lhdf5 -ljpeg -lz $HDF5_LIBS"
       ],[],[-lhdf5 -ljpeg -lz])
     ])
   ])
-m4trace:configure.ac:651: -1- AC_CHECK_LIB_NOCACHE_HDF5([jpeg], [main], [ AC_CHECK_LIB_NOCACHE_HDF5([hdf5],[H5Fopen],
+m4trace:configure.ac:645: -1- AC_CHECK_LIB_NOCACHE_HDF5([jpeg], [main], [ AC_CHECK_LIB_NOCACHE_HDF5([hdf5],[H5Fopen],
       [ ac_hdf5_lib="yes"
           HDF5_LIBS="-lhdf5 -ljpeg -lz $HDF5_LIBS"
       ],[],[-lhdf5 -ljpeg -lz])
     ])
-m4trace:configure.ac:651: -1- AC_CHECK_LIB_NOCACHE_HDF5([hdf5], [H5Fopen], [ ac_hdf5_lib="yes"
+m4trace:configure.ac:645: -1- AC_CHECK_LIB_NOCACHE_HDF5([hdf5], [H5Fopen], [ ac_hdf5_lib="yes"
           HDF5_LIBS="-lhdf5 -ljpeg -lz $HDF5_LIBS"
       ], [], [-lhdf5 -ljpeg -lz])
-m4trace:configure.ac:651: -1- AC_CHECK_HDF5_LIB([ac_hdf5_lib_ok='yes'])
-m4trace:configure.ac:651: -1- AC_CHECK_LIB_NOCACHE_HDF5([z], [compress], [ AC_CHECK_LIB_NOCACHE_HDF5([jpeg],[main],
+m4trace:configure.ac:645: -1- AC_CHECK_HDF5_LIB([ac_hdf5_lib_ok='yes'])
+m4trace:configure.ac:645: -1- AC_CHECK_LIB_NOCACHE_HDF5([z], [compress], [ AC_CHECK_LIB_NOCACHE_HDF5([jpeg],[main],
     [ AC_CHECK_LIB_NOCACHE_HDF5([hdf5],[H5Fopen],
       [ ac_hdf5_lib="yes"
           HDF5_LIBS="-lhdf5 -ljpeg -lz $HDF5_LIBS"
       ],[],[-lhdf5 -ljpeg -lz])
     ])
   ])
-m4trace:configure.ac:651: -1- AC_CHECK_LIB_NOCACHE_HDF5([jpeg], [main], [ AC_CHECK_LIB_NOCACHE_HDF5([hdf5],[H5Fopen],
+m4trace:configure.ac:645: -1- AC_CHECK_LIB_NOCACHE_HDF5([jpeg], [main], [ AC_CHECK_LIB_NOCACHE_HDF5([hdf5],[H5Fopen],
       [ ac_hdf5_lib="yes"
           HDF5_LIBS="-lhdf5 -ljpeg -lz $HDF5_LIBS"
       ],[],[-lhdf5 -ljpeg -lz])
     ])
-m4trace:configure.ac:651: -1- AC_CHECK_LIB_NOCACHE_HDF5([hdf5], [H5Fopen], [ ac_hdf5_lib="yes"
+m4trace:configure.ac:645: -1- AC_CHECK_LIB_NOCACHE_HDF5([hdf5], [H5Fopen], [ ac_hdf5_lib="yes"
           HDF5_LIBS="-lhdf5 -ljpeg -lz $HDF5_LIBS"
       ], [], [-lhdf5 -ljpeg -lz])
-m4trace:configure.ac:651: -1- AC_CHECK_HEADER_NOCACHE_HDF5([hdf5.h], [ac_hdf5_h='yes'])
-m4trace:configure.ac:651: -1- AC_CHECK_HEADER_NOCACHE_HDF5([hdf5.h], [ac_hdf5_h='yes'])
-m4trace:configure.ac:651: -1- m4_pattern_allow([^HDF5_LIBS$])
-m4trace:configure.ac:651: -1- m4_pattern_allow([^HDF5_CFLAGS$])
-m4trace:configure.ac:651: -1- m4_pattern_allow([^HDF5_LDFLAGS$])
-m4trace:configure.ac:659: -1- m4_pattern_allow([^USEHDF5$])
-m4trace:configure.ac:661: -1- m4_pattern_allow([^USEHDF5$])
-m4trace:configure.ac:662: -1- m4_pattern_allow([^hdf5_inc$])
-m4trace:configure.ac:663: -1- m4_pattern_allow([^hdf5_libs$])
-m4trace:configure.ac:673: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:679: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:684: -1- AC_CHECK_UDUNITS2([
+m4trace:configure.ac:645: -1- AC_CHECK_HEADER_NOCACHE_HDF5([hdf5.h], [ac_hdf5_h='yes'])
+m4trace:configure.ac:645: -1- AC_CHECK_HEADER_NOCACHE_HDF5([hdf5.h], [ac_hdf5_h='yes'])
+m4trace:configure.ac:645: -1- m4_pattern_allow([^HDF5_LIBS$])
+m4trace:configure.ac:645: -1- m4_pattern_allow([^HDF5_CFLAGS$])
+m4trace:configure.ac:645: -1- m4_pattern_allow([^HDF5_LDFLAGS$])
+m4trace:configure.ac:653: -1- m4_pattern_allow([^USEHDF5$])
+m4trace:configure.ac:655: -1- m4_pattern_allow([^USEHDF5$])
+m4trace:configure.ac:656: -1- m4_pattern_allow([^hdf5_inc$])
+m4trace:configure.ac:657: -1- m4_pattern_allow([^hdf5_libs$])
+m4trace:configure.ac:667: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:673: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:678: -1- AC_CHECK_UDUNITS2([
     have_udunits=yes
   ])
-m4trace:configure.ac:684: -1- AC_CHECK_UDUNITS2_LIB([ac_udunits2_lib_ok="yes"])
-m4trace:configure.ac:684: -1- AC_CHECK_LIB_NOCACHE_UDUNITS2([udunits2], [main], [ ac_udunits2_lib="yes"
+m4trace:configure.ac:678: -1- AC_CHECK_UDUNITS2_LIB([ac_udunits2_lib_ok="yes"])
+m4trace:configure.ac:678: -1- AC_CHECK_LIB_NOCACHE_UDUNITS2([udunits2], [main], [ ac_udunits2_lib="yes"
     UDUNITS2_LIBS="-ludunits2 $UDUNITS2_LIBS"
   ])
-m4trace:configure.ac:684: -1- AC_CHECK_UDUNITS2_LIB([ac_udunits2_lib_ok="yes"])
-m4trace:configure.ac:684: -1- AC_CHECK_LIB_NOCACHE_UDUNITS2([udunits2], [main], [ ac_udunits2_lib="yes"
+m4trace:configure.ac:678: -1- AC_CHECK_UDUNITS2_LIB([ac_udunits2_lib_ok="yes"])
+m4trace:configure.ac:678: -1- AC_CHECK_LIB_NOCACHE_UDUNITS2([udunits2], [main], [ ac_udunits2_lib="yes"
     UDUNITS2_LIBS="-ludunits2 $UDUNITS2_LIBS"
   ])
-m4trace:configure.ac:684: -1- AC_CHECK_HEADER_NOCACHE_UDUNITS2([udunits2.h], [ac_udunits2_h="yes"])
-m4trace:configure.ac:684: -1- AC_CHECK_HEADER_NOCACHE_UDUNITS2([udunits2.h], [ac_udunits2_h="yes"])
-m4trace:configure.ac:684: -1- m4_pattern_allow([^UDUNITS2_LIBS$])
-m4trace:configure.ac:684: -1- m4_pattern_allow([^UDUNITS2_CFLAGS$])
-m4trace:configure.ac:684: -1- m4_pattern_allow([^UDUNITS2_LDFLAGS$])
-m4trace:configure.ac:697: -1- GA_SET_FLAGS([], [], [], [-ldf])
-m4trace:configure.ac:698: -1- GA_SET_DYNLIB_VAR([hdf_libs], [mfhdf df jpeg z udunits2])
-m4trace:configure.ac:705: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:711: -1- AC_CHECK_HDF4_NETCDF([use_hdf=yes], [use_hdf=yes])
-m4trace:configure.ac:711: -1- AC_CHECK_HDF4([
+m4trace:configure.ac:678: -1- AC_CHECK_HEADER_NOCACHE_UDUNITS2([udunits2.h], [ac_udunits2_h="yes"])
+m4trace:configure.ac:678: -1- AC_CHECK_HEADER_NOCACHE_UDUNITS2([udunits2.h], [ac_udunits2_h="yes"])
+m4trace:configure.ac:678: -1- m4_pattern_allow([^UDUNITS2_LIBS$])
+m4trace:configure.ac:678: -1- m4_pattern_allow([^UDUNITS2_CFLAGS$])
+m4trace:configure.ac:678: -1- m4_pattern_allow([^UDUNITS2_LDFLAGS$])
+m4trace:configure.ac:691: -1- GA_SET_FLAGS([], [], [], [-ldf])
+m4trace:configure.ac:692: -1- GA_SET_DYNLIB_VAR([hdf_libs], [mfhdf df jpeg z udunits2])
+m4trace:configure.ac:699: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:705: -1- AC_CHECK_HDF4_NETCDF([use_hdf=yes], [use_hdf=yes])
+m4trace:configure.ac:705: -1- AC_CHECK_HDF4([
     ac_hdf4_netcdf_save_LDFLAGS=$LDFLAGS
     ac_hdf4_netcdf_save_LIBS=$LIBS
     LIBS="$LIBS $HDF4_LIBS"
@@ -4407,12 +4407,12 @@ dnl    ac_hdf4_netcdf_save_NC_CFLAGS=$NC_CFLAGS
     CPPFLAGS=$ac_hdf4_netcdf_save_CPPFLAGS
 dnl    NC_CFLAGS=$ac_hdf4_netcdf_save_NC_CFLAG
   ])
-m4trace:configure.ac:711: -1- AC_CHECK_HDF4_LIB([ac_hdf4_lib_ok='yes'])
-m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([sz], [SZ_BufftoBuffCompress], [
+m4trace:configure.ac:705: -1- AC_CHECK_HDF4_LIB([ac_hdf4_lib_ok='yes'])
+m4trace:configure.ac:705: -1- AC_CHECK_LIB_NOCACHE_HDF4([sz], [SZ_BufftoBuffCompress], [
       LIBS="$LIBS -lsz"
       HDF4_LIBS='-lsz'
   ])
-m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([z], [deflate], [ AC_CHECK_LIB_NOCACHE_HDF4([jpeg],[jpeg_start_compress],
+m4trace:configure.ac:705: -1- AC_CHECK_LIB_NOCACHE_HDF4([z], [deflate], [ AC_CHECK_LIB_NOCACHE_HDF4([jpeg],[jpeg_start_compress],
     [ AC_CHECK_LIB_NOCACHE_HDF4([df],[Hopen],
       [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
         [ ac_hdf4_lib="yes"
@@ -4421,27 +4421,27 @@ m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([z], [deflate], [ AC_CHE
       ],[],[-ljpeg -lz])
     ])
   ])
-m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([jpeg], [jpeg_start_compress], [ AC_CHECK_LIB_NOCACHE_HDF4([df],[Hopen],
+m4trace:configure.ac:705: -1- AC_CHECK_LIB_NOCACHE_HDF4([jpeg], [jpeg_start_compress], [ AC_CHECK_LIB_NOCACHE_HDF4([df],[Hopen],
       [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
         [ ac_hdf4_lib="yes"
           HDF4_LIBS="-lmfhdf -ldf -ljpeg -lz $HDF4_LIBS"
         ],[],[-ldf -ljpeg -lz])
       ],[],[-ljpeg -lz])
     ])
-m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([df], [Hopen], [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
+m4trace:configure.ac:705: -1- AC_CHECK_LIB_NOCACHE_HDF4([df], [Hopen], [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
         [ ac_hdf4_lib="yes"
           HDF4_LIBS="-lmfhdf -ldf -ljpeg -lz $HDF4_LIBS"
         ],[],[-ldf -ljpeg -lz])
       ], [], [-ljpeg -lz])
-m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([mfhdf], [SDstart], [ ac_hdf4_lib="yes"
+m4trace:configure.ac:705: -1- AC_CHECK_LIB_NOCACHE_HDF4([mfhdf], [SDstart], [ ac_hdf4_lib="yes"
           HDF4_LIBS="-lmfhdf -ldf -ljpeg -lz $HDF4_LIBS"
         ], [], [-ldf -ljpeg -lz])
-m4trace:configure.ac:711: -1- AC_CHECK_HDF4_LIB([ac_hdf4_lib_ok='yes'])
-m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([sz], [SZ_BufftoBuffCompress], [
+m4trace:configure.ac:705: -1- AC_CHECK_HDF4_LIB([ac_hdf4_lib_ok='yes'])
+m4trace:configure.ac:705: -1- AC_CHECK_LIB_NOCACHE_HDF4([sz], [SZ_BufftoBuffCompress], [
       LIBS="$LIBS -lsz"
       HDF4_LIBS='-lsz'
   ])
-m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([z], [deflate], [ AC_CHECK_LIB_NOCACHE_HDF4([jpeg],[jpeg_start_compress],
+m4trace:configure.ac:705: -1- AC_CHECK_LIB_NOCACHE_HDF4([z], [deflate], [ AC_CHECK_LIB_NOCACHE_HDF4([jpeg],[jpeg_start_compress],
     [ AC_CHECK_LIB_NOCACHE_HDF4([df],[Hopen],
       [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
         [ ac_hdf4_lib="yes"
@@ -4450,41 +4450,41 @@ m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([z], [deflate], [ AC_CHE
       ],[],[-ljpeg -lz])
     ])
   ])
-m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([jpeg], [jpeg_start_compress], [ AC_CHECK_LIB_NOCACHE_HDF4([df],[Hopen],
+m4trace:configure.ac:705: -1- AC_CHECK_LIB_NOCACHE_HDF4([jpeg], [jpeg_start_compress], [ AC_CHECK_LIB_NOCACHE_HDF4([df],[Hopen],
       [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
         [ ac_hdf4_lib="yes"
           HDF4_LIBS="-lmfhdf -ldf -ljpeg -lz $HDF4_LIBS"
         ],[],[-ldf -ljpeg -lz])
       ],[],[-ljpeg -lz])
     ])
-m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([df], [Hopen], [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
+m4trace:configure.ac:705: -1- AC_CHECK_LIB_NOCACHE_HDF4([df], [Hopen], [ AC_CHECK_LIB_NOCACHE_HDF4([mfhdf],[SDstart],
         [ ac_hdf4_lib="yes"
           HDF4_LIBS="-lmfhdf -ldf -ljpeg -lz $HDF4_LIBS"
         ],[],[-ldf -ljpeg -lz])
       ], [], [-ljpeg -lz])
-m4trace:configure.ac:711: -1- AC_CHECK_LIB_NOCACHE_HDF4([mfhdf], [SDstart], [ ac_hdf4_lib="yes"
+m4trace:configure.ac:705: -1- AC_CHECK_LIB_NOCACHE_HDF4([mfhdf], [SDstart], [ ac_hdf4_lib="yes"
           HDF4_LIBS="-lmfhdf -ldf -ljpeg -lz $HDF4_LIBS"
         ], [], [-ldf -ljpeg -lz])
-m4trace:configure.ac:711: -1- AC_CHECK_HEADER_NOCACHE_HDF4([mfhdf.h], [ac_hdf4_h='yes'])
-m4trace:configure.ac:711: -1- AC_CHECK_HEADER_NOCACHE_HDF4([mfhdf.h], [ac_hdf4_h='yes'])
-m4trace:configure.ac:711: -1- m4_pattern_allow([^HAVE_HDF4_NETCDF_H$])
-m4trace:configure.ac:711: -1- AC_CHECK_NETCDF_HEADER([], [ac_hdf4_netcdf_h='yes'])
-m4trace:configure.ac:711: -1- AC_CHECK_NETCDF_3_HEADER([], [ac_netcdf_h='yes'], [ac_netcdf_h='no'])
-m4trace:configure.ac:711: -1- m4_pattern_allow([^NC_NETCDF_3_CPPFLAG$])
-m4trace:configure.ac:711: -1- m4_pattern_allow([^HDF4_LIBS$])
-m4trace:configure.ac:711: -1- m4_pattern_allow([^HDF4_CFLAGS$])
-m4trace:configure.ac:711: -1- m4_pattern_allow([^HDF4_LDFLAGS$])
-m4trace:configure.ac:711: -1- m4_pattern_allow([^HDF_HAVE_NETCDF$])
-m4trace:configure.ac:711: -1- m4_pattern_allow([^HDF_NETCDF_NAME$])
-m4trace:configure.ac:711: -1- m4_pattern_allow([^HDF_NETCDF_NAME$])
-m4trace:configure.ac:719: -1- m4_pattern_allow([^USEHDF$])
-m4trace:configure.ac:721: -1- m4_pattern_allow([^USEHDF$])
-m4trace:configure.ac:722: -1- m4_pattern_allow([^hdf_inc$])
-m4trace:configure.ac:723: -1- m4_pattern_allow([^hdf_libs$])
-m4trace:configure.ac:736: -1- GA_SET_FLAGS([])
-m4trace:configure.ac:737: -1- GA_SET_DYNLIB_VAR([nc_libs], [udunits2 netcdf])
-m4trace:configure.ac:737: -1- GA_SET_DYNLIB_VAR([nc_libs], [udunits2 netcdf hdf5_hl hdf5 curl z])
-m4trace:configure.ac:763: -1- AC_CHECK_NETCDF([
+m4trace:configure.ac:705: -1- AC_CHECK_HEADER_NOCACHE_HDF4([mfhdf.h], [ac_hdf4_h='yes'])
+m4trace:configure.ac:705: -1- AC_CHECK_HEADER_NOCACHE_HDF4([mfhdf.h], [ac_hdf4_h='yes'])
+m4trace:configure.ac:705: -1- m4_pattern_allow([^HAVE_HDF4_NETCDF_H$])
+m4trace:configure.ac:705: -1- AC_CHECK_NETCDF_HEADER([], [ac_hdf4_netcdf_h='yes'])
+m4trace:configure.ac:705: -1- AC_CHECK_NETCDF_3_HEADER([], [ac_netcdf_h='yes'], [ac_netcdf_h='no'])
+m4trace:configure.ac:705: -1- m4_pattern_allow([^NC_NETCDF_3_CPPFLAG$])
+m4trace:configure.ac:705: -1- m4_pattern_allow([^HDF4_LIBS$])
+m4trace:configure.ac:705: -1- m4_pattern_allow([^HDF4_CFLAGS$])
+m4trace:configure.ac:705: -1- m4_pattern_allow([^HDF4_LDFLAGS$])
+m4trace:configure.ac:705: -1- m4_pattern_allow([^HDF_HAVE_NETCDF$])
+m4trace:configure.ac:705: -1- m4_pattern_allow([^HDF_NETCDF_NAME$])
+m4trace:configure.ac:705: -1- m4_pattern_allow([^HDF_NETCDF_NAME$])
+m4trace:configure.ac:713: -1- m4_pattern_allow([^USEHDF$])
+m4trace:configure.ac:715: -1- m4_pattern_allow([^USEHDF$])
+m4trace:configure.ac:716: -1- m4_pattern_allow([^hdf_inc$])
+m4trace:configure.ac:717: -1- m4_pattern_allow([^hdf_libs$])
+m4trace:configure.ac:730: -1- GA_SET_FLAGS([])
+m4trace:configure.ac:731: -1- GA_SET_DYNLIB_VAR([nc_libs], [udunits2 netcdf])
+m4trace:configure.ac:731: -1- GA_SET_DYNLIB_VAR([nc_libs], [udunits2 netcdf hdf5_hl hdf5 curl z])
+m4trace:configure.ac:757: -1- AC_CHECK_NETCDF([
         use_nc=yes 
         # the macro doesn't test for nc4 options so we do it here
         NC_CONFIG="`pkg-config --variable=prefix netcdf`/bin/nc-config"
@@ -4496,37 +4496,37 @@ m4trace:configure.ac:763: -1- AC_CHECK_NETCDF([
         nc_inc="$NC_CFLAGS $UDUNITS_CFLAGS"
         nc_libs="$NC_LIBS $UDUNITS_LIBS"
       ])
-m4trace:configure.ac:763: -1- m4_pattern_allow([^NC_LDFLAGS$])
-m4trace:configure.ac:763: -1- m4_pattern_allow([^NC_LIBS$])
-m4trace:configure.ac:763: -1- AC_CHECK_NETCDF_HEADER([$NC_PATH_INC], [ac_netcdf_header='yes'], [ac_netcdf_header='no'], [$ac_check_nc_interface])
-m4trace:configure.ac:763: -1- AC_CHECK_NETCDF_3_HEADER([$NC_PATH_INC], [ac_netcdf_h='yes'], [ac_netcdf_h='no'])
-m4trace:configure.ac:763: -1- m4_pattern_allow([^NC_NETCDF_3_CPPFLAG$])
-m4trace:configure.ac:763: -1- AC_CHECK_NETCDF_HEADER([$ac_netcdf_incdir], [ac_netcdf_header='yes'], [ac_netcdf_header='no'], [$ac_check_nc_interface])
-m4trace:configure.ac:763: -1- AC_CHECK_NETCDF_3_HEADER([$ac_netcdf_incdir], [ac_netcdf_h='yes'], [ac_netcdf_h='no'])
-m4trace:configure.ac:763: -1- m4_pattern_allow([^NC_NETCDF_3_CPPFLAG$])
-m4trace:configure.ac:763: -1- m4_pattern_allow([^NC_CFLAGS$])
-m4trace:configure.ac:781: -1- m4_pattern_allow([^USENETCDF$])
-m4trace:configure.ac:782: -1- m4_pattern_allow([^HAVENETCDF4$])
-m4trace:configure.ac:783: -1- m4_pattern_allow([^USEDAP$])
-m4trace:configure.ac:785: -1- m4_pattern_allow([^USENETCDF$])
-m4trace:configure.ac:787: -1- m4_pattern_allow([^HAVENETCDF4$])
-m4trace:configure.ac:789: -1- m4_pattern_allow([^HAVENETCDF4$])
-m4trace:configure.ac:791: -1- m4_pattern_allow([^USEDAP$])
-m4trace:configure.ac:793: -1- m4_pattern_allow([^USEDAP$])
-m4trace:configure.ac:796: -1- m4_pattern_allow([^nc_inc$])
-m4trace:configure.ac:797: -1- m4_pattern_allow([^nc_libs$])
-m4trace:configure.ac:809: -1- GA_SET_FLAGS([], [], [], [-lz])
-m4trace:configure.ac:810: -1- GA_SET_DYNLIB_VAR([gadap_libs], [gadap dapclient dap curl xml2 z])
-m4trace:configure.ac:821: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:827: -1- GA_CHECK_LIB_GADAP([ use_gadap=yes 
+m4trace:configure.ac:757: -1- m4_pattern_allow([^NC_LDFLAGS$])
+m4trace:configure.ac:757: -1- m4_pattern_allow([^NC_LIBS$])
+m4trace:configure.ac:757: -1- AC_CHECK_NETCDF_HEADER([$NC_PATH_INC], [ac_netcdf_header='yes'], [ac_netcdf_header='no'], [$ac_check_nc_interface])
+m4trace:configure.ac:757: -1- AC_CHECK_NETCDF_3_HEADER([$NC_PATH_INC], [ac_netcdf_h='yes'], [ac_netcdf_h='no'])
+m4trace:configure.ac:757: -1- m4_pattern_allow([^NC_NETCDF_3_CPPFLAG$])
+m4trace:configure.ac:757: -1- AC_CHECK_NETCDF_HEADER([$ac_netcdf_incdir], [ac_netcdf_header='yes'], [ac_netcdf_header='no'], [$ac_check_nc_interface])
+m4trace:configure.ac:757: -1- AC_CHECK_NETCDF_3_HEADER([$ac_netcdf_incdir], [ac_netcdf_h='yes'], [ac_netcdf_h='no'])
+m4trace:configure.ac:757: -1- m4_pattern_allow([^NC_NETCDF_3_CPPFLAG$])
+m4trace:configure.ac:757: -1- m4_pattern_allow([^NC_CFLAGS$])
+m4trace:configure.ac:775: -1- m4_pattern_allow([^USENETCDF$])
+m4trace:configure.ac:776: -1- m4_pattern_allow([^HAVENETCDF4$])
+m4trace:configure.ac:777: -1- m4_pattern_allow([^USEDAP$])
+m4trace:configure.ac:779: -1- m4_pattern_allow([^USENETCDF$])
+m4trace:configure.ac:781: -1- m4_pattern_allow([^HAVENETCDF4$])
+m4trace:configure.ac:783: -1- m4_pattern_allow([^HAVENETCDF4$])
+m4trace:configure.ac:785: -1- m4_pattern_allow([^USEDAP$])
+m4trace:configure.ac:787: -1- m4_pattern_allow([^USEDAP$])
+m4trace:configure.ac:790: -1- m4_pattern_allow([^nc_inc$])
+m4trace:configure.ac:791: -1- m4_pattern_allow([^nc_libs$])
+m4trace:configure.ac:803: -1- GA_SET_FLAGS([], [], [], [-lz])
+m4trace:configure.ac:804: -1- GA_SET_DYNLIB_VAR([gadap_libs], [gadap dapclient dap curl xml2 z])
+m4trace:configure.ac:815: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:821: -1- GA_CHECK_LIB_GADAP([ use_gadap=yes 
       gadap_libs=$GADAP_LIBS
     ])
-m4trace:configure.ac:827: -1- m4_pattern_allow([^GADAP_LIBS$])
-m4trace:configure.ac:834: -1- m4_pattern_allow([^USEGADAP$])
-m4trace:configure.ac:836: -1- m4_pattern_allow([^USEGADAP$])
-m4trace:configure.ac:837: -1- m4_pattern_allow([^gadap_inc$])
-m4trace:configure.ac:838: -1- m4_pattern_allow([^gadap_libs$])
-m4trace:configure.ac:851: -1- GA_CHECK_GUI([
+m4trace:configure.ac:821: -1- m4_pattern_allow([^GADAP_LIBS$])
+m4trace:configure.ac:828: -1- m4_pattern_allow([^USEGADAP$])
+m4trace:configure.ac:830: -1- m4_pattern_allow([^USEGADAP$])
+m4trace:configure.ac:831: -1- m4_pattern_allow([^gadap_inc$])
+m4trace:configure.ac:832: -1- m4_pattern_allow([^gadap_libs$])
+m4trace:configure.ac:845: -1- GA_CHECK_GUI([
     use_gui=yes
     GA_SET_LIB_VAR(gui_libs, [sx])
     if test z"$gui_libs_Xext" != 'z'; then
@@ -4534,84 +4534,84 @@ m4trace:configure.ac:851: -1- GA_CHECK_GUI([
     fi
     gui_libs="$gui_libs -lXaw -lXpm -lXmu -lXt"
   ])
-m4trace:configure.ac:851: -1- GA_SET_FLAGS([X11/neXtaw libsx], [$X_CFLAGS], [$X_LIBS], [$X_PRE_LIBS -lX11 $X_EXTRA_LIBS])
-m4trace:configure.ac:851: -1- GA_UNSET_FLAGS
-m4trace:configure.ac:851: -1- GA_SET_LIB_VAR([gui_libs], [sx])
-m4trace:configure.ac:860: -1- GA_CHECK_LIBSX([use_gui=yes;use_freq=yes], [use_gui=yes;use_freq=no])
-m4trace:configure.ac:860: -1- GA_CHECK_XAW([ga_xaw_found='yes'], [ga_xaw_found='no'])
-m4trace:configure.ac:860: -1- PKG_CHECK_MODULES([XAW7], [xaw7], [], [ac_pkgconfig_xaw7=no])
-m4trace:configure.ac:860: -1- m4_pattern_allow([^XAW7_CFLAGS$])
-m4trace:configure.ac:860: -1- m4_pattern_allow([^XAW7_LIBS$])
-m4trace:configure.ac:860: -1- PKG_CHECK_EXISTS([xaw7], [pkg_cv_[]XAW7_CFLAGS=`$PKG_CONFIG --[]cflags "xaw7" 2>/dev/null`], [pkg_failed=yes])
-m4trace:configure.ac:860: -1- PKG_CHECK_EXISTS([xaw7], [pkg_cv_[]XAW7_LIBS=`$PKG_CONFIG --[]libs "xaw7" 2>/dev/null`], [pkg_failed=yes])
-m4trace:configure.ac:860: -1- _PKG_SHORT_ERRORS_SUPPORTED
-m4trace:configure.ac:860: -1- m4_pattern_allow([^XAW_LIBS$])
-m4trace:configure.ac:860: -1- m4_pattern_allow([^XAW_XLIBS$])
-m4trace:configure.ac:860: -1- m4_pattern_allow([^XAW_CFLAGS$])
-m4trace:configure.ac:860: -1- m4_pattern_allow([^HAVE_SIMPLEGETFILE$])
-m4trace:configure.ac:860: -1- m4_pattern_allow([^GETFILE_SHORT_PROTOTYPE$])
-m4trace:configure.ac:860: -1- m4_pattern_allow([^GA_LIBSX_LIBS$])
-m4trace:configure.ac:868: -1- m4_pattern_allow([^USEGUI$])
-m4trace:configure.ac:870: -1- m4_pattern_allow([^USEGUI$])
-m4trace:configure.ac:874: -1- m4_pattern_allow([^grads_xlibs$])
-m4trace:configure.ac:877: -1- m4_pattern_allow([^USEFREQ$])
-m4trace:configure.ac:879: -1- m4_pattern_allow([^USEFREQ$])
-m4trace:configure.ac:881: -1- GA_SET_INCLUDE_VAR([gui_inc], [libsx])
-m4trace:configure.ac:882: -1- m4_pattern_allow([^gui_inc$])
-m4trace:configure.ac:883: -1- m4_pattern_allow([^gui_libs$])
-m4trace:configure.ac:892: -1- m4_pattern_allow([^GRADS_VERSION$])
-m4trace:configure.ac:895: -1- AM_CONDITIONAL([READLINE], [ test "$use_readline"  = "yes"  ])
-m4trace:configure.ac:895: -1- m4_pattern_allow([^READLINE_TRUE$])
-m4trace:configure.ac:895: -1- m4_pattern_allow([^READLINE_FALSE$])
-m4trace:configure.ac:895: -1- _AM_SUBST_NOTMAKE([READLINE_TRUE])
-m4trace:configure.ac:895: -1- _AM_SUBST_NOTMAKE([READLINE_FALSE])
-m4trace:configure.ac:896: -1- AM_CONDITIONAL([USEGUI], [ test "$use_gui"  = "yes"  ])
-m4trace:configure.ac:896: -1- m4_pattern_allow([^USEGUI_TRUE$])
-m4trace:configure.ac:896: -1- m4_pattern_allow([^USEGUI_FALSE$])
-m4trace:configure.ac:896: -1- _AM_SUBST_NOTMAKE([USEGUI_TRUE])
-m4trace:configure.ac:896: -1- _AM_SUBST_NOTMAKE([USEGUI_FALSE])
-m4trace:configure.ac:897: -1- AM_CONDITIONAL([GEOTIFF], [ test "$use_geotiff"  = "yes"  ])
-m4trace:configure.ac:897: -1- m4_pattern_allow([^GEOTIFF_TRUE$])
-m4trace:configure.ac:897: -1- m4_pattern_allow([^GEOTIFF_FALSE$])
-m4trace:configure.ac:897: -1- _AM_SUBST_NOTMAKE([GEOTIFF_TRUE])
-m4trace:configure.ac:897: -1- _AM_SUBST_NOTMAKE([GEOTIFF_FALSE])
-m4trace:configure.ac:898: -1- AM_CONDITIONAL([USESHP], [ test "$use_shp"  = "yes"  ])
-m4trace:configure.ac:898: -1- m4_pattern_allow([^USESHP_TRUE$])
-m4trace:configure.ac:898: -1- m4_pattern_allow([^USESHP_FALSE$])
-m4trace:configure.ac:898: -1- _AM_SUBST_NOTMAKE([USESHP_TRUE])
-m4trace:configure.ac:898: -1- _AM_SUBST_NOTMAKE([USESHP_FALSE])
-m4trace:configure.ac:899: -1- AM_CONDITIONAL([USEGADAP], [ test "$use_gadap" = "yes"  ])
-m4trace:configure.ac:899: -1- m4_pattern_allow([^USEGADAP_TRUE$])
-m4trace:configure.ac:899: -1- m4_pattern_allow([^USEGADAP_FALSE$])
-m4trace:configure.ac:899: -1- _AM_SUBST_NOTMAKE([USEGADAP_TRUE])
-m4trace:configure.ac:899: -1- _AM_SUBST_NOTMAKE([USEGADAP_FALSE])
-m4trace:configure.ac:900: -1- AM_CONDITIONAL([USEDAP], [ test "$use_dap" = "yes"  ])
-m4trace:configure.ac:900: -1- m4_pattern_allow([^USEDAP_TRUE$])
-m4trace:configure.ac:900: -1- m4_pattern_allow([^USEDAP_FALSE$])
-m4trace:configure.ac:900: -1- _AM_SUBST_NOTMAKE([USEDAP_TRUE])
-m4trace:configure.ac:900: -1- _AM_SUBST_NOTMAKE([USEDAP_FALSE])
-m4trace:configure.ac:901: -1- AM_CONDITIONAL([USEHDF], [ test "$use_hdf" = "yes"  ])
-m4trace:configure.ac:901: -1- m4_pattern_allow([^USEHDF_TRUE$])
-m4trace:configure.ac:901: -1- m4_pattern_allow([^USEHDF_FALSE$])
-m4trace:configure.ac:901: -1- _AM_SUBST_NOTMAKE([USEHDF_TRUE])
-m4trace:configure.ac:901: -1- _AM_SUBST_NOTMAKE([USEHDF_FALSE])
-m4trace:configure.ac:902: -1- AM_CONDITIONAL([USEGD], [ test "$use_gd" = "yes"  ])
-m4trace:configure.ac:902: -1- m4_pattern_allow([^USEGD_TRUE$])
-m4trace:configure.ac:902: -1- m4_pattern_allow([^USEGD_FALSE$])
-m4trace:configure.ac:902: -1- _AM_SUBST_NOTMAKE([USEGD_TRUE])
-m4trace:configure.ac:902: -1- _AM_SUBST_NOTMAKE([USEGD_FALSE])
-m4trace:configure.ac:903: -1- AM_CONDITIONAL([USECAIRO], [ test "$use_cairo" = "yes"  ])
-m4trace:configure.ac:903: -1- m4_pattern_allow([^USECAIRO_TRUE$])
-m4trace:configure.ac:903: -1- m4_pattern_allow([^USECAIRO_FALSE$])
-m4trace:configure.ac:903: -1- _AM_SUBST_NOTMAKE([USECAIRO_TRUE])
-m4trace:configure.ac:903: -1- _AM_SUBST_NOTMAKE([USECAIRO_FALSE])
-m4trace:configure.ac:906: -1- m4_pattern_allow([^host_ldadd$])
-m4trace:configure.ac:921: -1- m4_pattern_allow([^LIB@&t@OBJS$])
-m4trace:configure.ac:921: -1- m4_pattern_allow([^LTLIBOBJS$])
-m4trace:configure.ac:921: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
-m4trace:configure.ac:921: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
-m4trace:configure.ac:921: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
-m4trace:configure.ac:921: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
-m4trace:configure.ac:921: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
-m4trace:configure.ac:921: -1- _AC_AM_CONFIG_HEADER_HOOK(["$ac_file"])
-m4trace:configure.ac:921: -1- _LT_PROG_LTMAIN
+m4trace:configure.ac:845: -1- GA_SET_FLAGS([X11/neXtaw libsx], [$X_CFLAGS], [$X_LIBS], [$X_PRE_LIBS -lX11 $X_EXTRA_LIBS])
+m4trace:configure.ac:845: -1- GA_UNSET_FLAGS
+m4trace:configure.ac:845: -1- GA_SET_LIB_VAR([gui_libs], [sx])
+m4trace:configure.ac:854: -1- GA_CHECK_LIBSX([use_gui=yes;use_freq=yes], [use_gui=yes;use_freq=no])
+m4trace:configure.ac:854: -1- GA_CHECK_XAW([ga_xaw_found='yes'], [ga_xaw_found='no'])
+m4trace:configure.ac:854: -1- PKG_CHECK_MODULES([XAW7], [xaw7], [], [ac_pkgconfig_xaw7=no])
+m4trace:configure.ac:854: -1- m4_pattern_allow([^XAW7_CFLAGS$])
+m4trace:configure.ac:854: -1- m4_pattern_allow([^XAW7_LIBS$])
+m4trace:configure.ac:854: -1- PKG_CHECK_EXISTS([xaw7], [pkg_cv_[]XAW7_CFLAGS=`$PKG_CONFIG --[]cflags "xaw7" 2>/dev/null`], [pkg_failed=yes])
+m4trace:configure.ac:854: -1- PKG_CHECK_EXISTS([xaw7], [pkg_cv_[]XAW7_LIBS=`$PKG_CONFIG --[]libs "xaw7" 2>/dev/null`], [pkg_failed=yes])
+m4trace:configure.ac:854: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:854: -1- m4_pattern_allow([^XAW_LIBS$])
+m4trace:configure.ac:854: -1- m4_pattern_allow([^XAW_XLIBS$])
+m4trace:configure.ac:854: -1- m4_pattern_allow([^XAW_CFLAGS$])
+m4trace:configure.ac:854: -1- m4_pattern_allow([^HAVE_SIMPLEGETFILE$])
+m4trace:configure.ac:854: -1- m4_pattern_allow([^GETFILE_SHORT_PROTOTYPE$])
+m4trace:configure.ac:854: -1- m4_pattern_allow([^GA_LIBSX_LIBS$])
+m4trace:configure.ac:862: -1- m4_pattern_allow([^USEGUI$])
+m4trace:configure.ac:864: -1- m4_pattern_allow([^USEGUI$])
+m4trace:configure.ac:868: -1- m4_pattern_allow([^grads_xlibs$])
+m4trace:configure.ac:871: -1- m4_pattern_allow([^USEFREQ$])
+m4trace:configure.ac:873: -1- m4_pattern_allow([^USEFREQ$])
+m4trace:configure.ac:875: -1- GA_SET_INCLUDE_VAR([gui_inc], [libsx])
+m4trace:configure.ac:876: -1- m4_pattern_allow([^gui_inc$])
+m4trace:configure.ac:877: -1- m4_pattern_allow([^gui_libs$])
+m4trace:configure.ac:886: -1- m4_pattern_allow([^GRADS_VERSION$])
+m4trace:configure.ac:889: -1- AM_CONDITIONAL([READLINE], [ test "$use_readline"  = "yes"  ])
+m4trace:configure.ac:889: -1- m4_pattern_allow([^READLINE_TRUE$])
+m4trace:configure.ac:889: -1- m4_pattern_allow([^READLINE_FALSE$])
+m4trace:configure.ac:889: -1- _AM_SUBST_NOTMAKE([READLINE_TRUE])
+m4trace:configure.ac:889: -1- _AM_SUBST_NOTMAKE([READLINE_FALSE])
+m4trace:configure.ac:890: -1- AM_CONDITIONAL([USEGUI], [ test "$use_gui"  = "yes"  ])
+m4trace:configure.ac:890: -1- m4_pattern_allow([^USEGUI_TRUE$])
+m4trace:configure.ac:890: -1- m4_pattern_allow([^USEGUI_FALSE$])
+m4trace:configure.ac:890: -1- _AM_SUBST_NOTMAKE([USEGUI_TRUE])
+m4trace:configure.ac:890: -1- _AM_SUBST_NOTMAKE([USEGUI_FALSE])
+m4trace:configure.ac:891: -1- AM_CONDITIONAL([GEOTIFF], [ test "$use_geotiff"  = "yes"  ])
+m4trace:configure.ac:891: -1- m4_pattern_allow([^GEOTIFF_TRUE$])
+m4trace:configure.ac:891: -1- m4_pattern_allow([^GEOTIFF_FALSE$])
+m4trace:configure.ac:891: -1- _AM_SUBST_NOTMAKE([GEOTIFF_TRUE])
+m4trace:configure.ac:891: -1- _AM_SUBST_NOTMAKE([GEOTIFF_FALSE])
+m4trace:configure.ac:892: -1- AM_CONDITIONAL([USESHP], [ test "$use_shp"  = "yes"  ])
+m4trace:configure.ac:892: -1- m4_pattern_allow([^USESHP_TRUE$])
+m4trace:configure.ac:892: -1- m4_pattern_allow([^USESHP_FALSE$])
+m4trace:configure.ac:892: -1- _AM_SUBST_NOTMAKE([USESHP_TRUE])
+m4trace:configure.ac:892: -1- _AM_SUBST_NOTMAKE([USESHP_FALSE])
+m4trace:configure.ac:893: -1- AM_CONDITIONAL([USEGADAP], [ test "$use_gadap" = "yes"  ])
+m4trace:configure.ac:893: -1- m4_pattern_allow([^USEGADAP_TRUE$])
+m4trace:configure.ac:893: -1- m4_pattern_allow([^USEGADAP_FALSE$])
+m4trace:configure.ac:893: -1- _AM_SUBST_NOTMAKE([USEGADAP_TRUE])
+m4trace:configure.ac:893: -1- _AM_SUBST_NOTMAKE([USEGADAP_FALSE])
+m4trace:configure.ac:894: -1- AM_CONDITIONAL([USEDAP], [ test "$use_dap" = "yes"  ])
+m4trace:configure.ac:894: -1- m4_pattern_allow([^USEDAP_TRUE$])
+m4trace:configure.ac:894: -1- m4_pattern_allow([^USEDAP_FALSE$])
+m4trace:configure.ac:894: -1- _AM_SUBST_NOTMAKE([USEDAP_TRUE])
+m4trace:configure.ac:894: -1- _AM_SUBST_NOTMAKE([USEDAP_FALSE])
+m4trace:configure.ac:895: -1- AM_CONDITIONAL([USEHDF], [ test "$use_hdf" = "yes"  ])
+m4trace:configure.ac:895: -1- m4_pattern_allow([^USEHDF_TRUE$])
+m4trace:configure.ac:895: -1- m4_pattern_allow([^USEHDF_FALSE$])
+m4trace:configure.ac:895: -1- _AM_SUBST_NOTMAKE([USEHDF_TRUE])
+m4trace:configure.ac:895: -1- _AM_SUBST_NOTMAKE([USEHDF_FALSE])
+m4trace:configure.ac:896: -1- AM_CONDITIONAL([USEGD], [ test "$use_gd" = "yes"  ])
+m4trace:configure.ac:896: -1- m4_pattern_allow([^USEGD_TRUE$])
+m4trace:configure.ac:896: -1- m4_pattern_allow([^USEGD_FALSE$])
+m4trace:configure.ac:896: -1- _AM_SUBST_NOTMAKE([USEGD_TRUE])
+m4trace:configure.ac:896: -1- _AM_SUBST_NOTMAKE([USEGD_FALSE])
+m4trace:configure.ac:897: -1- AM_CONDITIONAL([USECAIRO], [ test "$use_cairo" = "yes"  ])
+m4trace:configure.ac:897: -1- m4_pattern_allow([^USECAIRO_TRUE$])
+m4trace:configure.ac:897: -1- m4_pattern_allow([^USECAIRO_FALSE$])
+m4trace:configure.ac:897: -1- _AM_SUBST_NOTMAKE([USECAIRO_TRUE])
+m4trace:configure.ac:897: -1- _AM_SUBST_NOTMAKE([USECAIRO_FALSE])
+m4trace:configure.ac:900: -1- m4_pattern_allow([^host_ldadd$])
+m4trace:configure.ac:915: -1- m4_pattern_allow([^LIB@&t@OBJS$])
+m4trace:configure.ac:915: -1- m4_pattern_allow([^LTLIBOBJS$])
+m4trace:configure.ac:915: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
+m4trace:configure.ac:915: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
+m4trace:configure.ac:915: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
+m4trace:configure.ac:915: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
+m4trace:configure.ac:915: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
+m4trace:configure.ac:915: -1- _AC_AM_CONFIG_HEADER_HOOK(["$ac_file"])
+m4trace:configure.ac:915: -1- _LT_PROG_LTMAIN

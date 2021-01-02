@@ -17720,9 +17720,9 @@ if test "Z$ga_supplib_dir" != "Z" ; then
 if test "x$ac_cv_header_readline_readline_h" = xyes; then :
    ac_fn_c_check_header_mongrel "$LINENO" "readline/history.h" "ac_cv_header_readline_history_h" "$ac_includes_default"
 if test "x$ac_cv_header_readline_history_h" = xyes; then :
-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for tgetent in -lreadline" >&5
-$as_echo_n "checking for tgetent in -lreadline... " >&6; }
-if ${ac_cv_lib_readline_tgetent+:} false; then :
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lreadline" >&5
+$as_echo_n "checking for main in -lreadline... " >&6; }
+if ${ac_cv_lib_readline_main+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
@@ -17730,90 +17730,33 @@ LIBS="-lreadline  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char tgetent ();
+
 int
 main ()
 {
-return tgetent ();
+return main ();
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_readline_tgetent=yes
+  ac_cv_lib_readline_main=yes
 else
-  ac_cv_lib_readline_tgetent=no
+  ac_cv_lib_readline_main=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_readline_tgetent" >&5
-$as_echo "$ac_cv_lib_readline_tgetent" >&6; }
-if test "x$ac_cv_lib_readline_tgetent" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_readline_main" >&5
+$as_echo "$ac_cv_lib_readline_main" >&6; }
+if test "x$ac_cv_lib_readline_main" = xyes; then :
    use_readline=yes
-#        GA_SET_LIB_VAR([readline_libs],[readline])
 
   ga_lib_prefix='-l'
   for ga_lib_name in readline ; do
       readline_libs="$readline_libs ${ga_lib_prefix}${ga_lib_name}"
   done
-
-
-else
-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for tgetent in -lncurses" >&5
-$as_echo_n "checking for tgetent in -lncurses... " >&6; }
-if ${ac_cv_lib_ncurses_tgetent+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lncurses  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char tgetent ();
-int
-main ()
-{
-return tgetent ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_ncurses_tgetent=yes
-else
-  ac_cv_lib_ncurses_tgetent=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_ncurses_tgetent" >&5
-$as_echo "$ac_cv_lib_ncurses_tgetent" >&6; }
-if test "x$ac_cv_lib_ncurses_tgetent" = xyes; then :
-   use_readline=yes
-#          GA_SET_LIB_VAR([readline_libs],[readline ncurses])
-
-  ga_lib_prefix='-l'
-  for ga_lib_name in readline ncurses ; do
-      readline_libs="$readline_libs ${ga_lib_prefix}${ga_lib_name}"
-  done
-
-
-fi
 
 
 fi
@@ -17833,6 +17776,7 @@ fi
   LIBS=$ga_saved_libs
 
 fi
+
 # check in system locations
 if test "$use_readline" != "yes" -a "$ga_dyn_supplibs" = "yes" ; then
   echo looking in other system locations
@@ -17962,6 +17906,7 @@ fi
 done
 
       use_readline=yes
+  readline_libs="$READLINE_LIBS"
     else
       :
     fi
@@ -17972,7 +17917,6 @@ done
 
 
 
-  readline_libs="$READLINE_LIBS"
 fi
 # Set output variables
 if test $use_readline != "yes" ; then

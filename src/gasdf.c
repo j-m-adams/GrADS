@@ -2468,7 +2468,9 @@ char dimname[H4_MAX_NC_NAME+1];
     pvar->recoff = 0;
     pvar->ncvid = -999;
     pvar->sdvid = -999;
+#if USEHDF5==1
     pvar->h5vid = -999;
+#endif
     pvar->levels = 0;
     pvar->dfrm = 0;
     pvar->var_t = 0;
