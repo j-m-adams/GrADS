@@ -312,6 +312,7 @@ if test "$use_readline" != "yes" -a "$ga_dyn_supplibs" = "yes" ; then
   GA_LIB_READLINE([use_readline=yes 
   readline_libs="$READLINE_LIBS"]) 
 fi
+
 # Set output variables
 if test $use_readline != "yes" ; then
   AC_DEFINE(READLINE, 0, [Disabled command line editing]) 
