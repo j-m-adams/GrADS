@@ -759,8 +759,8 @@ AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
 m4_include([m4/Xaw.m4])
+m4_include([m4/ax_lib_readline.m4])
 m4_include([m4/cairo.m4])
-m4_include([m4/ga_lib_readline.m4])
 m4_include([m4/gadap.m4])
 m4_include([m4/gd.m4])
 m4_include([m4/geotiff.m4])
