@@ -88,7 +88,7 @@ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(noinst_HEADERS)
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/Xaw.m4 \
-	$(top_srcdir)/m4/cairo.m4 $(top_srcdir)/m4/ga_lib_readline.m4 \
+	$(top_srcdir)/m4/ax_lib_readline.m4 $(top_srcdir)/m4/cairo.m4 \
 	$(top_srcdir)/m4/gadap.m4 $(top_srcdir)/m4/gd.m4 \
 	$(top_srcdir)/m4/geotiff.m4 $(top_srcdir)/m4/grib2.m4 \
 	$(top_srcdir)/m4/gui.m4 $(top_srcdir)/m4/hdf4.m4 \

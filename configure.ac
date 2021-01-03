@@ -297,9 +297,14 @@ if test "Z$ga_supplib_dir" != "Z" ; then
   GA_SET_FLAGS([])
   AC_CHECK_HEADER(readline/readline.h,
   [ AC_CHECK_HEADER(readline/history.h,
-    [ AC_CHECK_LIB([readline],[main],
+    [ AC_CHECK_LIB(readline,tgetent,
       [ use_readline=yes
         GA_SET_DYNLIB_VAR([readline_libs],[readline])
+      ],
+      [ AC_CHECK_LIB(ncurses,tgetent,
+	[ use_readline=yes
+          GA_SET_DYNLIB_VAR([readline_libs],[readline ncurses])
+        ])
       ])
     ])
   ])
@@ -309,9 +314,13 @@ fi
 # check in system locations
 if test "$use_readline" != "yes" -a "$ga_dyn_supplibs" = "yes" ; then
   echo looking in other system locations
-  GA_LIB_READLINE([use_readline=yes 
-  readline_libs="$READLINE_LIBS"]) 
+  AX_LIB_READLINE([use_readline=yes readline_libs=$READLINE_LIBS],[])
 fi
+
+echo JMA $use_readline $readline_libs
+
+#  GA_LIB_READLINE([use_readline=yes 
+#  readline_libs="$READLINE_LIBS"]) 
 
 # Set output variables
 if test $use_readline != "yes" ; then
