@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* Simplified X interface for Cairo -- no widgets, buttons, X-based pattern fill, etc. */
 
@@ -421,6 +421,11 @@ void gxdrec (gadouble x1, gadouble x2, gadouble y1, gadouble y2) {   /* draw a f
   if (QLength(display)&&rstate) gxdeve(0);
 }
  
+void gxdcirc (gadouble x, gadouble y, gadouble r, gaint flg) {
+  gxCcirc(x,y,r,flg);
+  if (QLength(display)&&rstate) gxdeve(0);
+}
+
 void gxddbl (void) {                         /* turn on double buffer mode */
   XSync(display, 0);
   gxCfrm();  /* clear the foreground */

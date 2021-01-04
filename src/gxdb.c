@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* Keep track of persistent settings for "device backend" attributes, such as 
    settings for custom colors, line widths, fonts, patterns, etc.  This interface

@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 #include <stdlib.h>
 
@@ -184,6 +184,7 @@ struct gxpsubs {
   void (*gxpacol) (gaint);
   void (*gxpwid) (gaint);
   void (*gxprec) (gadouble,gadouble,gadouble,gadouble);
+  void (*gxpcirc) (gadouble,gadouble,gadouble,gaint);
   void (*gxpbpoly) (void);
   gaint (*gxpepoly) (gadouble*,gaint);
   void (*gxpmov) (gadouble,gadouble);
@@ -224,6 +225,7 @@ struct gxdsubs {
   gadouble (*gxdqchl) (char,gaint,gadouble);
   void (*gxdrbb) (gaint,gaint,gadouble,gadouble,gadouble,gadouble,gaint);
   void (*gxdrec) (gadouble,gadouble,gadouble,gadouble);
+  void (*gxdcirc) (gadouble,gadouble,gadouble,gaint);
   void (*gxdrmu) (int,struct gdmu*,int,int);
   void (*gxdsfr) (int);
   void (*gxdsgl) (void);
@@ -364,6 +366,7 @@ void gxgrmp (gadouble, gadouble, gadouble *, gadouble *);
 void gxcord (gadouble *, gaint, gaint);
 void gxrset (gaint);
 void gxrecf (gadouble, gadouble, gadouble, gadouble);
+void gxcirc (gadouble, gadouble, gadouble, gaint);
 gaint gxqwid (void);
 gaint gxqclr (void);
 void gxqrgb (gaint, gaint *, gaint *, gaint *);
@@ -405,6 +408,7 @@ void gxhnew (gadouble, gadouble, int);
 void hout0 (int);
 void hout1 (int, int);
 void hout2 (int, gadouble, gadouble);
+void hout3 (int, gadouble, gadouble, gadouble);
 void hout4 (int, gadouble, gadouble, gadouble, gadouble);
 void hout2i (int, int, int);
 void hout3i (int, int, int, int);

@@ -87,7 +87,7 @@ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/etc/ltmain.sh $(top_srcdir)/etc/missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/Xaw.m4 \
-	$(top_srcdir)/m4/cairo.m4 $(top_srcdir)/m4/ga_lib_readline.m4 \
+	$(top_srcdir)/m4/ax_lib_readline.m4 $(top_srcdir)/m4/cairo.m4 \
 	$(top_srcdir)/m4/gadap.m4 $(top_srcdir)/m4/gd.m4 \
 	$(top_srcdir)/m4/geotiff.m4 $(top_srcdir)/m4/grib2.m4 \
 	$(top_srcdir)/m4/gui.m4 $(top_srcdir)/m4/hdf4.m4 \
@@ -267,6 +267,7 @@ LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+LT_SYS_LIBRARY_PATH = @LT_SYS_LIBRARY_PATH@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
@@ -294,12 +295,14 @@ RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
+SHP_CFLAGS = @SHP_CFLAGS@
+SHP_LDFLAGS = @SHP_LDFLAGS@
 SHP_LIBS = @SHP_LIBS@
 STRIP = @STRIP@
 SUPPLIBS = @SUPPLIBS@
-UDUNITS_CFLAGS = @UDUNITS_CFLAGS@
-UDUNITS_LDFLAGS = @UDUNITS_LDFLAGS@
-UDUNITS_LIBS = @UDUNITS_LIBS@
+UDUNITS2_CFLAGS = @UDUNITS2_CFLAGS@
+UDUNITS2_LDFLAGS = @UDUNITS2_LDFLAGS@
+UDUNITS2_LIBS = @UDUNITS2_LIBS@
 VERSION = @VERSION@
 XAW7_CFLAGS = @XAW7_CFLAGS@
 XAW7_LIBS = @XAW7_LIBS@
@@ -378,6 +381,8 @@ psdir = @psdir@
 readline_libs = @readline_libs@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
+shp_inc = @shp_inc@
+shp_ldflags = @shp_ldflags@
 shp_libs = @shp_libs@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@

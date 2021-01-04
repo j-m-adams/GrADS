@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* This is the include file for the GrADS-Python interface. 
    Originally authored by Brian Doty and Jennifer Adams in April 2018.
@@ -21,4 +21,6 @@ struct pygagrid {
 static char *(*pdocmd)(char *,int *);
 static int   (*pgainit)(int,char **);
 static int   (*pdoexpr)(char *,struct pygagrid *);
+static int   (*pdoget)(char *,struct pygagrid *);
+static int   (*psetup)(char *,struct pygagrid *);
 static void  (*pyfre)(struct pygagrid *);

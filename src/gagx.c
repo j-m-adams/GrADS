@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* Authored by B. Doty */
 
@@ -193,7 +193,7 @@ gaint proj;
 	else if (pcm->goutstn==4) gapmdl (pcm);
 	else if (pcm->goutstn==7) gasmrk (pcm);
 	else if (pcm->goutstn==8) gastnwrt (pcm);
-	else if (pcm->goutstn==9) gashpwrt (pcm);   /* shapefile*/
+	else if (pcm->goutstn==9) gashpwrt (pcm);   /* shapefile */
 	else gawsym (pcm);
       }
       else if (stn->idim==2 && stn->jdim == -1) gapprf (pcm);
@@ -948,6 +948,13 @@ char lab[20];
 	  gxcolr (i);
 	}
         gxmark (pcm->cmark,x,y,pcm->digsiz*0.5);
+	/* JMA use Cairo to draw open circle -- won't work with X11/GD */
+        /* if (pcm->cmark == 2) */
+	/*   gxcirc(x,y,pcm->digsiz*0.25,0); /\* open circle *\/ */
+	/* else if (pcm->cmark == 3) */
+	/*   gxcirc(x,y,pcm->digsiz*0.25,1); /\* closed circle *\/ */
+	/* else */
+	/*   gxmark (pcm->cmark,x,y,pcm->digsiz*0.5); */
 
         /* stn id plot */
 	if (pcm->stidflg) {
@@ -3396,6 +3403,8 @@ char *r1mask, *r2mask, *cmask=NULL;
         if (*cmask==0) {
 	  /* if color grid has missing data, use color 15 */
 	  gxcolr(15);
+          /* don't draw marks when color grid is missing */
+          drawthismark=0;
 	}
         else {
           lcol = gashdc(pcm,*c);
@@ -3415,7 +3424,7 @@ char *r1mask, *r2mask, *cmask=NULL;
       if (drawthismark) {
 	gxconv (*r1,*r2,&x,&y,1);
 	im = pcm->cmark;
-	gxmark (im,x,y,pcm->digsiz*0.5);
+        gxmark (im,x,y,pcm->digsiz*0.5);
       }
     }
     r1++; r2++; r1mask++; r2mask++;

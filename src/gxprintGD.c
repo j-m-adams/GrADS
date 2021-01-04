@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* Routines to print the graphics with calls to the GD library, needs gxGD.c */
 
@@ -109,5 +109,7 @@ gadouble gxpqchl (char ch, gaint fn, gadouble w) {
   return -999;
 }
 void gxpclip (gadouble x1, gadouble x2, gadouble y1, gadouble y2) { 
+}
+void gxpcirc (gadouble x, gadouble y, gadouble r, gaint flg) {  
 }
 

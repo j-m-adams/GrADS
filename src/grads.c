@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* Main program for GrADS (Grid Analysis and Display System).
    This program loops on commands from the user, and calls the
@@ -76,7 +76,7 @@ int main (int argc, char *argv[])  {
   char *gatxtl(char *str,gaint level);
   
   char cmd[1024];
-  gaint rc,i,j,land,port,cmdflg,hstflg,gflag,killflg,ratioflg;
+  gaint rc,i,j,land,port,cmdflg,hstflg,killflg,ratioflg;
   gaint metabuff,size=0,g2size=0,geomflg=0;
   gaint gxd=0,gxp=0;
   char gxdopt[16],gxpopt[16],xgeom[100]; 
@@ -95,7 +95,6 @@ int main (int argc, char *argv[])  {
   cmdflg = 0;
   metabuff = 0;
   hstflg = 1; 
-  gflag = 0;
   icmd = NULL;
   arg = NULL;
   rc1 = NULL;
@@ -206,7 +205,7 @@ int main (int argc, char *argv[])  {
   if (ipcflg) printf("\n<IPC>" );  /* delimit splash screen */
  
   printf("\nGrid Analysis and Display System (GrADS) Version %s\n",gatxtl(GRADS_VERSION,0));
-  printf("Copyright (C) 1988-2018 by George Mason University\n");
+  printf("Copyright (C) 1988-2020 by George Mason University\n");
   printf("GrADS comes with ABSOLUTELY NO WARRANTY\n");
   printf("See file COPYRIGHT for more information\n\n");
   
@@ -340,7 +339,7 @@ int main (int argc, char *argv[])  {
 #endif
   if (ipcflg) printf("\n<RC> %d </RC>\n</IPC>\n",rc);
   
-/* This is for pygrads */
+/* This is for GradsPy */
 #ifdef SHRDOBJ
   gapysavpcm(&gcmn);
   return(0);  

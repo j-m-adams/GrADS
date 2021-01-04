@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* Originally authored by B. Doty */
 
@@ -904,7 +904,7 @@ char name[15],ename[20];
         *d = t2gr(pfi->abvals[3],&(pst->tmin));  
       } 
       else {
-        if (pfi->type==1 || pfi->type==4) { 
+        if (pfi->type==1 || pfi->type==4 || pfi->type==5) { 
           conv = pfi->ab2gr[*dim];
           cvals = pfi->abvals[*dim];
           *d = conv(cvals,pst->dmin[*dim]);
@@ -979,7 +979,7 @@ char name[15],ename[20];
     else if (*dim == 3) {
       *d = t2gr(pfi->abvals[3],&dtim);
     } else {
-      if (pfi->type==1 || pfi->type==4) {  /* grids  */
+      if (pfi->type==1 || pfi->type==4 || pfi->type==5) {  /* grids  */
         conv = pfi->ab2gr[*dim];
         cvals = pfi->abvals[*dim];
         *d = conv(cvals,v);
@@ -2031,7 +2031,7 @@ void gahswp (struct rpthdr *hdr) {
 gaint dayweek (struct dt *dtime) {
 struct dt anch;
 gaint i,j;
-  if (dtime->yr<1950 || dtime->yr>2020) return(7);
+  if (dtime->yr<1950 || dtime->yr>3000) return(7);
   anch.yr = 1950;
   anch.mo = 1;
   anch.dy = 1;
@@ -2256,6 +2256,7 @@ gadouble *cpscal (gadouble *vals, gaint lin, gaint dir, gaint dim) {
 gaint i,num;
 gadouble *vvv;
 size_t sz;
+char name[10];
 
  if (dim<0) {
    gaprnt (0,"cpscal error:  dim is not >= 0 \n");
@@ -2269,7 +2270,9 @@ size_t sz;
    else num = (gaint)(*vals+0.5) + 5;
  }
  sz = sizeof(gadouble)*num;
- vvv = (gadouble *)galloc(sz,"cpscal");
+ if (dir) sprintf(name,"cpscala%d",dim);
+ else     sprintf(name,"cpscalg%d",dim);
+ vvv = (gadouble *)galloc(sz,name);
  if (vvv==NULL) {
    snprintf(pout,1255,"cpscal memory allocation error; dim=%d lin=%d num=%d\n",dim,lin,num);
    gaprnt(0,pout);

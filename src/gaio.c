@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* Authored by B. Doty and Jennifer Adams */
 
@@ -140,7 +140,8 @@ gaint gaggrd (struct gagrid *pgrid) {
     msgflg = 0;
   }
 
-  if (pfi->type==4) {
+  /* check if it's a defined grid */
+  if (pfi->type==4 || pfi->type==5) {
     rc = gagdef();
     return (rc);
   }
@@ -258,7 +259,7 @@ gaint gaggrd (struct gagrid *pgrid) {
       else
 	vname = pvr->abbrv;
       /* open the variable */
-      rc = h5openvar(pfi->h5id,vname,&dsid,&vid);
+      rc = h5openvar(pfi->h5id,vname,&dsid,&vid,pfi->cachesize);
       if (rc) {
 	pvr->h5vid = -888;
 	snprintf(pout,1255,"Error: Variable %s not in HDF5 file\n",vname);
@@ -275,7 +276,7 @@ gaint gaggrd (struct gagrid *pgrid) {
 	if (rc) return (rc);
       }
       /* set h5-relevant variables in the gavar structure */
-      pvr->h5vid = (gaint)vid; 
+      pvr->h5vid = vid; 
     }
   }
 #endif
@@ -500,7 +501,7 @@ gaint y,z,t,e;
 	else
 	  vname = pvr->abbrv;
 	/* open the variable */
-	rc = h5openvar(pfi->h5id,vname,&dsid,&vid);
+	rc = h5openvar(pfi->h5id,vname,&dsid,&vid,pfi->cachesize);
 	if (rc) {
 	  pvr->h5vid = -888;
 	  snprintf(pout,1255,"Error: Variable %s not in HDF5 file\n",vname);
@@ -517,7 +518,7 @@ gaint y,z,t,e;
 	  if (rc) return (rc);
 	}
 	/* set h5-relevant variables in the gavar structure */
-	pvr->h5vid = (gaint)vid; 
+	pvr->h5vid = vid; 
       }
     }
 #endif
@@ -538,7 +539,7 @@ gaint y,z,t,e;
   if (pfi->ncflg==1) {              
     rc = gancsetup();
     if (rc) return(rc);
-     rc = gancrow (x, y, z, tt, ee, len, gr, gru);
+    rc = gancrow (x, y, z, tt, ee, len, gr, gru);
     return(rc);
   }
   /* HDF-SDS */
@@ -1639,7 +1640,8 @@ gaint diag=0;
   /* move file pointer to the start of the grib record */
   rc = fseeko(pfi->infile,seek,SEEK_SET);
   if (rc) {
-    gaprnt(0,"GRIB2 I/O error: fseeko failed \n");
+    snprintf(pout,1255,"GRIB2 I/O error: fseeko failed (seek = %ld)\n",(long)seek);
+    gaprnt(0,pout);
     return(NULL);     
   }
   
@@ -3440,8 +3442,8 @@ return (0);
      gets the scale factor and add offset attributes 
 */
 
-gaint h5setup(void) {
 #if USEHDF5 == 1
+gaint h5setup(void) {
   hid_t vid=0, dsid, plid, tid;
   gadouble val;
   char *vname;
@@ -3539,9 +3541,9 @@ gaint h5setup(void) {
       }
     }
   }
-#endif
   return(0); 
 }
+#endif
 
 /* Opens an HDF5 variable and allocates the chunk cache 
    takes a file id and a variable name as arguments
@@ -3549,26 +3551,30 @@ gaint h5setup(void) {
 */
 
 #if USEHDF5==1
-gaint h5openvar (gaint h5id, char *vname, hid_t *dataspace, hid_t *h5varflg) {
-  hid_t fid,vid,plid,dsid;
+gaint h5openvar (hid_t h5id, char *vname, hid_t *dataspace, hid_t *h5varflg, long cachesize) {
+  hid_t vid,plid,dsid;
   size_t nslots;
   gadouble pp;
+  herr_t rc;
 
   /* create a property list, and change the cache settings with two hard-coded args */ 
   plid = H5Pcreate (H5P_DATASET_ACCESS);
   nslots = 51203;
   pp = 0.75;
-  H5Pset_chunk_cache(plid, nslots, cachesf*pfi->cachesize, pp);
-
-  /* now open the variable with the modified property list */
-  fid = (hid_t)h5id;
-  vid = H5Dopen2 (fid, vname, plid);
-  if (vid<0) {
-    snprintf(pout,1255,"Error: H5Dopen2 failed for variable %s \n",vname);
+  rc = H5Pset_chunk_cache(plid, nslots, cachesf*cachesize, pp);
+  if (rc<0)  {
+    snprintf(pout,1255,"Error: H5Pset_chunk_cache failed for variable %s \n",vname);
     gaprnt(0,pout);
     return (1); 
   }
 
+  /* now open the variable with the modified property list */
+  vid = H5Dopen2 (h5id, (const char*)vname, plid);
+  if (vid<0) {
+    snprintf(pout,1255,"Error: H5Dopen2 failed for variable %s (h5id=%lld, plid=%lld)\n",vname,h5id,plid);
+    gaprnt(0,pout);
+    return (1); 
+  }
   /* close the property list */
   H5Pclose (plid);
   
@@ -3908,9 +3914,9 @@ return (0);
 
 /* Retrieves a numeric HDF5 Attribute. */
 
-gaint h5attr(gaint varid, char *vname, char *aname, gadouble *value) {
 #if USEHDF5 == 1
-hid_t vid,aid,atype,aspace,rc;    
+gaint h5attr(hid_t varid, char *vname, char *aname, gadouble *value) {
+hid_t aid,atype,aspace,rc;    
 H5T_class_t aclass;
 H5T_sign_t asign;
 size_t asize;
@@ -3926,17 +3932,20 @@ unsigned long ulval;
 float fval;
 gadouble dval;
 
-  vid=(hid_t)varid;
-
   /* get the attribute id */
-  if ((aid = H5Aopen_by_name(vid, vname, aname, H5P_DEFAULT, H5P_DEFAULT))<0) {
+  if ((aid = H5Aopen_by_name(varid, vname, aname, H5P_DEFAULT, H5P_DEFAULT))<0) {
     snprintf(pout,1255,"HDF5 attribute named \"%s\" does not exist\n",aname);
     gaprnt(2,pout);
     return(1);
   } 
-  /* get the attribute rank, make sure it is 1 */
+  /* get the attribute rank, make sure it is not greater than 1 */
   if ((aspace = H5Aget_space(aid))<0) { gaprnt(2,"H5Aget_space failed\n"); return (1); }
-  if ((rank   = H5Sget_simple_extent_ndims(aspace))!=1) { gaprnt(2,"rank != 1\n"); return (1); }
+  rank = H5Sget_simple_extent_ndims(aspace);
+  if (rank > 1 || rank < 0) {
+    snprintf(pout,1255,"rank of attribute named %s must be 0 or 1, but is %d \n",aname,rank);
+    gaprnt(2,pout);
+    return (1);
+  }
   /* get the attribute type, class, and size */
   if ((atype  = H5Aget_type(aid))<0) { gaprnt(2,"H5Aget_type failed\n"); return (1); } 
   if ((aclass = H5Tget_class(atype))<0) { gaprnt(2,"H5Tget_class failed\n"); return (1); } 
@@ -4036,10 +4045,8 @@ gadouble dval;
   H5Aclose(aid);
   H5Tclose(atype);
   return (0);
-
-#endif
-  return(0);
 }
+#endif
 
 
 /* Retrieves a non-character HDF-SDS Attribute. */
@@ -4206,6 +4213,9 @@ gadouble *dattr_val;
 gafloat  *fattr_val;
 long   *iattr_val;
 short  *sattr_val;
+unsigned short  *usattr_val;
+long long   *i64attr_val;
+unsigned long long  *ui64attr_val;
 char   *cattr_val;
 char  **strattr_val;
 char   *battr_val;
@@ -4339,6 +4349,26 @@ size_t sz,asize;
 	      }
 	      gree(sattr_val,"f141");
 	      break;
+	    case (NC_USHORT):
+	      sz = asize * sizeof (NC_USHORT);
+	      usattr_val = (unsigned short *) galloc(sz,"usattrval");
+	      if (nc_get_att_ushort(ncid, varid, attr_name, usattr_val) == -1) {
+		gaprnt(2,"nc_get_att_ushort failed for type NC_USHORT\n"); 
+	      }
+	      else {
+		gaprnt(2,abbrv); 
+		gaprnt(2," UInt16 "); 
+		gaprnt(2,attr_name); 
+		gaprnt(2," ");
+		for (i=0; i<asize; i++) {
+		  snprintf(pout,1255,"%d", (gaint)(usattr_val[i])); 
+		  gaprnt(2,pout);
+		  if (i<asize-1) gaprnt(2,",");
+		}
+		gaprnt(2,"\n");
+	      }
+	      gree(usattr_val,"f141b");
+	      break;
 	    case (NC_LONG):
 	      sz = asize * sizeof (NC_LONG);
 	      iattr_val = (long *) galloc(sz,"iattrval1");
@@ -4358,6 +4388,46 @@ size_t sz,asize;
 		gaprnt(2,"\n");
 	      }
 	      gree(iattr_val,"f142");
+	      break;
+	    case (NC_INT64):
+	      sz = asize * sizeof (NC_INT64);
+	      i64attr_val = (long long *) galloc(sz,"i64attrval");
+	      if (nc_get_att_longlong(ncid, varid, attr_name, i64attr_val) == -1) {
+		gaprnt(2,"nc_get_att_longlong failed for type NC_INT64\n"); 
+	      }
+	      else {
+		gaprnt(2,abbrv); 
+		gaprnt(2," Int64 "); 
+		gaprnt(2,attr_name); 
+		gaprnt(2," ");
+		for (i=0; i<asize; i++) {
+		  snprintf(pout,1255,"%lld", i64attr_val[i]); 
+		  gaprnt(2,pout);
+		  if (i<asize-1) gaprnt(2,",");
+		}
+		gaprnt(2,"\n");
+	      }
+	      gree(i64attr_val,"f142");
+	      break;
+	    case (NC_UINT64):
+	      sz = asize * sizeof (NC_INT64);
+	      ui64attr_val = (unsigned long long *) galloc(sz,"ui64attrval");
+	      if (nc_get_att_ulonglong(ncid, varid, attr_name, ui64attr_val) == -1) {
+		gaprnt(2,"nc_get_att_ulonglong failed for type NC_UINT64\n"); 
+	      }
+	      else {
+		gaprnt(2,abbrv); 
+		gaprnt(2," UInt64 "); 
+		gaprnt(2,attr_name); 
+		gaprnt(2," ");
+		for (i=0; i<asize; i++) {
+		  snprintf(pout,1255,"%lld", ui64attr_val[i]); 
+		  gaprnt(2,pout);
+		  if (i<asize-1) gaprnt(2,",");
+		}
+		gaprnt(2,"\n");
+	      }
+	      gree(ui64attr_val,"f142");
 	      break;
 	    case (NC_FLOAT):
 	      sz = asize * sizeof (gafloat);
@@ -4669,31 +4739,41 @@ size_t sz;
 }
 
 /* Subroutine to print out HDF5 (variable) attributes */
-gaint h5pattrs(gaint fid, char *vname, char *abbrv, gaint hdrflg, gaint fnum, char* ftit) {
 #if USEHDF5 == 1
-H5O_info_t oinfo;
-H5T_class_t aclass=-1;
-H5T_sign_t asign;
-hid_t   h5id,vid,dsid,aid,atype=-1,aspace=-1;
-hsize_t ai,stosize;
-size_t sz,asize,len=0;
-gaint   aindex,n_atts=0,rc,i,rank=-1,err=0;
-char    *aname=NULL;
-char    *cval=NULL,*string=NULL;
-unsigned char *ucval=NULL;
-short   *sval=NULL;
-unsigned short  *usval=NULL;
-gaint   *ival=NULL;
-gauint  *uival=NULL;
-long    *lval=NULL;
-unsigned long *ulval=NULL;
-gafloat  *fval=NULL;
-gadouble *dval=NULL;
+gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, char* ftit, long cachesize) {
+  H5O_info_t oinfo;
+  H5T_class_t aclass=-1;
+  H5T_sign_t asign;
+  hid_t   vid,dsid,aid,atype=-1,aspace=-1;
+  hsize_t ai,stosize;
+  size_t sz,asize,len=0;
+  gaint   aindex,n_atts=0,rc,i,rank=-1,err=0;
+  char    *aname=NULL;
+  char    *cval=NULL,*string=NULL;
+  unsigned char *ucval=NULL;
+  short   *sval=NULL;
+  unsigned short  *usval=NULL;
+  gaint   *ival=NULL;
+  gauint  *uival=NULL;
+  long    *lval=NULL;
+  unsigned long *ulval=NULL;
+  gafloat  *fval=NULL;
+  gadouble *dval=NULL;
 
+/* Get the variable id and number of attributes */
+  /* if (cmpwrd("global",abbrv)) { */
+  /*   /\* this is the first step, to get the number *\/ */
+  /*   n_atts = H5Aget_num_attrs(h5id); */
+  /*   if (n_atts>0) printf("%d global attributes\n",n_atts); */
+    /* aid = H5Aopen_by_name(h5id,(const char*)abbrv); */
+
+    /* varid = NC_GLOBAL; */
+    /* rc = nc_inq_natts(ncid,&n_atts); */
+    /* if (rc != NC_NOERR) error=1; */
+  /* } */
 
   /* Get the variable id and number of attributes */
-  h5id = (hid_t)fid;
-  rc = h5openvar(fid, vname, &vid, &dsid);
+  rc = h5openvar(h5id, vname, &dsid, &vid, cachesize);
   if (rc) err=1;
   if (!err) {
     if ((rc = H5Oget_info(vid,&oinfo))<0) err=1;
@@ -4919,9 +4999,9 @@ gadouble *dval=NULL;
   
   h5closevar(dsid,vid);
   return(n_atts);
-#endif
   return(0);
 }
+#endif
 
 /* routine to print out a string attribute that may have carriage returns in it */
 void prntwrap(char *vname, char *aname, char *str ) {
@@ -4957,7 +5037,9 @@ struct dt dtim, dtimi;
 struct gaens *ens;
 gaint i,rc,flag,endx,need_new_file;
 char *fn=NULL;
-
+#if USEHDF5 == 1
+hid_t retc=-88888;
+#endif
   *oflg = 0;
   /* make sure e and t are within range of grid dimensions */
   if (t<1 || t>pfi->dnum[3]) return(-99999);
@@ -5035,11 +5117,14 @@ char *fn=NULL;
       rc = gaophdf (pfi,1,0);
       if (rc) pfi->sdid = -999;
     }
+#if USEHDF5 == 1
     /* open hdf5 */
     else if (pfi->ncflg==3) { 
       rc = gaoph5 (pfi,1,0);
+      /* if (rc) pfi->h5id = retc; */
       if (rc) pfi->h5id = -999;
     }
+#endif
     /* open all others except BUFR */
     else if (!pfi->bufrflg) {        
       pfi->infile = fopen (fn, "rb");
@@ -5146,19 +5231,22 @@ gaint gaoph5 (struct gafile *pfil, gaint tflag, gaint eflag) {
   /* open the hdf5 file */
   if ((fapl = H5Pcreate(H5P_FILE_ACCESS))>=0) {
     if ((H5Pset_fclose_degree(fapl,H5F_CLOSE_STRONG))>=0) {
+      /* Suppress the stderr messages for H5Fopen */
+      H5Eset_auto(H5E_DEFAULT,NULL, NULL);
       if ((h5id = H5Fopen(filename, H5F_ACC_RDONLY, fapl))>=0) {
 	op=1;
-      }
-    }
-  }
-
+      } 
+    } 
+  } 
   H5Pclose(fapl);
+
   /* if file opened, set the file id in the gafile structure */
   if (op) {
-    pfil->h5id = (gaint)h5id;     
+    pfil->h5id = h5id;     
     return (0);
   }
   else {
+    /* If eflag==0 file templating is in use, so we don't inform the user of missing files */
     if (eflag) {
       snprintf(pout,1255,"Error: Unable to open HDF5 file %s \n",filename);
       gaprnt(0,pout);
@@ -5213,16 +5301,16 @@ gaint gacloseh5 (struct gafile *pfi) {
   hid_t fid;
 
   if (pfi->h5id != -999) {
-    fid = (hid_t)pfi->h5id;
+    fid = pfi->h5id;
     /* loop over all variables, make sure they are closed */
     lclvar = pfi->pvar1;
     for (i=0; i<pfi->vnum; i++) {
       rc = h5closevar(lclvar->dataspace,lclvar->h5varflg);
       if (rc) return (1);
       /* reset flags */
-      lclvar->dataspace = -999; 
-      lclvar->h5varflg = -999;  
-      lclvar++; 
+      lclvar->dataspace = -999;
+      lclvar->h5varflg = -999;
+      lclvar++;
     }
     /* now we can close the file */
     if ((H5Fclose(fid)) < 0) {

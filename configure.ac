@@ -9,7 +9,7 @@ dnl  See acinclude.m4 for definitions of the GA_xxx macros
 AC_PREREQ(2.52) 
 
 # The "master" version string that will appear in all code, etc.
-AC_INIT(GrADS, [2.2.1], [jadams21@gmu.edu])
+AC_INIT(GrADS, [2.2.2], [jadams21@gmu.edu])
 
 # Supporting scripts are in etc/ 
 AC_CONFIG_AUX_DIR(etc)
@@ -299,12 +299,10 @@ if test "Z$ga_supplib_dir" != "Z" ; then
   [ AC_CHECK_HEADER(readline/history.h,
     [ AC_CHECK_LIB(readline,tgetent,
       [ use_readline=yes
-#        GA_SET_LIB_VAR([readline_libs],[readline])
         GA_SET_DYNLIB_VAR([readline_libs],[readline])
       ],
       [ AC_CHECK_LIB(ncurses,tgetent,
 	[ use_readline=yes
-#          GA_SET_LIB_VAR([readline_libs],[readline ncurses])
           GA_SET_DYNLIB_VAR([readline_libs],[readline ncurses])
         ])
       ])
@@ -312,12 +310,18 @@ if test "Z$ga_supplib_dir" != "Z" ; then
   ])
   GA_UNSET_FLAGS
 fi
+
 # check in system locations
 if test "$use_readline" != "yes" -a "$ga_dyn_supplibs" = "yes" ; then
   echo looking in other system locations
-  GA_LIB_READLINE([use_readline=yes]) 
-  readline_libs="$READLINE_LIBS"
+  AX_LIB_READLINE([use_readline=yes readline_libs=$READLINE_LIBS],[])
 fi
+
+echo JMA $use_readline $readline_libs
+
+#  GA_LIB_READLINE([use_readline=yes 
+#  readline_libs="$READLINE_LIBS"]) 
+
 # Set output variables
 if test $use_readline != "yes" ; then
   AC_DEFINE(READLINE, 0, [Disabled command line editing]) 
@@ -334,18 +338,16 @@ echo -------
 # check in supplibs directory 
 if test "Z$ga_supplib_dir" != "Z" ; then 
   echo looking in $ga_supplib_dir
-  GA_SET_FLAGS([],[],[-ltiff])
+  GA_SET_FLAGS([],[],[],[-ltiff])
   AC_CHECK_HEADER(geotiff.h,
   [ AC_CHECK_HEADER(geotiffio.h,
     [ AC_CHECK_HEADER(xtiffio.h, 
-      [ AC_CHECK_LIB([tiff], [main], 
-        [ AC_CHECK_LIB([geotiff], [main], 
-          [ have_geotiff=yes
-            have_tiff=yes
-#            GA_SET_LIB_VAR([geotiff_libs], [tiff geotiff])
-            GA_SET_DYNLIB_VAR([geotiff_libs], [tiff geotiff])
-            use_geotiff=yes
-          ])
+      [ AC_CHECK_LIB([geotiff], [main], 
+        [ have_geotiff=yes
+          have_tiff=yes
+#          GA_SET_LIB_VAR([geotiff_libs], [tiff geotiff])
+          GA_SET_DYNLIB_VAR([geotiff_libs], [tiff geotiff])
+          use_geotiff=yes
         ])
       ])
     ])
@@ -355,8 +357,8 @@ fi
 # check in system locations
 if test "$use_geotiff" != "yes" -a "$ga_dyn_supplibs" = "yes" ; then
   echo looking in other system locations
-  AC_CHECK_GEOTIFF([
-    LDFLAGS="$LDFLAGS $GEOTIFF_LDFLAGS"
+  AC_CHECK_GEOTIFF(
+  [ LDFLAGS="$LDFLAGS $GEOTIFF_LDFLAGS"
     geotiff_inc="$GEOTIFF_CFLAGS"
     geotiff_libs="$GEOTIFF_LIBS"
     geotiff_ldflags="$GEOTIFF_LDFLAGS"
@@ -372,6 +374,7 @@ else
   AC_SUBST(geotiff_libs)
   AC_SUBST(geotiff_ldflags)
 fi
+
 
 
 # * * * SHAPELIB * * *
@@ -395,9 +398,12 @@ fi
 # check in system locations
 if test "$use_shp" != "yes" -a "$ga_dyn_supplibs" = "yes" ; then
   echo looking in other system locations
-  GA_CHECK_LIB_SHP(
-  [ use_shp=yes 
-    shp_libs=$SHP_LIBS
+  GA_CHECK_LIB_SHP([
+    use_shp=yes 
+    LDFLAGS="$LDFLAGS $SHP_LDFLAGS"
+    shp_inc="$SHP_CFLAGS"
+    shp_libs="$SHP_LIBS"
+    shp_ldflags="$SHP_LDFLAGS"
   ])
 fi
 # set output variables
@@ -406,72 +412,87 @@ if test "$use_shp" != "yes" ; then
 else
   AC_DEFINE(USESHP, 1, [Enable shapefile])
   AC_SUBST(shp_libs)
+  AC_SUBST(shp_inc)
+  AC_SUBST(shp_ldflags)
 fi
 
 
-# check in supplibs directory for the additional dependent libs
-if test "Z$ga_supplib_dir" != "Z" ; then 
-  echo looking in $ga_supplib_dir for additional dependent libs
+# check in supplibs and other systems directories for the additional dependent libs
 
-  # png15
-  echo 
-  echo png
-  echo ---
-  GA_SET_FLAGS([])
+# png15
+echo 
+echo png
+echo ---
+GA_SET_FLAGS([])
+AC_CHECK_LIB([png15], [main], [have_png=yes])
+GA_UNSET_FLAGS
+if test "$have_png" != "yes" ; then
   AC_CHECK_LIB([png15], [main], [have_png=yes])
-  GA_UNSET_FLAGS
+fi
 
-  # zlib
-  echo 
-  echo zlib
-  echo ----
-  GA_SET_FLAGS([])
+# zlib
+echo 
+echo zlib
+echo ----
+GA_SET_FLAGS([])
+AC_CHECK_HEADER([zlib.h], 
+[ AC_CHECK_LIB([z], [compress], [have_zlib=yes])
+])
+GA_UNSET_FLAGS
+if test "$have_zlib" != "yes" ; then
   AC_CHECK_HEADER([zlib.h], 
-  [ AC_CHECK_LIB([z], [compress], [have_zlib=yes])
+    [ AC_CHECK_LIB([z], [compress], [have_zlib=yes])
   ])
-  GA_UNSET_FLAGS
+fi
 
-  # jpeg
-  echo 
-  echo jpeg
-  echo ----
-  GA_SET_FLAGS([])
+# jpeg
+echo 
+echo jpeg
+echo ----
+GA_SET_FLAGS([])
+AC_CHECK_LIB([jpeg], [main], [have_jpeg=yes])
+GA_UNSET_FLAGS
+if test "$have_jpeg" != "yes" ; then
   AC_CHECK_LIB([jpeg], [main], [have_jpeg=yes])
-  GA_UNSET_FLAGS
+fi
 
-  # jasper
-  echo 
-  echo jasper
-  echo ------
-  GA_SET_FLAGS([jasper])
-  AC_CHECK_HEADER([jasper.h],
+# jasper
+echo 
+echo jasper
+echo ------
+GA_SET_FLAGS([jasper])
+AC_CHECK_HEADER([jasper.h],
+[ AC_CHECK_LIB([jasper], [main], [have_jasper=yes])
+])
+GA_UNSET_FLAGS
+if test "$have_jasper" != "yes" ; then
+  AC_CHECK_HEADER([jasper/jasper.h],
   [ AC_CHECK_LIB([jasper], [main], [have_jasper=yes])
   ])
-  GA_UNSET_FLAGS
-
-  # xml2
-  echo 
-  echo xml2
-  echo ----
-  if test "$have_zlib" = "yes" ; then
-    GA_SET_FLAGS([libxml2],[],[],[-lz])
-    AC_CHECK_LIB([xml2], [main], [have_xml2=yes])
-    GA_UNSET_FLAGS
-  fi
-
-  # curl (needed for netcdf4 and gadap)
-  echo 
-  echo curl
-  echo ----
-  GA_SET_FLAGS([])
-  AC_CHECK_LIB([curl], [main], 
-  [ have_curl=yes 
-    # this will be used to check if curl is https-enabled
-    CURL_CONFIG=${ga_supplib_dir}/bin/curl-config
-  ])
-  GA_UNSET_FLAGS	
-
 fi
+
+
+# xml2
+echo 
+echo xml2
+echo ----
+if test "$have_zlib" = "yes" ; then
+  GA_SET_FLAGS([libxml2],[],[],[-lz])
+  AC_CHECK_LIB([xml2], [main], [have_xml2=yes])
+  GA_UNSET_FLAGS
+  if test "$have_xml2" != "yes" ; then
+    AC_CHECK_LIB([xml2], [main], [have_xml2=yes])
+  fi
+fi
+
+# curl (needed for netcdf4 and gadap)
+echo 
+echo curl
+echo ----
+GA_SET_FLAGS([])
+AC_CHECK_LIB([curl], [main], [ have_curl=yes ])
+GA_UNSET_FLAGS	
+
 
 # * * * GD * * *
 echo 
@@ -566,8 +587,8 @@ if test "Z$ga_supplib_dir" != "Z" ; then
       [ AC_CHECK_LIB(freetype,main,
       [ AC_CHECK_LIB(Xrender,main,
       [ AC_CHECK_LIB(cairo,main,
-        [ use_cairo="yes"
-          have_cairo="yes"
+        [ use_cairo=yes
+          have_cairo=yes
           GA_SET_INCLUDE_VAR([cairo_inc], [cairo freetype2])
 #          GA_SET_LIB_VAR(cairo_libs, [cairo Xrender fontconfig freetype pixman-1 png15 xml2 z])
           GA_SET_DYNLIB_VAR(cairo_libs, [cairo])
@@ -585,11 +606,17 @@ fi
 # check in system locations
 if test "$use_cairo" != "yes" -a "$ga_dyn_supplibs" = "yes" ; then
   echo looking in other system locations
-  GA_CHECK_LIB_CAIRO([
-    use_cairo='yes'
+  if test "z$CAIRO_CFLAGS" != "z" -a "z$CAIRO_LIBS" != "z" ; then
+    use_cairo=yes
     cairo_inc=$CAIRO_CFLAGS
     cairo_libs=$CAIRO_LIBS
-  ])
+  else
+    GA_CHECK_LIB_CAIRO([
+      use_cairo=yes
+      cairo_inc=$CAIRO_CFLAGS
+      cairo_libs=$CAIRO_LIBS
+    ])
+  fi
 fi
 # set output variables
 if test "$use_cairo" != "yes" ; then
@@ -648,8 +675,8 @@ echo -------
 if test "Z$ga_supplib_dir" != "Z" ; then 
   echo looking in $ga_supplib_dir 
   GA_SET_FLAGS([])
-  AC_CHECK_HEADER([udunits.h], 
-  [ AC_CHECK_LIB([udunits], [utInit], 
+  AC_CHECK_HEADER([udunits2.h], 
+  [ AC_CHECK_LIB([udunits2], [main], 
     [ have_udunits=yes 
     ])
   ])
@@ -658,10 +685,8 @@ fi
 # check in system locations
 if test "$have_udunits" = "no" -a "$ga_dyn_supplibs" = "yes" ; then
   echo looking in other system locations
-  AC_CHECK_UDUNITS([
+  AC_CHECK_UDUNITS2([
     have_udunits=yes
-#    udunits_inc="$UDUNITS_CFLAGS"
-#    udunits_libs="$UDUNITS_LIBS"
   ])
 fi
 
@@ -673,14 +698,12 @@ echo ----
 if test "Z$ga_supplib_dir" != "Z" ; then 
   if test "$have_zlib" = "yes" -a "$have_jpeg" = "yes" -a "$have_udunits" = "yes" ; then
     echo looking in $ga_supplib_dir 
-    GA_SET_FLAGS([])
+    GA_SET_FLAGS([], [], [], [-ldf])
     AC_CHECK_HEADER([mfhdf.h],
-    [ AC_CHECK_LIB([df], [main], 
-      [ AC_CHECK_LIB([mfhdf], [main],
-        [ use_hdf=yes 
-#          GA_SET_LIB_VAR([hdf_libs], [mfhdf df jpeg z udunits])
-          GA_SET_DYNLIB_VAR([hdf_libs], [mfhdf df jpeg z udunits])
-        ])
+    [ AC_CHECK_LIB([mfhdf], [main],
+      [ use_hdf=yes 
+#        GA_SET_LIB_VAR([hdf_libs], [mfhdf df jpeg z udunits])
+        GA_SET_DYNLIB_VAR([hdf_libs], [mfhdf df jpeg z udunits2])
       ])
     ])
     GA_UNSET_FLAGS
@@ -723,7 +746,7 @@ if test "$have_udunits" = "yes" ; then
 	if test ! -f "$NC_CONFIG" || test ! -x "$NC_CONFIG"; then
           use_nc4="no"
 #          GA_SET_LIB_VAR(nc_libs, [udunits netcdf])
-          GA_SET_DYNLIB_VAR(nc_libs, [udunits netcdf])
+          GA_SET_DYNLIB_VAR(nc_libs, [udunits2 netcdf])
         else
           # check if netcdf lib has hdf5 and if dap-enabled
           nchdf5=`$NC_CONFIG --has-hdf5`
@@ -731,7 +754,7 @@ if test "$have_udunits" = "yes" ; then
           if test "$nchdf5" = "yes" -a "$have_curl" = "yes" ; then
             use_nc4="yes"
 #            GA_SET_LIB_VAR(nc_libs, [udunits netcdf hdf5_hl hdf5 curl z])
-            GA_SET_DYNLIB_VAR(nc_libs, [udunits netcdf hdf5_hl hdf5 curl z])
+            GA_SET_DYNLIB_VAR(nc_libs, [udunits2 netcdf hdf5_hl hdf5 curl z])
           fi
         fi
       ])

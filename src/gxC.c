@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* This file contains the primary Cairo-GrADS interface. 
    The interactive interface (X windows) is managed by routines in gxX.c and the routines here.  
@@ -758,6 +758,22 @@ gadouble di1,di2,dj1,dj2;
     cairo_line_to(cr,di2,dj2);
     cairo_stroke(cr);
   }
+}
+
+/* Draw an open or filled circle */
+
+void gxCcirc (gadouble x, gadouble y, gadouble r, gaint flg) {
+gadouble di,dj,rad;
+  if (drawing) cairo_stroke(cr);
+  drawing = 0;
+  gxCxycnv (x,y,&di,&dj);
+  rad = r*yscl;
+  cairo_move_to(cr,di+rad,dj);
+  cairo_arc (cr, di, dj, rad, 0, 2*M_PI);
+  if (flg)
+    cairo_fill (cr);    /* filled */
+  else
+    cairo_stroke (cr);  /* open */
 }
 
 

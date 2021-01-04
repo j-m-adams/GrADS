@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* Authored by B. Doty */
 
@@ -1039,7 +1039,7 @@ size_t sz;
   /* If request from a defined grid, ignore fixed dimensions
      in the defined grid */
 
-  if (pfi->type==4) {
+  if (pfi->type==4 || pfi->type==5) {
     for (i=0; i<5; i++) {
       if (pfi->dnum[i]==1) {
         dmin[i] = 0.0;

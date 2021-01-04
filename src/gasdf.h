@@ -1,3 +1,5 @@
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
+
 /* gasdf.h - header info for SDF functionality */
 /* id: netcdf_io.h,v 1.2 1995/05/31 23:53:44 jac (Julia Collins) */
 /* Revision 1.3 1997/07/21 09:51:00 hoop */

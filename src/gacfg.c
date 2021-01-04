@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2018 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
 
 /* file: gacfg.c
  *
@@ -42,14 +42,6 @@
 #include "hdf5.h"
 #endif
 
-#if USENETCDF==1
-#include "netcdf.h"
-#include "netcdf_meta.h"
-#endif
-
-#if USEGADAP==1
-const char *libgadap_version(void);
-#endif
 
 #include "gatypes.h"
 #include "gx.h"
@@ -124,7 +116,7 @@ snprintf(cmd,255,"Config: v%s",GRADS_VERSION);
  }
  
  gaprnt (verbose, "Grid Analysis and Display System (GrADS) Version " GRADS_VERSION "\n");
- gaprnt (verbose, "Copyright (C) 1988-2018 by George Mason University \n");
+ gaprnt (verbose, "Copyright (C) 1988-2020 by George Mason University \n");
  gaprnt (verbose, "GrADS comes with ABSOLUTELY NO WARRANTY \n");
  gaprnt (verbose, "See file COPYRIGHT for more information \n\n");
  
@@ -133,77 +125,79 @@ snprintf(cmd,255,"Config: v%s",GRADS_VERSION);
  gaprnt(verbose,"\n\nThis build of GrADS has the following features:\n");
  
 #if BYTEORDER==1
-   gaprnt(verbose," -+- Byte order is BIG ENDIAN \n");
+   gaprnt(verbose,"  +  Byte order is BIG ENDIAN \n");
 #else 
-   gaprnt(verbose," -+- Byte order is LITTLE ENDIAN \n");
+   gaprnt(verbose,"  +  Byte order is LITTLE ENDIAN \n");
 #endif
 
 #if USEGUI==1
-   gaprnt(verbose," -+- Athena Widget GUI ENABLED \n");
+   gaprnt(verbose,"  +  Athena Widget GUI ENABLED \n");
 #else
-   gaprnt(verbose," -+- Athena Widget GUI DISABLED \n");
+   gaprnt(verbose,"  -  Athena Widget GUI DISABLED \n");
 #endif
  
 #if READLINE==1
-   gaprnt(verbose," -+- Command line editing ENABLED \n");
+   gaprnt(verbose,"  +  Command line editing ENABLED \n");
 #else
-   gaprnt(verbose," -+- Command line editing DISABLED \n");
+   gaprnt(verbose,"  -  Command line editing DISABLED \n");
 #endif
 
 #if GRIB2==1
-   snprintf(cmd,255," -+- GRIB2 interface ENABLED  %s \n",G2_VERSION);
+   snprintf(cmd,255,"  +  GRIB2 interface ENABLED  %s \n",G2_VERSION);
    gaprnt(verbose,cmd);
 #else 
-   gaprnt(verbose," -+- GRIB2 interface DISABLED\n");
+   gaprnt(verbose,"  -  GRIB2 interface DISABLED\n");
 #endif
  
 #if USENETCDF==1
-   snprintf(cmd,255," -+- NetCDF interface ENABLED  netcdf-%s \n",NC_VERSION);
+   const char * nc_inq_libvers(void);
+   snprintf(cmd,255,"  +  NetCDF interface ENABLED  netcdf-%s \n",nc_inq_libvers());
    gaprnt(verbose,cmd);
 #else 
-   gaprnt(verbose," -+- NetCDF interface DISABLED\n");
+   gaprnt(verbose,"  -  NetCDF interface DISABLED\n");
 #endif
  
 #if USEDAP==1
-   gaprnt(verbose," -+- OPeNDAP gridded data interface ENABLED\n");
+   gaprnt(verbose,"  +  OPeNDAP gridded data interface ENABLED\n");
 #else
-   gaprnt(verbose," -+- OPeNDAP gridded data interface DISABLED\n");
+   gaprnt(verbose,"  -  OPeNDAP gridded data interface DISABLED\n");
 #endif
 
 #if USEGADAP==1
-   snprintf(cmd,255," -+- OPeNDAP station data interface ENABLED  %s \n", libgadap_version());
+   const char *libgadap_version(void);
+   snprintf(cmd,255,"  +  OPeNDAP station data interface ENABLED  %s \n", libgadap_version());
    gaprnt(verbose,cmd);
 #else
-   gaprnt(verbose," -+- OPeNDAP station data interface DISABLED\n");
+   gaprnt(verbose,"  -  OPeNDAP station data interface DISABLED\n");
 #endif
 
 #if USEHDF==1
    Hgetlibversion(&majorv,&minorv,&release,hdfverstr);
-   snprintf(cmd,255," -+- HDF4 interface ENABLED  hdf-%d.%dr%d \n",majorv,minorv,release);
+   snprintf(cmd,255,"  +  HDF4 interface ENABLED  hdf-%d.%dr%d \n",majorv,minorv,release);
    gaprnt(verbose,cmd);
 #else
-   gaprnt(verbose," -+- HDF4 interface DISABLED \n");
+   gaprnt(verbose,"  -  HDF4 interface DISABLED \n");
 #endif
 
 #if USEHDF5==1
    H5get_libversion(&vmajor,&vminor,&vrelease);
-   snprintf(cmd,255," -+- HDF5 interface ENABLED  hdf5-%d.%d.%d \n",vmajor,vminor,vrelease);
+   snprintf(cmd,255,"  +  HDF5 interface ENABLED  hdf5-%d.%d.%d \n",vmajor,vminor,vrelease);
    gaprnt(verbose,cmd);
 #else
-   gaprnt(verbose," -+- HDF5 interface DISABLED \n");
+   gaprnt(verbose,"  -  HDF5 interface DISABLED \n");
 #endif
 
-   gaprnt(verbose," -+- KML contour output ENABLED\n");
+   gaprnt(verbose,"  +  KML contour output ENABLED\n");
 
 #if GEOTIFF==1
-   gaprnt(verbose," -+- GeoTIFF and KML/TIFF output ENABLED\n");
+   gaprnt(verbose,"  +  GeoTIFF and KML/TIFF output ENABLED\n");
 #else
-   gaprnt(verbose," -+- GeoTIFF and KML/TIFF output DISABLED\n");
+   gaprnt(verbose,"  -  GeoTIFF and KML/TIFF output DISABLED\n");
 #endif
 #if USESHP==1
-   gaprnt(verbose," -+- Shapefile interface ENABLED\n");
+   gaprnt(verbose,"  +  Shapefile interface ENABLED\n");
 #else
-   gaprnt(verbose," -+- Shapefile interface DISABLED\n");
+   gaprnt(verbose,"  -  Shapefile interface DISABLED\n");
 #endif
 
  gaprnt(verbose,"The 'q gxconfig' command returns Graphics configuration information\n");
