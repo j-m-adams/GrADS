@@ -1,5 +1,5 @@
 	        GrADS - Grid Analysis and Display System
-			     Version 2.2
+			     Version 2.2.2
 
                       http://cola.gmu.edu/grads
 
@@ -36,8 +36,11 @@ The following shared object files (and their symlinks) are in the ./lib director
  libgxpGD         Classic GD printing plug-in
  libgxdummy       A no-op dummy graphics display and printing plug-in
 
+ gradspy          The Python interface for Grads (GradsPy)
+ libgradspy       The GrADS executable plug-in that is loaded by the GradsPy start method
 
-A second tar file (data2.tar.gz) contains the GrADS fonts and maps data sets is 
+
+A second tar file (data3.tar.gz) contains the GrADS fonts and maps data sets is 
 also necessary and can be downloaded from http://cola.gmu.edu/grads/downloads.php
 
 The contents of this file are typically placed in the directory
@@ -47,7 +50,7 @@ you must also change the environment variable GADDIR so the GrADS executables wi
 know where to find these files.
 
      cd dirname
-     tar xvfz data2.tar.gz
+     tar xvfz data3.tar.gz
      setenv GADDIR dirname (If dirname is not /usr/local/lib/grads)
 
 

@@ -527,9 +527,6 @@ void gxdsfr (int frame) {
 void gxdptn (int typ, int den, int ang) {
 }
 
-void gxdbb(char *filename) { 
-} 
-
 void gxdfb(char *filename)  {
 } 
 

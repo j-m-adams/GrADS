@@ -243,8 +243,6 @@ gaint gxload(char *gxdopt, char *gxpopt) {
   if ((err=dlerror())!=NULL) {printf("Error in gxload: %s\n",err); return(1);}
   dsubs.gxdckfont= dlsym(dhandle,"gxdckfont");
   if ((err=dlerror())!=NULL) {printf("Error in gxload: %s\n",err); return(1);}
-  dsubs.gxdbb    = dlsym(dhandle,"gxdbb"); 
-  if ((err=dlerror())!=NULL) {printf("Error in gxload: %s\n",err); return(2);}
   dsubs.gxdfb    = dlsym(dhandle,"gxdfb"); 
   if ((err=dlerror())!=NULL) {printf("Error in gxload: %s\n",err); return(2);}
   dsubs.gxdacol  = dlsym(dhandle,"gxdacol"); 
