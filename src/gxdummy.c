@@ -8,7 +8,6 @@
 
 void gxdcfg () {}
 gaint gxdckfont () {return 0;}
-void gxdbb (char *a) {}
 void gxdfb (char *a) {}
 gaint gxdacol (gaint a, gaint b, gaint c, gaint d, gaint e) {return 0;}
 void gxdbat () {}

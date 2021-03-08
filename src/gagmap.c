@@ -1139,7 +1139,7 @@ err:
  }
 
 #endif  /* matches #if GRIB2 */
-
+ return(0);
 }
 
 
