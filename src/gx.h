@@ -200,7 +200,6 @@ struct gxpsubs {
 struct gxdsubs {
   void (*gxdcfg) (void);
   gaint (*gxdckfont) (void);
-  void (*gxdfb) (char*);
   gaint (*gxdacol) (gaint,gaint,gaint,gaint,gaint);
   void (*gxdbat) (void);
   void (*gxdbgn) (gadouble,gadouble);

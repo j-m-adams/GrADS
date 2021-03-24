@@ -527,9 +527,6 @@ void gxdsfr (int frame) {
 void gxdptn (int typ, int den, int ang) {
 }
 
-void gxdfb(char *filename)  {
-} 
-
 /* Gives current window information */
 
 gaint win_data (struct xinfo *xinf) {
