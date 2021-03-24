@@ -48,9 +48,9 @@ AC_PREFIX_DEFAULT(`pwd`)
 #    6. If any interfaces have been removed or changed since the last public release, 
 #       then set age to 0. 
 
-LIBGX_CURRENT=1
+LIBGX_CURRENT=2
 LIBGX_REVISION=0
-LIBGX_AGE=1
+LIBGX_AGE=0
 AC_SUBST(LIBGX_CURRENT)
 AC_SUBST(LIBGX_REVISION)
 AC_SUBST(LIBGX_AGE)
