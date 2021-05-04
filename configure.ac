@@ -419,15 +419,15 @@ fi
 
 # check in supplibs and other systems directories for the additional dependent libs
 
-# png15
+# png
 echo 
 echo png
 echo ---
 GA_SET_FLAGS([])
-AC_CHECK_LIB([png15], [main], [have_png=yes])
+AC_CHECK_LIB([png], [main], [have_png=yes])
 GA_UNSET_FLAGS
 if test "$have_png" != "yes" ; then
-  AC_CHECK_LIB([png15], [main], [have_png=yes])
+  AC_CHECK_LIB([png], [main], [have_png=yes])
 fi
 
 # zlib
@@ -546,8 +546,8 @@ if test "Z$ga_supplib_dir" != "Z" ; then
     AC_CHECK_HEADER(grib2.h,
     [ AC_CHECK_LIB([grib2c], [main], 
       [ use_grib2=yes 
-#        GA_SET_LIB_VAR([grib2_libs], [grib2c jasper png15 z])
-        GA_SET_DYNLIB_VAR([grib2_libs], [grib2c jasper png15 z])
+#        GA_SET_LIB_VAR([grib2_libs], [grib2c jasper png z])
+        GA_SET_DYNLIB_VAR([grib2_libs], [grib2c jasper png z])
       ])
     ])
     GA_UNSET_FLAGS
@@ -590,7 +590,7 @@ if test "Z$ga_supplib_dir" != "Z" ; then
         [ use_cairo=yes
           have_cairo=yes
           GA_SET_INCLUDE_VAR([cairo_inc], [cairo freetype2])
-#          GA_SET_LIB_VAR(cairo_libs, [cairo Xrender fontconfig freetype pixman-1 png15 xml2 z])
+#          GA_SET_LIB_VAR(cairo_libs, [cairo Xrender fontconfig freetype pixman-1 png xml2 z])
           GA_SET_DYNLIB_VAR(cairo_libs, [cairo])
         ])
       ])
