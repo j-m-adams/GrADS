@@ -18949,7 +18949,7 @@ fi
 
 # check in supplibs and other systems directories for the additional dependent libs
 
-# png15
+# png
 echo 
 echo png
 echo ---
@@ -18966,13 +18966,13 @@ echo ---
   LDFLAGS="-L${ga_supplib_dir}/lib "
   LIBS="$LIBS "
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lpng15" >&5
-$as_echo_n "checking for main in -lpng15... " >&6; }
-if ${ac_cv_lib_png15_main+:} false; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lpng" >&5
+$as_echo_n "checking for main in -lpng... " >&6; }
+if ${ac_cv_lib_png_main+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpng15  $LIBS"
+LIBS="-lpng  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -18986,17 +18986,17 @@ return main ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_png15_main=yes
+  ac_cv_lib_png_main=yes
 else
-  ac_cv_lib_png15_main=no
+  ac_cv_lib_png_main=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_png15_main" >&5
-$as_echo "$ac_cv_lib_png15_main" >&6; }
-if test "x$ac_cv_lib_png15_main" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_png_main" >&5
+$as_echo "$ac_cv_lib_png_main" >&6; }
+if test "x$ac_cv_lib_png_main" = xyes; then :
   have_png=yes
 fi
 
@@ -19007,13 +19007,13 @@ fi
   LIBS=$ga_saved_libs
 
 if test "$have_png" != "yes" ; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lpng15" >&5
-$as_echo_n "checking for main in -lpng15... " >&6; }
-if ${ac_cv_lib_png15_main+:} false; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lpng" >&5
+$as_echo_n "checking for main in -lpng... " >&6; }
+if ${ac_cv_lib_png_main+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lpng15  $LIBS"
+LIBS="-lpng  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -19027,17 +19027,17 @@ return main ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_png15_main=yes
+  ac_cv_lib_png_main=yes
 else
-  ac_cv_lib_png15_main=no
+  ac_cv_lib_png_main=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_png15_main" >&5
-$as_echo "$ac_cv_lib_png15_main" >&6; }
-if test "x$ac_cv_lib_png15_main" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_png_main" >&5
+$as_echo "$ac_cv_lib_png_main" >&6; }
+if test "x$ac_cv_lib_png_main" = xyes; then :
   have_png=yes
 fi
 
@@ -20101,10 +20101,10 @@ fi
 $as_echo "$ac_cv_lib_grib2c_main" >&6; }
 if test "x$ac_cv_lib_grib2c_main" = xyes; then :
    use_grib2=yes 
-#        GA_SET_LIB_VAR([grib2_libs], [grib2c jasper png15 z])
+#        GA_SET_LIB_VAR([grib2_libs], [grib2c jasper png z])
         
   ga_lib_prefix='-l'
-  for ga_lib_name in grib2c jasper png15 z ; do
+  for ga_lib_name in grib2c jasper png z ; do
       grib2_libs="$grib2_libs ${ga_lib_prefix}${ga_lib_name}"
   done  
 
@@ -20536,7 +20536,7 @@ if test "x$ac_cv_lib_cairo_main" = xyes; then :
       cairo_inc="$cairo_inc ${ga_include_prefix}/${ga_include_name}"
   done  
 
-#          GA_SET_LIB_VAR(cairo_libs, [cairo Xrender fontconfig freetype pixman-1 png15 xml2 z])
+#          GA_SET_LIB_VAR(cairo_libs, [cairo Xrender fontconfig freetype pixman-1 png xml2 z])
           
   ga_lib_prefix='-l'
   for ga_lib_name in cairo ; do
