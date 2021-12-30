@@ -933,9 +933,6 @@ cv_converter *converter=NULL;
 	  istart = 1 ;
 	  incrfactor = time2 - time1 ;
 
-	  /* printf("JMA time1 is %02d:%02dZ %4d-%02d-%02d  incr = %g %s\n", */
-	  /* 	 ihr,imn,iyr,imo,idy,incrfactor,trunc_units); */
-	
 	  if (compare_units("year", trunc_units) == Success) {
 	    tvals[5] = 12.0 * incrfactor;
 	    if (tvals[5] < 1.0) {
@@ -1071,8 +1068,6 @@ cv_converter *converter=NULL;
 	  /* only one time step */
 	  tvals[5] = 0.0 ;
 	  tvals[6] = 1.0 ; /* one time-step files get a (meaningless) delta t of one minute */
-	  /* printf("JMA time1 is %02d:%02dZ %4d-%02d-%02d\n",ihr,imn,iyr,imo,idy); */
-
 	} 
 	if (time_units)  gree(time_units,"f1");
 	if (trunc_units) gree(trunc_units,"f2") ;

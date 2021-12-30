@@ -132,8 +132,6 @@ snprintf(cmd,255,"Config: v%s",GRADS_VERSION);
 
 #if USEGUI==1
    gaprnt(verbose,"  +  Athena Widget GUI ENABLED \n");
-#else
-   gaprnt(verbose,"  -  Athena Widget GUI DISABLED \n");
 #endif
  
 #if READLINE==1
@@ -167,8 +165,6 @@ snprintf(cmd,255,"Config: v%s",GRADS_VERSION);
    const char *libgadap_version(void);
    snprintf(cmd,255,"  +  OPeNDAP station data interface ENABLED  %s \n", libgadap_version());
    gaprnt(verbose,cmd);
-#else
-   gaprnt(verbose,"  -  OPeNDAP station data interface DISABLED\n");
 #endif
 
 #if USEHDF==1

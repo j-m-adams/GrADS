@@ -251,7 +251,7 @@ gaint gaggrd (struct gagrid *pgrid) {
   /* For non-templated HDF5 data sets, file is already open, 
      but we still need to open the variable and set it up */ 
   if (pfi->tmplat==0 && pfi->ncflg==3) {
-    /* check of variable is already opened */
+    /* check if variable has not been previously opened */
     if (pvr->h5varflg < 0) {   
       /* get the variable name */
       if (pvr->longnm[0] != '\0')
@@ -262,21 +262,20 @@ gaint gaggrd (struct gagrid *pgrid) {
       rc = h5openvar(pfi->h5id,vname,&dsid,&vid,pfi->cachesize);
       if (rc) {
 	pvr->h5vid = -888;
+	pvr->h5varflg = 1;
 	snprintf(pout,1255,"Error: Variable %s not in HDF5 file\n",vname);
 	gaprnt(0,pout);
 	return (rc); 
       }
       /* No errors, so continue with variable set up */
       pvr->dataspace = dsid;
-      pvr->h5varflg = vid;
       /* if we haven't looked at this variable before ... */
       if (pvr->h5vid == -999) {  
 	/* get undef & packing attributes, check cache size */
+	pvr->h5varflg = vid;  /* stash vid in h5varflg for now */
 	rc = h5setup();   
 	if (rc) return (rc);
       }
-      /* set h5-relevant variables in the gavar structure */
-      pvr->h5vid = vid; 
     }
   }
 #endif
@@ -492,9 +491,9 @@ gaint y,z,t,e;
       bpsav = (off_t)-999;    
     }
 #if USEHDF5==1
-    /* For HDF5, call h5setup and h5openvar if new file opened or if a new variable */
+    /* For templated HDF5, call h5setup and h5openvar if new file opened or if a new variable */
     if (pfi->ncflg==3) {
-      if (oflg || pvr->h5varflg<0) { 
+      if (oflg || pvr->h5varflg < 0) { 
 	/* get the variable name */
 	if (pvr->longnm[0] != '\0')
 	  vname = pvr->longnm;
@@ -504,21 +503,20 @@ gaint y,z,t,e;
 	rc = h5openvar(pfi->h5id,vname,&dsid,&vid,pfi->cachesize);
 	if (rc) {
 	  pvr->h5vid = -888;
+	  pvr->h5varflg = 1;
 	  snprintf(pout,1255,"Error: Variable %s not in HDF5 file\n",vname);
 	  gaprnt(0,pout);
 	  return (rc); 
 	}
 	/* No errors, so continue with variable set up */
 	pvr->dataspace = dsid;
-	pvr->h5varflg = vid;
 	/* if we haven't looked at this variable before ... */
 	if (pvr->h5vid == -999) {  
 	  /* get undef & packing attributes, check cache size */
+	  pvr->h5varflg = vid;  /* stash vid in h5varflg for now */
 	  rc = h5setup();   
 	  if (rc) return (rc);
 	}
-	/* set h5-relevant variables in the gavar structure */
-	pvr->h5vid = vid; 
       }
     }
 #endif
@@ -3440,6 +3438,8 @@ return (0);
      makes sure the variable exists in the file
      gets the undef value
      gets the scale factor and add offset attributes 
+     pvr->h5varflg gets updated with vid before this routine is called, 
+       gets set to 1 here when finished 
 */
 
 #if USEHDF5 == 1
@@ -3451,9 +3451,13 @@ gaint h5setup(void) {
   size_t size;
   hsize_t *chsize=NULL,nelems;
 
-  if (pvr->h5vid == -888) return(1);  /* already tried and failed */
-  if (pvr->h5varflg > 0) vid = pvr->h5varflg;
-  if (pvr->dataspace > 0) dsid = pvr->dataspace;
+  if (pvr->h5vid == -888) {  /* already tried and failed */
+    pvr->h5varflg = 1;
+    return(1);  
+  }
+
+  vid = pvr->h5varflg;
+  dsid = pvr->dataspace;
 
   /* get the variable name */
   if (pvr->longnm[0] != '\0')
@@ -3541,6 +3545,9 @@ gaint h5setup(void) {
       }
     }
   }
+  /* Store the working vid in h5vid, set h5varflg to 1 */
+  pvr->h5vid = vid;
+  pvr->h5varflg = 1;
   return(0); 
 }
 #endif
@@ -3551,7 +3558,7 @@ gaint h5setup(void) {
 */
 
 #if USEHDF5==1
-gaint h5openvar (hid_t h5id, char *vname, hid_t *dataspace, hid_t *h5varflg, long cachesize) {
+gaint h5openvar (hid_t h5id, char *vname, hid_t *dataspace, hid_t *h5vid, long cachesize) {
   hid_t vid,plid,dsid;
   size_t nslots;
   gadouble pp;
@@ -3585,7 +3592,7 @@ gaint h5openvar (hid_t h5id, char *vname, hid_t *dataspace, hid_t *h5varflg, lon
   }  
 
   /* success */
-  *h5varflg = vid;
+  *h5vid = vid;
   *dataspace = dsid;
   return (0);
 }
@@ -3635,8 +3642,8 @@ long *lval;
 unsigned long *ulval;
 gafloat *fval;
 
-  /* copy the varid from the h5varflg */
-  vid = pvr->h5varflg;
+  /* copy the varid from the pvr structure */
+  vid = pvr->h5vid;
 
   /* Change the Y indexes if yrev flag is set */
   if (pfi->yrflg) {
@@ -3933,8 +3940,8 @@ float fval;
 gadouble dval;
 
   /* get the attribute id */
-  if ((aid = H5Aopen_by_name(varid, vname, aname, H5P_DEFAULT, H5P_DEFAULT))<0) {
-    snprintf(pout,1255,"HDF5 attribute named \"%s\" does not exist\n",aname);
+  if ((aid = H5Aopen_by_name(varid, ".", aname, H5P_DEFAULT, H5P_DEFAULT))<0) {
+    snprintf(pout,1255,"HDF5 attribute named \"%s\" does not exist for variable %s \n",aname,vname);
     gaprnt(2,pout);
     return(1);
   } 
@@ -4744,10 +4751,10 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
   H5O_info_t oinfo;
   H5T_class_t aclass=-1;
   H5T_sign_t asign;
-  hid_t   vid,dsid,aid,atype=-1,aspace=-1;
-  hsize_t ai,stosize;
-  size_t sz,asize,len=0;
-  gaint   aindex,n_atts=0,rc,i,rank=-1,err=0;
+  hid_t   vid,dsid,aid=-1,atype=-1,aspace=-1;
+  hsize_t ai,stosize=0;
+  size_t sz,asize,len=-1;
+  gaint   aindex,n_atts=0,n_gatts=0,rc,i,rank=-1,err=0,npts=-1;
   char    *aname=NULL;
   char    *cval=NULL,*string=NULL;
   unsigned char *ucval=NULL;
@@ -4760,23 +4767,16 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
   gafloat  *fval=NULL;
   gadouble *dval=NULL;
 
-/* Get the variable id and number of attributes */
-  /* if (cmpwrd("global",abbrv)) { */
-  /*   /\* this is the first step, to get the number *\/ */
-  /*   n_atts = H5Aget_num_attrs(h5id); */
-  /*   if (n_atts>0) printf("%d global attributes\n",n_atts); */
-    /* aid = H5Aopen_by_name(h5id,(const char*)abbrv); */
-
-    /* varid = NC_GLOBAL; */
-    /* rc = nc_inq_natts(ncid,&n_atts); */
-    /* if (rc != NC_NOERR) error=1; */
-  /* } */
-
-  /* Get the variable id and number of attributes */
-  rc = h5openvar(h5id, vname, &dsid, &vid, cachesize);
-  if (rc) err=1;
+  /* Use the file id or variable id to get the object info which contains the number of attributes */
+  if (cmpwrd("global",abbrv)) {
+    vid = h5id; /* jma not sure if this will work with H5AOpen ... */
+  }
+  else {
+    if (h5openvar(h5id, vname, &dsid, &vid, cachesize)) err=1;
+  }
   if (!err) {
-    if ((rc = H5Oget_info(vid,&oinfo))<0) err=1;
+    rc = H5Oget_info(vid,&oinfo);
+    if (rc<0) err=1;
   }
   if (err) return (0); /* zero attributes printed */
 
@@ -4796,21 +4796,34 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
     err=0;
     ai = (hsize_t)aindex;
     aid = H5Aopen_by_idx(vid,".",H5_INDEX_CRT_ORDER,H5_ITER_INC,ai,H5P_DEFAULT,H5P_DEFAULT); if (aid<0) err=1;
-    /* get the attribute name */
-    if (!err) len    = H5Aget_name(aid,0,NULL); if (len<=0) err=1;
-    sz = (len+1)*sizeof(char);
-    if (!err) aname  = (char*)galloc(sz,"aname"); if (aname==NULL) err=1;
-    if (!err) rc     = H5Aget_name(aid,len+1,aname); if (rc<0) err=1;
-    /* get the attribute rank */
+    /* get the attribute rank, make sure it is not greater than 1. */
     if (!err) aspace = H5Aget_space(aid); if (aspace<0) err=1;
-    if (!err) rank   = H5Sget_simple_extent_ndims(aspace); if (rank<0) err=1;
+    if (!err) rank   = H5Sget_simple_extent_ndims(aspace);
+    if (rank>1 || rank<0) {
+      /* higher ranked attributes are not of interest */
+       H5Aclose(aid); 
+       H5Sclose(aspace);
+       continue; 
+    }
     /* get the attribute type, class, and size */
-    if (!err) atype  = H5Aget_type(aid); if (atype<0) err=1;
+    if (!err) atype  = H5Aget_type(aid);    if (atype<0)  err=1;
     if (!err) aclass = H5Tget_class(atype); if (aclass<0) err=1;
-    if (!err) asize  = H5Tget_size(atype); if (asize==0) err=1;
+    if (!err) asize  = H5Tget_size(atype);  if (asize==0) err=1;
+    /* get the attribute storage size and number of points */
+    if (!err) stosize = H5Aget_storage_size(aid); if (stosize==0) err=1;
+    if (!err) npts    = H5Sget_simple_extent_npoints(aspace); if (npts<0) err=1;
+    /* get the attribute name */
+    if (!err) len    = H5Aget_name(aid,0,NULL); if (len<0) err=1;
+    if (!err) aname  = (char*)galloc((len+1)*sizeof(char),"aname"); if (aname==NULL) err=1;
+    if (!err) rc     = H5Aget_name(aid,len+1,aname); if (rc<0) err=1;
     if (err) {
       snprintf(pout,1255,"Unable to retrieve required info for attribute number %d for variable %s \n",aindex,abbrv);
       gaprnt(2,pout);
+      H5Aclose(aid);
+      H5Sclose(aspace);
+      H5Tclose(atype);
+      if (aname) gree(aname,"f153l");
+      aname=NULL;
       continue; /* move on to the next attribute */
     }
     else {
@@ -4818,11 +4831,10 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
       if (aclass == H5T_FLOAT)	{
 	/* float */
 	if (asize == 4) {
-	  sz = rank*sizeof(gafloat);
-	  if ((fval = (gafloat*)galloc(sz,"fval"))!=NULL) {
+	  if ((fval = (gafloat*)galloc(npts*sizeof(gafloat),"fval"))!=NULL) {
 	    if ((rc = H5Aread(aid,H5T_NATIVE_FLOAT,fval))>=0) {
 	      snprintf(pout,1255,"%s Float32 %s ",abbrv,aname); gaprnt(2,pout);
-	      for (i=0; i<rank; i++) {
+	      for (i=0; i<npts; i++) {
 		snprintf(pout,1255,"%g ", fval[i]); gaprnt(2,pout);
 	      }
 	      gaprnt(2,"\n");
@@ -4832,11 +4844,10 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
 	}
 	/* double */
 	else if (asize == 8) {
-	  sz = rank*sizeof(gadouble);
-	  if ((dval = (gadouble*)galloc(sz,"dval"))!=NULL) {
+	  if ((dval = (gadouble*)galloc(npts*sizeof(gadouble),"dval"))!=NULL) {
 	    if ((rc = H5Aread(aid,H5T_NATIVE_DOUBLE,dval))>=0) {
 	      snprintf(pout,1255,"%s Float64 %s ",abbrv,aname); gaprnt(2,pout);
-	      for (i=0; i<rank; i++) {
+	      for (i=0; i<npts; i++) {
 		snprintf(pout,1255,"%g ", dval[i]); gaprnt(2,pout);
 	      }
 	      gaprnt(2,"\n");
@@ -4851,11 +4862,10 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
 	  /* byte */
 	  if (asize == 1) {
 	    if (asign==H5T_SGN_NONE) {  
-	      sz = rank*sizeof(unsigned char);
-	      if ((ucval = (unsigned char*)galloc(sz,"ucval"))!=NULL) {
+	      if ((ucval = (unsigned char*)galloc(npts*sizeof(unsigned char),"ucval"))!=NULL) {
 		if ((rc = H5Aread(aid,H5T_NATIVE_UCHAR,(void*)ucval))>=0) {
 		  snprintf(pout,1255,"%s Byte %s ",abbrv,aname); gaprnt(2,pout);
-		  for (i=0; i<rank; i++) {
+		  for (i=0; i<npts; i++) {
 		    snprintf(pout,1255,"%u ", (gaint)ucval[i]); 
 		    gaprnt(2,pout);
 		  }
@@ -4865,11 +4875,10 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
 	      }
 	    }
 	    else {
-	      sz = rank*sizeof(char);
-	      if ((cval = (char*)galloc(sz,"cval"))!=NULL) {
+	      if ((cval = (char*)galloc(npts*sizeof(char),"cval"))!=NULL) {
 		if ((rc = H5Aread(aid,H5T_NATIVE_CHAR,(void*)cval))>=0) {
 		  snprintf(pout,1255,"%s Byte %s ",abbrv,aname); gaprnt(2,pout);
-		  for (i=0; i<rank; i++) {
+		  for (i=0; i<npts; i++) {
 		    snprintf(pout,1255,"%d ", (gaint)cval[i]); 
 		    gaprnt(2,pout);
 		  }
@@ -4882,11 +4891,10 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
 	  /* short */
 	  else if (asize == 2) {
 	    if (asign==H5T_SGN_NONE) {  
-	      sz = rank*sizeof(unsigned short);
-	      if ((usval = (unsigned short*)galloc(sz,"usval"))!=NULL) {
+	      if ((usval = (unsigned short*)galloc(npts*sizeof(unsigned short),"usval"))!=NULL) {
 		if ((rc = H5Aread(aid,H5T_NATIVE_USHORT,(void*)usval))>=0) {
 		  snprintf(pout,1255,"%s UInt16 %s ",abbrv,aname); gaprnt(2,pout);
-		  for (i=0; i<rank; i++) {
+		  for (i=0; i<npts; i++) {
 		    snprintf(pout,1255,"%u ", (gaint)usval[i]); 
 		    gaprnt(2,pout);
 		  }
@@ -4896,11 +4904,10 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
 	      }
 	    }
 	    else {
-	      sz = rank*sizeof(short);
-	      if ((sval = (short*)galloc(sz,"sval"))!=NULL) {
+	      if ((sval = (short*)galloc(npts*sizeof(short),"sval"))!=NULL) {
 		if ((rc = H5Aread(aid,H5T_NATIVE_SHORT,(void*)sval))>=0) {
 		  snprintf(pout,1255,"%s Int16 %s ",abbrv,aname); gaprnt(2,pout);
-		  for (i=0; i<rank; i++) {
+		  for (i=0; i<npts; i++) {
 		    snprintf(pout,1255,"%d ", (gaint)sval[i]); 
 		    gaprnt(2,pout);
 		  }
@@ -4913,11 +4920,10 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
 	  /* int */
 	  else if (asize == 4) {
 	    if (asign==H5T_SGN_NONE) {  
-	      sz = rank*sizeof(gauint);
-	      if ((uival = (gauint*)galloc(sz,"uival"))!=NULL) {
+	      if ((uival = (gauint*)galloc(npts*sizeof(gauint),"uival"))!=NULL) {
 		if ((rc = H5Aread(aid,H5T_NATIVE_UINT,(void*)uival))>=0) {
 		  snprintf(pout,1255,"%s UInt32 %s ",abbrv,aname); gaprnt(2,pout);
-		  for (i=0; i<rank; i++) {
+		  for (i=0; i<npts; i++) {
 		    snprintf(pout,1255,"%u ", uival[i]); 
 		    gaprnt(2,pout);
 		  }
@@ -4927,11 +4933,10 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
 	      }
 	    }
 	    else {
-	      sz = rank*sizeof(gaint);
-	      if ((ival = (gaint*)galloc(sz,"ival"))!=NULL) {
+	      if ((ival = (gaint*)galloc(npts*sizeof(gaint),"ival"))!=NULL) {
 		if ((rc = H5Aread(aid,H5T_NATIVE_INT,(void*)ival))>=0) {
 		  snprintf(pout,1255,"%s Int32 %s ",abbrv,aname); gaprnt(2,pout);
-		  for (i=0; i<rank; i++) {
+		  for (i=0; i<npts; i++) {
 		    snprintf(pout,1255,"%d ", ival[i]); 
 		    gaprnt(2,pout);
 		  }
@@ -4944,11 +4949,10 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
 	  /* long */
 	  else if (asize == 8) {
 	    if (asign==H5T_SGN_NONE) {  
-	      sz = rank*sizeof(unsigned long);
-	      if ((ulval = (unsigned long*)galloc(sz,"ulval"))!=NULL) {
+	      if ((ulval = (unsigned long*)galloc(npts*sizeof(unsigned long),"ulval"))!=NULL) {
 		if ((rc = H5Aread(aid,H5T_NATIVE_ULONG,(void*)ulval))>=0) {
 		  snprintf(pout,1255,"%s UInt32 %s ",abbrv,aname); gaprnt(2,pout);
-		  for (i=0; i<rank; i++) {
+		  for (i=0; i<npts; i++) {
 		    snprintf(pout,1255,"%lu ", ulval[i]); 
 		    gaprnt(2,pout);
 		  }
@@ -4958,11 +4962,10 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
 	      }
 	    }
 	    else {
-	      sz = rank*sizeof(long);
-	      if ((lval = (long*)galloc(sz,"lval"))!=NULL) {
+	      if ((lval = (long*)galloc(npts*sizeof(long),"lval"))!=NULL) {
 		if ((rc = H5Aread(aid,H5T_NATIVE_LONG,(void*)lval))>=0) {
 		  snprintf(pout,1255,"%s Int32 %s ",abbrv,aname); gaprnt(2,pout);
-		  for (i=0; i<rank; i++) {
+		  for (i=0; i<npts; i++) {
 		    snprintf(pout,1255,"%ld ", lval[i]); 
 		    gaprnt(2,pout);
 		  }
@@ -4979,7 +4982,7 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
 	}
       }
       else if (aclass == H5T_STRING) {
-	if ((stosize = H5Aget_storage_size(aid))==0) {
+	if (stosize > 0) {
 	  if ((string = (char*)malloc((stosize+1)*sizeof(char)))!=NULL) {
 	    if ((rc = H5Aread(aid,atype,(void*)string))>=0) {
 	      string[stosize]='\0';
@@ -4992,12 +4995,15 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
 	}
       }
     }
-    gree(aname,"f153l");
     H5Aclose(aid);
+    H5Sclose(aspace);
     H5Tclose(atype);
+    if (aname) gree(aname,"f153");
+    aname=NULL;
   }
   
-  h5closevar(dsid,vid);
+  /* leave the file open but close the variable */
+  if (cmpwrd("global",abbrv) < 1) h5closevar(dsid,vid);
   return(n_atts);
   return(0);
 }

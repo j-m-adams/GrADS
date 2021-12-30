@@ -391,12 +391,12 @@ rtrn:
   return(rval);
 }
 
-/* The 'get' method takes the name of a defined variables and returns the data and metadata in a Python tuple.
+/* The 'get' method takes the name of a defined variable and returns the data and metadata in a Python tuple.
 
    The returned tuple has seven elements (one integer and six PyObjects):
    1. The return code contains the number of varying dimensions (rank) 
       of the result grid; if it is negative, an error occurred.
-   2. 2D NumPy array containing the result grid (with NaN for missing data values) 
+   2. The NumPy array containing the result grid (with NaN for missing data values) 
    3. 1D NumPy array of X coordinate values (NaN if X is not varying) 
    4. 1D NumPy array of Y coordinate values (NaN if Y is not varying)
    5. 1D NumPy array of Z coordinate values (NaN if Z is not varying)
@@ -589,6 +589,7 @@ PyMODINIT_FUNC PyInit_gradspy(void) {
 
   PyObject *m;
   void *handle;
+  char *libname=NULL;
   const char *error;
 
   gapyerror = 0;
@@ -596,12 +597,19 @@ PyMODINIT_FUNC PyInit_gradspy(void) {
   m = PyModule_Create(&moduledef);
   if (m == NULL) goto err;
   
-  /* Is there a more elegant way to handle the different shared object file names for linux and macOS? --JMA */
-  handle = dlopen ("libgradspy.so",    RTLD_LAZY | RTLD_GLOBAL );
-  /* handle = dlopen ("libgradspy.dylib", RTLD_LAZY | RTLD_GLOBAL ); */
+  /* Is there a more elegant way to handle the different shared object file names? 
+     Using an environment variable called $GAGPY to override the default (.so for unix), 
+     and added a comment in the error message to inform users how to set it. */ 
+
+  if ((libname = getenv("GAGPY"))==NULL) 
+    handle = dlopen ("libgradspy.so", RTLD_LAZY | RTLD_GLOBAL );
+  else
+    handle = dlopen (libname, RTLD_LAZY | RTLD_GLOBAL );  
+
   if (!handle) {
     fputs (dlerror(), stderr);
     fputs ("\n", stderr);
+    fputs ("Use the environment variable $GAGPY to specify the shared object filename if different from `libgradspy.so`\n", stderr);
     goto err; 
   } 
   else {

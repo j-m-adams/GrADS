@@ -1916,11 +1916,11 @@ gaint wtg2map(struct gafile *pfi, struct gag2indx *g2indx) {
 /* 	if (g2indx->bigflg) { */
 /* 	  joff = eoff+ioff; */
 /* 	  if (g2indx->g2bigpnt[joff] <-900)  */
-/* 	    printf("JMA variable record %d is unmatched for e=%d, t=%d\n",i+1,e+1,t+1); */
+/* 	    printf("variable record %d is unmatched for e=%d, t=%d\n",i+1,e+1,t+1); */
 /* 	} else { */
 /* 	  joff = 2*(eoff+ioff); */
 /* 	  if (g2indx->g2intpnt[joff] < -900) */
-/* 	    printf("JMA variable record %d is unmatched for e=%d, t=%d\n",i+1,e+1,t+1); */
+/* 	    printf("variable record %d is unmatched for e=%d, t=%d\n",i+1,e+1,t+1); */
 /* 	} */
 /*       } */
 /*     } */
@@ -2257,7 +2257,7 @@ gaint g2a_check (gribfield *gfld, struct gavar *pvar) {
 	    match=1;
 	}
 	else {
-	  /* only the aerosol type is available for matching; leave this as a non-match for the moment --JMA */
+	  /* only the aerosol type is available for matching; leave this as a non-match for now */
 	}
       }
     }

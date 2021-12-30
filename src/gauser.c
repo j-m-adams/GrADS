@@ -2722,7 +2722,8 @@ char name[20];
       gree(pfic->ubuf,"f93a");
       for (i=0; i<5; i++) {
 	gree(pfic->grvals[i],"f93b");
-	gree(pfic->abvals[i],"f93c");
+	/* From gaudef: gradspy defined objects don't need to free abvals */
+	if (pfic->type!=5) gree(pfic->abvals[i],"f93c"); 
       }
       gree(pfic,"f94");
       *prev = pcurr->pforw;
@@ -3239,7 +3240,7 @@ gadouble minvals[4], maxvals[4],dval;
     }
     gaprnt(2,"\n");
   }
-  else if (cmpwrd(arg,"vars")) {
+  else if (cmpwrd(arg,"vars")) {   /* this is an undocumented query option */
     if (pcm->pfi1==NULL) {
       gaprnt (0,"No Files Open\n");
       return(1);
@@ -4609,10 +4610,9 @@ gadouble minvals[4], maxvals[4],dval;
 	h5id = pfi->h5id;
 	closethisfilelater=0;
       }
-      /* JMA Write code to check for global attributes in HDF5 files */
       /* Retrieve HDF5 global attributes */
-      /* n_gatts = h5pattrs(h5id, "foo", "global", hdrflg, fnum, pfi->title, pfi->cachesize); */
-      /* if (hdrflg && n_gatts>0) hdrflg=0; */
+      n_gatts = h5pattrs(h5id, "foo", "global", hdrflg, fnum, pfi->title, pfi->cachesize);
+      if (hdrflg && n_gatts>0) hdrflg=0;
 #endif
     }
 
@@ -7915,7 +7915,7 @@ gaint prntgaattr (struct gafile *pfi, char *name, gaint hdrflg, gaint fnum) {
 		gaprnt(2,pout);
 		lptr++;
 	      } else if (attr->nctype == 5) {
-		snprintf(pout,1255,"%f",*(fptr));
+		snprintf(pout,1255,"%g",*(fptr));
 		gaprnt(2,pout);
 		fptr++;
 	      } else { 
@@ -9307,8 +9307,9 @@ struct gastat *pst;
    that are passed through in the pygagrid structure */
 
 int gasetup (char *ch, struct pygagrid *pypgr) {
-struct gafile *pypfi,*pfi;
-struct gadefn *pypdf,*pdf,*opdf;
+struct gafile *pypfi,*pfi,*pfic;
+struct gadefn *pypdf,*pdf,*opdf,*pcurr,*psave;
+struct gadefn **prev;
 struct gacmn  *pcm=NULL;
 gaint i,j,rc,ev1,ev2,add,gsz;
 char name[20];
@@ -9333,7 +9334,32 @@ char *pymask=NULL;
     if (i>16) break;
   }
   name[i] = '\0';
-  
+
+  /* Check if we already have a defined variable with the same name */
+  pcurr = pcm->pdf1;
+  prev = &(pcm->pdf1);
+  while (pcurr!=NULL) {
+    if (cmpwrd(name,pcurr->abbrv)) {
+      printf("JMA(gasetup) Name already DEFINEd: '%s' will be deleted and replaced\n",name);
+      pfic = pcurr->pfi;
+      gree(pfic->rbuf,"f93");
+      gree(pfic->ubuf,"f93a");
+      for (i=0; i<5; i++) {
+	gree(pfic->grvals[i],"f93b");
+	/* From gaudef: gradspy defined objects don't need to free abvals */
+	if (pfic->type!=5) gree(pfic->abvals[i],"f93c"); 
+      }
+      gree(pfic,"f94");
+      *prev = pcurr->pforw;
+      psave = pcurr;
+      pcurr = pcurr->pforw;
+      gree(psave,"f95");
+      continue;
+    }
+    prev = &(pcurr->pforw);
+    pcurr = pcurr->pforw;
+  }
+
   /* initialize a file structure for the new defined grid. 
      Use getpfi, but don't put it in the chain of open file structures */
   pypfi = getpfi();
@@ -9432,38 +9458,7 @@ char *pymask=NULL;
   pypfi->rbuf = pygrid;
   pypfi->ubuf = pymask;
 
-  /* Now we will add our new object to the chain of define blocks.
-     First, check for an existing defined object with the same name */
-  pdf = pcm->pdf1;
-  opdf = NULL;
-  while (pdf!=NULL) {
-    if (cmpwrd(name,pdf->abbrv)) break;
-    opdf = pdf;
-    pdf = pdf->pforw;
-  }
-  if (pdf!=NULL) {
-    /* name was found, pdf is pointing to the object we need to delete */
-    if (opdf==NULL) {
-      /* pdf was the first in the chain, so we promote the forward link to anchor */
-      pcm->pdf1 = pdf->pforw;
-    }
-    else {
-      /* attach the forward link to the previous link */
-      opdf->pforw = pdf->pforw;
-    }
-    /* now we can delete pdf */
-    pfi = pdf->pfi;
-    gree(pfi->rbuf,"g159");
-    gree(pfi->ubuf,"g160");
-    for (i=0; i<5; i++) {
-      if (pfi->grvals[i]!=NULL) {
-	gree(pfi->grvals[i],"g161");
-	if (pfi->type!=5) gree(pfi->abvals[i],"g161");
-      }
-    }
-    gree(pfi,"g163");
-    gree(pdf,"g164");
-  }
+  /* Now we will add our new object to the chain of define blocks.*/
 
   /* Allocate the structure for a defined variable */
   pypdf = NULL;
