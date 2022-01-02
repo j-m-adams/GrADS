@@ -9340,7 +9340,7 @@ char *pymask=NULL;
   prev = &(pcm->pdf1);
   while (pcurr!=NULL) {
     if (cmpwrd(name,pcurr->abbrv)) {
-      printf("JMA(gasetup) Name already DEFINEd: '%s' will be deleted and replaced\n",name);
+      /* Name already DEFINEd, will be deleted and replaced */
       pfic = pcurr->pfi;
       gree(pfic->rbuf,"f93");
       gree(pfic->ubuf,"f93a");
