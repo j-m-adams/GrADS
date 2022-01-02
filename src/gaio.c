@@ -3613,7 +3613,7 @@ gaint h5closevar (hid_t dsid, hid_t vid) {
   /* close variable */
   if (vid > (hid_t)0) {
     if ((H5Dclose(vid))<0) {
-      snprintf(pout,1255,"H5Dclose failed to close varid %d\n",(gaint)vid);
+      snprintf(pout,1255,"H5Dclose failed to close varid %lld\n",vid);
       gaprnt(1,pout);
       return (1);
     }
@@ -5311,11 +5311,12 @@ gaint gacloseh5 (struct gafile *pfi) {
     /* loop over all variables, make sure they are closed */
     lclvar = pfi->pvar1;
     for (i=0; i<pfi->vnum; i++) {
-      rc = h5closevar(lclvar->dataspace,lclvar->h5varflg);
+      rc = h5closevar(lclvar->dataspace,lclvar->h5vid);
       if (rc) return (1);
       /* reset flags */
       lclvar->dataspace = -999;
       lclvar->h5varflg = -999;
+      lclvar->h5vid = -999;
       lclvar++;
     }
     /* now we can close the file */
