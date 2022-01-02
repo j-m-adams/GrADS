@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2022 by George Mason University. See file COPYRIGHT for more information. */
 
 /* file: gacfg.c
  *
@@ -116,7 +116,7 @@ snprintf(cmd,255,"Config: v%s",GRADS_VERSION);
  }
  
  gaprnt (verbose, "Grid Analysis and Display System (GrADS) Version " GRADS_VERSION "\n");
- gaprnt (verbose, "Copyright (C) 1988-2020 by George Mason University \n");
+ gaprnt (verbose, "Copyright (C) 1988-2022 by George Mason University \n");
  gaprnt (verbose, "GrADS comes with ABSOLUTELY NO WARRANTY \n");
  gaprnt (verbose, "See file COPYRIGHT for more information \n\n");
  

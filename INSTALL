@@ -1,25 +1,33 @@
 	        GrADS - Grid Analysis and Display System
-			     Version 2.2.2
+			     Version 2.2.3
 
                       http://cola.gmu.edu/grads
+		      https://github.com/j-m-adams/GrADS
 
 GrADS is distributed freely and is copyrighted under the GNU Public License. 
 Please read the COPYRIGHT file for more complete information. 
 For download information consult http://cola.gmu.edu/grads/downloads.php
 
-The executables contained in the ./bin directory of the distribution tarfile 
-are typically placed in a public directory such as /usr/local/bin. 
-If you do not have write permission for /usr/local/bin, you can put them 
-in a subdirectory under $HOME -- e.g. /home/username/bin/. 
+Pre-compiled binary executables are not provided now that the 
+dependent libraries are no longer statically linked. Please see the 
+documentation on building the supplemental libraries and building GrADS 
+from source at http://cola.gmu.edu/grads/gadoc/supplibs2.html
 
-The shared object files in the ./lib directory of the distribution tarfile may be 
-placed anywhere that is convenient. GrADS will looks for a default file called "updt" 
-in the directory named by the GADDIR environment variable. The udpt file contains the 
-full path to the shared object files, along with other information that GrADS needs. 
+After a successful build, the executables in the ./bin directory  
+are typically placed in a public directory such as /usr/local/bin. 
+If you do not have write permission for /usr/local/bin, you can put 
+them in a subdirectory under $HOME.  
+
+The shared object files in the ./lib directory may be left in place or 
+moved to a public directory such as /usr/local/lib/. Use the environment
+variable LD_LIBRARY_PATH to point to their location. 
+
+GrADS will looks for a default file called "updt" in the directory named 
+by the GADDIR environment variable. The udpt file contains the full path 
+to the shared object files, along with other information that GrADS needs. 
 Please see documentation http://cola.gmu.edu/grads/gadoc/udpt.html
 
-
-The following executables are in the ./bin directory:
+A successfull build will place the following executables in the ./bin directory:
 
  bufrscan         Reads BUFR messages and prints out ascii values 
  grads            GrADS - The basic package
@@ -28,26 +36,23 @@ The following executables are in the ./bin directory:
  gribscan         Extracts grid info from a GRIB data set
  stnmap           Maps station data
 
-The following shared object files (and their symlinks) are in the ./lib directory
+The following shared object files (and their symlinks) will be in the ./lib directory
 
  libgxdCairo      Cairo graphics display plug-in
  libgxpCairo      Cairo graphics printing plugin
  libgxdX11        Classic X11 display plug-in
  libgxpGD         Classic GD printing plug-in
  libgxdummy       A no-op dummy graphics display and printing plug-in
-
- gradspy          The Python interface for Grads (GradsPy)
  libgradspy       The GrADS executable plug-in that is loaded by the GradsPy start method
 
+To install GradsPy, the Python interface to GrADS, you must be using Python3.
+Please see the documentation at http://cola.gmu.edu/grads/gadoc/python.html
 
-A second tar file (data3.tar.gz) contains the GrADS fonts and maps data sets is 
-also necessary and can be downloaded from http://cola.gmu.edu/grads/downloads.php
-
-The contents of this file are typically placed in the directory
-/usr/local/lib/grads, the default location for these files. If you do not have
-write permission for /usr/local/lib/grads, you can place the files elsewhere, but
-you must also change the environment variable GADDIR so the GrADS executables will
-know where to find these files.
+The .data/ directory contains the GrADS fonts, map files, and udunits files that are
+required for running GrADS. A tarball is also available at ftp://cola.gmu.edu/grads/data3.tar.gz. 
+The default location is /usr/local/lib/grads/. If you do not have write permission for 
+/usr/local/lib/grads, you can place the files elsewhere, but you must also change the 
+environment variable GADDIR so the GrADS executables will know where to find these files.
 
      cd dirname
      tar xvfz data3.tar.gz

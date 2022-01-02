@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2022 by George Mason University. See file COPYRIGHT for more information. */
 
 /* This is the source file for the GrADS Python extension. 
    It gets compiled with the command 'python setup.py install'

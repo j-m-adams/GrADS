@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2022 by George Mason University. See file COPYRIGHT for more information. */
 
 /* This is the include file for the GrADS-Python interface. 
    Originally authored by Brian Doty and Jennifer Adams in April 2018.

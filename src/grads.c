@@ -1,4 +1,4 @@
-/* Copyright (C) 1988-2020 by George Mason University. See file COPYRIGHT for more information. */
+/* Copyright (C) 1988-2022 by George Mason University. See file COPYRIGHT for more information. */
 
 /* Main program for GrADS (Grid Analysis and Display System).
    This program loops on commands from the user, and calls the
@@ -205,7 +205,7 @@ int main (int argc, char *argv[])  {
   if (ipcflg) printf("\n<IPC>" );  /* delimit splash screen */
  
   printf("\nGrid Analysis and Display System (GrADS) Version %s\n",gatxtl(GRADS_VERSION,0));
-  printf("Copyright (C) 1988-2020 by George Mason University\n");
+  printf("Copyright (C) 1988-2022 by George Mason University\n");
   printf("GrADS comes with ABSOLUTELY NO WARRANTY\n");
   printf("See file COPYRIGHT for more information\n\n");
   
