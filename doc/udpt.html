@@ -1,0 +1,73 @@
+<!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<html>
+<head>
+<title>User-Defined Plug-in Table (UDPT)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link href="GrADS.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+.red {
+        color: #C00;
+}
+body {
+        background-color: #e0f0ff;
+}
+</style>
+</head>
+<body text="#000000">
+
+<h1>The User-Defined Plug-in Table (UDPT)</h1>
+<p> The user defined plug-in table (UDPT) is a simple stand-alone text file that
+  contains all the information that GrADS requires in order to use  <a href="plugins.html">plug-ins</a> for user-defined functions and graphics display and printing.  There is one record (line) in the file for each plug-in. A record contains three blank delimited fields:  a <strong>Type</strong>,  a <strong>Name</strong>, and the <strong>Filename</strong>, which is the full path to the shared object file (a dynamic library) that contains the plug-in's exectuable routines. Starting with <span class="red">version 2.2.1</span>, an optional fourth entry (an <strong>Alias</strong> for the function name) may be included if necessary. The UDPT may also contain comments, which  can begin with  * or #. 
+<ol>
+  <li>The <strong>Type</strong> must be one of these three keywords:<br>
+    <br>
+    <code>function&nbsp;&nbsp; </code>(for <a href="udp.html">user-defined functions</a>)<br>
+    <code>gxdisplay&nbsp; </code>(for <a href="plugins.html">graphics</a> display)<br>
+    <code>gxprint&nbsp;&nbsp;&nbsp;&nbsp;</code>(for <a href="plugins.html">graphics</a> printing) <br>
+    <br>
+  <li>The <strong>Name</strong> is how the plug-in is referred to by the user.   <br>
+    <br>
+  For plug-ins of type <code>function</code>, the name should match the subroutine that gets called when the function is invoked, it is the actual name of the function in the user's source code. Because the function name gets parsed by the GrADS expression handler, it must  meet the following criteria: it must start with a letter, must be 15 characters or less, and may only contain letters, numbers or underscore. All letters must be lower case.   If the user's source code function names cannot meet these criteria, an alias may be used (see #4 below).<br>
+    <br>
+    For plug-ins of type <code>gxdisplay</code> or <code>gxprint</code>, the name is more like a nickname that is used with the -d or -h arguments on startup to tell GrADS which plug-in to use. For these plug-in types, the rules outlined above still hold, except the name may be mixed case. <br>
+    <br>
+  <li>The  <strong>Filename</strong>  of the shared object file (.so) or dynamic library (.so) must include the full path. The filename can be mixed case but cannot contain any spaces. GrADS will use the 'dlopen' command to load the library file, and the 'dlsym' command to point to the named function.  
+    The man pages for dlopen and dlsym have more information about how these routines work.<br>
+    <br>
+<li><span class="red">(Version 2.2.1)</span> The optional <strong>Alias</strong> is a workaround in case the function names in the plug-in are incompatible with the requirements for GrADS function names. The alias is appended to the UDPT file entry for the plug-in function and contains the actual function name as it appears in the source code. The name is used for invoking the function inside GrADS, but the alias is the name of the routine that gets loaded from the shared object file.
+</ol>
+<p>GrADS will look for UDPT records in two places:
+<ol>
+<li>The user-specified plug-in table named by the GAUDPT <a href="gradcomdgrads.html#env">environment variable</a></li>
+<li>The default plug-in table (a file called 'udpt') in the directory named by the GADDIR <a href="gradcomdgrads.html#env">environment variable</a></li>
+</ol>
+<p>Entries in the file named by GAUDPT take precedence over entries the default udpt with the same <strong>Type</strong> and <strong>Name</strong>. </p>
+<h3>Example</h3>
+
+<code># Type  &nbsp;&nbsp;&nbsp;  Name  &nbsp;&nbsp;&nbsp;  Full path to shared object file<br>
+  # ----     &nbsp;&nbsp;&nbsp;&nbsp;----     &nbsp;&nbsp;&nbsp;&nbsp;-------------------------------<br>
+  gxdisplay  &nbsp;Cairo    &nbsp;&nbsp;&nbsp;/usr/local/lib/grads/libgxdCairo.so<br>
+  gxdisplay&nbsp;  X11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      /usr/local/lib/grads/libgxdX11.so<br>
+  gxdisplay&nbsp;  gxdummy&nbsp;  /usr/local/lib/grads/libgxdummy.so<br>
+  *<br>
+  gxprint&nbsp;&nbsp;&nbsp;    Cairo&nbsp;&nbsp;&nbsp;    /usr/local/lib/grads/libgxpCairo.so<br>
+  gxprint&nbsp;&nbsp;&nbsp;    GD       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/local/lib/grads/libgxpGD.so<br>
+  gxprint    &nbsp;&nbsp;&nbsp;gxdummy  &nbsp;/usr/local/lib/grads/libgxdummy.so<br>
+</code><code>*<br> 
+function
+&nbsp;&nbsp;dothis&nbsp;&nbsp;&nbsp;/home/username/grads/udp/dothis.so<br>
+</code><br>
+<h3>Query the UDPT</h3>
+<p>The 'q udpt' command will show you the complete list of plug-in records that GrADS parsed on startup.
+<p> <code>ga-&gt; q udpt<br>
+  gxdisplay&nbsp;  Cairo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;            /usr/local/lib/grads/libgxdCairo.so<br>
+  gxdisplay&nbsp;  X11              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/local/lib/grads/libgxdX11.so<br>
+  gxdisplay&nbsp;  gxdummy&nbsp;&nbsp;&nbsp;          /usr/local/lib/grads/libgxdummy.so<br>
+  gxprint    &nbsp;&nbsp;&nbsp;Cairo            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/local/lib/grads/libgxpCairo.so<br>
+  gxprint    &nbsp;&nbsp;&nbsp;GD               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/local/lib/grads/libgxpGD.so<br>
+  gxprint    &nbsp;&nbsp;&nbsp;gxdummy&nbsp;&nbsp;          &nbsp;/usr/local/lib/grads/libgxdummy.so
+  </code><code><br>
+function   &nbsp;&nbsp;dothis&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/home/username/grads/udp/dothis.so</code>
+</html>
+

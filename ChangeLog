@@ -1,0 +1,654 @@
+2022-07-17 Version 2.2.3
+
+    Updates:
+    * Fixed attribute checking and variable setup for HDF5
+    * Added support for netCDF attribute types USHORT, INT64, and UINT64
+    * Added environment variable $GAGPY to specify name of GradsPy shared object file
+
+    Misc:
+    * Added the ChangeLog to the repository
+
+2021-01-04 Version 2.2.2
+
+    Features:
+    * New GradsPy methods:
+      'put' creates a defined variable in GrADS with data and metadata from Python
+      'get' copies data and metadata from a GrADS defined variable into Python
+    * GradsPy interface updated for Python3
+    * New commands 'draw circ' and 'draw circf' (only available with Cairo)
+    * Updated configure script and m4 scripts for udunits2, libshp, libreadline
+    * Updated the HDF5 interface 
+    * Retired the outxwd command
+
+    Bug Fixes:
+    * extended range of years in dayweek() so 'q time' returns a proper weekday
+
+    Supplibs Update:
+    * Linked with udunits-2.2.26 -- this requires new data files, udunits2*.xml
+    * Linked with HDF5-1.10.6
+    * Linked with readline-8.1
+
+2018-04-25 Version 2.2.1
+
+    Features:
+    * GrADS is officially 30 years old!
+    * New Python interface called GradsPy
+    * Major configuration changes; all supplibs now linked dynamically
+    * Added support for ^ and $ at the beginning of a shared object filename in UDPT entries
+    * Added support for an optional fourth arg in UDPT entry for a function name alias
+    * Added support for netcdf attributes of type STRING
+
+    Bug Fixes:
+    * Fixed bug in gr2stn() when station expression returns a NULL result
+    * Fixed bug in 'set misswarn' when no files are open
+    * Prevents attempts to use non-Hershey fonts when using the classic graphics plug-ins (X11/gd)
+
+    New/Updated Documentation:
+    * http://cola.gmu.edu/grads/gadoc/python.html
+    * http://cola.gmu.edu/grads/gadoc/udpt.html
+
+2017-09-05 Version 2.2.0
+
+    Features:
+    * Graphics display and printing are now handled as independent plug-ins.
+        Cairo is the default, but the traditional X11 display (with widgets) and
+	the old GD interface for image output are available as user-specified options.
+	There is also no-op gxdummy plug-in for when no graphics capabilities are needed.
+    * New arguments on startup for specifying graphics plug-in names (-d and -h)
+    * New requirements for the User-Defined Plug-in Table: gxdisplay and gxprint
+    * Overhaul of auto configuration protocol to support creation of shared libraries
+	for the graphics plug-ins.
+    * Added command 'q udpt' that lists all available plug-ins
+    * Added command 'q gxconfig' that reports the configuration of graphics plug-ins
+    * Updated the output from the 'q config' command
+    * New command 'q font' returns information about a specific font
+    * Added support in grib2scan to print model version date for PDTs 60 and 61
+    * Added optional argument to 'q dbf' to specify a delimiter other than ","
+    * Increased max number of block requests to raise limit on station data memory usage
+
+    Bug Fixes:
+    * Fixed bug to use an 8-byte integer to store a variable's offset in a file
+    * Fixed bug in new shaded contour algorithm when plotting a range beyond the
+	data maximum and csmooth is on.
+    * Fixed routines handling netcdf4 cachesize so it resets if user adjusts scale factor
+    * Fixed mismatched max length of variable description in descriptor files
+    * Fixed bug when drawing zero-sized strings with Cairo
+
+    New/Updated Documentation:
+    * http://cola.gmu.edu/grads/gadoc/udp.html
+    * http://cola.gmu.edu/grads/gadoc/udpt.html
+    * http://cola.gmu.edu/grads/gadoc/plugins.html
+    * http://cola.gmu.edu/grads/gadoc/supplibs2.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdgrads.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdqdbf.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdquery.html
+
+    Supplibs Update:
+    * Simplified the protocol for building, installing, and checking the supplibs
+	in conjunction with changes to auto configuration scripts.
+    * New documentation page: http://cola.gmu.edu/grads/gadoc/supplibs2.html
+    * Updated the gadap library to version 2.1 to add support for a shared object
+	and some minor fixes for compilation on newer versions of unix. 
+    * Linked with pixman-0.34.0 and cairo-1.14.10
+	
+	
+2017-02-14 Version 2.1.1.b0
+	
+    Features:
+    * Added support for User Defined Plug-in functions which replace the old UDFs
+    * Added support for logical operators in the expression syntax (gridded data only)
+    * New function 'if()' performs an if/then/else expression evaluation
+    * New scripting language function 'sys()' submits any command to the shell and 
+	returns the resulting text stream that the command sends to standard output
+    * New option '-4de' for the 'set sdfwrite' command 
+    * New option for 'q define'	prints all the relevant information about a variable
+    * New command 'set barbopts' to support filled pennant flags on wind barbs
+	
+    Misc:
+    * Added support in gxprint for mixed case file names with the -f or -b option
+    * Added descriptor file entry 'XYTRAILER' for files that have a trailer record 
+
+    New/Updated Documentation:
+    * http://cola.gmu.edu/grads/gadoc/udp.html
+    * http://cola.gmu.edu/grads/gadoc/expressions.html
+    * http://cola.gmu.edu/grads/gadoc/gradfuncif.html
+    * http://cola.gmu.edu/grads/gadoc/script.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetsdfwrite.html
+    * http://cola.gmu.edu/grads/gadoc/descriptorfile.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdqdefine.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetbarbopts.html
+	
+    Supplib Update:	
+    * Some builds are linked dynamically with OpenSSL to access data servers via HTTPS.
+      This library may not always be needed or available, so builds without OpenSSL 
+      have also been provided. 
+
+
+2016-06-20 Version 2.1.0
+	
+    Features:
+    * New command pdefwrite writes out internally calculated interpolation weights
+    * Added support for GRIB2 PDTs 60 and 61 (Ensemble Reforecasts) 
+    * Added support for a second undef attribute name for netcdf/hdf4 formats 
+	sdfopen will look for "missing_value" (primary) and "_FillValue" (secondary)
+	works with xdfopen-style and full descriptor files 
+    * Previously undocumented command 'set misswarn' -- enables a warning message 
+	with missing file names for templated data sets. 
+	
+    Bug Fixes:	
+    * Fixed undef handling for BUFR station data
+    * Fixed undef handling for station data when using -u and -a with const()
+    * Closed infinite loop when parsing arguments to script function gsfpath() 	
+    * Added support for transparent colors in KML output	
+    	
+    Misc:
+    * Changed the logo to "GrADS/COLA" 
+    * Output from sdfwrite command will use 'months since' or 'minutes since'
+	in time axis metadata depending on what is used in the original data file
+    * coll2gr() now supports the -u option with a vertical coordinate of height
+	
+    New Documentation Pages:
+    * http://cola.gmu.edu/grads/gadoc/pdefwrite.html
+    * http://cola.gmu.edu/grads/gadoc/setmisswarn.html
+
+    Supplib Update:	
+    * Linked with g2clib-1.6.0, jasper-1.900.1-ubuntu3.2debian
+	
+	
+2015-03-10  Version 2.1.a3
+	
+    Features:
+    * Added support for time template substitutions within a CHSUB string
+    * Added support for GRIB2 PDTs 6 and 10 (Percentiles) 
+	
+    Bug Fixes:
+    * Memory leak in metabuffer handling
+    * Bad error message when netcdf chunksize is bigger than cachesize
+    * Parsing error for files with time axis unit "minutes since..." 
+    * Missing data handling in coll2grd function 	
+    * Unnecessary re-initialization of font files 
+    * Core dump when using non-existing data variables in a define expression
+    * Memory leak for grids and stn reports when expression parsing fails
+
+    Updated Documentation Pages:
+    * http://cola.gmu.edu/grads/gadoc/descriptorfile.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsdfwrite.html
+    * http://cola.gmu.edu/grads/gadoc/library.html
+    * http://cola.gmu.edu/grads/gadoc/templates.html
+  
+    Supplib Update:	
+    * Linked with netcdf-4.3.3
+	
+
+2014-05-27  Version 2.1.a2
+
+    Features:	
+    * Update option for gribmap (-u) has been restored
+    * New options for gribmap to up/downgrade the index file version;
+	this enables gribmap updates without having to rescan data files
+    * New option for 'set sdfwrite' to specify an unlimited dimension
+    * New option for 'set sdfwrite' to force a 3-dimensional output file
+    * Added 'q fgvals' to return colors and values specified with 'set fgvals'
+	
+    Bugs:
+    * Checks if hdf5 format is chunked before checking chunking parameters
+    * Checks for valid image file before creating a custom tile
+
+    Updated Documentation Pages:
+    * http://cola.gmu.edu/grads/gadoc/fontcontrol.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdquery.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsdfwrite.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetbackground.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetfont.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetsdfwrite.html
+    * http://cola.gmu.edu/grads/gadoc/gradutilgribmap.html
+    * http://cola.gmu.edu/grads/gadoc/script.html
+    * http://cola.gmu.edu/grads/gadoc/supplibs.html
+
+    Supplib Updates:
+    * Linked with zlib-1.2.8, hdf5-1.8.12, netcdf-4.3.2
+	
+	
+2013-12-16  Version 2.1.a1
+	
+    Features:	
+    * All the graphics, including the interactive X window display and 
+	all image and hardcopy output, are now handled by the Cairo library.
+    * New command 'gxprint' -- all-purpose printing command that handles all output formats
+    * New hardcopy output options with gxprint: PDF and SVG
+    * External utilities gxps, gxeps, gxtran are obsolete
+    * Commands 'enable print', 'print', and 'disable print' are obsolete
+    * The 'printim' command is now an alias for 'gxprint'
+    * Added options to 'set rgb' to support transparent colors and patterns	
+    * Added options to 'set font' to define new fonts
+    * New command 'set hershey' -- enables generic fonts that are analogs of Hershey fonts 
+    * New command 'set lwid' -- defines a new line thickness setting 
+    * New command 'set tile' -- enables pattern filling for shaded contours
+    * New command 'set antialias' -- temporarily disables anti-aliasing (not recommended)
+    * The interactive display is always in color mode. The 'set display' command 
+      is now only for swapping the background and foreground colors
+    * Major redesign of the graphics code to make graphics rendering more "pluggable"
+    * The widgets (buttons, drop menus, and rubber bands) have been temporarily disabled
+	
+    Misc:
+    * Added new mark #12, a closed diamond
+    * Added check for hPa unit in sdfopen
+    * Added thickness option to 'set grid' command
+	
+    Bugs:
+    * Fixed templating and array-indexing bugs for dtype hdf5_grid
+    * Checks for NaN retured by pow() function
+    * New metabuffer structure handles shapefiles with a very large number of vertices
+	
+    New Documentation Pages:
+    * http://cola.gmu.edu/grads/gadoc/ascii.html
+    * http://cola.gmu.edu/grads/gadoc/basemap.html
+    * http://cola.gmu.edu/grads/gadoc/drawingtips.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdgxprint.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetantialias.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsethershey.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetlwid.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsettile.html
+	
+    Updated Documentation Pages:
+    * http://cola.gmu.edu/grads/gadoc/colorcontrol.html
+    * http://cola.gmu.edu/grads/gadoc/font.html
+    * http://cola.gmu.edu/grads/gadoc/fontcontrol.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomddisableprint.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomddrawmark.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdenableprint.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdoutxwd.html 
+    * http://cola.gmu.edu/grads/gadoc/gradcomdprint.html 
+    * http://cola.gmu.edu/grads/gadoc/gradcomdprintim.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetannot.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetbackground.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetclopts.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetcmark.html 
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetcthick.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetdisplay.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetfont.html 
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetgrid.html 
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetline.html 
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetmap.html 
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetmpt.html 
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetrgb.html 
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetstring.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetxlopts.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetylopts.html
+    * http://cola.gmu.edu/grads/gadoc/gradutilgxeps.html
+    * http://cola.gmu.edu/grads/gadoc/gradutilgxps.html
+    * http://cola.gmu.edu/grads/gadoc/gradutilgxtran.html
+    * http://cola.gmu.edu/grads/gadoc/imageoutput.html
+    * http://cola.gmu.edu/grads/gadoc/script.html
+    * http://cola.gmu.edu/grads/gadoc/shapefiles.html
+    * http://cola.gmu.edu/grads/gadoc/supplibs.html
+
+	
+Supplib Updates:	
+    * Linked with cairo-1.12.16, pixman-0.28.0, freetype-2.4.10, fontconfig-2.9.0, Xrender-0.9.6,
+	hdf5-1.8.11, netcdf-4.2.1.1, g2clib 1.4.0.
+	
+	
+2012-11-9  Version 2.0.2
+
+    Features:
+
+    * New function amax() returns the maximum grid value over an X-Y region.
+    * New function amaxlocx() returns the the X location of the maximum grid value over an X-Y region.
+    * New function amaxlocy() returns the the Y location of the maximum grid value over an X-Y region.
+    * New function amin() returns the minimum grid value over an X-Y region.
+    * New function aminlocx() returns the the X location of the minimum grid value over an X-Y region.
+    * New function aminlocy() returns the the Y location of the minimum grid value over an X-Y region.
+    * New function atot() combines the latitude-weighting capability in aave() with the summing capability of asum().
+    * New features added to lterp() based on regrid2() and re(): a bessel interpolation may be added 
+      to the bilinear option, plus new options for an area average using aave or amean.
+    * Added support for GRIB2 Probability & Aerosol products (Product Definition Templates 5, 9, and 48).
+      These templates require a third set of codes in the variable declaration of the descriptor file.
+    * grib2scan prints out relevant codes and suggests a variable declaration entry for descriptor file.
+    * Colorization of scatter plots enabled by using a third argument: 'display x;y;c'.
+
+    Misc:
+    * For Robinson Projection, longitude may range from 0 to 360 as well as -180 to 180. 
+    * Changed hard-coded 3.1415... to M_PI. 
+    * Tweaks to verbose output from gribmap to help diagnose unmatched records.
+    * When sdfopen/xdfopen is checking for Z axis, if pressure units of Pa is detected, units 
+      will convert to mb automatically. Notice to user printed.
+
+    Bugs:
+    * Fixed I/O when reading 2-byte data.
+    * Fixed EDEF handling in sdfopen/xdfopen. 
+    * Fixed ensemble name parsing error.
+    * Fixed sdfopen/xdfopen to reject files with 360-day calendar attribute.
+    * Fixed streamlines to improve density handling for grid boxes that are very elongated, 
+      such as at high latitudes, or in vertical cross sections.  
+
+    New documentation pages:
+    * http://cola.gmu.edu/grads/gadoc/gradcomdscreen.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetlog1d.html
+    * http://cola.gmu.edu/grads/gadoc/gradfuncamax.html
+    * http://cola.gmu.edu/grads/gadoc/gradfuncamaxlocx.html
+    * http://cola.gmu.edu/grads/gadoc/gradfuncamaxlocy.html
+    * http://cola.gmu.edu/grads/gadoc/gradfuncamin.html
+    * http://cola.gmu.edu/grads/gadoc/gradfuncaminlocx.html
+    * http://cola.gmu.edu/grads/gadoc/gradfuncaminlocy.html
+    * http://cola.gmu.edu/grads/gadoc/gradfuncatot.html
+    * http://cola.gmu.edu/grads/gadoc/scatterplot.html
+
+    Updated documentation pages:
+    * http://cola.gmu.edu/grads/gadoc/descriptorfile.html
+    * http://cola.gmu.edu/grads/gadoc/font.html
+    * http://cola.gmu.edu/grads/gadoc/fontcontrol.html
+    * http://cola.gmu.edu/grads/gadoc/functions.html
+    * http://cola.gmu.edu/grads/gadoc/functionsatt.html
+    * http://cola.gmu.edu/grads/gadoc/gadoc.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomddrawbutton.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomddrawwxsym.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdenableprint.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsdfwrite.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetccols.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetdefval.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetfont.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetgxout.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetvrange.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetvrange2.html
+    * http://cola.gmu.edu/grads/gadoc/gradcomdsetwxcols.html
+    * http://cola.gmu.edu/grads/gadoc/gradfuncaave.html
+    * http://cola.gmu.edu/grads/gadoc/gradfuncasum.html
+    * http://cola.gmu.edu/grads/gadoc/gradfunclterp.html
+    * http://cola.gmu.edu/grads/gadoc/gradutilgrib2scan.html
+    * http://cola.gmu.edu/grads/gadoc/imageoutput.html
+    * http://cola.gmu.edu/grads/gadoc/indexlist.html
+    * http://cola.gmu.edu/grads/gadoc/library.html
+    * http://cola.gmu.edu/grads/gadoc/mathfunctions.html
+    * http://cola.gmu.edu/grads/gadoc/pagecontrol.html
+    * http://cola.gmu.edu/grads/gadoc/shapefiles.html
+    * http://cola.gmu.edu/grads/gadoc/supplibs.html
+    * http://cola.gmu.edu/grads/gadoc/templates.html
+    * http://cola.gmu.edu/grads/gadoc/tutorial.html
+
+    Supplib Updates:
+    * Linked with g2clib 1.4.0
+				   
+
+2011-10-25  Version 2.0.1
+
+    Bug in gribmap: 
+    * Fixed error when matching z-varying variables with different level types. 
+
+
+2011-09-29  Version 2.0.0
+
+    Features:
+    * New shaded contouring algorithm: "set gxout shade2"
+      Polygons are closed, have no holes, do not overlap, and are as large and few in number as is feasible 
+      Use of -1 for a color # will suppress drawing of the shaded contour, making it effectively transparent
+    * Legacy shaded contouring routine: "set gxout shade1" 
+    * "set gxout shaded" is now an alias for legacy shaded contouring routine
+    * Support for creating polygon shapefiles with new option "-poly" to "set shp" command 
+    * Support for creating polygon KML files with new option "-poly" to "set kml" command 
+    * 1D loglog plots with new command "set log1d"
+    * New environment variable GASHP, contains 1 or more directories that may contain shapefiles.
+      GASHP delimiters are space, semicolon, comma, or colon. Algorithm is:
+        1. Tries to open filename as provided by user	 
+        2. Parses GASHP and prepends each dir to filename
+        3. Prepends GADDIR directory (only one dir) to filename    
+    * New command "set strmopts" to control streamline density plus arrowhead spacing, size, and type. 
+      Support for negative streamline density values (between -10 and -1) for high-res grids. 
+
+    Misc:
+    * Mixed case ensemble names are now allowed
+    * Changes to improve masked contour labeling; also now works with "set vpage"
+    * Support for grib1 time range indicator 7, which subtracts the forecast time 
+      from the basetime to get the valid time
+    * Loosened restrictions in gribmap for mapping monthly data
+    * Previously undocumented command: "screen"
+    * Added "query calendar" command to discover calendar mode (unset, 365-day, or standard)
+    * Added ":" to list of delimiters for multiple dirs in GASCRP environment variable (now same as GASHP)
+    * Added "NULL" as an option for scale factor attribute name in the UNPACK descriptor file entry 
+      when add offset occurs alone
+    * Updated wgrib.c to version 1.8.1.2a
+    * Updated grib2scan to show start/ending times for averages, and valid times for instantaneous fields
+    * Handles GRIB2 Product Definition Template 4.15
+    * Added aliases 'line' for 'ln' and 'point' for 'pt' in 'set shp' and 'set kml' commands
+    * Added alias 'image' for 'img' in 'set kml' command
+
+    Bugs:
+    * Fixed errors when retrieving data from a very large defined object that has more than 2Gb elements.
+    * Patched memory leak when reading NetCDF attributes with lengths larger than 128
+    * Patched memory leaks in cdiff(), gr2stn(), and coll2gr() functions and collect() command
+    * Cannot have a leap and no-leap file open at the same time
+    * Calendar mode cleared with "reinit" only 
+    * Fixed big/little endian error when reading 2-byte binary data
+    * Fixed bug where 2-point contour segments are not drawn in upper right corner of grid
+    * Fixed contouring bug for very high res grids with vertices too close together to resolve graphically
+    * Fixed contouring bug for small grids that left a gap in contour line
+    * Added check for strictly increasing contour levels 
+    * Fixed streamlines in areas where grid boxes are not square (e.g. near the poles)
+    * Disabled erroneous vector/barb drawing in some projections (mollweide, orthographic, and robinson)
+    * Fixed erroneous results from 'q xy2gr' for some projections (returns -999.9 instead of garbage)
+
+    Supplib Updates:
+    * Linked with jasper-1.900.1, g2clib 1.2.2, hdf5-1.8.7, netcdf-4.1.3, zlib-1.2.5
+
+
+2010-09-02  Version 2.0.a9
+
+    Features:
+    * Support for creating shapefiles with new commands: 
+      set gxout shp, set shp, clear shp, set shpattr, q shpopts
+    * New option "-ln" to "set kml" to write out a KML file containing contours 
+      (this option is always enabled)
+    * New forecast templates:
+      %fn2  forecast minutes 
+      %fhn  forecast time in hhnn (hours and minutes)
+      %fdhn forecast time in ddhhnn (days, hours, and minutes) 
+    * New option "-a" on startup to set the aspect ratio of the graphics page 
+    * new option "-C" on startup to colorize text in command window
+    Misc:
+    * Default dimensions of printim changed to reflect page's aspect ratio
+    * Files that are templated on E but not T do not have to be padded with missing data 
+      if ensembles do not have same start/end times (for binary and SDF formats)
+    * Change to "set sdfwrite" -- no dimension padding if -4d and -5d are not used
+    * Support for grib files with time unit code 13 or 14 for 15-min and 30-min increments
+    * Updated doc files in src distribution
+    * Changes to configuration scripts
+    Bugs:
+    * fixed color selection for shaded plots: lev1 < val <= lev2
+    * Default cache size set properly with sdfopen
+    * Forecast hours no longer round up when forecast minutes > 30
+    * "gxout stnmark" now draws reports at locations exactly equal to min/max lon/lat 
+    * handles grib2 records with junk bytes prefixed
+
+2010-03-26  Version 2.0.a8
+
+    Features:
+    * Single executable called "grads" is now fully-enabled
+    * Support for indexing grib and grib2 files that are > 2Gb
+    * Support for reading/drawing Shapefiles
+      new commands: 'draw shp', 'q shp', 'q dbf', and 'set shpopts'
+    * Support for reading/writing compressed netcdf-4
+      new commands: q cache, q cachesf, set cachesf, set chunksize
+      new options to 'set sdfwrite': -nc3/-nc4, -chunk, -zip, -flt/-dbl
+      new descriptor file entry: CACHESIZE
+    * New graphics output option: 'set gxout imap' 
+      Quickly draws shaded grid boxes just like 'gxout grfill', but
+      the metafile is not updated so printim and print will not work.
+      Useful for interactive display of high resolution data. 
+    Misc:
+    * Added template substitution strings %t4, %t5, %t6, %tm4, %tm5, %tm6
+    * Enabled -b option in gribmap for GRIB2 files
+    * Mods to gribmap and wgrib for handing ECMWF GRIB1 files 
+      with long record lengths
+    * Improvements to HDF5 interface to speed up performance
+    * New command 'q contours' returns contour colors and levels
+
+
+2009-08-04  Version 2.0.a7.1
+	    
+    Features:
+    * New interface for the HDF5 data format
+    * New options for templating on Julian Day and Time axis indices
+    * New "offt" syntax for variable specification to express time as an 
+      offset from the variable's initial time instead of an absolute value
+    * New function eloop() for obtaining E-varying results from expressions 
+      that are unable to operate when E is a varying dimension
+    * New option for contour labels: 'set clab masked'
+      This creates gaps in the contour lines for the labels, so rectangles 
+      for the label background are not drawn; contour labels never overlap.
+
+    Misc:
+    * Fixed sdfopen/xdfopen to detect only those data variables whose 
+      dimensions match all of the grid dimensions
+    * Added isnan() and isinf() tests at initial I/O 
+	
+    Bugs: 
+    * Fixed bug in original release of 2.0.a7 for non-templated HDF datasets.
+     
+
+2009-06-02  Version 2.0.a6
+
+    Features:
+    * Maximum number of user-defined colors increased from 99 to 255. 
+    * New commands "set undef" and "query undef" allow the user to 
+      control the undefined data value for all forms of GrADS output. 
+      This affects all the undefined values printed to screen in the 
+      'gxout stat' and 'gxout print' output, as well as the undefined 
+      values in fwrite, sdfwrite, and geotiff files. 
+      The default output undef value is -9.99e8.
+      N.B. THIS FEATURE CHANGES THE DEFAULT BEHAVIOR OF GrADS! 
+
+    Bugs:
+    * Fixed geotiff code to write out data in correct format
+    * Fixed the background image option to printim
+    * Fixed gancgrid I/O for variables with dimensions in a funky order (i.e. not ETZYX) 
+    * Fixed gancgrid response if request is outside of file's bounds
+    * Fixed 'close' command to properly reset defaults
+    * Fixed gribmap printing debugging and error messages in verbose mode
+    * Replaced library function call SDiscoordvar in gasdf.c 
+
+    Misc:
+    * More informative error messages when request is beyond file's limits
+    * Added chsub option to xdfopen-style descriptors
+    * Added -n flag to gr2stn for nearest neighbor option
+    * Changed hard-coded undefs from -9.99e33 to -9.99e8 
+    * Changed hard-coded XYBMAX from 500 to 5000 in gxshad.c
+    * Configure and src code changes to get rid of XLIBEMU
+    * Fixes to GUI configuration
+    * Bug fix in gaio.c to change vars lskip and lgrib to type g2int
+    * Changed var type to off_t and fixed? optimization issues for x86_64 builds 
+    * Changed Pixel to gaPixel
+    * Removed pcx11e.* from src directory
+    * Changed #include syntax for gabufr.h in grads.h
+
+
+2009-02-04  Version 2.0.a5
+
+    Features:
+    * New graphics output options for creating GeoTIFF and KML formatted files
+      'set gxout geotiff'   (generates a GeoTIFF data file)
+      'set geotiff'         (sets output filename root and other characteristics)
+      'set gxout kml'       (generates a TIFF image file and a companion KML text file)
+      'set kml'             (sets output filename root)
+
+    Bugs: 
+    * PDEF lcc now works properly in the Southern Hemisphere
+    * sdfwrite output has correct time axis units
+
+    Misc:
+    * Added support for templating on T but not E for self-describing files
+    * Added support for optional padding of sdfwrite output to include fixed dimensions
+    * Added check in gribmap for non-supported grib2 product definition templates
+    * Added support for jpeg image output format with printim
+
+
+2008-12-31   Version 2.0.a4
+
+    Bugs:
+    * Fixed function stnave(): error occurred when setting undef mask for result 
+      if some reports were missing. Led to incorrect averages!!
+    * Fixed function asum(): error occurred when setting undef mask for final result.
+      Led to answer being always undefined!!
+    * Fixed seg fault for non-templated netcdf files when X dim wraps the globe
+      and other dims are fixed.
+    * No precision errors for some hourly GDS data sets. 
+
+    Misc:
+    * 'set frame circle' now works for orthograhic projections
+    * Support for grib2 grid 204 (curvilinear orthogonal)
+    * The color of a constant grid is whatever 'set ccolor' is, instead of being fixed red
+    * The 'q ctlinfo' and 'q file' output is enhanced and more accurate. 
+      (This one helps GDS 2.0 know when a data set is 4D or 5D.)
+    * Create postscript output from inside GrADS using 'print' command without 'enable print'
+
+  
+2008-08-12   Version 2.0.a3
+    
+    Features:
+    * New set of commands for writing out netcdf files.  
+      'sdfwrite'       (creates the file, takes a defined variable name as an argument) 
+      'set sdfwrite'   (sets the output filename, default is grads.sdfwrite.nc) 
+      'query sdfwrite' (shows the output filename, format, and user-specified attributes)
+      'set sdfattr'    (sets attribute metadata for the output file) 
+      'clear sdfwrite' (resets the sdf output filename and releases any	attributes)
+    * Added "PDEF GENERAL" as an data-format independent alternative to "PDEF FILE".
+
+    Fixes:
+    * Station data handling via OPeNDAP (enabled with libgadap) works with GDS 2.0.
+    * The stnmap utility does not seg fault when some templated data files are missing.
+    * Added PDEF handling for 2-D native HDF and NetCDF files
+    * Data format dependence in PDEF FILE better documented. Warning issued
+      when data set that uses PDEF FILE is opened.
+    * Memory leak in scorr().
+    * The index files created by gribmap are portable
+    * parsing of VECTORPAIRS entry in descriptor file does not seq fault
+
+    Misc:
+    * Graphical display window is sized according to the height of the display;
+      portait is 90% of display height, landscape is 60%.
+    * Changes to the configure tools to facilitate building from source
+    * The sdfopen command handles files with "axis" attribute
+    * Output from 'query config' more complete, contains some supplib versions
+    * Support for NetCDF and HDF files with spaces in the variable names;
+      substitute ~ for <space> in varname=>alias syntax.
+
+
+2008-04-28   Version 2.0.a2
+
+    Features:
+    * ready for use with GDS-2.0 to access 5-dimensional data sets via OPeNDAP
+    * support for thinned grib2 grids
+    * gribmap has -0 option for grib2
+	* allows non-float data types for hdf coordinate axes
+
+    Bug Fixes:
+    * memory leak when replacing an existing defined variable
+    * multiple fixes for netcdf/hdf handling (templating, zrev, %nodim%, et al.)
+    * contour interval and label handling for double precision
+    * changed 'query dims' output for Ensembles
+    * fixed gribmap's handling of data sets templated over T but not E
+
+
+2008-02-13   Version 2.0.a1
+
+    Bug Fixes:
+    * detection of linear and wrapping axes for netcdf files opened with sdfopen
+    * GRIB2 grids that have a bitmap were being drawn upside down
+    * display for gxout=model and gxout=grid
+    * handling of templated netcdf data sets opened with xdfopen
+    * detection of unlimited axis in hdf files opened with sdfopen
+    * reading PDEF files
+    * creating gribmap index files >250mb
+    * added some debug statements for detection of errors in calls to seekgb() in the grib2c library
+
+
+2008-01-25   Version 2.0.a0
+
+    Initial release of GrADS 2.0.
+    * new fifth (ensemble) dimension for gridded data sets
+    * supports GRIB2 formatted data
+    * new external utility 'grib2scan'
+    * internal data handling is all double precision
+    * undef handling completely reimplemented
+    * new function "lterp" for linear interpolation
+    * new exectuable names: grads and gradsdap
+    * no LATS interface, no UDFs
