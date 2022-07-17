@@ -16,135 +16,61 @@ body {
 </head>
 <body text="#000000">
 
-<h1>GradsPy: The Python Interface for GrADS</h1>
-<p> GrADS <span class="red">version 2.2.1</span> introduced a new
-  C-language Python extension, called GradsPy. It allows users to run
-  and interact with GrADS from within a Python script or an interactive
-  session. Gridded data and metadata can be passed back and forth
-  between GrADS and Python so you can use either tool for file I/O,
-  analysis, or plotting. Once you have imported GradsPy into Python,
-  there are several methods for interacting with GrADS:
-<p>
-<code>start &nbsp;&nbsp;&nbsp;&nbsp</code> Starts GrADS with any number of optional switches and arguments<br>
-<code>cmd &nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp</code> Issues a GrADS command and returns the string response from GrADS<br>
-<code>result &nbsp;&nbsp;&nbsp</code> Evaluates a GrADS expression and returns the resulting grid of data and metadata in a Python tuple<br>
-<code>get &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</code> Pulls the data and metadata from a defined variable in GrADS and returns a Python tuple<br>
-<code>put &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</code> Populates a defined variable in GrADS using data and metadata contained in a Python tuple<br>
-<p>
-Additional documentation for each method is below. The interface has a
-few components: a C program called gradspy.c, a python script called
-setup.py, and a build of GrADS that is compiled as a dynamically
-loading library, called libgradspy.so (or libgradspy.dylib). The
-libgradspy.* files are generated along with the regular binary
-executables when compiling GrADS.
+<h1>The GrADS- Python Interface (GradsPy)</h1>
+<p> GrADS <span class="red">version 2.2.1</span> introduces a new C-language Python extension, called GradsPy. The interface has a few components: a  C program called gradspy.c, a python script called setup.py, and a build of GrADS that is compiled as a dynamically loading library, called libgradspy.so (or libgradspy.dylib). The libgradspy.* files are generated along with the regular binary executables when compiling GrADS.
 <h2>Installing GradsPy</h2>
-<p>1. Move to the directory where your GrADS source code is installed
-(e.g. $HOME/grads-2.2.1/src). Make sure that gradspy.c, gradspy.h, and
-setup.py are in that directory.
-
-<p>2(a). For <span class="red">version 2.2.1 and 2.2.2</span>, it is
-necessary to edit the gradspy.c file so that the dlopen command will
-point to the correct name of the libgradspy file for your system (use
-the .so extension for linux, the .dylib extension for Mac OS X). The
-relevant code looks like this (you must comment out one of these):<br>
-<code>
-handle = dlopen (&quot;libgradspy.so&quot;, &nbsp;&nbsp RTLD_LAZY | RTLD_GLOBAL );  /* for linux */<br>
-handle = dlopen (&quot;libgradspy.dylib&quot;, RTLD_LAZY | RTLD_GLOBAL );  /* for mac   */ 
-</code>
-
-<p>2(b). For <span class="red">version 2.2.3+</span>, the need to edit
-gradspy.c was removed.  The shared object file
-name <code>libgradspy.so</code> (for unix systems) is now set as the
-default. If you are using a Mac, set the name of the shared object
-file using the $GAGPY environment variable to override the
-default:<br>
-<code> &gt; export GAGPY=libgradspy.dylib </code>
-
-
-<p>3. The GradsPy interface for GrADS version <span class="red">2.2.2+</span> 
-requires Python version 3. Make sure you also have numpy installed in your
-Python environment because GradsPy uses numpy objects when passing data
-back and forth to Python.
-
-<p>4. Compile gradspy.c with the following command: <br>
+<p>1. Move to the directory where your GrADS source code is installed (e.g. $HOME/grads-2.2.1/src). Make sure that gradspy.c, gradspy.h, and setup.py are in that directory. Edit the gradspy.c file so that the dlopen command will point to the correct name of the libgradspy  file for your system (use the .so extension for linux, the .dylib extension for Mac OS X). The relevant code looks like this (you must comment out one of these):
+<p> <code> handle = dlopen (&quot;libgradspy.so&quot;,    RTLD_LAZY | RTLD_GLOBAL );  /* for linux */<br>
+  handle = dlopen (&quot;libgradspy.dylib&quot;, RTLD_LAZY | RTLD_GLOBAL );  /* for mac   */ 
+  </code>
+<p>2. Now you are ready to compile gradspy.c with the following command: <br>
 <code>  &gt; python setup.py install</code>
-
-<p>5. Now you are ready to run Python and issue the command to import
-GradsPy. Make sure that your shell environment will know where to find
-the libgradspy.so (or libgradspy.dylib) file that GradsPy will try to
-open. Update the environment variable LD_LIBRARY_PATH to include the
-path to your GrADS installation. Note the <code>'as gp'</code> in the
-command is optional (it is just an alias that is faster to type):<br>
+<p>  Be sure you are using Python version 2, we haven't done any testing with Python 3. You must also have NumPy installed on your system, because the GradsPy extension delivers NumPy objects when evaluting expressions. Use 'sudo' in front of this command if you have root access privileges on your system.<br>
+  <br> 
+3. Now you are ready to run Python and issue the command:<br>
 <code>
-&gt;&gt;&gt import gradspy as gp</code>
-
+&gt;&gt;&gt; import gradspy</code>
+<p>Before you do this, make sure that your shell environment will know where to find the libgradspy.so (or libgradspy.dylib) file that GradsPy will try to open. Update the environment variable LD_LIBRARY_PATH to  include the path to your grads-2.2.1 installation (e.g. $HOME/grads-2.2.1/lib).
 <p>
 <h2>GradsPy Methods</h2>
+<p>Once you have imported GradsPy into Python, there are three methods for interacting with GrADS: start, cmd, and result. </p>
 
 <h3>start</h3>
 
-<p>The 'start' method only needs to be issued once, it starts GrADS
-  with any number of optional switches and arguments. Most
-  space-delimited arguments to GrADS become comma-delimited and quoted
-  arguments to the gradspy.start method.  The exception to this rule
-  is when you are using the -c argument and the script name you
-  provide takes arguments. In this case, you would invoke the script
-  name and its arguments inside one set of quotes.
+<p>The 'start' method only needs to be issued once, it starts GrADS with any number of optional switches and arguments. Most  space-delimited arguments to GrADS become comma-delimited and quoted arguments to the gradspy.start method. 
+  The exception to this rule is when you are using the -c argument and the script name you provide takes arguments. In this case, you would invoke the script name and its arguments inside one set of quotes. 
   
 For example:<br>
-<code>gp.start()<br>
-gp.start(&quot;-lb&quot;)<br>
-gp.start(&quot;-lc&quot;,&quot;open /data/samples/model.ctl&quot;)<br>
-gp.start(&quot;-a&quot;,&quot;1.0&quot;,&quot;-g&quot;,&quot;800x800+60+0&quot;,&quot;-d&quot;,&quot;X11&quot;)<br>
-gp.start(&quot;-lb&quot;,&quot;-c&quot;,&quot;scriptname.gs arg1 arg2&quot;)
-</code>
-  
+  <code>gradspy.start()<br>
+  gradspy.start(&quot;-lb&quot;)<br>
+  gradspy.start(&quot;-lc&quot;,&quot;open /data/samples/model.ctl&quot;)<br>
+  gradspy.start(&quot;-a&quot;,&quot;1.0&quot;,&quot;-g&quot;,&quot;800x800+60+0&quot;,&quot;-d&quot;,&quot;X11&quot;)<br>
+  gradspy.start(&quot;-lb&quot;,&quot;-c&quot;,&quot;scriptname.gs arg1 arg2&quot;)
+  </code>
 <h3>cmd</h3>
+<p>The 'cmd' method is how you issue any GrADS command. For example:<br>
+<code>gradspy.cmd('q config')</code>
   
-<p>The 'cmd' method is how you issue commands to GrADS. It takes a single string as an argument.  For example:<br>
-<code>gp.cmd('q config')<br>
-gp.cmd('draw mark 4 5.5 4.25 1')
-</code>
-  
-<p>The text that GrADS delivers to the command window (or to the
-predefined script variable 'result' in the GrADS scripting language)
-is returned to Python when the <code>cmd</code> method is called. When
-working in Interactive Mode, Python will dump the unformatted text to
-the command window; in a Jupyter Notebook, the text output from the
-last command will appear below the code cell. The text dump is
-suppressed when running Python in Script Mode. You can also store the
-returned text in a local variable for further parsing, or wrap the
-Python <code>print()</code> function around it for more readable
-output:<br>
-<code>
-res = gp.cmd('q file')<br>
-print(gp.cmd('q dims'))<br>
-</code>
-
+<p>The text that GrADS delivers to the command window (or the internal variable 'result' in a script) is also returned to Python when the cmd method is called. Python will print this unformatted text to your command window. A more elegant strategy is to assign the returned text to a local variable and save it for further parsing or better formatted printing:<br>
+<code>a=gradspy.cmd('q file')<br>
+ print (a)</code>
+<br>
+<code>b=gradspy.cmd('q dims')<br>
+print (b)</code>
 <h3>result</h3>
-
-<p>The <code>result</code> method evaluates a user-provided GrADS expression and
-returns the grid of data and relevant metadata in a Python
-tuple. When using the <code>result</code> method, no more
-than two dimensions may be varying. <br>
-<code>
-gp.cmd('open model.ctl')<br>
-gp.cmd('set x 1 72')<br>
-gp.cmd('set y 1 46')<br>
-tup = gp.result('ave(ts,t=1,t=5)')</code>
-
-<p>The returned tuple (here named '<code>tup</code>' for illustration
-purposes) has seven elements (one integer followed by six
-PyObjects):</p>
-<p>[0] The return code contains the number of varying dimensions (rank) in the result grid; if negative, an error occurred. <br>
-  [1] A numpy array that contains the grid of data from the expression evaluation (with NaN for missing data values)<br>
-  [2] A 1-D numpy array of  longitude coordinate values (NaN if X is not varying) <br>
-  [3] A 1-D numpy array of latitude coordinate values (NaN if Y is not varying)<br>
-  [4] A 1-D numpy array of level coordinate values (NaN if Z is not varying)<br>
-  [5] A 1-D numpy array of additional grid metadata containing 14 integers, listed below.</p>
+<p>The 'result' method evaluates a user-provided GrADS expression and returns the resulting grid of data and relevant metadata in a Python tuple.<br>
+<code>rt=gradspy.result('ave(tsfc,t=1,t=12)')</code>
+<p>The returned tuple (here named '<code>rt</code>' for illustration purposes) has seven elements (one integer followed by six PyObjects):</p>
+<p>[0] The return code. If the return code is negative, then an error occurred. Otherwise, it  contains the number of varying dimensions (rank) 
+  in the result grid. <br>
+  [1] A 2-D NumPy array that contains the  grid of data from the expression evaluation (with NaN for missing data values)<br>
+  [2] A 1-D NumPy array of  longitude coordinate values (NaN if X is not varying) <br>
+  [3] A 1-D NumPy array of latitude coordinate values (NaN if Y is not varying)<br>
+  [4] A 1-D NumPy array of level coordinate values (NaN if Z is not varying)<br>
+  [5] A 1-D NumPy array of additional grid metadata containing 14 integers, listed below.</p>
 <p><code>
   &nbsp;&nbsp;&nbsp;0. X (lon)  size (1 if X is not varying) <br>
-  &nbsp;&nbsp;&nbsp;1. Y (lat)  size (1 if Y is not varying) <br>
+  &nbsp;&nbsp;&nbsp;1. Y (lat)  size (1 if Y is not  varying) <br>
   &nbsp;&nbsp;&nbsp;2. Z (lev)  size (1 if Z is not varying) <br>
   &nbsp;&nbsp;&nbsp;3. T (time) size (1 if T is not varying) <br>
   &nbsp;&nbsp;&nbsp;4. E (ens)  size (1 if E is not varying) <br>
@@ -158,7 +84,7 @@ PyObjects):</p>
   &nbsp;&nbsp;&nbsp;12. T calendar type (0==normal, 1==365-day) <br>
   &nbsp;&nbsp;&nbsp;13. E start (E increment is always 1) </code></p>
 <p>
-[6] A 1-D numpy array of additional grid metadata containing 6 doubles, listed below:</p>
+[6] A 1-D NumPy array of additional grid metadata containing 6 doubles, listed below:</p>
 <p><code>&nbsp;&nbsp;&nbsp;</code><code>0. X start value (if X dimension is linear) <br>
   &nbsp;&nbsp;&nbsp;1. X increment (negative if non-linear) <br>
   &nbsp;&nbsp;&nbsp;2. Y start value (if Y dimension is linear)  <br>
@@ -166,43 +92,11 @@ PyObjects):</p>
   &nbsp;&nbsp;&nbsp;4. Z start value (if Z dimension is linear) <br>
   &nbsp;&nbsp;&nbsp;5. Z increment (negative if non-linear) </code>
   
-<h3>get</h3>
-<p>The 'get' method takes the name of a defined variable in GrADS and retrieves the data and metadata in a Python tuple. In the example below some commands are issued first to illustate how you could create the defined variable <em>speed</em> before using <code>get</code> to pull the data into Python. <br>
-<code>
-gp.cmd('open model.ctl')<br>
-gp.cmd('set x 1 72')<br>
-gp.cmd('set y 1 46')<br>
-gp.cmd('set z 1 7')<br>
-gp.cmd('set t 1 5')<br>
-gp.cmd('define speed = mag(u,v)')<br>
-tup = gp.get('speed')<br>
-</code>
-
-<p>The returned tuple has seven elements as described above for the <code>result</code> method. 
-
-<h3>put</h3>
-
-<p>The 'put' method does the opposite of 'get' -- it takes a Python
-tuple as an argument and creates a defined variable within GrADS. The
-tuple argument has the same structure as described above for
-the <code>result</code> method, except for the first element, which
-should contain a string for the new variable's name. Variable names in
-GrADS must start with a letter and be alphanumeric, lowercase, and
-less than 16 characters.
-
+  
+</p>
 <h2>Usage Notes</h2>
 <ol>
- <li>When the result of an expression is a 2D lat/lon grid, GrADS
- orients the data with dimension 0 as i (or X, or longitude) and
- dimension 1 as j (or Y, or latitude). In Python, the dimension order
- convention is reversed, so the returned grid's dimension 0 is
- j/Y/latitude, and dimension 1 is i/X/longitude. This rule generalizes
- for all results that vary in two dimensions -- the (i,j) data array
- in GrADS gets sent to Python as (j,i).
- <li>Before using the <code>put</code> method, you must first open a
-file. GrADS requires at least one open file before it can create a
-defined variable object.
-
+ <li>When the result of an expression is a 2D lat/lon grid, GrADS orients the data with dimension 0 as i (or X,  or longitude) and dimension 1 as j (or Y, or latitude). In Python,  the dimension order convention is reversed, so the returned grid's dimension 0 is j/Y/latitude, and dimension 1 is i/X/longitude. This rule generalizes for all results that vary in two dimensions -- the (i,j) data array in GrADS gets sent to Python as  (j,i).
 </ol>
 <p>
 

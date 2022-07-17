@@ -164,7 +164,7 @@ tar xvfz ../tarfiles/g2clib-1.6.0.tar.gz<br>
 
 cd g2clib-1.6.0</p>
       <p class="code style1">Note1: There is no configure script in this library, so you must edit the makefile manually. Change the  &quot;INC&quot; variable as indicated below. Be sure to write out $SUPPLIBS explicitly: <br>
-           INC=-I$SUPPLUBS/include -I$UPPLIBS/include/libpng15<br>
+           INC=-I$SUPPLIBS/include -I$SUPPLIBS/include/libpng15<br>
           You must also edit the &quot;CFLAGS&quot; variable to include  the &quot;-fPIC&quot; option. On some unix servers it may also be necessary to 
       remove the &quot;-m64&quot; and/or &quot;-D__64BIT__&quot; options.</p>
       <p class="code"><span class="style1">Note2: Version 1.6.0 of the grib2 C library introduced a new output file naming convention that includes a version number. When manually installing in it the $SUPLLIBS/lib directory, rename it to the old (static) filename. It is also necessary to manually install the grib2.h file in the $SUPPLIBS/include directory.</span></p>
@@ -291,7 +291,7 @@ unsetenv LDFLAGS<br>
 Also change &quot;-g -O2&quot; to &quot;-g -fPIC -O2&quot; when it occurs instead of $(CFLAGS)</span><br>
 <br>
         </span>make all lib</p>
-<p class="code"><span class="style1">Installation to $SUPPLUBS is done manually. The utilities are copied to the $SUPPLIBS/bin directory in case they might be useful to the user -- GrADS doesn't explicitly need them.</span></p>
+<p class="code"><span class="style1">Installation to $SUPPLIBS is done manually. The utilities are copied to the $SUPPLIBS/bin directory in case they might be useful to the user -- GrADS doesn't explicitly need them.</span></p>
       <p class="code">/bin/cp -f ./.libs/libshp.a $SUPPLIBS/lib<br>
         /bin/cp -f shapefil.h  $SUPPLIBS/include<br>
     /bin/cp -f shpcreate shpadd shpdump shprewind dbfcreate dbfadd dbfdump shptest $SUPPLIBS/bin    </p></td>
