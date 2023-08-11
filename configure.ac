@@ -759,6 +759,7 @@ if test "$have_udunits" = "yes" ; then
         fi
       ])
     ])
+    GA_UNSET_FLAGS
   fi
 # check in system locations
   if test "$ga_dyn_supplibs" = "yes" ; then
