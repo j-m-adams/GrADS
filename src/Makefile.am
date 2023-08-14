@@ -16,7 +16,8 @@ if USECAIRO
 lt_cairo = libgxpCairo.la libgxdCairo.la
 endif
 
-lib_LTLIBRARIES = $(lt_gd) $(lt_cairo) libgxdX11.la libgxdummy.la libgradspy.la
+lib_LTLIBRARIES = libgradspy.la
+pkglib_LTLIBRARIES = $(lt_gd) $(lt_cairo) libgxdX11.la libgxdummy.la
 
 ## Convenience targets
 utils: gribmap stnmap gribscan grib2scan bufrscan 
@@ -103,28 +104,29 @@ grads_LDADD	      = $(common_ldadd) $(readline_libs) $(grib2_libs) \
 if USEGD
 libgxpGD_la_CPPFLAGS = -I. -I$(SUPPLIBS)/include
 libgxpGD_la_LIBADD = $(LDADD) $(gd_libs)
-libgxpGD_la_LDFLAGS = -version-info $(LIBGX_VERSION)
+libgxpGD_la_LDFLAGS = -avoid-version -module -shared
 endif
 
 # display X11 
 libgxdX11_la_CPPFLAGS = -I. -I$(SUPPLIBS)/include
 libgxdX11_la_LIBADD = $(X11_ldadd)
-libgxdX11_la_LDFLAGS = -version-info $(LIBGX_VERSION)
+libgxdX11_la_LDFLAGS = -avoid-version -module -shared
  
 # print with Cairo
 libgxpCairo_la_CPPFLAGS = -I. $(cairo_inc)
 #-I$(SUPPLIBS)/include -I$(SUPPLIBS)/include/cairo -I$(SUPPLIBS)/include/freetype2
 libgxpCairo_la_LIBADD = $(LDADD) $(cairo_libs)
-libgxpCairo_la_LDFLAGS = -version-info $(LIBGX_VERSION)
+libgxpCairo_la_LDFLAGS = -avoid-version -module -shared
 
 ## display X11 with Cairo 
 libgxdCairo_la_CPPFLAGS = -I. $(cairo_inc)
 #-I$(SUPPLIBS)/include -I$(SUPPLIBS)/include/cairo -I$(SUPPLIBS)/include/freetype2
 libgxdCairo_la_LIBADD = $(X11_ldadd) $(LDADD) $(cairo_libs)
-libgxdCairo_la_LDFLAGS = -version-info $(LIBGX_VERSION)
+libgxdCairo_la_LDFLAGS = -avoid-version -module -shared
 
 ## dummy (for display and print)
 libgxdummy_la_CPPFLAGS = -I. 
+libgxdummy_la_LDFLAGS = -avoid-version -module -shared
 
 
 
