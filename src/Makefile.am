@@ -37,7 +37,7 @@ src_gui = gagui.c gsgui.c
 endif
 
 if USECAIRO
-libgxpCairo_la_SOURCES = gxprint.c gxC.c
+libgxpCairo_la_SOURCES = gxprint.c gxC.c gxX.c
 libgxdCairo_la_SOURCES = gxX.c gxC.c
 endif
 
