@@ -48,7 +48,7 @@ void write_command_log(char *logfile);
 
 static struct gaupb *upba=NULL;     /* Anchor for user defined plug-in */
 char *gxgnam(char *);               /* This is also in gx.h */
-static struct gacmn gcmn;  
+struct gacmn gcmn;
 static struct gawgds wgds; 
 extern struct gamfcmn mfcmn;
 

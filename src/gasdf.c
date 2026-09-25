@@ -313,7 +313,7 @@ struct sdfnames *varnames;
 struct gaens *ens;
 struct dt dt2,tdef,tdefi,tdefe;
 gadouble v1,v2,*zvals,*tvals=NULL,*evals=NULL;
-gadouble time1,time2,lat1,lat2,lev1,lev2,incrfactor,sf,sec,res,time1val;
+gadouble time1,time2,lat1,lat2,lev1,lev2,incrfactor,sf,sec,res,time1val,origin;
 gafloat dsec;
 size_t len_time_units,trunc_point,sz ;
 gaint len,noname,notinit,nolength;
@@ -335,9 +335,6 @@ cv_converter *converter=NULL;
   if (read_metadata(pfi) == Failure) {
     gaprnt(0, "Error: Couldn't ingest SDF metadata.\n") ;
     return Failure ;
-  }
-  if (!parms.isxdf) {
-    pfi->calendar = 0 ;  /* 365 day kind not available under COARDS */
   }
 
   /* Get the title */
@@ -711,7 +708,7 @@ cv_converter *converter=NULL;
       gaprnt(2, "SDF file has no discernable time coordinate -- using default values.\n") ;
     }
     else {
-      /* make sure it's not a 360- or 365-day calendar */
+      /* make sure it's not a 360-day calendar */
       attr = NULL;
       attr = find_att(Tcoord->longnm, pfi->attr, "calendar") ;
       if (attr) {
@@ -724,12 +721,22 @@ cv_converter *converter=NULL;
 	    (!strncasecmp((char *)attr->value,"common_year",11)) ||
 	    (!strncasecmp((char *)attr->value,"365_day",     7)) ||
 	    (!strncasecmp((char *)attr->value,"noleap",      6))) {
-	  
-	  gaprnt(0,"Error: 365 day calendars are not supported by sdfopen.\n"); 
-	  gaprnt(0,"  To open this file with GrADS, use a descriptor file with \n");
-	  gaprnt(0,"  a complete TDEF entry and OPTIONS 365_day_calendar. \n");
-	  gaprnt(0,"  Documentation is at http://cola.gmu.edu/grads/gadoc/SDFdescriptorfile.html\n"); 
-	  return Failure;
+
+          pfi->calendar=1;
+          /* set the global calendar and check if we are trying to change with a new file... */
+          if (mfcmn.cal365<0) {
+            mfcmn.cal365=pfi->calendar;
+          } else {
+            if (pfi->calendar != mfcmn.cal365) {
+              gaprnt(0,"Attempt to change the global calendar...\n");
+              if (mfcmn.cal365) {
+                gaprnt(0,"The calendar is NOW 365 DAYS and you attempted to open a standard calendar file\n");
+              } else {
+                gaprnt(0,"The calendar is NOW STANDARD and you attempted to open a 365-day calendar file\n");
+              }
+              return Failure;
+            }
+          }
 	}
       }
       /* set dimension size */
@@ -876,35 +883,49 @@ cv_converter *converter=NULL;
 	  }
 	  strcpy(time_units, (char *) timeunits_attr->value);
 	} 
-	/* convert unit string to a udunits format */
-	fromUnit = ut_parse(utSys, time_units, UT_ASCII);
+        /* convert unit string to a udunits format */
+        fromUnit = ut_parse(utSys, time_units, UT_ASCII);
         if (fromUnit == NULL) {
-	  snprintf(pout,1255, "Error: Unable to parse time units (%s) from SDF file.\n",time_units) ;
-	  gaprnt(0,pout);
-	  goto err2;
-	}
+          snprintf(pout,1255, "Error: Unable to parse time units (%s) from SDF file.\n",time_units);
+          gaprnt(0,pout);
+          goto err2;
+        }
+        toUnit = ut_offset_by_time(second, ut_encode_time(2001, 1, 1, 0, 0, 0.0));
+        if (toUnit == NULL) {
+          snprintf(pout,1255, "Error: Unable to convert time units (%s) from SDF file.\n",time_units);
+          gaprnt(0,pout);
+          goto err2;
+        }
+        /* the check for campatibility was also done in findT */
+        if (!ut_are_convertible(fromUnit, toUnit)) {
+          snprintf(pout,1255, "Error: Unable to convert time units (%s) from SDF file.\n",time_units);
+          gaprnt(0,pout);
+          goto err2;
+        }
 
-	/* convert udunits-formatted time to integer values for yr, mo, etc. */
-	ckflg = 0;
-	toUnit = ut_offset_by_time(second, ut_encode_time(2001, 1, 1, 0, 0, 0.0));
-	if (toUnit != NULL) { 
-	  /* the check for campatibility was also done in findT */
-	  if (ut_are_convertible(fromUnit, toUnit)) { 
-	    /* convert the unit to 'seconds since 2001-1-1 00:00:0.0' */
-	    converter = ut_get_converter(fromUnit, toUnit);
-	    if (converter != NULL) {
-	      time1val = cv_convert_double(converter,time1); 
-	      /* decode the converted value to integer values for yr, mo, dy, et al. */
-	      ut_decode_time(time1val, &iyr, &imo, &idy, &ihr, &imn, &sec, &res);
-	      cv_free(converter);
-	      ckflg = 1;
-	    }
-	  }
-	}
-	if (!ckflg) {
-	  gaprnt(0,"Error: Unable to decode initial time value in SDF file.\n") ;
-	  goto err2;
-	}
+        converter = ut_get_converter(fromUnit, toUnit);
+        if (converter == NULL) {
+          gaprnt(0,"Error: Unable to decode initial time value in SDF file.\n") ;
+          goto err2;
+        }
+        if (pfi->calendar == 0) {
+          /* udunits-compatible calendar */
+          time1val = cv_convert_double(converter,time1);
+          /* decode the converted value to integer values for yr, mo, dy, et al. */
+          ut_decode_time(time1val, &iyr, &imo, &idy, &ihr, &imn, &sec, &res);
+          cv_free(converter);
+        } else {
+          /* 365-days calendar */
+          origin = cv_convert_double(converter, 0.0);
+          /* decode the converted value to integer values for yr, mo, dy, et al. */
+          ut_decode_time(origin, &iyr, &imo, &idy, &ihr, &imn, &sec, &res);
+          cv_free(converter);
+
+          rc = advance_cal365_time(time1, time_units, &iyr, &imo, &idy, &ihr, &imn);
+          if (rc != Success) {
+            goto err2;
+          }
+        }
 
 	if (imo == 0) imo = 1 ;
 	if (idy == 0) idy = 1 ;
@@ -2293,6 +2314,135 @@ gaint  i,slen,int_len;
     *year = MISSING;
 
   /* All OK. */
+  return Success;
+}
+
+static gaint is_integer(gadouble val) {
+  gaint intpart;
+  gadouble fract;
+
+  intpart = (gaint)(val + 0.1);
+  fract = val - intpart;
+  return fabs(fract) < 0.01;
+}
+
+static gaint parse_unit_to_months_mins(gadouble inc, char *unit, gadouble* dmon, gadouble* dmin) {
+  if (compare_units("year", unit) == Success) {
+    *dmon = 12.0 * inc;
+    *dmin = 0.0;
+    if (!is_integer(*dmon)) {
+      snprintf(pout, 1255, "Error: Yearly time shift must have integer number of month: %g (%g months)\n", inc, *dmon) ;
+      gaprnt(0, pout);
+      return Failure;
+    }
+    return Success;
+  }
+  if ((!strncmp(unit, "month", 5)) ||
+      (!strncmp(unit, "common_year/12", 14)) ||
+      (!strncmp(unit, "common_years/12", 15))) {
+    *dmon = inc;
+    *dmin = 0.0;
+    if (!is_integer(*dmon)) {
+      gaprnt(0, "Error: Fractional months are ill-defined and not supported by GrADS\n") ;
+      return Failure;
+    }
+    return Success;
+  }
+  if (compare_units("day", unit) == Success) {
+    *dmon = 0.0;
+    *dmin = inc * 24.0 * 60.0;
+    if (!is_integer(*dmin)) {
+      snprintf(pout, 1255, "Error: Daily time shift must have integer number of minutes %g (%g minutes)\n", inc, *dmin);
+      gaprnt(0, pout);
+      return Failure;
+    }
+    return Success;
+  }
+  if (compare_units("hour", unit) == Success) {
+    *dmon = 0.0;
+    *dmin = inc * 60.0;
+    if (!is_integer(*dmin)) {
+      snprintf(pout, 1255, "Error: Hourly time shift must have integer number of minutes %g (%g minutes)\n", inc, *dmin);
+      gaprnt(0, pout);
+      return Failure;
+    }
+    return Success;
+  }
+  if (compare_units("minute", unit) == Success) {
+    *dmon = 0.0;
+    *dmin = inc;
+    if (!is_integer(*dmin)) {
+      snprintf(pout, 1255, "Error: Minutes time shift must have integer number of minutes %g (%g minutes)\n", inc, *dmin);
+      gaprnt(0, pout);
+      return Failure;
+    }
+    return Success;
+  }
+  if (compare_units("seconds", unit) == Success) {
+    *dmin = 0.0;
+    *dmin = inc / 60.0;
+    if (!is_integer(*dmin)) {
+      snprintf(pout, 1255, "Error: Seconds time shift must have integer number of minutes %g (%g minutes)\n", inc, *dmin);
+      gaprnt(0, pout);
+      return Failure;
+    }
+    return Success;
+  }
+  gaprnt(0, "Error: Unable to parse time units in SDF file.\n");
+  return Failure;
+}
+
+gaint advance_cal365_time(gadouble time, char *time_units,
+                          gaint *year, gaint *month, gaint *day,
+                          gaint *hour, gaint *min) {
+
+  // time unit since instant
+  char unit[256];
+  char *p;
+
+  gaint unit_len, rc;
+  gadouble dmon, dmin;
+  struct dt delta, result;
+
+  p = strstr(time_units, " since ");
+  if (p == NULL) {
+    gaprnt(0, "gadsdf error: Time unit is missing ' since '.\n");
+    return Failure;
+  }
+
+  unit_len = p - time_units;
+  if (unit_len + 1 > sizeof(unit)) {
+    unit_len = sizeof(unit) - 1;
+  }
+  strncpy(unit, time_units, unit_len);
+  unit[unit_len] = '\0';
+
+  /* parse time units into either months or minutes */
+  rc = parse_unit_to_months_mins(time, unit, &dmon, &dmin);
+  if (rc != Success) {
+    return rc;
+  }
+
+  delta.yr = 0;
+  delta.mo = (gaint)(dmon + 0.1);
+  delta.dy = 0;
+  delta.hr = 0;
+  delta.mn = (gaint)(dmin + 0.1);
+
+  result.yr = *year;
+  result.mo = *month;
+  result.dy = *day;
+  result.hr = *hour;
+  result.mn = *min;
+
+  timadd(&delta, &result);
+
+  *year  = result.yr;
+  *month = result.mo;
+  *day   = result.dy;
+  *hour  = result.hr;
+  *min   = result.mn;
+
   return Success;
 }
 

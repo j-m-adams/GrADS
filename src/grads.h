@@ -1299,6 +1299,7 @@ gaint find_dim(struct gafile *, char *);
 void  handle_error(gaint);
 void  close_sdf(struct gafile *);
 gaint decode_standard_time(gadouble, gaint *, gaint *, gaint *, gaint *, gaint *, gafloat *);
+gaint advance_cal365_time(gadouble, char*, gaint *, gaint *, gaint *, gaint *, gaint *);
 gaint decode_delta_t(char *, gaint *, gaint *, gaint *, gaint *, gaint *, gaint *);
 gaint init_standard_arrays (gaint);
 gaint gadxdf(struct gafile *, GASDFPARMS *);
