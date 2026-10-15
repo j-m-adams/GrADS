@@ -21,7 +21,7 @@
 
 /* function prototype */
 void *galloc(size_t,char *);
-void gree();
+void gree(void *, char *);
 char *intprs (char *, gaint *);
 char *getdbl (char *, gadouble *);
 /* gaint gxclvert (FILE *); */

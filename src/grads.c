@@ -35,10 +35,6 @@
 #include <signal.h>
 #include "grads.h"
 
-#if USEGUI == 1
-#include "gagui.h"
-#endif
-
 #if READLINE ==1
 #include <time.h>
 #include <readline/history.h>
@@ -83,7 +79,7 @@ int main (int argc, char *argv[])  {
   gaint txtcs=-2;
   gaint ipcflg = 0; /* for IPC friendly interaction via pipes */
   char *icmd,*arg,*rc1;
-  void gasigcpu() ;
+  void gasigcpu(gaint) ;
   gaint wrhstflg=0; 
   gadouble aspratio;
   char *logfile,*userhome=NULL;
@@ -314,7 +310,7 @@ int main (int argc, char *argv[])  {
   /* Inform gaio.c what the global scale factor for netcdf4/hdf5 cache */
   setcachesf(gcmn.cachesf);
 
-#if !defined(__CYGWIN32__) && !defined(__GO32__)
+#if !defined(_WIN32) && !defined(__CYGWIN32__) && !defined(__GO32__)
   signal(CPULIMSIG, gasigcpu) ;  /* CPU time limit signal; just exit */
 #endif
   
@@ -331,12 +327,6 @@ int main (int argc, char *argv[])  {
   
   signal(2,gasig);                      /* Trap cntrl c */
   
-#if USEGUI == 1
-  if (!ipcflg) 
-    gagui_main (argc, argv);   /*ams Initializes GAGUI, and if the environment
-				 variable GAGUI is set it starts a GUI
-				 script. Otherwise, it just returns. ams*/
-#endif
   if (ipcflg) printf("\n<RC> %d </RC>\n</IPC>\n",rc);
   
 /* This is for GradsPy */
@@ -816,4 +806,3 @@ struct gaupb *upb;
   }
   return (NULL);
 }
-

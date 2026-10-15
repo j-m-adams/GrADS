@@ -10,7 +10,8 @@ ACLOCAL_AMFLAGS = -I m4
 #   before processing the current directory
 SUBDIRS=src
 
-EXTRA_DIST=COPYRIGHT INSTALL
+EXTRA_DIST=COPYRIGHT INSTALL tools/natural_earth_to_grads.py \
+	tools/natural_earth_to_shapefiles.py
 
 BINDISTFILES=COPYRIGHT INSTALL
 

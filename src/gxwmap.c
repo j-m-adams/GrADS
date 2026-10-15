@@ -27,7 +27,7 @@
 /* #include "gxmap.h" */
 
 int gagby (char *, int, int);
-void gree();
+void gree(void *, char *);
 gaint dequal(gadouble, gadouble, gadouble);
 void *galloc(size_t,char *);
 

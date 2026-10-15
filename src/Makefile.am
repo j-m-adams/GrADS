@@ -32,10 +32,6 @@ if USEGADAP
 src_gadap = dodstn.c
 endif
 
-if USEGUI
-src_gui = gagui.c gsgui.c
-endif
-
 if USECAIRO
 libgxpCairo_la_SOURCES = gxprint.c gxC.c
 libgxdCairo_la_SOURCES = gxX.c gxC.c
@@ -49,14 +45,14 @@ libgxdummy_la_SOURCES  = gxdummy.c
 libgxdX11_la_SOURCES   = gxX11.c 
 
 ## GrADS source files to be compiled
-grads_SOURCES =	grads.c  gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
+grads_SOURCES =	grads.c ga_dynload.c gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
 		gxwmap.c gxshad.c gxshad2.c gaexpr.c gafunc.c gautil.c gagx.c \
 		gscrpt.c gamach.c gatxt.c   galloc.c gaddes.c gacfg.c  gaio.c \
                 gauser.c gasdf.c  bufrstn.c gabufr.c gabufrtbl.c \
-                $(src_gui) $(src_gadap) 
+                $(src_gadap)
 
 ## These may not always be compiled but must be listed in order to go in the distribution 
-EXTRA_grads_SOURCES = gagmap.c gagui.c gsgui.c dodstn.c \
+EXTRA_grads_SOURCES = gagmap.c dodstn.c \
                       gxprintGD.c gxGD.c gxX11.c \
                       gxprint.c gxC.c gxX.c gxdummy.c 
 
@@ -66,8 +62,8 @@ EXTRA_grads_SOURCES = gagmap.c gagui.c gsgui.c dodstn.c \
 
 ## Headers must be listed here to be included in the distribution.
 ## The "noinst_" prefix prevents "make install" from trying to do anything with them
-hdr_core  = grads.h  gatypes.h bitmaps.h bitmaps2.h gvt.h wx.h gs.h
-hdr_ga    = gagmap.h gagui.h gabufr.h gasdf.h gasdf_std_time.h 
+hdr_core  = grads.h gatypes.h ga_dynload.h bitmaps.h bitmaps2.h gvt.h wx.h gs.h
+hdr_ga    = gagmap.h gabufr.h gasdf.h gasdf_std_time.h
 hdr_gx    = gx.h gxGD.h gxC.h gxmap.h 
 
 noinst_HEADERS = $(hdr_core) $(hdr_ga) $(hdr_gx) 
@@ -90,14 +86,14 @@ common_ldadd            = $(LDADD) $(host_ldadd)
 X11_ldadd               = $(X_LIBS) $(X_PRE_LIBS) -lX11 -lXext $(X_EXTRA_LIBS)
 
 
-AM_CPPFLAGS		= -I. -I$(supp_include_dir) $(gui_inc) $(nc_inc) \
+AM_CPPFLAGS		= -I. -I$(supp_include_dir) $(nc_inc) \
 			  $(hdf_inc) $(hdf5_inc) $(geotiff_inc) $(shp_inc) $(gadap_inc) \
-                          $(X_CFLAGS) $(XAW_CFLAGS) $(HDF4_CFLAGS) 
+                          $(X_CFLAGS) $(HDF4_CFLAGS)
 
 ## libraries needed
 grads_LDADD	      = $(common_ldadd) $(readline_libs) $(grib2_libs) \
 			$(hdf_libs) $(hdf5_libs) $(nc_libs) $(geotiff_libs) \
-			$(shp_libs) $(gadap_libs) $(gui_libs) -ldl 
+			$(shp_libs) $(gadap_libs) $(DLOPEN_LIBS)
 
 # print with GD
 if USEGD
@@ -131,23 +127,23 @@ libgxdummy_la_CPPFLAGS = -I.
 ##---------------------------------------------------------------------
 ## GradsPy 
 
-libgradspy_la_SOURCES  = grads.c gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
+libgradspy_la_SOURCES  = grads.c ga_dynload.c gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
 		gxwmap.c gxshad.c gxshad2.c gaexpr.c gafunc.c gautil.c gagx.c \
 		gscrpt.c gamach.c gatxt.c   galloc.c gaddes.c gacfg.c  gaio.c \
                 gauser.c gasdf.c  bufrstn.c gabufr.c gabufrtbl.c \
-                $(src_gui) $(src_gadap) 
+                $(src_gadap)
 
 ## this object file needs to be recompiled for gradspy with the SHRDOBJ flag set 
 libgradspy_la-grads.o: $(srcdir)/grads.c
 	$(COMPILE) -DSHRDOBJ -o libgradspy_la-grads.lo -c $(srcdir)/grads.c
 
 libgradspy_la_CFLAGS   = -DSHRDOBJ
-libgradspy_la_CPPFLAGS = -I. -I$(SUPPLIBS)/include $(gui_inc) $(geotiff_inc) \
+libgradspy_la_CPPFLAGS = -I. -I$(SUPPLIBS)/include $(geotiff_inc) \
                          $(nc_inc) $(hdf_inc) $(hdf5_inc) \
-                         $(shp_inc) $(gadap_inc) $(X_CFLAGS) $(XAW_CFLAGS) 
+                         $(shp_inc) $(gadap_inc) $(X_CFLAGS)
 libgradspy_la_LIBADD   = $(common_ldadd) $(readline_libs) $(grib2_libs) \
 			 $(hdf_libs) $(hdf5_libs) $(nc_libs) $(geotiff_libs) \
-			 $(shp_libs) $(gadap_libs) $(gui_libs) 
+			 $(shp_libs) $(gadap_libs) $(DLOPEN_LIBS)
 libgradspy_la_LDFLAGS  = -version-info $(LIBGX_VERSION)
 
 
@@ -195,4 +191,3 @@ grib2scan_LDADD	       = gautil.sa.o gatxt.o $(LDADD) $(readline_libs)
 
 ## bufrscan
 bufrscan_SOURCES       = bufrscan.c gabufr.c gabufrtbl.c gamach.c
-

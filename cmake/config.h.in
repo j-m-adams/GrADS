@@ -1,0 +1,38 @@
+#ifndef GRADS_CMAKE_CONFIG_H
+#define GRADS_CMAKE_CONFIG_H
+
+#define BYTEORDER 0
+#define GEOTIFF 1
+#define GRADS_CRAY 0
+#define GRADS_HP64 0
+#define GRADS_VERSION "@GRADS_VERSION@"
+#define GRIB2 1
+#define HAVENETCDF4 1
+#define HAVE_FSEEKO 1
+#define HAVE_HDF4_NETCDF_H 1
+#define HAVE_INTTYPES_H 1
+#define HAVE_MALLOC_H 1
+#define HAVE_MEMORY_H 1
+#define HAVE_READLINE_HISTORY 1
+#define HAVE_READLINE_HISTORY_H 1
+#define HAVE_READLINE_READLINE_H 1
+#define HAVE_STDINT_H 1
+#define HAVE_STDLIB_H 1
+#define HAVE_STRING_H 1
+#define HAVE_SYS_STAT_H 1
+#define HAVE_SYS_TYPES_H 1
+#define HDF_HAVE_NETCDF 1
+#define HDF_NETCDF_NAME(name) sd_ ## name
+#define READLINE 1
+#define STDC_HEADERS 1
+#define USECAIRO 1
+#define USEDAP 1
+#define USEGADAP 0
+#define USEGD 1
+#define USEHDF 1
+#define USEHDF5 1
+#define USENETCDF 1
+#define USESHP 1
+#define X_DISPLAY_MISSING 0
+
+#endif

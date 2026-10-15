@@ -2508,7 +2508,7 @@ gaint gancsetup (void) {
 		gaprnt(1,"*** There are two ways to control the cache size: \n");
 		gaprnt(1,"*** add a CACHESIZE entry to the descriptor file \n");
 		gaprnt(1,"*** or change the scale factor with 'set cachesf' \n");
-		gaprnt(1,"*** Please read http://cola.gmu.edu/grads/gadoc/compression.html \n");
+		gaprnt(1,"*** Please read https://wetterzentrale.de/grads/docs/compression.html \n");
 	      }
 	    }
 	  }
@@ -3536,7 +3536,7 @@ gaint h5setup(void) {
                 gaprnt(1,"*** There are two ways to control the cache size: \n");
                 gaprnt(1,"*** add a CACHESIZE entry to the descriptor file \n");
 		gaprnt(1,"*** or change the scale factor with 'set cachesf' \n");
-                gaprnt(1,"*** Please read http://cola.gmu.edu/grads/gadoc/compression.html \n");
+                gaprnt(1,"*** Please read https://wetterzentrale.de/grads/docs/compression.html \n");
               }
             }
           }
@@ -4327,7 +4327,7 @@ size_t sz,asize;
                 for (j=0; j<sz; j++) cattr_val[j] = strattr_val[0][j];
                 cattr_val[sz]='\0';
                 nc_free_string(asize, strattr_val);
-                gree(strattr_val);
+                gree(strattr_val, NULL);
                 gaprnt(2,abbrv); 
                 gaprnt(2," String ");
                 gaprnt(2,attr_name); 
@@ -4748,7 +4748,7 @@ size_t sz;
 /* Subroutine to print out HDF5 (variable) attributes */
 #if USEHDF5 == 1
 gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, char* ftit, long cachesize) {
-  H5O_info_t oinfo;
+  H5O_info2_t oinfo;
   H5T_class_t aclass=-1;
   H5T_sign_t asign;
   hid_t   vid,dsid,aid=-1,atype=-1,aspace=-1;
@@ -4775,7 +4775,7 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
     if (h5openvar(h5id, vname, &dsid, &vid, cachesize)) err=1;
   }
   if (!err) {
-    rc = H5Oget_info(vid,&oinfo);
+    rc = H5Oget_info3(vid,&oinfo,H5O_INFO_NUM_ATTRS);
     if (rc<0) err=1;
   }
   if (err) return (0); /* zero attributes printed */

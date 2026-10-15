@@ -9,7 +9,7 @@ dnl  See acinclude.m4 for definitions of the GA_xxx macros
 AC_PREREQ(2.52) 
 
 # The "master" version string that will appear in all code, etc.
-AC_INIT(GrADS, [2.2.3], [jennifer.m.adams@nasa.gov])
+AC_INIT(GrADS, [2.3], [jennifer.m.adams@nasa.gov])
 
 # Supporting scripts are in etc/ 
 AC_CONFIG_AUX_DIR(etc)
@@ -171,6 +171,11 @@ echo ---------------------------------------------------------
 
 AC_CHECK_LIB(m,cos,, AC_MSG_ERROR([Fatal: Math library not found]))
 AC_PATH_XTRA
+AC_SEARCH_LIBS([dlopen], [dl],
+  [DLOPEN_LIBS="$ac_cv_search_dlopen"],
+  [AC_MSG_ERROR([Fatal: dynamic loading support not found])])
+AS_IF([test "x$DLOPEN_LIBS" = "xnone required"], [DLOPEN_LIBS=""])
+AC_SUBST([DLOPEN_LIBS])
 
 echo
 
@@ -242,9 +247,6 @@ esac
 
 # Initialize. The assumption is that we have none of the needed libs.
 use_readline=no
-use_gui=no
-use_freq=no
-use_xaw_xlibs=no
 use_geotiff=no
 use_gd=no
 use_grib2=no
@@ -544,10 +546,14 @@ if test "Z$ga_supplib_dir" != "Z" ; then
   echo looking in $ga_supplib_dir 
     GA_SET_FLAGS([])
     AC_CHECK_HEADER(grib2.h,
-    [ AC_CHECK_LIB([grib2c], [main], 
-      [ use_grib2=yes 
-#        GA_SET_LIB_VAR([grib2_libs], [grib2c jasper png z])
+    [ AC_CHECK_LIB([grib2c], [main],
+      [ use_grib2=yes
         GA_SET_DYNLIB_VAR([grib2_libs], [grib2c jasper png z])
+      ],
+      [ AC_CHECK_LIB([g2c], [main],
+        [ use_grib2=yes
+          GA_SET_DYNLIB_VAR([grib2_libs], [g2c jasper png z])
+        ])
       ])
     ])
     GA_UNSET_FLAGS
@@ -846,48 +852,6 @@ else
   echo
 fi
 
-# * * * GUI * * *
-echo 
-echo gui
-echo ---
-if test "$use_gui" != "yes" -a "$ga_dyn_supplibs" = "yes" ; then
-  echo looking in system locations
-  GA_CHECK_GUI([
-    use_gui=yes
-    GA_SET_LIB_VAR(gui_libs, [sx])
-    if test z"$gui_libs_Xext" != 'z'; then
-      gui_libs="$gui_libs -lXext"
-    fi
-    gui_libs="$gui_libs -lXaw -lXpm -lXmu -lXt"
-  ])
-  if test $use_gui != "yes" ; then
-    GA_CHECK_LIBSX([use_gui=yes;use_freq=yes],[use_gui=yes;use_freq=no])
-    gui_libs="$GA_LIBSX_LIBS"
-    grads_xlibs="$XAW_XLIBS"
-    use_xaw_xlibs=yes
-  fi
-fi
-# set output variables
-if test $use_gui != "yes" ; then
-  AC_DEFINE(USEGUI, 0, [Disable GUI widgets]) 
-else
-  AC_DEFINE(USEGUI, 1, [Enable GUI widgets]) 
-# if the gui is built, we use the X flags from Xaw.
-  if test "$use_xaw_xlibs" != 'yes'; then
-    grads_xlibs="$X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
-    AC_SUBST(grads_xlibs)
-  fi
-  if test $use_freq = 'yes'; then
-    AC_DEFINE(USEFREQ, 1, [Use GetFile from freq])
-  else
-    AC_DEFINE(USEFREQ, 0, [Use GetFile from freq])
-  fi
-  GA_SET_INCLUDE_VAR([gui_inc],[libsx]) 
-  AC_SUBST(gui_inc)
-  AC_SUBST(gui_libs)
-fi
-
-
 # ----------------------------------------------------
 # Send test results to makefile and config.h
 # ----------------------------------------------------
@@ -897,7 +861,6 @@ AC_DEFINE(GRADS_VERSION, "AC_PACKAGE_VERSION", [GrADS version])
 
 # These are used to add the necessary source files to Makefile targets
 AM_CONDITIONAL(READLINE, [ test "$use_readline"  = "yes" ] )
-AM_CONDITIONAL(USEGUI,   [ test "$use_gui"  = "yes" ] )
 AM_CONDITIONAL(GEOTIFF,  [ test "$use_geotiff"  = "yes" ] )
 AM_CONDITIONAL(USESHP,   [ test "$use_shp"  = "yes" ] )
 AM_CONDITIONAL(USEGADAP, [ test "$use_gadap" = "yes" ] )
@@ -939,11 +902,6 @@ AC_OUTPUT
    echo "  |                               |"
    echo "  |  GrADS will be built with:    |"
    echo "  |                               |"
-if test "$use_gui" = "yes" ; then
-   echo "  |  + GUI enabled                |"
-else
-   echo "  |  - GUI disabled               |"
-fi 
 if test "$use_readline" = "yes" ; then
    echo "  |  + READLINE enabled           |"
 else

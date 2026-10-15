@@ -87,18 +87,17 @@ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(srcdir)/config.h.in $(top_srcdir)/etc/mkinstalldirs \
 	$(noinst_HEADERS)
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/Xaw.m4 \
-	$(top_srcdir)/m4/ax_lib_readline.m4 $(top_srcdir)/m4/cairo.m4 \
-	$(top_srcdir)/m4/gadap.m4 $(top_srcdir)/m4/gd.m4 \
-	$(top_srcdir)/m4/geotiff.m4 $(top_srcdir)/m4/grib2.m4 \
-	$(top_srcdir)/m4/gui.m4 $(top_srcdir)/m4/hdf4.m4 \
-	$(top_srcdir)/m4/hdf5.m4 $(top_srcdir)/m4/libsx.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/netcdf.m4 \
-	$(top_srcdir)/m4/netcdf_header.m4 $(top_srcdir)/m4/pkg.m4 \
-	$(top_srcdir)/m4/shapelib.m4 $(top_srcdir)/m4/udunits.m4 \
-	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/ax_lib_readline.m4 \
+	$(top_srcdir)/m4/cairo.m4 $(top_srcdir)/m4/gadap.m4 \
+	$(top_srcdir)/m4/gd.m4 $(top_srcdir)/m4/geotiff.m4 \
+	$(top_srcdir)/m4/grib2.m4 $(top_srcdir)/m4/hdf4.m4 \
+	$(top_srcdir)/m4/hdf5.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/m4/netcdf.m4 $(top_srcdir)/m4/netcdf_header.m4 \
+	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/shapelib.m4 \
+	$(top_srcdir)/m4/udunits.m4 $(top_srcdir)/acinclude.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/etc/mkinstalldirs
@@ -144,28 +143,27 @@ libgradspy_la_DEPENDENCIES = $(am__DEPENDENCIES_3) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1)
-am__libgradspy_la_SOURCES_DIST = grads.c gxsubs.c gxmeta.c gxchpl.c \
-	gxcntr.c gxstrm.c gxdb.c gxwmap.c gxshad.c gxshad2.c gaexpr.c \
-	gafunc.c gautil.c gagx.c gscrpt.c gamach.c gatxt.c galloc.c \
-	gaddes.c gacfg.c gaio.c gauser.c gasdf.c bufrstn.c gabufr.c \
-	gabufrtbl.c gagui.c gsgui.c dodstn.c
-@USEGUI_TRUE@am__objects_1 = libgradspy_la-gagui.lo \
-@USEGUI_TRUE@	libgradspy_la-gsgui.lo
-@USEGADAP_TRUE@am__objects_2 = libgradspy_la-dodstn.lo
+am__libgradspy_la_SOURCES_DIST = grads.c ga_dynload.c gxsubs.c \
+	gxmeta.c gxchpl.c gxcntr.c gxstrm.c gxdb.c gxwmap.c gxshad.c \
+	gxshad2.c gaexpr.c gafunc.c gautil.c gagx.c gscrpt.c gamach.c \
+	gatxt.c galloc.c gaddes.c gacfg.c gaio.c gauser.c gasdf.c \
+	bufrstn.c gabufr.c gabufrtbl.c dodstn.c
+@USEGADAP_TRUE@am__objects_1 = libgradspy_la-dodstn.lo
 am_libgradspy_la_OBJECTS = libgradspy_la-grads.lo \
-	libgradspy_la-gxsubs.lo libgradspy_la-gxmeta.lo \
-	libgradspy_la-gxchpl.lo libgradspy_la-gxcntr.lo \
-	libgradspy_la-gxstrm.lo libgradspy_la-gxdb.lo \
-	libgradspy_la-gxwmap.lo libgradspy_la-gxshad.lo \
-	libgradspy_la-gxshad2.lo libgradspy_la-gaexpr.lo \
-	libgradspy_la-gafunc.lo libgradspy_la-gautil.lo \
-	libgradspy_la-gagx.lo libgradspy_la-gscrpt.lo \
-	libgradspy_la-gamach.lo libgradspy_la-gatxt.lo \
-	libgradspy_la-galloc.lo libgradspy_la-gaddes.lo \
-	libgradspy_la-gacfg.lo libgradspy_la-gaio.lo \
-	libgradspy_la-gauser.lo libgradspy_la-gasdf.lo \
-	libgradspy_la-bufrstn.lo libgradspy_la-gabufr.lo \
-	libgradspy_la-gabufrtbl.lo $(am__objects_1) $(am__objects_2)
+	libgradspy_la-ga_dynload.lo libgradspy_la-gxsubs.lo \
+	libgradspy_la-gxmeta.lo libgradspy_la-gxchpl.lo \
+	libgradspy_la-gxcntr.lo libgradspy_la-gxstrm.lo \
+	libgradspy_la-gxdb.lo libgradspy_la-gxwmap.lo \
+	libgradspy_la-gxshad.lo libgradspy_la-gxshad2.lo \
+	libgradspy_la-gaexpr.lo libgradspy_la-gafunc.lo \
+	libgradspy_la-gautil.lo libgradspy_la-gagx.lo \
+	libgradspy_la-gscrpt.lo libgradspy_la-gamach.lo \
+	libgradspy_la-gatxt.lo libgradspy_la-galloc.lo \
+	libgradspy_la-gaddes.lo libgradspy_la-gacfg.lo \
+	libgradspy_la-gaio.lo libgradspy_la-gauser.lo \
+	libgradspy_la-gasdf.lo libgradspy_la-bufrstn.lo \
+	libgradspy_la-gabufr.lo libgradspy_la-gabufrtbl.lo \
+	$(am__objects_1)
 libgradspy_la_OBJECTS = $(am_libgradspy_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -222,23 +220,22 @@ bufrscan_OBJECTS = $(am_bufrscan_OBJECTS)
 bufrscan_LDADD = $(LDADD)
 bufrscan_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1)
-am__grads_SOURCES_DIST = grads.c gxsubs.c gxmeta.c gxchpl.c gxcntr.c \
-	gxstrm.c gxdb.c gxwmap.c gxshad.c gxshad2.c gaexpr.c gafunc.c \
-	gautil.c gagx.c gscrpt.c gamach.c gatxt.c galloc.c gaddes.c \
-	gacfg.c gaio.c gauser.c gasdf.c bufrstn.c gabufr.c gabufrtbl.c \
-	gagui.c gsgui.c dodstn.c
-@USEGUI_TRUE@am__objects_3 = gagui.$(OBJEXT) gsgui.$(OBJEXT)
-@USEGADAP_TRUE@am__objects_4 = dodstn.$(OBJEXT)
-am_grads_OBJECTS = grads.$(OBJEXT) gxsubs.$(OBJEXT) gxmeta.$(OBJEXT) \
-	gxchpl.$(OBJEXT) gxcntr.$(OBJEXT) gxstrm.$(OBJEXT) \
-	gxdb.$(OBJEXT) gxwmap.$(OBJEXT) gxshad.$(OBJEXT) \
-	gxshad2.$(OBJEXT) gaexpr.$(OBJEXT) gafunc.$(OBJEXT) \
-	gautil.$(OBJEXT) gagx.$(OBJEXT) gscrpt.$(OBJEXT) \
-	gamach.$(OBJEXT) gatxt.$(OBJEXT) galloc.$(OBJEXT) \
-	gaddes.$(OBJEXT) gacfg.$(OBJEXT) gaio.$(OBJEXT) \
-	gauser.$(OBJEXT) gasdf.$(OBJEXT) bufrstn.$(OBJEXT) \
-	gabufr.$(OBJEXT) gabufrtbl.$(OBJEXT) $(am__objects_3) \
-	$(am__objects_4)
+am__grads_SOURCES_DIST = grads.c ga_dynload.c gxsubs.c gxmeta.c \
+	gxchpl.c gxcntr.c gxstrm.c gxdb.c gxwmap.c gxshad.c gxshad2.c \
+	gaexpr.c gafunc.c gautil.c gagx.c gscrpt.c gamach.c gatxt.c \
+	galloc.c gaddes.c gacfg.c gaio.c gauser.c gasdf.c bufrstn.c \
+	gabufr.c gabufrtbl.c dodstn.c
+@USEGADAP_TRUE@am__objects_2 = dodstn.$(OBJEXT)
+am_grads_OBJECTS = grads.$(OBJEXT) ga_dynload.$(OBJEXT) \
+	gxsubs.$(OBJEXT) gxmeta.$(OBJEXT) gxchpl.$(OBJEXT) \
+	gxcntr.$(OBJEXT) gxstrm.$(OBJEXT) gxdb.$(OBJEXT) \
+	gxwmap.$(OBJEXT) gxshad.$(OBJEXT) gxshad2.$(OBJEXT) \
+	gaexpr.$(OBJEXT) gafunc.$(OBJEXT) gautil.$(OBJEXT) \
+	gagx.$(OBJEXT) gscrpt.$(OBJEXT) gamach.$(OBJEXT) \
+	gatxt.$(OBJEXT) galloc.$(OBJEXT) gaddes.$(OBJEXT) \
+	gacfg.$(OBJEXT) gaio.$(OBJEXT) gauser.$(OBJEXT) \
+	gasdf.$(OBJEXT) bufrstn.$(OBJEXT) gabufr.$(OBJEXT) \
+	gabufrtbl.$(OBJEXT) $(am__objects_2)
 grads_OBJECTS = $(am_grads_OBJECTS)
 grads_DEPENDENCIES = $(am__DEPENDENCIES_3) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -358,6 +355,7 @@ CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DLLTOOL = @DLLTOOL@
+DLOPEN_LIBS = @DLOPEN_LIBS@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -368,7 +366,6 @@ EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 G2_LIBS = @G2_LIBS@
 GADAP_LIBS = @GADAP_LIBS@
-GA_LIBSX_LIBS = @GA_LIBSX_LIBS@
 GD_CFLAGS = @GD_CFLAGS@
 GD_CONFIG = @GD_CONFIG@
 GD_LIBS = @GD_LIBS@
@@ -436,11 +433,6 @@ UDUNITS2_CFLAGS = @UDUNITS2_CFLAGS@
 UDUNITS2_LDFLAGS = @UDUNITS2_LDFLAGS@
 UDUNITS2_LIBS = @UDUNITS2_LIBS@
 VERSION = @VERSION@
-XAW7_CFLAGS = @XAW7_CFLAGS@
-XAW7_LIBS = @XAW7_LIBS@
-XAW_CFLAGS = @XAW_CFLAGS@
-XAW_LIBS = @XAW_LIBS@
-XAW_XLIBS = @XAW_XLIBS@
 XMKMF = @XMKMF@
 X_CFLAGS = @X_CFLAGS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
@@ -479,10 +471,7 @@ gd_libs = @gd_libs@
 geotiff_inc = @geotiff_inc@
 geotiff_ldflags = @geotiff_ldflags@
 geotiff_libs = @geotiff_libs@
-grads_xlibs = @grads_xlibs@
 grib2_libs = @grib2_libs@
-gui_inc = @gui_inc@
-gui_libs = @gui_libs@
 hdf5_inc = @hdf5_inc@
 hdf5_libs = @hdf5_libs@
 hdf_inc = @hdf_inc@
@@ -526,24 +515,23 @@ top_srcdir = @top_srcdir@
 @USECAIRO_TRUE@lt_cairo = libgxpCairo.la libgxdCairo.la
 lib_LTLIBRARIES = $(lt_gd) $(lt_cairo) libgxdX11.la libgxdummy.la libgradspy.la
 @USEGADAP_TRUE@src_gadap = dodstn.c
-@USEGUI_TRUE@src_gui = gagui.c gsgui.c
 @USECAIRO_TRUE@libgxpCairo_la_SOURCES = gxprint.c gxC.c
 @USECAIRO_TRUE@libgxdCairo_la_SOURCES = gxX.c gxC.c
 @USEGD_TRUE@libgxpGD_la_SOURCES = gxprintGD.c gxGD.c
 libgxdummy_la_SOURCES = gxdummy.c
 libgxdX11_la_SOURCES = gxX11.c 
-grads_SOURCES = grads.c  gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
+grads_SOURCES = grads.c ga_dynload.c gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
 		gxwmap.c gxshad.c gxshad2.c gaexpr.c gafunc.c gautil.c gagx.c \
 		gscrpt.c gamach.c gatxt.c   galloc.c gaddes.c gacfg.c  gaio.c \
                 gauser.c gasdf.c  bufrstn.c gabufr.c gabufrtbl.c \
-                $(src_gui) $(src_gadap) 
+                $(src_gadap)
 
-EXTRA_grads_SOURCES = gagmap.c gagui.c gsgui.c dodstn.c \
+EXTRA_grads_SOURCES = gagmap.c dodstn.c \
                       gxprintGD.c gxGD.c gxX11.c \
                       gxprint.c gxC.c gxX.c gxdummy.c 
 
-hdr_core = grads.h  gatypes.h bitmaps.h bitmaps2.h gvt.h wx.h gs.h
-hdr_ga = gagmap.h gagui.h gabufr.h gasdf.h gasdf_std_time.h 
+hdr_core = grads.h gatypes.h ga_dynload.h bitmaps.h bitmaps2.h gvt.h wx.h gs.h
+hdr_ga = gagmap.h gabufr.h gasdf.h gasdf_std_time.h
 hdr_gx = gx.h gxGD.h gxC.h gxmap.h 
 noinst_HEADERS = $(hdr_core) $(hdr_ga) $(hdr_gx) 
 DISTCLEANFILES = buildinfo.h config.h
@@ -552,13 +540,13 @@ supp_lib_dir = $(SUPPLIBS)/lib
 LDADD = -L$(supp_lib_dir) $(geotiff_ldflags) $(shp_ldflags) $(gd_ldflags)
 common_ldadd = $(LDADD) $(host_ldadd) 
 X11_ldadd = $(X_LIBS) $(X_PRE_LIBS) -lX11 -lXext $(X_EXTRA_LIBS)
-AM_CPPFLAGS = -I. -I$(supp_include_dir) $(gui_inc) $(nc_inc) \
+AM_CPPFLAGS = -I. -I$(supp_include_dir) $(nc_inc) \
 			  $(hdf_inc) $(hdf5_inc) $(geotiff_inc) $(shp_inc) $(gadap_inc) \
-                          $(X_CFLAGS) $(XAW_CFLAGS) $(HDF4_CFLAGS) 
+                          $(X_CFLAGS) $(HDF4_CFLAGS)
 
 grads_LDADD = $(common_ldadd) $(readline_libs) $(grib2_libs) \
 			$(hdf_libs) $(hdf5_libs) $(nc_libs) $(geotiff_libs) \
-			$(shp_libs) $(gadap_libs) $(gui_libs) -ldl 
+			$(shp_libs) $(gadap_libs) $(DLOPEN_LIBS)
 
 
 # print with GD
@@ -581,20 +569,20 @@ libgxdCairo_la_CPPFLAGS = -I. $(cairo_inc)
 libgxdCairo_la_LIBADD = $(X11_ldadd) $(LDADD) $(cairo_libs)
 libgxdCairo_la_LDFLAGS = -version-info $(LIBGX_VERSION)
 libgxdummy_la_CPPFLAGS = -I. 
-libgradspy_la_SOURCES = grads.c gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
+libgradspy_la_SOURCES = grads.c ga_dynload.c gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
 		gxwmap.c gxshad.c gxshad2.c gaexpr.c gafunc.c gautil.c gagx.c \
 		gscrpt.c gamach.c gatxt.c   galloc.c gaddes.c gacfg.c  gaio.c \
                 gauser.c gasdf.c  bufrstn.c gabufr.c gabufrtbl.c \
-                $(src_gui) $(src_gadap) 
+                $(src_gadap)
 
 libgradspy_la_CFLAGS = -DSHRDOBJ
-libgradspy_la_CPPFLAGS = -I. -I$(SUPPLIBS)/include $(gui_inc) $(geotiff_inc) \
+libgradspy_la_CPPFLAGS = -I. -I$(SUPPLIBS)/include $(geotiff_inc) \
                          $(nc_inc) $(hdf_inc) $(hdf5_inc) \
-                         $(shp_inc) $(gadap_inc) $(X_CFLAGS) $(XAW_CFLAGS) 
+                         $(shp_inc) $(gadap_inc) $(X_CFLAGS)
 
 libgradspy_la_LIBADD = $(common_ldadd) $(readline_libs) $(grib2_libs) \
 			 $(hdf_libs) $(hdf5_libs) $(nc_libs) $(geotiff_libs) \
-			 $(shp_libs) $(gadap_libs) $(gui_libs) 
+			 $(shp_libs) $(gadap_libs) $(DLOPEN_LIBS)
 
 libgradspy_la_LDFLAGS = -version-info $(LIBGX_VERSION)
 @USEGADAP_FALSE@grads_LINK = $(CC)  $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
@@ -805,6 +793,9 @@ distclean-compile:
 libgradspy_la-grads.lo: grads.c
 	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgradspy_la_CPPFLAGS) $(CPPFLAGS) $(libgradspy_la_CFLAGS) $(CFLAGS) -c -o libgradspy_la-grads.lo `test -f 'grads.c' || echo '$(srcdir)/'`grads.c
 
+libgradspy_la-ga_dynload.lo: ga_dynload.c
+	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgradspy_la_CPPFLAGS) $(CPPFLAGS) $(libgradspy_la_CFLAGS) $(CFLAGS) -c -o libgradspy_la-ga_dynload.lo `test -f 'ga_dynload.c' || echo '$(srcdir)/'`ga_dynload.c
+
 libgradspy_la-gxsubs.lo: gxsubs.c
 	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgradspy_la_CPPFLAGS) $(CPPFLAGS) $(libgradspy_la_CFLAGS) $(CFLAGS) -c -o libgradspy_la-gxsubs.lo `test -f 'gxsubs.c' || echo '$(srcdir)/'`gxsubs.c
 
@@ -879,12 +870,6 @@ libgradspy_la-gabufr.lo: gabufr.c
 
 libgradspy_la-gabufrtbl.lo: gabufrtbl.c
 	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgradspy_la_CPPFLAGS) $(CPPFLAGS) $(libgradspy_la_CFLAGS) $(CFLAGS) -c -o libgradspy_la-gabufrtbl.lo `test -f 'gabufrtbl.c' || echo '$(srcdir)/'`gabufrtbl.c
-
-libgradspy_la-gagui.lo: gagui.c
-	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgradspy_la_CPPFLAGS) $(CPPFLAGS) $(libgradspy_la_CFLAGS) $(CFLAGS) -c -o libgradspy_la-gagui.lo `test -f 'gagui.c' || echo '$(srcdir)/'`gagui.c
-
-libgradspy_la-gsgui.lo: gsgui.c
-	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgradspy_la_CPPFLAGS) $(CPPFLAGS) $(libgradspy_la_CFLAGS) $(CFLAGS) -c -o libgradspy_la-gsgui.lo `test -f 'gsgui.c' || echo '$(srcdir)/'`gsgui.c
 
 libgradspy_la-dodstn.lo: dodstn.c
 	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgradspy_la_CPPFLAGS) $(CPPFLAGS) $(libgradspy_la_CFLAGS) $(CFLAGS) -c -o libgradspy_la-dodstn.lo `test -f 'dodstn.c' || echo '$(srcdir)/'`dodstn.c

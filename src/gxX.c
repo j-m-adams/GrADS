@@ -74,7 +74,7 @@ static Screen *sptr;
 Display *display=(Display *)NULL;
 static gaint snum;
 static XEvent report;
-Window win=(Window) NULL;   /* used via extern in gagui */
+static Window win=(Window) NULL;
 static Drawable drwbl,drwbl2;
 static char *window_name = "GrADS " GRADS_VERSION "";
 static char *display_name = NULL; 

@@ -22,12 +22,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <dlfcn.h>
+#include "ga_dynload.h"
 #include "gatypes.h"
 #include "gx.h"
 
+/* Keep the symbol-table initialization below readable. */
+#define dlerror ga_dlerror
+#define dlsym ga_dlsym
+
 char *gaqupb (char *, gaint);
-void gree ();
+void gree (void *, char *);
 
 /* The following variables are local to this file, and are used by
    all the routines in the file.    */
@@ -110,11 +114,51 @@ gaint gxstrt (gadouble xmx, gadouble ymx, gaint batch, gaint hbufsz, char *gxdop
 
 /* Loads the graphics back end shared libraries and define the required subroutines */
 gaint gxload(char *gxdopt, char *gxpopt) {
-  void *phandle=NULL,*dhandle=NULL; 
+  ga_dlhandle phandle=NULL,dhandle=NULL;
   const char *err=NULL,*dname=NULL,*pname=NULL;
   char *cname=NULL;
   FILE *cfile;
   
+  /* Display — load first so its symbols (e.g. gxdXflush) are available to print plugin */
+  dname=(const char *)gaqupb(gxdopt,3);
+  if (dname==NULL) {
+    printf("GX Package Error: Could not find a record for the display plug-in named \"%s\" \n",gxdopt);
+    /* Tell user where we looked based on $GAUDPT */
+    cname = getenv("GAUDPT");
+    if (cname==NULL) {
+      printf("  * The environment variable GAUDPT has not been set\n");
+    } 
+    else {
+      cfile = fopen(cname,"r");
+      if (cfile==NULL) {
+        printf("  * Unable to open the file named by the GAUDPT environment variable: %s\n",cname);
+      }
+      else {
+        printf("  * No entry with \"gxdisplay %s\" in the file named by the GAUDPT environment variable: %s\n",gxdopt,cname);
+        fclose(cfile);
+      }
+    }
+    /* Tell user where we looked based on $GADDIR/udpt */
+    cname = gxgnam("udpt");
+    cfile = fopen(cname,"r");
+    if (cfile==NULL) {
+      printf("  * Unable to open the default User Defined Plug-in Table: %s\n",cname);
+    }
+    else {
+      printf("  * No entry with \"gxdisplay %s\" in the default User Defined Plug-in Table: %s\n",gxdopt,cname);
+      fclose(cfile);
+    }
+    printf("  Please read the documentation at https://wetterzentrale.de/grads/docs/plugins.html\n");
+    return(1);
+  }
+  ga_dlerror();
+  dhandle = ga_dlopen (dname, GA_RTLD_LAZY | GA_RTLD_GLOBAL);
+  if (!dhandle) {
+    printf("GX Package Error: dlopen failed to get a a handle on gxdisplay plug-in named \"%s\" \n",gxdopt); 
+    if ((err=ga_dlerror())!=NULL) printf("   %s\n",err);
+    return(2);
+  }
+
   /* Printing Hardcopy */
   pname=(const char *)gaqupb(gxpopt,4);
   if (pname==NULL) {
@@ -144,55 +188,15 @@ gaint gxload(char *gxdopt, char *gxpopt) {
       printf("  * No entry with \"gxprint %s\" in the default User Defined Plug-in Table: %s\n",gxpopt,cname);
       fclose(cfile);
     }
-    printf("  Please read the documentation at http://cola.gmu.edu/grads/gadoc/plugins.html\n");
+    printf("  Please read the documentation at https://wetterzentrale.de/grads/docs/plugins.html\n");
     return(1);
   }
-  dlerror();
-  phandle = dlopen (pname, RTLD_LAZY);
+  ga_dlerror();
+  phandle = ga_dlopen (pname, GA_RTLD_LAZY);
   if (!phandle) {
     printf("GX Package Error: dlopen failed to get a handle on gxprint plug-in named \"%s\" \n",gxpopt); 
-    if ((err=dlerror())!=NULL) printf("   %s\n",err); 
+    if ((err=ga_dlerror())!=NULL) printf("   %s\n",err);
     return(1);
-  }
-
-  /* Display */
-  dname=(const char *)gaqupb(gxdopt,3);
-  if (dname==NULL) {
-    printf("GX Package Error: Could not find a record for the display plug-in named \"%s\" \n",gxpopt);
-    /* Tell user where we looked based on $GAUDPT */
-    cname = getenv("GAUDPT");
-    if (cname==NULL) {
-      printf("  * The environment variable GAUDPT has not been set\n");
-    } 
-    else {
-      cfile = fopen(cname,"r");
-      if (cfile==NULL) {
-        printf("  * Unable to open the file named by the GAUDPT environment variable: %s\n",cname);
-      }
-      else {
-        printf("  * No entry with \"gxdisplay %s\" in the file named by the GAUDPT environment variable: %s\n",gxdopt,cname);
-        fclose(cfile);
-      }
-    }
-    /* Tell user where we looked based on $GADDIR/udpt */
-    cname = gxgnam("udpt");
-    cfile = fopen(cname,"r");
-    if (cfile==NULL) {
-      printf("  * Unable to open the default User Defined Plug-in Table: %s\n",cname);
-    }
-    else {
-      printf("  * No entry with \"gxdisplay %s\" in the default User Defined Plug-in Table: %s\n",gxdopt,cname);
-      fclose(cfile);
-    }
-    printf("  Please read the documentation at http://cola.gmu.edu/grads/gadoc/plugins.html\n");
-    return(1);
-  }
-  dlerror();
-  dhandle = dlopen (dname, RTLD_LAZY);
-  if (!dhandle) {
-    printf("GX Package Error: dlopen failed to get a a handle on gxdisplay plug-in named \"%s\" \n",gxdopt); 
-    if ((err=dlerror())!=NULL) printf("   %s\n",err); 
-    return(2);
   }
   
   /* Get pointers to the printing subroutines */
@@ -1197,6 +1201,60 @@ gaint i,flag,onum,aflag;
   if (aflag) free(buff);
 }
 
+/* Fill a compound polygon consisting of one or more rings.  Unlike gxfill,
+   clipping is left to the graphics backend so that an interior ring which
+   surrounds the clipping rectangle is not lost.  Ring boundaries are encoded
+   as NaN coordinate pairs for the backend and as additional move operations
+   in the metafile. */
+
+void gxfillrings (gadouble *xy, gaint *starts, gaint nrings, gaint num) {
+gadouble *buff,*out;
+gaint i,j,end,onum;
+
+  if (xy==NULL || starts==NULL || nrings<1 || num<3) return;
+  if (nrings==1) {
+    gxfill(xy,num);
+    return;
+  }
+  onum = num + nrings - 1;
+  buff = (gadouble *)malloc(sizeof(gadouble)*onum*2);
+  if (buff==NULL) {
+    printf("Memory allocation error in gxfillrings.  Can't fill polygon\n");
+    return;
+  }
+
+  out = buff;
+  for (i=0; i<nrings; i++) {
+    end = (i+1<nrings) ? starts[i+1] : num;
+    if (i) {
+      *out = NAN;
+      *(out+1) = NAN;
+      out += 2;
+    }
+    for (j=starts[i]; j<end; j++) {
+      gxvcon(*(xy+j*2),*(xy+j*2+1),out,out+1);
+      out += 2;
+    }
+  }
+
+  hout1(-7,onum);
+  out = buff;
+  for (i=0; i<nrings; i++) {
+    if (i) out += 2;
+    end = (i+1<nrings) ? starts[i+1] : num;
+    hout2(-10,*out,*(out+1));
+    out += 2;
+    for (j=starts[i]+1; j<end; j++) {
+      hout2(-11,*out,*(out+1));
+      out += 2;
+    }
+  }
+  hout0(-8);
+
+  if (intflg) dsubs.gxdfil(buff,onum);
+  free(buff);
+}
+
 /* Perform edge interpolation for clipping  */
 
 void bdterp (gadouble x1, gadouble y1, gadouble x2, gadouble y2,
@@ -1401,4 +1459,3 @@ size_t sz;
 
   return (fname);
 }
-

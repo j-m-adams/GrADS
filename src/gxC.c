@@ -787,17 +787,34 @@ void gxCbfil (void) {
 
 void gxCfil (gadouble *xy, gaint n) {
 gadouble *pt,x,y;
-gaint i;
+gaint i,newring,multiring;
 
   if (drawing) cairo_stroke(cr);
   drawing = 0;
+  cairo_save(cr);
+  cairo_rectangle(cr,clx,cly,clw,clh);
+  cairo_clip(cr);
   pt = xy;
+  newring = 1;
+  multiring = 0;
   for (i=0; i<n; i++) {
+    if (isnan(*pt) || isnan(*(pt+1))) {
+      cairo_close_path(cr);
+      newring = 1;
+      multiring = 1;
+      pt+=2;
+      continue;
+    }
     gxCxycnv (*pt,*(pt+1),&x,&y);
-    if (i==0) cairo_move_to(cr,x,y);
+    if (newring) {
+      cairo_move_to(cr,x,y);
+      newring = 0;
+    }
     else cairo_line_to(cr,x,y);
     pt+=2;
   }
+  cairo_close_path(cr);
+  if (multiring) cairo_set_fill_rule(cr,CAIRO_FILL_RULE_EVEN_ODD);
   /* disable antialiasing, otherwise faint lines appear around the edges */
   if (aaflg) {
     cairo_set_antialias(cr,CAIRO_ANTIALIAS_NONE);
@@ -807,6 +824,7 @@ gaint i;
   else {
     cairo_fill(cr);                                  
   }
+  cairo_restore(cr);
   /* turn off polygon-filling flag */
   filflg = 0;
   return;
@@ -1163,4 +1181,3 @@ void gxCpop (void) {
 void gxCcfg (void) {
   printf("cairo-%d.%d.%d ",CAIRO_VERSION_MAJOR,CAIRO_VERSION_MINOR,CAIRO_VERSION_MICRO);
 }
-

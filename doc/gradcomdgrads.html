@@ -13,6 +13,12 @@ body {
 <body>
 <h2><b>grads | gradsdap &nbsp;&nbsp;&nbsp;<br>
 gradsc | gradsnc | gradshdf | gradsdods</b> &nbsp;&nbsp;</h2>
+<p class="plaintext"><strong>Installation:</strong> use the conda-forge
+package: <code>mamba create -n grads -c conda-forge grads</code>, followed by
+<code>mamba activate grads</code>. The package includes the data files and
+graphics plug-ins. Its activation hook configures <code>GADDIR</code>,
+<code>GAUDPT</code>, and <code>GAGPY</code>, so users should not set these
+variables or library paths manually.</p>
 <table width="700" border="0">
   <tr>
     <td><p class="plaintext">GrADS is an interactive desktop tool for the analysis and 
@@ -180,6 +186,13 @@ href="functions.html">functions</a> are provided. In addition, users may add the
 <p>
 <p>&nbsp; 
 <h2><a name="env"></a>Environment Variables </h2>
+<p class="plaintext"><strong>Conda-forge installations:</strong> activating
+the environment automatically sets <code>GADDIR</code>, <code>GAUDPT</code>,
+and <code>GAGPY</code> to locations within that environment and restores any
+previous values on deactivation. The manual settings below are intended for
+source builds and other custom installations. Stale values that name a
+different GrADS installation can cause data or graphics plug-ins from the
+wrong installation to be loaded.</p>
 <table width="680" border="0" cellpadding="5" cellspacing="5" class="plaintext">
   <tr> 
     <td colspan="2"><span class="plaintext">Some environment variables must be 

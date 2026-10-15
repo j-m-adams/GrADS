@@ -17,20 +17,20 @@ body {
 <body text="#000000">
 
 <h1>The GrADS- Python Interface (GradsPy)</h1>
-<p> GrADS <span class="red">version 2.2.1</span> introduces a new C-language Python extension, called GradsPy. The interface has a few components: a  C program called gradspy.c, a python script called setup.py, and a build of GrADS that is compiled as a dynamically loading library, called libgradspy.so (or libgradspy.dylib). The libgradspy.* files are generated along with the regular binary executables when compiling GrADS.
+<p> GrADS includes a C-language Python extension called GradsPy. The conda-forge
+distribution keeps the native GrADS installation and Python wrapper as separate
+packages.
 <h2>Installing GradsPy</h2>
-<p>1. Move to the directory where your GrADS source code is installed (e.g. $HOME/grads-2.2.1/src). Make sure that gradspy.c, gradspy.h, and setup.py are in that directory. Edit the gradspy.c file so that the dlopen command will point to the correct name of the libgradspy  file for your system (use the .so extension for linux, the .dylib extension for Mac OS X). The relevant code looks like this (you must comment out one of these):
-<p> <code> handle = dlopen (&quot;libgradspy.so&quot;,    RTLD_LAZY | RTLD_GLOBAL );  /* for linux */<br>
-  handle = dlopen (&quot;libgradspy.dylib&quot;, RTLD_LAZY | RTLD_GLOBAL );  /* for mac   */ 
-  </code>
-<p>2. Now you are ready to compile gradspy.c with the following command: <br>
-<code>  &gt; python setup.py install</code>
-<p>  Be sure you are using Python version 2, we haven't done any testing with Python 3. You must also have NumPy installed on your system, because the GradsPy extension delivers NumPy objects when evaluting expressions. Use 'sudo' in front of this command if you have root access privileges on your system.<br>
-  <br> 
-3. Now you are ready to run Python and issue the command:<br>
-<code>
-&gt;&gt;&gt; import gradspy</code>
-<p>Before you do this, make sure that your shell environment will know where to find the libgradspy.so (or libgradspy.dylib) file that GradsPy will try to open. Update the environment variable LD_LIBRARY_PATH to  include the path to your grads-2.2.1 installation (e.g. $HOME/grads-2.2.1/lib).
+<pre>mamba create -n grads -c conda-forge grads
+mamba activate grads
+mamba install -c conda-forge gradspy</pre>
+<p>Test the installation with:</p>
+<pre>python -c "from gradspy import GrADS; print(GrADS)"</pre>
+<p>The conda packages provide the native library and runtime integration;
+manual compilation and library-path exports are not required. The environment
+activation hook sets <code>GAGPY</code> to the packaged GradsPy library, along
+with <code>GADDIR</code> and <code>GAUDPT</code> for the native GrADS runtime.
+Do not set these variables manually when using the conda-forge packages.</p>
 <p>
 <h2>GradsPy Methods</h2>
 <p>Once you have imported GradsPy into Python, there are three methods for interacting with GrADS: start, cmd, and result. </p>
@@ -101,4 +101,3 @@ print (b)</code>
 <p>
 
 </html>
-

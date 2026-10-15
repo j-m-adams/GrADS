@@ -371,6 +371,7 @@ void gxqrgb (gaint, gaint *, gaint *, gaint *);
 gaint gxqstl (void);
 void gxmark (gaint, gadouble, gadouble, gadouble);
 void gxfill (gadouble *, gaint);
+void gxfillrings (gadouble *, gaint *, gaint, gaint);
 void bdterp (gadouble, gadouble, gadouble, gadouble, gadouble *, gadouble *);
 void gxptrn (int, int, int);
 char *gxgsym(char *);
@@ -561,7 +562,7 @@ int  gxlamc (struct mapprj *);
 void gxlamcp (gadouble, gadouble, gadouble *, gadouble *);
 void gxlamcb (gadouble, gadouble, gadouble *, gadouble *);
 gadouble *gxmpoly(gadouble *xy, gaint cnt, gadouble llinc, gaint *newcnt); 
-void gree();
+void gree(void *, char *);
 
 
 /* routines in gxX.c */
@@ -574,6 +575,5 @@ void gxsetpatt (gaint);
 void gxdXflush (void);
 void gxdclip (gadouble, gadouble, gadouble, gadouble);
 gaint gxdacol (gaint, gaint, gaint, gaint, gaint);
-
 
 

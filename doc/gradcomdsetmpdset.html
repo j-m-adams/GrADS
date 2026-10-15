@@ -1,10 +1,36 @@
 <!--Copyright (C) 1988-2005 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
 
 <H2><B>set mpdset</B></H2><P>
-<code>set mpdset &lt;<i>lowres|mres|hires|nmap</i>&gt;</code><p>
- <code>lowres</code> is the default. <code>mres</code> and
-<code>hires</code> have state and country outlines. <code>nmap</code>
-covers only North America. <p>
+<code>set mpdset &lt;<i>dataset</i>&gt; [<i>dataset</i> ...]</code><p>
+Selects one or more map background data sets. Up to eight data set names
+may be given; when more than one is specified, GrADS draws them in the
+order listed.<p>
+
+<code>lowres</code> is the legacy default and remains selected unless this
+command is issued. The other legacy data sets are <code>mres</code>,
+<code>hires</code>, and <code>nmap</code>; <code>mres</code> and
+<code>hires</code> have state and country outlines, while <code>nmap</code>
+covers only North America.<p>
+
+The Natural Earth data sets included with GrADS are:
+<ul>
+<li><code>ne110m</code> &mdash; 1:110 million, suited to global maps</li>
+<li><code>ne50m</code> &mdash; 1:50 million, suited to continental maps</li>
+<li><code>ne10m</code> &mdash; 1:10 million, suited to regional maps</li>
+</ul>
+All three contain coastlines, country boundaries, and first-order
+state/province boundaries. See the <a href="naturalearthmaps.html">Natural
+Earth map data set notes</a> for provenance, contents, and examples.<p>
 Settings stay the same until changed by new <code>set</code> commands. <p>
 <H3>Usage Notes</H3><P>
+The named files are normally found in the GrADS data directory. A full path
+may also be used. Map types can be selected and styled with
+<a href="gradcomdsetmpt.html"><code>set mpt</code></a>; political boundaries
+can be toggled with <a href="gradcomdsetpoli.html"><code>set poli</code></a>.<p>
 <H3>Examples</H3><P>
+<pre>
+set mpdset ne110m
+set mpdset ne50m
+set mpdset ne10m
+set mpdset ne110m ne50m
+</pre>

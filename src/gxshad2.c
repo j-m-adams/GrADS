@@ -51,7 +51,7 @@ char *intprs (char *, gaint *);
 char *getdbl (char *, gadouble *);
 #endif
 void *galloc(size_t, char *);
-void gree ();
+void gree (void *, char *);
 
 /* Variables shared between the different routines in this source file */
 

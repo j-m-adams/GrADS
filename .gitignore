@@ -1,0 +1,12 @@
+tools/*zip
+
+# Autotools generated files
+Makefile
+config.log
+config.status
+libtool
+
+# Documentation build output
+docs/_build/
+docs/_downloads/
+

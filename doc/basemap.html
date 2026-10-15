@@ -16,18 +16,18 @@ body {
 <body text="#000000">
 
 <h2><b>basemap</b>.gs</h2>
-<p>This is documentation for <a href="ftp://cola.gmu.edu/grads/scripts/basemap.gs">basemap.gs</a>, a GrADS script that overlays a land or ocean mask that exactly matches the coastal outlines of the three GrADS map files: lowres, mres, and hires. Basemap works by overlaying polygons on top of an existing display; once they are all drawn, the polygons appear as a solid region that covers the land or ocean areas. Basemap does not actually mask the data, it only masks the display of the data.<br>
+<p>This is documentation for <a href="https://wetterzentrale.de/grads/docs/basemap.html">basemap.gs</a>, a GrADS script that overlays a land or ocean mask that exactly matches the coastal outlines of the three GrADS map files: lowres, mres, and hires. Basemap works by overlaying polygons on top of an existing display; once they are all drawn, the polygons appear as a solid region that covers the land or ocean areas. Basemap does not actually mask the data, it only masks the display of the data.<br>
 <H3>Syntax </H3>
 <code>basemap.gs L(and)/O(cean) &lt;fill_color&gt; &lt;outline_color&gt; &lt;L(owres)/M(res)/H(ires)&gt;</code>
 <p>
 The land and ocean masks are composed of hundreds of 
 polygons that are specified in accompanying ASCII files. The ASCII files must be downloaded from the GrADS script library. Once you have downloaded these files and stored them in a convenient location, you must update your copy of basemap.gs to include the path of the location of these files. The script will not work without these files. <br>
-  <a href="ftp://cola.gmu.edu/grads/scripts/lpoly_lowres.asc">ftp://cola.gmu.edu/grads/scripts/lpoly_lowres.asc </a><br>
-  <a href="ftp://cola.gmu.edu/grads/scripts/lpoly_mres.asc">ftp://cola.gmu.edu/grads/scripts/lpoly_mres.asc</a><br>
-  <a href="ftp://cola.gmu.edu/grads/scripts/lpoly_hires.asc">ftp://cola.gmu.edu/grads/scripts/lpoly_hires.asc </a><br>
-  <a href="ftp://cola.gmu.edu/grads/scripts/opoly_lowres.asc">ftp://cola.gmu.edu/grads/scripts/opoly_lowres.asc </a><br>
-  <a href="ftp://cola.gmu.edu/grads/scripts/opoly_mres.asc">ftp://cola.gmu.edu/grads/scripts/opoly_mres.asc </a><br>
-  <a href="ftp://cola.gmu.edu/grads/scripts/opoly_hires.asc">ftp://cola.gmu.edu/grads/scripts/opoly_hires.asc </a><br>
+  <a href="https://wetterzentrale.de/grads/docs/basemap.html">lpoly_lowres.asc</a><br>
+  <a href="https://wetterzentrale.de/grads/docs/basemap.html">lpoly_mres.asc</a><br>
+  <a href="https://wetterzentrale.de/grads/docs/basemap.html">lpoly_hires.asc</a><br>
+  <a href="https://wetterzentrale.de/grads/docs/basemap.html">opoly_lowres.asc</a><br>
+  <a href="https://wetterzentrale.de/grads/docs/basemap.html">opoly_mres.asc</a><br>
+  <a href="https://wetterzentrale.de/grads/docs/basemap.html">opoly_hires.asc</a><br>
 <h3>Usage Notes </h3>
 <ol>
   <li>  The default values for the optional arguments are: fill_color 15, outline_color 0, and Lowres. </li>
@@ -51,12 +51,12 @@ polygons that are specified in accompanying ASCII files. The ASCII files must be
 <p> To avoid this, you can plot a transparent color value using a color mask.  How this operates "under the hood" is somewhat like double buffering.  When the masked color number is encountered,  a mask is set up, the same size of the screen image.  While that color number is being plotted, the plotting is done to the mask image instead. The mask image can be thought of as  simply zeros and ones -- 0 indicating that the color has not been drawn there,  1 that it has.  When the drawing action is terminated, at the conclusion of a 'draw' or 'display' command or when another color number is being used, then the "masked" color is drawn to the main plot using a masked paint operation, where the color is painted to the plot everywhere where the mask image was 1. To set a color to be masked, simply specify its alpha channel value as negative.  The positive of that value will be used to draw the actual  color, when rendered via the mask. </p>
 <p>There is a further complication with transparent color masking and basemap. The basemap script is basically a repetition of many 'draw polyf' commands, so the color masking doesn't work the way it should because the color mask is flushed at the conclusion of each 'draw' command instead of at the conclusion of the basemap script itself. The solution was to convert the polygon data into  <a href="shapefiles.html" target="pages">shapefiles</a>. All the polygons in a shapefile are rendered with a single 'draw shp' command, so the transparent color masking  works properly. See Example #4 below for how to draw a semi-transparent mask over land areas. The links for downloading the required shapefiles are given below. Note that a shapefile is actually a set of four files, so for each class of shapefile there is a link to a zipped tarball that contains all the required files (.shp, .shx, .dbf, and .prj).<br>
   <br>
-  <a href="ftp://cola.gmu.edu/grads/scripts/grads_lowres_land.tar.gz">ftp://cola.gmu.edu/grads/scripts/grads_lowres_land.tar.gz</a><br>
-  <a href="ftp://cola.gmu.edu/grads/scripts/grads_lowres_ocean.tar.gz">ftp://cola.gmu.edu/grads/scripts/grads_lowres_ocean.tar.gz</a><br>
-  <a href="ftp://cola.gmu.edu/grads/scripts/grads_mres_land.tar.gz">ftp://cola.gmu.edu/grads/scripts/grads_mres_land.tar.gz</a><br>
-  <a href="ftp://cola.gmu.edu/grads/scripts/grads_mres_ocean.tar.gz">ftp://cola.gmu.edu/grads/scripts/grads_mres_ocean.tar.gz</a><br>
-  <a href="ftp://cola.gmu.edu/grads/scripts/grads_hires_land.tar.gz">ftp://cola.gmu.edu/grads/scripts/grads_hires_land.tar.gz</a><br>
-<a href="ftp://cola.gmu.edu/grads/scripts/grads_hires_ocean.tar.gz">ftp://cola.gmu.edu/grads/scripts/grads_hires_ocean.tar.gz</a></p>
+  <a href="https://wetterzentrale.de/grads/docs/basemap.html">grads_lowres_land.tar.gz</a><br>
+  <a href="https://wetterzentrale.de/grads/docs/basemap.html">grads_lowres_ocean.tar.gz</a><br>
+  <a href="https://wetterzentrale.de/grads/docs/basemap.html">grads_mres_land.tar.gz</a><br>
+  <a href="https://wetterzentrale.de/grads/docs/basemap.html">grads_mres_ocean.tar.gz</a><br>
+  <a href="https://wetterzentrale.de/grads/docs/basemap.html">grads_hires_land.tar.gz</a><br>
+<a href="https://wetterzentrale.de/grads/docs/basemap.html">grads_hires_ocean.tar.gz</a></p>
 <p>The bottom line is that basemap script will not work with transparent colors -- you must use the custom shapefiles instead. It is important to note that the shapefiles that were created based on the basemap polygon data do not conform to the official ESRI Shapefile Technical Specification. They will display properly when used with GrADS, but do not use these custom shapefiles for any other purpose or with any other shapefile-handling tool. </p>
 
 <h3> <br>
@@ -100,7 +100,7 @@ basemap L </pre>
 Canadian land regions surrounding the US, so that only the 
 conterminous states are seen, change 
   your land polygon file from lpoly_lowres.asc to lpoly_US.asc: 
-  <a href="ftp://cola.gmu.edu/grads/scripts/lpoly_US.asc">ftp://cola.gmu.edu/grads/scripts/lpoly_US.asc</a><br>
+  <a href="https://wetterzentrale.de/grads/docs/basemap.html">lpoly_US.asc</a><br>
 Then run basemap twice: <br>
 <pre>basemap o 0 0  (&lt;- that's oh zero zero) ;* mask out ocean 
 basemap L 0 0                           ;* mask out non-US land</pre>

@@ -109,7 +109,7 @@ gadouble gxpqchl (char ch, gaint fn, gadouble w) {
   return -999;
 }
 void gxpclip (gadouble x1, gadouble x2, gadouble y1, gadouble y2) { 
+  gxGDclip(x1,x2,y1,y2);
 }
 void gxpcirc (gadouble x, gadouble y, gadouble r, gaint flg) {  
 }
-

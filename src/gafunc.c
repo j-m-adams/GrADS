@@ -16,7 +16,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <dlfcn.h>
+#include "ga_dynload.h"
 #include <string.h>
 #include "grads.h"
 
@@ -7200,7 +7200,7 @@ size_t sz;
 
 gaint ffudpi (struct gafunc *pfc, struct gastat *pst2, struct gaupb *upb) {
 struct gaudpinfo *pudpinfo;
-void *handle;
+ga_dlhandle handle;
 char *error;
 gaint rc;
 gaint (*pfunc)(struct gafunc *, struct gastat *, struct gaudpinfo *);
@@ -7212,15 +7212,15 @@ gaint (*pfunc)(struct gafunc *, struct gastat *, struct gaudpinfo *);
 
   /* load the shared object file and get the function pointer */
   if (upb->pfunc == NULL) {
-    handle = dlopen(upb->fname,RTLD_LAZY);
+    handle = ga_dlopen(upb->fname,GA_RTLD_LAZY);
     if (handle==NULL) {
       snprintf (pout,1255,"Error: dlopen failed to get a handle on %s \n",upb->fname);
       gaprnt (0,pout);
       return (1);
     }
-    dlerror();
-    pfunc = dlsym(handle,upb->alias);
-    if ((error=dlerror()) != NULL) {
+    ga_dlerror();
+    pfunc = ga_dlsym(handle,upb->alias);
+    if ((error=(char *)ga_dlerror()) != NULL) {
       snprintf (pout,1255,"Error: dlsym failed to load %s \n%s \n",upb->alias,error);
       gaprnt (0,pout);
       return (1);

@@ -12,9 +12,12 @@
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <Python.h>
 #include <numpy/arrayobject.h>
-#include <dlfcn.h>
+#include "ga_dynload.h"
 #include <stdio.h>
 #include "gradspy.h"
+
+#define dlerror ga_dlerror
+#define dlsym ga_dlsym
 
 static int gapyerror;
 static int gapystart;
@@ -78,7 +81,7 @@ static PyObject* cmd(PyObject* self,PyObject *args) {
   
   if (rc<0) exit(0);
   resstr = Py_BuildValue("s", str);
-  free(str);
+  (*pystrfree)(str);
   return resstr;
 }
 
@@ -588,7 +591,7 @@ static struct PyModuleDef moduledef = {
 PyMODINIT_FUNC PyInit_gradspy(void) {
 
   PyObject *m;
-  void *handle;
+  ga_dlhandle handle;
   char *libname=NULL;
   const char *error;
 
@@ -601,20 +604,26 @@ PyMODINIT_FUNC PyInit_gradspy(void) {
      Using an environment variable called $GAGPY to override the default (.so for unix), 
      and added a comment in the error message to inform users how to set it. */ 
 
-  if ((libname = getenv("GAGPY"))==NULL) 
-    handle = dlopen ("libgradspy.so", RTLD_LAZY | RTLD_GLOBAL );
+  if ((libname = getenv("GAGPY"))==NULL)
+#ifdef _WIN32
+    handle = ga_dlopen ("gradspy.dll", GA_RTLD_LAZY | GA_RTLD_GLOBAL );
+#elif defined(__APPLE__)
+    handle = ga_dlopen ("libgradspy.dylib", GA_RTLD_LAZY | GA_RTLD_GLOBAL );
+#else
+    handle = ga_dlopen ("libgradspy.so", GA_RTLD_LAZY | GA_RTLD_GLOBAL );
+#endif
   else
-    handle = dlopen (libname, RTLD_LAZY | RTLD_GLOBAL );  
+    handle = ga_dlopen (libname, GA_RTLD_LAZY | GA_RTLD_GLOBAL );
 
   if (!handle) {
-    fputs (dlerror(), stderr);
+    fputs (ga_dlerror(), stderr);
     fputs ("\n", stderr);
     fputs ("Use the environment variable $GAGPY to specify the shared object filename if different from `libgradspy.so`\n", stderr);
     goto err; 
   } 
   else {
-    pgainit = dlsym(handle, "gamain");    /* starts GrADS */
-    if ((error = dlerror()) != NULL)  {
+    pgainit = ga_dlsym(handle, "gamain");    /* starts GrADS */
+    if ((error = ga_dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
       goto err;
@@ -623,6 +632,12 @@ PyMODINIT_FUNC PyInit_gradspy(void) {
     if ((error = dlerror()) != NULL)  {
       fputs(error, stderr);
       fputs ("\n", stderr);
+      goto err;
+    }
+    pystrfree = dlsym(handle, "gapystrfree"); /* releases command output */
+    if ((error = dlerror()) != NULL)  {
+      fputs(error, stderr);
+      fputs("\n", stderr);
       goto err;
     }
     pdoexpr = dlsym(handle, "gadoexpr");  /* evaluates an expression */

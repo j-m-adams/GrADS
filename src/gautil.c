@@ -2394,9 +2394,11 @@ off_t ftello(FILE *stream) {
 
 #if READLINE==1
 #include <sys/types.h>
+#ifndef _WIN32
 #include <sys/file.h>
 #include <sys/stat.h>
 #include <sys/errno.h>
+#endif
 #include <readline/readline.h>
 #include <readline/history.h>
 

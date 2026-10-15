@@ -37,7 +37,9 @@
 #define RPTNUM 200
 #define BLKNUM 50000
 
-#ifdef __hpux
+#ifdef _WIN32
+#define CPULIMSIG SIGTERM
+#elif defined(__hpux)
 #define CPULIMSIG _SIGXCPU
 #else
 #define CPULIMSIG SIGXCPU
@@ -879,6 +881,7 @@ gaint gadraw (char *, struct gacmn *);
 gaint gardrw (char *, struct gacmn *);
 gaint gaexec (char *, struct gacmn *);
 char *gagsdo (char *, gaint *);
+void gapystrfree (void *);
 gaint gadef (char *, struct gacmn *, gaint);
 gaint gaudef (char *, struct gacmn *);
 gaint gamodf (char *, struct gacmn *);
@@ -1309,5 +1312,5 @@ gaint initUnitSys(void);
 #endif
 
 void *galloc(size_t,char *);
-void gree();
+void gree(void *, char *);
 void glook();

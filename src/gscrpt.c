@@ -3524,6 +3524,51 @@ gaint len;
         dname = NULL;
       }
     } 
+
+    /* Packaged scripts may live alongside the GrADS data files.  Search
+       GADDIR after GASCRP so an environment-specific script path still takes
+       precedence. */
+    if (ifile==NULL && *(uname)!='/' ) {
+      sdir=getenv("GADDIR");
+      if (sdir!=NULL && *sdir!='\0') {
+        dname=gsstcp(sdir);
+        if (dname==NULL) return(NULL);
+        len=0;
+        while (*(dname+len)) len++;
+        if (*(dname+len-1)!='/') {
+          lname=gsstad(dname,"/");
+          if (lname==NULL) return(NULL);
+          free(dname);
+          dname=lname;
+        }
+        lname=gsstad(dname,uname);
+        if (lname==NULL) return(NULL);
+        ifile=fopen(lname,"rb");
+        if (ifile!=NULL) {
+          oname=lname;
+          lname=NULL;
+        }
+        else {
+          free(lname);
+          lname=NULL;
+          if (xname) {
+            lname=gsstad(dname,xname);
+            if (lname==NULL) return(NULL);
+            ifile=fopen(lname,"rb");
+            if (ifile!=NULL) {
+              oname=lname;
+              lname=NULL;
+            }
+            else {
+              free(lname);
+              lname=NULL;
+            }
+          }
+        }
+        free(dname);
+        dname=NULL;
+      }
+    }
   } else {
     oname = uname; 
     uname = NULL;

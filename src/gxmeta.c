@@ -582,6 +582,13 @@ char ccc,*uch;
         x = (gadouble)(*buff);
         y = (gadouble)(*(buff+1));
 	if (fflag) {
+          /* A second move within one fill begins another polygon ring.
+             Preserve that boundary for compound-polygon backends. */
+          if (xyc>0) {
+            xybuf[xyc*2] = NAN;
+            xybuf[xyc*2+1] = NAN;
+            xyc++;
+          }
 	  xybuf[xyc*2] = x;
 	  xybuf[xyc*2+1] = y;
 	  xyc++;
@@ -796,4 +803,3 @@ void gxmbuferr() {
   mbuferror = 1;
   mbufrel(0);
 }
-

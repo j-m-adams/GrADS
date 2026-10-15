@@ -22,7 +22,11 @@
 #define DFLTORIGIN " since 1-1-1 00:00:0.0"
 
 #include <stdlib.h>
+#ifdef _WIN32
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -461,7 +465,7 @@ cv_converter *converter=NULL;
       if ((rc==Failure) || (Xcoord == NULL)) {
 	gaprnt(0, "Error: SDF file has no discernable X coordinate.\n") ;
 	gaprnt(0,"  To open this file with GrADS, use a descriptor file with an XDEF entry.\n");
-	gaprnt(0,"  Documentation is at http://cola.gmu.edu/grads/gadoc/SDFdescriptorfile.html\n"); 
+	gaprnt(0,"  Documentation is at https://wetterzentrale.de/grads/docs/SDFdescriptorfile.html\n");
 	return Failure ;
       }
     }
@@ -514,7 +518,7 @@ cv_converter *converter=NULL;
       if ((rc==Failure) || (Ycoord == NULL)) {
 	gaprnt(0, "Error: SDF file has no discernable Y coordinate.\n") ;
 	gaprnt(0,"  To open this file with GrADS, use a descriptor file with a YDEF entry.\n");
-	gaprnt(0,"  Documentation is at http://cola.gmu.edu/grads/gadoc/SDFdescriptorfile.html\n"); 
+	gaprnt(0,"  Documentation is at https://wetterzentrale.de/grads/docs/SDFdescriptorfile.html\n");
 	return Failure ;
       }
     }
@@ -728,7 +732,7 @@ cv_converter *converter=NULL;
 	  gaprnt(0,"Error: 365 day calendars are not supported by sdfopen.\n"); 
 	  gaprnt(0,"  To open this file with GrADS, use a descriptor file with \n");
 	  gaprnt(0,"  a complete TDEF entry and OPTIONS 365_day_calendar. \n");
-	  gaprnt(0,"  Documentation is at http://cola.gmu.edu/grads/gadoc/SDFdescriptorfile.html\n"); 
+	  gaprnt(0,"  Documentation is at https://wetterzentrale.de/grads/docs/SDFdescriptorfile.html\n");
 	  return Failure;
 	}
       }
@@ -3070,7 +3074,7 @@ nc_type type;
                 for (j=0; j<sz; j++) cval[j] = strval[0][j];
 		cval[sz]='\0';
                 nc_free_string(attlen, strval);
-		gree(strval);
+		gree(strval, NULL);
 	      }
 	      break;
 	    case (NC_SHORT):

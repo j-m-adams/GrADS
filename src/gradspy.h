@@ -24,3 +24,4 @@ static int   (*pdoexpr)(char *,struct pygagrid *);
 static int   (*pdoget)(char *,struct pygagrid *);
 static int   (*psetup)(char *,struct pygagrid *);
 static void  (*pyfre)(struct pygagrid *);
+static void  (*pystrfree)(void *);

@@ -263,12 +263,12 @@ gaint size;
         for (j=0; j<BLKNUM; j++) {
           if (stn->blks[j] != NULL) gree(stn->blks[j],"f172");
         }
-        gree(stn);
+        gree(stn, NULL);
         pst->result.stn=NULL; 
       }
     }
   }
-  gree(stack);
+  gree(stack, NULL);
   pass--;
   return (err);
 }

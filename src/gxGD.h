@@ -8,6 +8,7 @@
 void  gxGDacol (gaint);
 void  gxGDbpoly (void);
 void  gxGDcol (gaint);
+void  gxGDclip (gadouble, gadouble, gadouble, gadouble);
 void  gxGDdrw (gadouble, gadouble);
 gaint gxGDend (char *, char *, gaint, gaint);
 gaint gxGDepoly (gadouble *, gaint);
@@ -19,5 +20,4 @@ void  gxGDpoly (gaint, gaint, gaint);
 void  gxGDrec (gadouble, gadouble, gadouble, gadouble);
 void  gxGDwid (gaint);
 void  gxGDcfg (void);
-
 

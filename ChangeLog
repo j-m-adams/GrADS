@@ -44,8 +44,8 @@
     * Prevents attempts to use non-Hershey fonts when using the classic graphics plug-ins (X11/gd)
 
     New/Updated Documentation:
-    * http://cola.gmu.edu/grads/gadoc/python.html
-    * http://cola.gmu.edu/grads/gadoc/udpt.html
+    * https://wetterzentrale.de/grads/docs/python.html
+    * https://wetterzentrale.de/grads/docs/udpt.html
 
 2017-09-05 Version 2.2.0
 
@@ -75,18 +75,18 @@
     * Fixed bug when drawing zero-sized strings with Cairo
 
     New/Updated Documentation:
-    * http://cola.gmu.edu/grads/gadoc/udp.html
-    * http://cola.gmu.edu/grads/gadoc/udpt.html
-    * http://cola.gmu.edu/grads/gadoc/plugins.html
-    * http://cola.gmu.edu/grads/gadoc/supplibs2.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdgrads.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdqdbf.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdquery.html
+    * https://wetterzentrale.de/grads/docs/udp.html
+    * https://wetterzentrale.de/grads/docs/udpt.html
+    * https://wetterzentrale.de/grads/docs/plugins.html
+    * https://wetterzentrale.de/grads/docs/supplibs2.html
+    * https://wetterzentrale.de/grads/docs/gradcomdgrads.html
+    * https://wetterzentrale.de/grads/docs/gradcomdqdbf.html
+    * https://wetterzentrale.de/grads/docs/gradcomdquery.html
 
     Supplibs Update:
     * Simplified the protocol for building, installing, and checking the supplibs
 	in conjunction with changes to auto configuration scripts.
-    * New documentation page: http://cola.gmu.edu/grads/gadoc/supplibs2.html
+    * New documentation page: https://wetterzentrale.de/grads/docs/supplibs2.html
     * Updated the gadap library to version 2.1 to add support for a shared object
 	and some minor fixes for compilation on newer versions of unix. 
     * Linked with pixman-0.34.0 and cairo-1.14.10
@@ -109,14 +109,14 @@
     * Added descriptor file entry 'XYTRAILER' for files that have a trailer record 
 
     New/Updated Documentation:
-    * http://cola.gmu.edu/grads/gadoc/udp.html
-    * http://cola.gmu.edu/grads/gadoc/expressions.html
-    * http://cola.gmu.edu/grads/gadoc/gradfuncif.html
-    * http://cola.gmu.edu/grads/gadoc/script.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetsdfwrite.html
-    * http://cola.gmu.edu/grads/gadoc/descriptorfile.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdqdefine.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetbarbopts.html
+    * https://wetterzentrale.de/grads/docs/udp.html
+    * https://wetterzentrale.de/grads/docs/expressions.html
+    * https://wetterzentrale.de/grads/docs/gradfuncif.html
+    * https://wetterzentrale.de/grads/docs/script.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetsdfwrite.html
+    * https://wetterzentrale.de/grads/docs/descriptorfile.html
+    * https://wetterzentrale.de/grads/docs/gradcomdqdefine.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetbarbopts.html
 	
     Supplib Update:	
     * Some builds are linked dynamically with OpenSSL to access data servers via HTTPS.
@@ -148,8 +148,8 @@
     * coll2gr() now supports the -u option with a vertical coordinate of height
 	
     New Documentation Pages:
-    * http://cola.gmu.edu/grads/gadoc/pdefwrite.html
-    * http://cola.gmu.edu/grads/gadoc/setmisswarn.html
+    * https://wetterzentrale.de/grads/docs/pdefwrite.html
+    * https://wetterzentrale.de/grads/docs/setmisswarn.html
 
     Supplib Update:	
     * Linked with g2clib-1.6.0, jasper-1.900.1-ubuntu3.2debian
@@ -171,10 +171,10 @@
     * Memory leak for grids and stn reports when expression parsing fails
 
     Updated Documentation Pages:
-    * http://cola.gmu.edu/grads/gadoc/descriptorfile.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsdfwrite.html
-    * http://cola.gmu.edu/grads/gadoc/library.html
-    * http://cola.gmu.edu/grads/gadoc/templates.html
+    * https://wetterzentrale.de/grads/docs/descriptorfile.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsdfwrite.html
+    * https://wetterzentrale.de/grads/docs/library.html
+    * https://wetterzentrale.de/grads/docs/templates.html
   
     Supplib Update:	
     * Linked with netcdf-4.3.3
@@ -195,15 +195,15 @@
     * Checks for valid image file before creating a custom tile
 
     Updated Documentation Pages:
-    * http://cola.gmu.edu/grads/gadoc/fontcontrol.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdquery.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsdfwrite.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetbackground.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetfont.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetsdfwrite.html
-    * http://cola.gmu.edu/grads/gadoc/gradutilgribmap.html
-    * http://cola.gmu.edu/grads/gadoc/script.html
-    * http://cola.gmu.edu/grads/gadoc/supplibs.html
+    * https://wetterzentrale.de/grads/docs/fontcontrol.html
+    * https://wetterzentrale.de/grads/docs/gradcomdquery.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsdfwrite.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetbackground.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetfont.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetsdfwrite.html
+    * https://wetterzentrale.de/grads/docs/gradutilgribmap.html
+    * https://wetterzentrale.de/grads/docs/script.html
+    * https://wetterzentrale.de/grads/docs/supplibs.html
 
     Supplib Updates:
     * Linked with zlib-1.2.8, hdf5-1.8.12, netcdf-4.3.2
@@ -241,47 +241,47 @@
     * New metabuffer structure handles shapefiles with a very large number of vertices
 	
     New Documentation Pages:
-    * http://cola.gmu.edu/grads/gadoc/ascii.html
-    * http://cola.gmu.edu/grads/gadoc/basemap.html
-    * http://cola.gmu.edu/grads/gadoc/drawingtips.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdgxprint.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetantialias.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsethershey.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetlwid.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsettile.html
+    * https://wetterzentrale.de/grads/docs/ascii.html
+    * https://wetterzentrale.de/grads/docs/basemap.html
+    * https://wetterzentrale.de/grads/docs/drawingtips.html
+    * https://wetterzentrale.de/grads/docs/gradcomdgxprint.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetantialias.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsethershey.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetlwid.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsettile.html
 	
     Updated Documentation Pages:
-    * http://cola.gmu.edu/grads/gadoc/colorcontrol.html
-    * http://cola.gmu.edu/grads/gadoc/font.html
-    * http://cola.gmu.edu/grads/gadoc/fontcontrol.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomddisableprint.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomddrawmark.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdenableprint.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdoutxwd.html 
-    * http://cola.gmu.edu/grads/gadoc/gradcomdprint.html 
-    * http://cola.gmu.edu/grads/gadoc/gradcomdprintim.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetannot.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetbackground.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetclopts.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetcmark.html 
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetcthick.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetdisplay.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetfont.html 
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetgrid.html 
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetline.html 
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetmap.html 
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetmpt.html 
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetrgb.html 
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetstring.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetxlopts.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetylopts.html
-    * http://cola.gmu.edu/grads/gadoc/gradutilgxeps.html
-    * http://cola.gmu.edu/grads/gadoc/gradutilgxps.html
-    * http://cola.gmu.edu/grads/gadoc/gradutilgxtran.html
-    * http://cola.gmu.edu/grads/gadoc/imageoutput.html
-    * http://cola.gmu.edu/grads/gadoc/script.html
-    * http://cola.gmu.edu/grads/gadoc/shapefiles.html
-    * http://cola.gmu.edu/grads/gadoc/supplibs.html
+    * https://wetterzentrale.de/grads/docs/colorcontrol.html
+    * https://wetterzentrale.de/grads/docs/font.html
+    * https://wetterzentrale.de/grads/docs/fontcontrol.html
+    * https://wetterzentrale.de/grads/docs/gradcomddisableprint.html
+    * https://wetterzentrale.de/grads/docs/gradcomddrawmark.html
+    * https://wetterzentrale.de/grads/docs/gradcomdenableprint.html
+    * https://wetterzentrale.de/grads/docs/gradcomdoutxwd.html
+    * https://wetterzentrale.de/grads/docs/gradcomdprint.html
+    * https://wetterzentrale.de/grads/docs/gradcomdprintim.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetannot.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetbackground.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetclopts.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetcmark.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetcthick.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetdisplay.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetfont.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetgrid.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetline.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetmap.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetmpt.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetrgb.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetstring.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetxlopts.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetylopts.html
+    * https://wetterzentrale.de/grads/docs/gradutilgxeps.html
+    * https://wetterzentrale.de/grads/docs/gradutilgxps.html
+    * https://wetterzentrale.de/grads/docs/gradutilgxtran.html
+    * https://wetterzentrale.de/grads/docs/imageoutput.html
+    * https://wetterzentrale.de/grads/docs/script.html
+    * https://wetterzentrale.de/grads/docs/shapefiles.html
+    * https://wetterzentrale.de/grads/docs/supplibs.html
 
 	
 Supplib Updates:	
@@ -323,48 +323,48 @@ Supplib Updates:
       such as at high latitudes, or in vertical cross sections.  
 
     New documentation pages:
-    * http://cola.gmu.edu/grads/gadoc/gradcomdscreen.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetlog1d.html
-    * http://cola.gmu.edu/grads/gadoc/gradfuncamax.html
-    * http://cola.gmu.edu/grads/gadoc/gradfuncamaxlocx.html
-    * http://cola.gmu.edu/grads/gadoc/gradfuncamaxlocy.html
-    * http://cola.gmu.edu/grads/gadoc/gradfuncamin.html
-    * http://cola.gmu.edu/grads/gadoc/gradfuncaminlocx.html
-    * http://cola.gmu.edu/grads/gadoc/gradfuncaminlocy.html
-    * http://cola.gmu.edu/grads/gadoc/gradfuncatot.html
-    * http://cola.gmu.edu/grads/gadoc/scatterplot.html
+    * https://wetterzentrale.de/grads/docs/gradcomdscreen.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetlog1d.html
+    * https://wetterzentrale.de/grads/docs/gradfuncamax.html
+    * https://wetterzentrale.de/grads/docs/gradfuncamaxlocx.html
+    * https://wetterzentrale.de/grads/docs/gradfuncamaxlocy.html
+    * https://wetterzentrale.de/grads/docs/gradfuncamin.html
+    * https://wetterzentrale.de/grads/docs/gradfuncaminlocx.html
+    * https://wetterzentrale.de/grads/docs/gradfuncaminlocy.html
+    * https://wetterzentrale.de/grads/docs/gradfuncatot.html
+    * https://wetterzentrale.de/grads/docs/scatterplot.html
 
     Updated documentation pages:
-    * http://cola.gmu.edu/grads/gadoc/descriptorfile.html
-    * http://cola.gmu.edu/grads/gadoc/font.html
-    * http://cola.gmu.edu/grads/gadoc/fontcontrol.html
-    * http://cola.gmu.edu/grads/gadoc/functions.html
-    * http://cola.gmu.edu/grads/gadoc/functionsatt.html
-    * http://cola.gmu.edu/grads/gadoc/gadoc.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomddrawbutton.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomddrawwxsym.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdenableprint.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsdfwrite.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetccols.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetdefval.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetfont.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetgxout.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetvrange.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetvrange2.html
-    * http://cola.gmu.edu/grads/gadoc/gradcomdsetwxcols.html
-    * http://cola.gmu.edu/grads/gadoc/gradfuncaave.html
-    * http://cola.gmu.edu/grads/gadoc/gradfuncasum.html
-    * http://cola.gmu.edu/grads/gadoc/gradfunclterp.html
-    * http://cola.gmu.edu/grads/gadoc/gradutilgrib2scan.html
-    * http://cola.gmu.edu/grads/gadoc/imageoutput.html
-    * http://cola.gmu.edu/grads/gadoc/indexlist.html
-    * http://cola.gmu.edu/grads/gadoc/library.html
-    * http://cola.gmu.edu/grads/gadoc/mathfunctions.html
-    * http://cola.gmu.edu/grads/gadoc/pagecontrol.html
-    * http://cola.gmu.edu/grads/gadoc/shapefiles.html
-    * http://cola.gmu.edu/grads/gadoc/supplibs.html
-    * http://cola.gmu.edu/grads/gadoc/templates.html
-    * http://cola.gmu.edu/grads/gadoc/tutorial.html
+    * https://wetterzentrale.de/grads/docs/descriptorfile.html
+    * https://wetterzentrale.de/grads/docs/font.html
+    * https://wetterzentrale.de/grads/docs/fontcontrol.html
+    * https://wetterzentrale.de/grads/docs/functions.html
+    * https://wetterzentrale.de/grads/docs/functionsatt.html
+    * https://wetterzentrale.de/grads/docs/index.html
+    * https://wetterzentrale.de/grads/docs/gradcomddrawbutton.html
+    * https://wetterzentrale.de/grads/docs/gradcomddrawwxsym.html
+    * https://wetterzentrale.de/grads/docs/gradcomdenableprint.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsdfwrite.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetccols.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetdefval.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetfont.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetgxout.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetvrange.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetvrange2.html
+    * https://wetterzentrale.de/grads/docs/gradcomdsetwxcols.html
+    * https://wetterzentrale.de/grads/docs/gradfuncaave.html
+    * https://wetterzentrale.de/grads/docs/gradfuncasum.html
+    * https://wetterzentrale.de/grads/docs/gradfunclterp.html
+    * https://wetterzentrale.de/grads/docs/gradutilgrib2scan.html
+    * https://wetterzentrale.de/grads/docs/imageoutput.html
+    * https://wetterzentrale.de/grads/docs/indexlist.html
+    * https://wetterzentrale.de/grads/docs/library.html
+    * https://wetterzentrale.de/grads/docs/mathfunctions.html
+    * https://wetterzentrale.de/grads/docs/pagecontrol.html
+    * https://wetterzentrale.de/grads/docs/shapefiles.html
+    * https://wetterzentrale.de/grads/docs/supplibs.html
+    * https://wetterzentrale.de/grads/docs/templates.html
+    * https://wetterzentrale.de/grads/docs/tutorial.html
 
     Supplib Updates:
     * Linked with g2clib 1.4.0

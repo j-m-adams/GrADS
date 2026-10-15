@@ -12,6 +12,29 @@
 
 <div class="bodyleft">
 
+<h2>Install GrADS with conda</h2>
+<p>The recommended installation is the conda-forge package. It includes the
+native executable, GRIB/NetCDF/HDF/GeoTIFF/shapefile support, data files, and
+Cairo graphics plug-ins.</p>
+<pre>mamba create -n grads -c conda-forge grads
+mamba activate grads</pre>
+<p>Activating the environment automatically sets <code>GADDIR</code>,
+<code>GAUDPT</code>, and <code>GAGPY</code> to the data, plug-in table, and
+GradsPy library installed in that environment. Do not set these variables
+manually for a conda-forge installation. If they were previously configured
+for another GrADS installation, activation temporarily replaces them and
+deactivation restores their previous values.</p>
+<p>Run GrADS after <code>mamba activate grads</code>, or without activating an
+interactive shell by using <code>mamba run -n grads grads</code>. Invoking an
+environment's executable directly from an unactivated shell does not apply its
+activation settings and may select data or plug-ins from another installation.</p>
+<p>Verify the installation:</p>
+<pre>printf "q config\nquit\n" | grads -bl</pre>
+<p>For the optional Python interface:</p>
+<pre>mamba install -n grads -c conda-forge gradspy</pre>
+<p>Source builds and supplemental-library compilation are for developers and
+package maintainers; they are not required for normal use.</p>
+
 <center>
 <h2>GrADS Documentation</h2>
 </center>
@@ -39,28 +62,14 @@
         for checking the syntax and usage of any GrADS command or function. Subject 
         headings from the User's Guide are also listed in the Index.</p>
 
-      <h3>Download HTML Documentation</h3>
-        <p>You can download a compressed tar file containing 
-        all the html source code. These can be useful to install on your local 
-        computer if you have a slow internet connection or if you travel often 
-        with a laptop.<br>
-        <a href="http://cola.gmu.edu/grads/gadoc/gadoc_files.tar.gz">
-        http://cola.gmu.edu/grads/gadoc/gadoc_files.tar.gz</a>
-       (last updated 9 November 2012)</p>
-
       <h3>Download Hard Copy Documentation</h3>
         <p>If you simply <i>must</i> 
         have a printable version of the documentation, you will have to settle 
-        for a version that is outdated and no longer supported. The following 
-        formats are available: <br>
-        <a href="ftp://cola.gmu.edu/grads/beta/doc/gadoc151.pdf">PDF</a><br>
-        <a href="ftp://cola.gmu.edu/grads/beta/doc/gadoc151.ps">Postscript</a>
-        (<a href="ftp://cola.gmu.edu/grads/beta/doc/gadoc151.ps.gz">G-Zipped</a> and
-        <a href="ftp://cola.gmu.edu/grads/beta/doc/gadoc151.ps.a4">A4</a>)<br>
-        <a href="ftp://cola.gmu.edu/grads/beta/doc/gadoc151.txt">ASCII</a><br>
-        <a href="http://grads.iges.org/grads/gadoc/reference_card.pdf">
+        for a version that is outdated and no longer supported. The current
+        quick-reference cards are available here: <br>
+        <a href="https://wetterzentrale.de/grads/docs/script.html">
          GrADS Commands Quick Reference Card</a><br>
-        <a href="http://grads.iges.org/grads/gadoc/reference_card_scl.pdf">
+        <a href="https://wetterzentrale.de/grads/docs/script.html">
          Scripting Language Quick Reference Card</a></p>
 
 </div>

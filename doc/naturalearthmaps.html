@@ -1,0 +1,69 @@
+<!--Copyright (C) 1988-2022 by the Institute of Global Environment and Society (IGES). See file COPYRIGHT for more information.-->
+
+<H2><B>Natural Earth Map Data Sets</B></H2><P>
+
+GrADS includes three optional map backgrounds derived from
+<a href="https://www.naturalearthdata.com/">Natural Earth</a> version 5.1.2:
+<code>ne110m</code> (1:110 million), <code>ne50m</code> (1:50 million), and
+<code>ne10m</code> (1:10 million). The names can be used with
+<a href="gradcomdsetmpdset.html"><code>set mpdset</code></a>. The legacy
+<code>lowres</code> map remains the GrADS default.<p>
+
+The source is the Natural Earth 5.1.2 vector GeoPackage archive. Its SHA-256
+is
+<code>b9e2e7b3d5c2c59593f6eafc19be2ba87fb04788a90c57ccd6cf32a587b6ecc3</code>.
+Natural Earth data are in the public domain; see the
+<a href="https://www.naturalearthdata.com/about/terms-of-use/">Natural Earth
+terms of use</a>.<p>
+
+The generated GrADS files have these checksums:
+
+<table border="1" cellpadding="4" cellspacing="0">
+<tr><th>File</th><th>Bytes</th><th>SHA-256</th></tr>
+<tr><td><code>ne110m</code></td><td>58,596</td><td><code>1173c5840a849016efc219cc92479218f5c768ad11bcba14ce8f620ad9a899e9</code></td></tr>
+<tr><td><code>ne50m</code></td><td>592,938</td><td><code>725508f80866ab9386b0ffd6e2f8805007fa2eba586f6a1b5d1b8954c4855aa0</code></td></tr>
+<tr><td><code>ne10m</code></td><td>5,288,370</td><td><code>5bfad17a26c93b07565d7b92549524c568207743b667c00da937ae2736f4dda4</code></td></tr>
+</table><p>
+
+<H3>Included Layers</H3><P>
+
+The same mapping is used at each of the three scales:
+
+<table border="1" cellpadding="4" cellspacing="0">
+<tr><th>GrADS map type</th><th>Natural Earth layer</th></tr>
+<tr><td>0</td><td><code>ne_&lt;scale&gt;_coastline</code></td></tr>
+<tr><td>1</td><td><code>ne_&lt;scale&gt;_admin_0_boundary_lines_land</code></td></tr>
+<tr><td>2</td><td><code>ne_&lt;scale&gt;_admin_1_states_provinces_lines</code></td></tr>
+</table><p>
+
+Here, <code>&lt;scale&gt;</code> is <code>110m</code>, <code>50m</code>, or
+<code>10m</code>. The selected layers use Natural Earth's unfiltered default
+worldview. Separate Natural Earth layers for minor-island coastlines, lakes,
+rivers, maritime boundaries, and disputed boundaries are not included.<p>
+
+<H3>Controlling Boundaries</H3><P>
+
+Coastlines only:
+<pre>
+set mpdset ne10m
+set poli off
+</pre>
+
+Coastlines plus all political boundaries:
+<pre>
+set mpdset ne10m
+set poli on
+</pre>
+
+Coastlines and country boundaries, without state/province boundaries:
+<pre>
+set mpdset ne10m
+set mpt * off
+set mpt 0 -1
+set mpt 1 -1
+</pre>
+
+The value <code>-1</code> tells GrADS to use the current
+<a href="gradcomdsetmap.html"><code>set map</code></a> attributes for that
+map type. See <a href="gradcomdsetmpt.html"><code>set mpt</code></a> for
+per-type color, line-style, and thickness controls.<p>

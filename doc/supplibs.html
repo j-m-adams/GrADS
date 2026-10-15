@@ -19,18 +19,20 @@ body {
 <center>
   <h3>Supplemental Libraries for GrADS version 2</h3>
 </center>
-<p>There are many supplemental libraries that are required to enable various features in the GrADS executable. Building all these libraries from source is not necessarily easy; this page provides some guidance and suggestions that have led to success on COLA's unix systems (64-bit linux running CentOS, and Mac OSX). COLA's objective in building GrADS is to make  our binary releases portable, so we strive to build all the libraries from scratch, disabling features GrADS doesn't need, and then link statically when building GrADS. If you are building GrADS from source but not planning to distribute your build, then you may find that many of these libraries are already installed on your system and you can link with them dynamically. In this case, use the --enable-dyn-supplibs option with the GrADS configure script. Please post questions about building from source to the <a href="http://iges.org/grads/users.html" target="_parent">GrADS Users Forum</a>. If you have the proper privileges, you may install these anywhere on your system instead of $HOME, just be sure to change the commands listed in the table below to accomodate your own installation. </p>
+<p><strong>Recommended installation:</strong> use the conda-forge package,
+which supplies the required native libraries automatically:
+<pre>mamba create -n grads -c conda-forge grads
+mamba activate grads</pre>
+The source-build instructions below are retained for developers.</p>
+<details>
+<summary>Advanced source-build instructions</summary>
+<p>There are many supplemental libraries that are required to enable various features in the GrADS executable. Building all these libraries from source is not necessarily easy; this page provides some guidance and suggestions that have led to success on COLA's unix systems (64-bit linux running CentOS, and Mac OSX). COLA's objective in building GrADS is to make  our binary releases portable, so we strive to build all the libraries from scratch, disabling features GrADS doesn't need, and then link statically when building GrADS. If you are building GrADS from source but not planning to distribute your build, then you may find that many of these libraries are already installed on your system and you can link with them dynamically. In this case, use the --enable-dyn-supplibs option with the GrADS configure script. Please post questions about building from source to the <a href="https://wetterzentrale.de/grads/docs/index.html" target="_parent">GrADS Users Forum</a>. If you have the proper privileges, you may install these anywhere on your system instead of $HOME, just be sure to change the commands listed in the table below to accomodate your own installation. </p>
 <p>To begin, make a directory top level directory for the supplibs under your $HOME:<br>
   <span class="code">mkdir $HOME/supplibs</span></p>
 <p>Make a subdirectory where you will store the tar files containing the library source code:<br>
   <span class="code">mkdir -p $HOME/supplibs/src/tarfiles</span></p>
-<p>Get the src from COLA's FTP server: <br>
-  <span class="code">cd $HOME/supplibs/src/tarfiles<br>
-  ftp iges.org<br>
-&lt;login as anonymous&gt;<br>
-  cd grads/Supplibs/2.1/src<br>
-  mget *<br> 
-quit </span></p>
+<p>The old COLA FTP archive is no longer maintained. For a reproducible
+installation, use the conda-forge package described above.</p>
 <p>These are the directories where you will install the compiled libaries, pkgconfig files, the necessary include files, and any executable utilities from the libraries that GrADS will need:<br>
   <span class="code">mkdir $HOME/supplibs/lib<br>
   mkdir $HOME/supplibs/lib/pkgconfig</span><br>
@@ -52,7 +54,7 @@ mkdir $HOME/supplibs/bin</span></p>
     <td width="19%" valign="top" bgcolor="ccdceb" class="plaintext"><p>Enables command line editing.<br>
         Links: <a href="http://tiswww.case.edu/php/chet/readline/rltop.html" target="_parent"><br>
         home page</a><br> 
-        <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/readline-5.0.tar.gz">local copy of source code</a></p>    </td>
+        <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></p>    </td>
     <td width="69%" bgcolor="ccdceb" class="plaintext"><p class="code">cd $HOME/supplibs/src/<br>
       tar xvfz ./tarfiles/readline-5.0.tar.gz <br>
       mkdir readline<br>
@@ -71,7 +73,7 @@ mkdir $HOME/supplibs/bin</span></p>
     <td valign="top" bgcolor="b8c8d7" class="plaintext"><p>Required by readline.<br>
       Links:<br>
       <a href="http://www.gnu.org/software/ncurses/">home page</a><br>
-      <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/ncurses-5.7.tar.gz">local copy of source code</a></p></td>
+      <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></p></td>
     <td bgcolor="b8c8d7" class="plaintext"><p class="code">cd $HOME/supplibs/src/<br>
       tar xvfz ./tarfiles/ncurses-5.7.tar.gz<br>
       mkdir ncurses<br>
@@ -89,7 +91,7 @@ mkdir $HOME/supplibs/bin</span></p>
       Required by NetCDF et al.<br>
         Links:<br>    
         <a href="http://www.zlib.net/" target="_parent">home page</a><br>    
-        <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/zlib-1.2.5.tar.gz">local copy of source code</a><br>
+        <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a><br>
       </p>
     </td>
     <td bgcolor="ccdceb" class="code"><p>cd $HOME/supplibs/src/<br>
@@ -109,7 +111,7 @@ mkdir $HOME/supplibs/bin</span></p>
     <td valign="top" bgcolor="b8c8d7">1.5.12</td>
     <td valign="top" bgcolor="b8c8d7">PNG reference library. <br>
       Links:<br>      
-      <a href="http://www.libpng.org/pub/png/libpng.html" target="_parent">home page</a><br>      <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/libpng-1.5.12.tar.gz">local copy of source code</a><br></td>
+      <a href="http://www.libpng.org/pub/png/libpng.html" target="_parent">home page</a><br>      <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a><br></td>
     <td bgcolor="b8c8d7" class="code"><p>cd $HOME/supplibs/src/<br>
       tar xvfz tarfiles/libpng-1.5.12.tar.gz<br>
       mkdir libpng<br>
@@ -130,7 +132,7 @@ mkdir $HOME/supplibs/bin</span></p>
     <td valign="top" class="plaintext">Image compression library. <br>
       Links:<br>      
       <a href="http://www.ijg.org/" target="_parent">home page</a><br>
-      <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/jpegsrc.v6b.tar.gz">local copy of source code</a></td>
+      <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="ccdceb" class="plaintext"><p class="code">cd $HOME/supplibs/src/<br>
       tar xvfz tarfiles/jpegsrc.v6b.tar.gz <br>
       mkdir -p jpeg/bin/cjpeg<br>
@@ -153,7 +155,7 @@ mkdir $HOME/supplibs/bin</span></p>
       Requires: zlib, libpng, jpeg<br>
       Links: <br>
       <a href="http://www.libgd.org/Main_Page" target="_parent">home page</a><br>
-      <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/gd-2.0.34.tar.gz">local copy of source code</a></td>
+      <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="b8c8d7" class="code">cd $HOME/supplibs/src/<br>
       tar xvfz tarfiles/gd-2.0.34.tar.gz<br>
       mkdir gd<br>
@@ -174,7 +176,7 @@ mkdir $HOME/supplibs/bin</span></p>
     <td valign="top" bgcolor="ccdceb">For image coding and manipulation <br>
     Links:<br>    
     <a href="http://www.ece.uvic.ca/~mdadams/jasper/" target="_parent">home page</a><br>
-    <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/jasper-1.900.1.tar.gz">local copy of source code</a></td>
+    <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="ccdceb"><p class="code">cd $HOME/supplibs/src/<br>
       tar xvfz tarfiles/jasper-1.900.1.tar.gz<br>
       mkdir jasper<br>
@@ -195,7 +197,7 @@ mkdir $HOME/supplibs/bin</span></p>
       Requires: zlib, png, jasper<br>
       Links:<br>    
     <a href="http://www.nco.ncep.noaa.gov/pmb/codes/GRIB2/" target="_parent">home page</a><br>
-    <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/g2clib-1.4.0.tar.gz">local copy of source code</a></p>    </td>
+    <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></p>    </td>
     <td bgcolor="b8c8d7"><p class="code">cd $HOME/supplibs/src/<br>
 tar xvfz tarfiles/g2clib-1.4.0.tar.gz<br>
 
@@ -216,7 +218,7 @@ cd g2clib-1.4.0</p>
       Required by HDF5<br>
         Links:<br>      
         <a href="http://www.compressconsult.com/szip/" target="_parent">home page</a><br>
-        <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/szip-2.1.tar.gz">local copy of source code</a></p>
+        <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></p>
       </td>
     <td bgcolor="ccdceb"><p class="code">cd $HOME/supplibs/src/<br>
       tar xvfz tarfiles/szip-2.1.tar.gz<br>
@@ -233,7 +235,7 @@ cd g2clib-1.4.0</p>
     <td valign="top"><p>Supports units of physical quantities. <br>
     Links:<br> 
     <a href="http://www.unidata.ucar.edu/software/udunits/" target="_parent">home page</a><br>
-    <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/udunits-1.11.7.tar.gz">local copy of source code</a></p>    </td>
+    <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></p>    </td>
     <td bgcolor="b8c8d7"><p class="code">cd $HOME/supplibs/src/<br>
       tar xvfz ./tarfiles/udunits-1.11.7.tar.gz<br>
       ln -sf udunits-1.11.7 udunits<br>
@@ -251,7 +253,7 @@ cd g2clib-1.4.0</p>
     <td valign="top" bgcolor="ccdceb">4.2r3</td>
     <td valign="top" bgcolor="ccdceb"> Hierarchical Data Format library, version 4. Requires: zlib, udunits, jpeg, szip<br>
       Links:<br>      <a href="http://hdfgroup.org/products/hdf4/index.html" target="_parent">home page</a><br>
-      <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/HDF4.2r3.tar.gz">local copy of source code</a></td>
+      <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="ccdceb" class="code"><p>cd $HOME/supplibs/src/<br>
       tar xvfz tarfiles/HDF4.2r3.tar.gz<br>
       mkdir hdf<br>
@@ -274,7 +276,7 @@ cd g2clib-1.4.0</p>
     <td valign="top">(<span class="style1">GrADS 2.0.a7+</span>) <br>
       Hierarchical Data Format library, version 5. Requires: zlib, szip<br>
 Links:<br><a href="http://www.hdfgroup.org/HDF5/" target="_parent">home page</a><br>
-<a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/hdf5-1.8.11.tar.gz">local copy of source code</a></td>
+<a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="b8c8d7"><p class="code">cd $HOME/supplibs/src/<br>
       tar xvfz tarfiles/hdf5-1.8.11.tar.gz<br>
       mkdir hdf5<br>
@@ -295,7 +297,7 @@ Links:<br><a href="http://www.hdfgroup.org/HDF5/" target="_parent">home page</a>
     <td valign="top" bgcolor="ccdceb">7.19.6</td>
     <td valign="top" bgcolor="ccdceb">      For enabling OPeNDAP access. <br>
       Links:<br>      
-      <a href="http://curl.haxx.se/" target="_parent">home page</a><br>      <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/curl-7.19.6.tar.gz">local copy of source code</a></td>
+      <a href="http://curl.haxx.se/" target="_parent">home page</a><br>      <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="ccdceb" class="code">cd $HOME/supplibs/src<br>
       tar xvfz tarfiles/curl-7.19.6.tar.gz<br>
       mkdir curl<br>
@@ -316,7 +318,7 @@ cp $HOME/supplibs/src/curl/lib/pkgconfig/libcurl.pc $HOME/supplibs/lib/pkgconfig
       Network Common Data Form library. <br>
       Requires hdf5, zlib, szip, curl. <br>
       Links:<br>      <a href="http://www.unidata.ucar.edu/software/netcdf/" target="_parent">home page</a><br>
-      <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/netcdf-4.2.1.1.tar.gz">local copy of source code</a></td>
+      <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="b8c8d7"><p class="code">cd $HOME/supplibs/src<br>
       tar xvfz tarfiles/netcdf-4.2.1.1tar.gz<br>
       mkdir 
@@ -348,7 +350,7 @@ unsetenv LDFLAGS<br>
       Links:<br>
       <a href="http://www.libtiff.org/">home page</a><br>
       <a href=
-      "ftp://cola.gmu.edu/grads/Supplibs/2.1/src/tiff-3.8.2.tar.gz">local copy of source code</a></td>
+      "https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="ccdceb" class="code">cd $HOME/supplibs/src/<br>
       tar xvfz tarfiles/tiff-3.8.2.tar.gz<br>
       mkdir tiff<br>
@@ -369,7 +371,7 @@ unsetenv LDFLAGS<br>
       Requires: tiff.<br>
       Links:<br>
       <a href="http://geotiff.osgeo.org/">home page</a><br>
-      <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/libgeotiff-1.2.5.tar.gz">local copy of source code</a></td>
+      <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="b8c8d7" class="code">cd $HOME/supplibs/src/<br>
       tar xvfz tarfiles/libgeotiff-1.2.5.tar.gz <br>
       mkdir geotiff<br>
@@ -391,7 +393,7 @@ unsetenv LDFLAGS<br>
       Enables handling of shapefiles<br>
       Links:<br>
       <a href="http://shapelib.maptools.org/">home page</a><br>
-      <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/shapelib-1.2.10.tar.gz">local copy of source code</a></td>
+      <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="ccdceb"><p class="code">cd $HOME/supplibs/src/<br>
       tar xvfz tarfiles/shapelib-1.2.10.tar.gz<br>
       cd shapelib-1.2.10<br>
@@ -409,7 +411,7 @@ unsetenv LDFLAGS<br>
       Required for Cairo.<br>
       Links:<br>
       <a href="http://pkg-config.freedesktop.org/wiki/">home page</a><br>
-      <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/pkgconfig-0.23.tar.gz">local copy of source code</a></td>
+      <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="b8c8d7"><p class="code">cd $HOME/supplibs/src<br>
       tar xvfz tarfiles/pkgconfig-0.23.tar.gz<br>
       mkdir pkg-config<br>
@@ -431,7 +433,7 @@ unsetenv LDFLAGS<br>
       also used by Cairo library.<br>
         Links:<br>    
         <a href="http://xmlsoft.org/" target="_parent">home page</a><br>
-        <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/libxml2-2.6.16.tar.gz">local copy of source code</a></p>    </td>
+        <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></p>    </td>
     <td bgcolor="ccdceb"><p class="code">cd $HOME/supplibs/src<br>
       tar xvfz tarfiles/libxml2-2.6.16.tar.gz<br>
       mkdir libxml2<br>
@@ -451,7 +453,7 @@ unsetenv LDFLAGS<br>
       Requires: xml2, curl.<br>
 Links:<br>
 <a href="http://opendap.org/index.html" target="_parent">home page</a><br>
-<a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/libdap-3.7.8.tar.gz">local copy of source code</a></td>
+<a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="b8c8d7"><p class="code">cd $HOME/supplibs/src<br>
       tar xvfz tarfiles/libdap-3.7.8.tar.gz<br>
       mkdir libdap<br>
@@ -476,7 +478,7 @@ setenv PKG_CONFIG_PATH $HOME/supplibs/lib/pkgconfig</p>
     <td valign="top" bgcolor="ccdceb">Enables OPeNDAP access of <br>
       in situ data. <br>
       Requires dap, curl, and xml2. <br>
-      Links:<br>      <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/gadap-2.0.tar.gz">local copy of source code</a></td>
+      Links:<br>      <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="ccdceb"><p class="code">cd $HOME/supplibs/src<br>
       tar xvfz tarfiles/gadap-2.0.tar.gz<br>
       mkdir gadap<br>
@@ -497,7 +499,7 @@ A helper tool used when compiling applications and libraries.
 Required for Cairo.<br>
 Links:<br>
 <a href="http://cgit.freedesktop.org/xorg/lib/libXrender/">home page</a><br>
-<a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/libXrender-0.9.6.tar.gz">local copy of source code</a></td>
+<a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="b8c8d7"><p class="code">cd $HOME/supplibs/src<br>
       tar xvfz tarfiles/libXrender-0.9.6.tar.gz <br>
       mkdir libXrender<br>
@@ -517,7 +519,7 @@ Links:<br>
     X and Cairo.<br>
     Links:<br>
     <a href="http://cgit.freedesktop.org/pixman/">home page</a><br>
-    <a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/pixman-0.28.0.tar.gz">local copy of source code</a></p>    </td>
+    <a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></p>    </td>
     <td bgcolor="ccdceb"><p class="code">cd $HOME/supplibs/src<br>
       tar xvfz tarfiles/pixman-0.28.0.tar.gz <br>
       mkdir pixman<br>
@@ -540,7 +542,7 @@ A software font engine.
 Required by Cairo. <br>
 Links:<br>
 <a href="http://www.freetype.org/">home page</a><br>
-<a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/freetype-2.4.10.tar.gz">local copy of source code</a></td>
+<a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="b8c8d7"><p class="code">cd $HOME/supplibs/src<br>
       tar xvfz tarfiles/freetype-2.4.10.tar.gz<br>
       mkdir freetype<br>
@@ -579,7 +581,7 @@ $HOME/supplibs/src/freetype/include/freetype2/freetype/config/*.h . </td>
 Required by Cairo. <br>
 Links:<br>
 <a href="http://www.freedesktop.org/wiki/Software/fontconfig">home page</a><br>
-<a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/fontconfig-2.9.0.tar.gz">local copy of source code</a></td>
+<a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="ccdceb"><p class="code">cd $HOME/supplibs/src<br>
       tar xvfz tarfiles/fontconfig-2.9.0.tar.gz<br>
       mkdir fontconfig<br>
@@ -610,7 +612,7 @@ Links:<br>
 A 2D graphics library with support for multiple output devices. Requires pkgconfig, zlib, xml2, libpng, pixman, fontconfig, freetype, and Xrender.<br>
 Links:<br>
 <a href="http://www.cairographics.org/">home page</a><br>
-<a href="ftp://cola.gmu.edu/grads/Supplibs/2.1/src/cairo-1.12.16.tar.gz">local copy of source code</a></td>
+<a href="https://wetterzentrale.de/grads/docs/index.html">local copy of source code</a></td>
     <td bgcolor="b8c8d7"><p class="code">cd $HOME/supplibs/src<br>
       tar xvf tarfiles/cairo-1.12.16.tar.gz<br>
       mkdir cairo<br>
@@ -639,6 +641,7 @@ Links:<br>
     cp $HOME/supplibs/src/cairo/include/* $HOME/supplibs/include/cairo/</p>    </td>
   </tr>
 </table>
+</details>
 <p class="plaintext"><br>
 </p>
 </body>

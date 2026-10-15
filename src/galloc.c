@@ -53,7 +53,7 @@ static int first = 1;
 static char msg[501];
 
 void *galloc (size_t, char *);
-void gree (char *, char *);
+void gree (void *, char *);
 void glook(void);
 int verbo=0;
 int buferr=0;   /* flag error on buffer exceeded */
@@ -105,10 +105,12 @@ size_t llen;
 
 /* replacement for free */
 
-void gree (char *mem, char *ch) {
+void gree (void *vmem, char *ch) {
+char *mem = (char *)vmem;
 int i,j,flag;
 size_t len;
 char *mmm;
+  if (ch == NULL) ch = "";
   
   /* if we have stopped tracking memory, just free it and return */
   if (buferr) {

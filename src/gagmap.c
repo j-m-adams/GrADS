@@ -40,7 +40,11 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
+#ifdef _WIN32
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #include <sys/types.h>
 #include "grads.h"
 #include "gagmap.h"
@@ -2431,6 +2435,20 @@ void g2prnt (gribfield *gfld, gaint r, g2int f, gaint sp, gaint sp2) {
     printf("ens=%d,%d ",(gaint)gfld->ipdtmpl[15],(gaint)gfld->ipdtmpl[16]);
   if (gfld->ipdtnum==2 || gfld->ipdtnum==12) 
     printf("ens=%d ",(gaint)gfld->ipdtmpl[15]);
+}
+
+/* Extract nbits bits from buf starting at bit offset iskip into iout.
+   Local replacement for gbit() which was removed from g2clib's public API. */
+static void gbit(unsigned char *buf, g2int *iout, g2int iskip, g2int nbits) {
+  g2int i, bitcnt, ibit, itmp;
+  g2int nbit = iskip;
+  itmp = 0;
+  for (i = 0; i < nbits; i++) {
+    ibit = (g2int)buf[nbit / 8] >> (7 - nbit % 8) & 1;
+    itmp = (itmp << 1) | ibit;
+    nbit++;
+  }
+  *iout = itmp;
 }
 
 void gaseekgb(FILE *lugb, off_t iseek, g2int mseek, off_t *lskip, g2int *lgrib)

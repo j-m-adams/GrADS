@@ -1,0 +1,129 @@
+{
+  "format": 1,
+  "layers": {
+    "ne10m_land": {
+      "bytes": {
+        "dbf": 129969,
+        "prj": 145,
+        "shp": 7521776,
+        "shx": 54796
+      },
+      "features": 6837,
+      "repaired_source_features": 0,
+      "rings": 6838,
+      "sha256": {
+        "dbf": "84126489c9b7ba67796c4d97b23e4da85bc5cec388d86fc972b35bfa137af5bd",
+        "prj": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4",
+        "shp": "06fcdef0cb4fb1a73d571ef7c8247c311c2f5afeccb70fad101b28984fc82a06",
+        "shx": "26bb510466e6da743b101942d9ed5410341656126437f69a582de9266767d70c"
+      },
+      "source_features": 11,
+      "source_layer": "ne_10m_land",
+      "vertices": 446175
+    },
+    "ne10m_ocean": {
+      "bytes": {
+        "dbf": 104,
+        "prj": 145,
+        "shp": 7176216,
+        "shx": 116
+      },
+      "features": 2,
+      "repaired_source_features": 1,
+      "rings": 6827,
+      "sha256": {
+        "dbf": "6f4e5edd8dbbbe68c7acca307e7a96b9e14c9c94d1147dd7fdc272e97ab55543",
+        "prj": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4",
+        "shp": "ef58ed257829fcdc5ed9a0c53c7e3d1d3853c50e71f41d9b905dadea8aaedd82",
+        "shx": "847d2cb1da7159d11cde32d3ad199350c1409bf67a6cb9eedc8bf411102261a1"
+      },
+      "source_features": 1,
+      "source_layer": "ne_10m_ocean",
+      "vertices": 446794
+    },
+    "ne110m_land": {
+      "bytes": {
+        "dbf": 2479,
+        "prj": 145,
+        "shp": 89524,
+        "shx": 1116
+      },
+      "features": 127,
+      "repaired_source_features": 1,
+      "rings": 129,
+      "sha256": {
+        "dbf": "f0843c9cff5c311f74dec903fa7e32b7edab79fec95db263b8571313f8290465",
+        "prj": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4",
+        "shp": "929e9ec731e3ff3044c0c37d01dda3ad546c7b2440b65811be04782319079b70",
+        "shx": "918b0706c88a21655e07977dc93cdc9aeba763c47a64c88ebb1f2a1069b78283"
+      },
+      "source_features": 127,
+      "source_layer": "ne_110m_land",
+      "vertices": 5144
+    },
+    "ne110m_ocean": {
+      "bytes": {
+        "dbf": 104,
+        "prj": 145,
+        "shp": 84804,
+        "shx": 116
+      },
+      "features": 2,
+      "repaired_source_features": 0,
+      "rings": 122,
+      "sha256": {
+        "dbf": "c3e47254c9667aebeb7aabaded665534e495b0f53b783a132730dcd26620f043",
+        "prj": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4",
+        "shp": "8006f16c5af40875fbe8e975bef6d4b6c1ffc7b767491bdc277fbc0b62ba5d02",
+        "shx": "b3388def7b13abb0e94c91053a989219c35aaaa233fb0029b68cdc5d84487c1a"
+      },
+      "source_features": 2,
+      "source_layer": "ne_110m_ocean",
+      "vertices": 5257
+    },
+    "ne50m_land": {
+      "bytes": {
+        "dbf": 27065,
+        "prj": 145,
+        "shp": 1050384,
+        "shx": 11468
+      },
+      "features": 1421,
+      "repaired_source_features": 0,
+      "rings": 1422,
+      "sha256": {
+        "dbf": "87fbc24b8ac806529dfb8172d9ed96a34cc9c1a14db82003d5e6c726476387f1",
+        "prj": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4",
+        "shp": "91f02f00f01f335ece88770ed722e5551716afffcc86eb3ebe8fa5308672dca2",
+        "shx": "3e30e0d8bf5d226e87632a90b03b7922eff6e381e2dd3d88286e3ce963d4fb48"
+      },
+      "source_features": 1420,
+      "source_layer": "ne_50m_land",
+      "vertices": 60669
+    },
+    "ne50m_ocean": {
+      "bytes": {
+        "dbf": 104,
+        "prj": 145,
+        "shp": 978392,
+        "shx": 116
+      },
+      "features": 2,
+      "repaired_source_features": 0,
+      "rings": 1411,
+      "sha256": {
+        "dbf": "6f4e5edd8dbbbe68c7acca307e7a96b9e14c9c94d1147dd7fdc272e97ab55543",
+        "prj": "a02a27b1d1982c8516d83398e85a3c8b1aef1713c13ef4d84d7bde17430c07c4",
+        "shp": "54bf7b38602fd88e150fabd0acdfe9f4eda26db705b240948f4968c8ce706bea",
+        "shx": "b0d5ab3c986c2a9c0dc746627b617e3c3f056693c3a66e28f540544a5bd54965"
+      },
+      "source_features": 1,
+      "source_layer": "ne_50m_ocean",
+      "vertices": 60784
+    }
+  },
+  "license": "public-domain",
+  "natural_earth_version": "5.1.2",
+  "project_url": "https://www.naturalearthdata.com/",
+  "source_sha256": "b9e2e7b3d5c2c59593f6eafc19be2ba87fb04788a90c57ccd6cf32a587b6ecc3"
+}

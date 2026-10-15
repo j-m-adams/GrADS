@@ -1,0 +1,3 @@
+/* Small compatibility layer for the wide, command-oriented reference pages. */
+pre, code { font-variant-ligatures: none; }
+.highlight pre { line-height: 1.35; }

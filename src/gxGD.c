@@ -6,7 +6,9 @@
 #include "config.h"
 #endif
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include <gd.h>
 #include "gatypes.h"
 #include "gx.h"
@@ -28,6 +30,106 @@ static gaint ixrs,iyrs;
 static gaint backbw,gdthck,fflag,xyflag,ccol,xyc=0;
 static gaint xsav,ysav;
 static gaint xcur,ycur,xycnt=0;
+static gaint clipxlo,clipxhi,clipylo,clipyhi;
+
+struct gxGDrow {
+  gadouble *x;
+  gaint count;
+  gaint size;
+};
+
+static int gxGDcmpdbl (const void *a, const void *b) {
+  gadouble aa = *(const gadouble *)a;
+  gadouble bb = *(const gadouble *)b;
+  if (aa<bb) return -1;
+  if (aa>bb) return 1;
+  return 0;
+}
+
+static gaint gxGDrowadd (struct gxGDrow *row, gadouble x) {
+gadouble *newx;
+gaint newsize;
+  if (row->count>=row->size) {
+    newsize = row->size ? row->size*2 : 8;
+    newx = (gadouble *)realloc(row->x,sizeof(gadouble)*newsize);
+    if (newx==NULL) return 1;
+    row->x = newx;
+    row->size = newsize;
+  }
+  row->x[row->count++] = x;
+  return 0;
+}
+
+static gaint gxGDedge (struct gxGDrow *rows, gadouble x1, gadouble y1,
+                       gadouble x2, gadouble y2) {
+gadouble ymin,ymax,scanx;
+gaint y,ystart,yend;
+  if (y1==y2) return 0;
+  ymin = y1<y2 ? y1 : y2;
+  ymax = y1>y2 ? y1 : y2;
+  ystart = (gaint)ceil(ymin-0.5);
+  yend = (gaint)ceil(ymax-0.5)-1;
+  if (ystart<clipylo) ystart=clipylo;
+  if (yend>clipyhi) yend=clipyhi;
+  for (y=ystart; y<=yend; y++) {
+    scanx = x1 + (((gadouble)y+0.5-y1)*(x2-x1)/(y2-y1));
+    if (gxGDrowadd(rows+y,scanx)) return 1;
+  }
+  return 0;
+}
+
+static gaint gxGDcompound (gadouble *xybuffer, gaint count) {
+struct gxGDrow *rows;
+gadouble firstx=0.0,firsty=0.0,prevx=0.0,prevy=0.0;
+gadouble x,y,left,right;
+gaint i,j,havepoint,ringpoints,xstart,xend,rc;
+
+  rows = (struct gxGDrow *)calloc(yimg,sizeof(struct gxGDrow));
+  if (rows==NULL) return 99;
+  havepoint = 0;
+  ringpoints = 0;
+  rc = 0;
+  for (i=0; i<=count; i++) {
+    if (i==count || isnan(xybuffer[i*2]) || isnan(xybuffer[i*2+1])) {
+      if (havepoint && ringpoints>2 &&
+          (prevx!=firstx || prevy!=firsty))
+        if (gxGDedge(rows,prevx,prevy,firstx,firsty)) { rc=99; break; }
+      havepoint = 0;
+      ringpoints = 0;
+      continue;
+    }
+    x = ((gadouble)ximg*xybuffer[i*2]*1000.0)/(gadouble)ixrs;
+    y = (gadouble)yimg -
+        ((gadouble)yimg*xybuffer[i*2+1]*1000.0)/(gadouble)iyrs;
+    if (!havepoint) {
+      firstx=x; firsty=y;
+      havepoint=1;
+    }
+    else if (gxGDedge(rows,prevx,prevy,x,y)) { rc=99; break; }
+    prevx=x; prevy=y;
+    ringpoints++;
+  }
+
+  if (!rc) {
+    for (i=clipylo; i<=clipyhi; i++) {
+      if (rows[i].count<2) continue;
+      qsort(rows[i].x,rows[i].count,sizeof(gadouble),gxGDcmpdbl);
+      for (j=0; j+1<rows[i].count; j+=2) {
+        left=rows[i].x[j];
+        right=rows[i].x[j+1];
+        xstart=(gaint)ceil(left-0.5);
+        xend=(gaint)ceil(right-0.5)-1;
+        if (xstart<clipxlo) xstart=clipxlo;
+        if (xend>clipxhi) xend=clipxhi;
+        if (xstart<=xend)
+          gdImageLine(im,xstart,i,xend,i,cnum[ccol]);
+      }
+    }
+  }
+  for (i=0; i<yimg; i++) free(rows[i].x);
+  free(rows);
+  return rc;
+}
 
 
 gaint gxGDinit (gadouble xrsize, gadouble yrsize, gaint xin, gaint yin, gaint bwin, char *bgImage) {
@@ -119,8 +221,28 @@ FILE *bgfile;
   xyflag = 0;
   gdthck = 1;
   ccol = 1;  
+  clipxlo = 0;
+  clipxhi = ximg-1;
+  clipylo = 0;
+  clipyhi = yimg-1;
 
   return(0);
+}
+
+void gxGDclip (gadouble x1, gadouble x2, gadouble y1, gadouble y2) {
+gaint tx1,tx2,ty1,ty2,tmp;
+  tx1=(gaint)floor(((gadouble)ximg*x1*1000.0)/(gadouble)ixrs);
+  tx2=(gaint)ceil (((gadouble)ximg*x2*1000.0)/(gadouble)ixrs);
+  ty1=(gaint)floor((gadouble)yimg-
+                   ((gadouble)yimg*y1*1000.0)/(gadouble)iyrs);
+  ty2=(gaint)ceil ((gadouble)yimg-
+                   ((gadouble)yimg*y2*1000.0)/(gadouble)iyrs);
+  if (tx1>tx2) { tmp=tx1; tx1=tx2; tx2=tmp; }
+  if (ty1>ty2) { tmp=ty1; ty1=ty2; ty2=tmp; }
+  clipxlo=tx1<0 ? 0 : tx1;
+  clipxhi=tx2>=ximg ? ximg-1 : tx2;
+  clipylo=ty1<0 ? 0 : ty1;
+  clipyhi=ty2>=yimg ? yimg-1 : ty2;
 }
 
 void gxGDcol (gaint clr) {  /* new color */
@@ -188,6 +310,13 @@ void gxGDbpoly (void) {  /* start a polygon fill */
 gaint gxGDepoly (gadouble *xybuffer, gaint xyc) {  /* terminate a polygon fill */
 gaint thisx,thisy,i,ptr,ix1,iy1;
 gadouble x1,y1;
+
+  for (i=0; i<xyc; i++) {
+    if (isnan(xybuffer[i*2]) || isnan(xybuffer[i*2+1])) {
+      fflag = 0;
+      return gxGDcompound(xybuffer,xyc);
+    }
+  }
 
   /* allocate memory for array of gdPoints */
   xybuf = (gdPoint *)malloc(sizeof(gdPoint)*(xyc+2));

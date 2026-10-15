@@ -9,9 +9,6 @@
 /* Enabled geotiff */
 #undef GEOTIFF
 
-/* Define if GetFile has a short prototype */
-#undef GETFILE_SHORT_PROTOTYPE
-
 /* Machine is a Cray */
 #undef GRADS_CRAY
 
@@ -65,9 +62,6 @@
 
 /* Define to 1 if you have the <readline/readline.h> header file. */
 #undef HAVE_READLINE_READLINE_H
-
-/* Define to 1 if you have the `SimpleGetFile' function. */
-#undef HAVE_SIMPLEGETFILE
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
@@ -132,17 +126,11 @@
 /* Enable OPeNDAP for grids */
 #undef USEDAP
 
-/* Use GetFile from freq */
-#undef USEFREQ
-
 /* Enable OPeNDAP for station data */
 #undef USEGADAP
 
 /* Enable gd */
 #undef USEGD
-
-/* Enable GUI widgets */
-#undef USEGUI
 
 /* Enable hdf4 */
 #undef USEHDF

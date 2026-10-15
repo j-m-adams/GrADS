@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
+#include <math.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
@@ -68,6 +70,7 @@ static gaint cused[276];                    /* Color is assigned */
 static gaint cmach[276];                    /* Color is matched */
 static gaint dblmode;                       /* single or double buffering */
 static gaint width,height,depth;            /* Window dimensions */
+static gaint clipxlo,clipxhi,clipylo,clipyhi;
 static gaint reds[16] =   {  0,255,250,  0, 30,  0,240,230,240,160,160,  0,230,  0,130,170};
 static gaint greens[16] = {  0,255, 60,220, 60,200,  0,220,130,  0,230,160,175,210,  0,170};
 static gaint blues[16]  = {  0,255, 60,  0,255,200,130, 50, 40,200, 50,255, 45,140,220,170};
@@ -103,7 +106,7 @@ static gaint snum;
 static GC gc;
 static XGCValues values;
 static XEvent report;
-Window win=(Window) NULL;    /* used via extern in gagui */
+static Window win=(Window) NULL;
 static Pixmap pmap;
 static Pixmap pmaps[200];
 static XImage *image;
@@ -237,6 +240,8 @@ char **flist,*xfnam;
   height = dh ; /* hoop */
   xscl = (gadouble) (dw) / xsize ; /* hoop */
   yscl = (gadouble) (dh) / ysize ; /* hoop */
+  clipxlo = 0; clipxhi = dw-1;
+  clipylo = 0; clipyhi = dh-1;
 
   /* Create window */
 
@@ -829,8 +834,72 @@ void gxdswp (void) {
 
 void gxdfil (gadouble *xy, gaint n) {
 gadouble *pt;
-gaint i;
+gaint i,j,start,multipart;
+gadouble xp,yp;
 XPoint *pnt;
+XPoint clippts[4];
+Region combined,ring,temp,clipreg;
+XRectangle box;
+
+  multipart=0;
+  for (i=0; i<n; i++) {
+    if (isnan(xy[i*2]) || isnan(xy[i*2+1])) {
+      multipart=1;
+      break;
+    }
+  }
+  if (multipart) {
+    combined=XCreateRegion();
+    start=0;
+    for (i=0; i<=n; i++) {
+      if (i<n && !isnan(xy[i*2]) && !isnan(xy[i*2+1])) continue;
+      if (i-start>=3) {
+        pnt=(XPoint *)malloc(sizeof(XPoint)*(i-start));
+        if (pnt==NULL) {
+          XDestroyRegion(combined);
+          printf("Error in compound polygon fill: out of memory\n");
+          return;
+        }
+        for (j=start; j<i; j++) {
+          xp=xy[j*2]*xscl+0.5;
+          yp=height-(xy[j*2+1]*yscl+0.5);
+          if (xp<SHRT_MIN) xp=SHRT_MIN;
+          if (xp>SHRT_MAX) xp=SHRT_MAX;
+          if (yp<SHRT_MIN) yp=SHRT_MIN;
+          if (yp>SHRT_MAX) yp=SHRT_MAX;
+          pnt[j-start].x=(short)xp;
+          pnt[j-start].y=(short)yp;
+        }
+        ring=XPolygonRegion(pnt,i-start,EvenOddRule);
+        temp=XCreateRegion();
+        XXorRegion(combined,ring,temp);
+        XDestroyRegion(combined);
+        XDestroyRegion(ring);
+        free(pnt);
+        combined=temp;
+      }
+      start=i+1;
+    }
+    clippts[0].x=clipxlo; clippts[0].y=clipylo;
+    clippts[1].x=clipxhi; clippts[1].y=clipylo;
+    clippts[2].x=clipxhi; clippts[2].y=clipyhi;
+    clippts[3].x=clipxlo; clippts[3].y=clipyhi;
+    clipreg=XPolygonRegion(clippts,4,EvenOddRule);
+    temp=XCreateRegion();
+    XIntersectRegion(combined,clipreg,temp);
+    XDestroyRegion(combined);
+    XDestroyRegion(clipreg);
+    combined=temp;
+    if (!XEmptyRegion(combined)) {
+      XClipBox(combined,&box);
+      XSetRegion(display,gc,combined);
+      XFillRectangle(display,drwbl,gc,box.x,box.y,box.width,box.height);
+      XSetClipMask(display,gc,None);
+    }
+    XDestroyRegion(combined);
+    if (QLength(display)&&rstate) gxdeve(0);
+    return;
+  }
 
   point = (XPoint *)malloc(sizeof(XPoint)*n);
   if (point==NULL) {
@@ -3104,6 +3173,17 @@ void gxdsignal (gaint sig) {
 void gxdXflush (void) {
 }
 void gxdclip (gadouble xlo, gadouble xhi, gadouble ylo, gadouble yhi) {
+gaint tmp;
+  clipxlo=(gaint)floor(xlo*xscl);
+  clipxhi=(gaint)ceil(xhi*xscl);
+  clipylo=height-(gaint)ceil(yhi*yscl);
+  clipyhi=height-(gaint)floor(ylo*yscl);
+  if (clipxlo>clipxhi) { tmp=clipxlo; clipxlo=clipxhi; clipxhi=tmp; }
+  if (clipylo>clipyhi) { tmp=clipylo; clipylo=clipyhi; clipyhi=tmp; }
+  if (clipxlo<0) clipxlo=0;
+  if (clipxhi>=width) clipxhi=width-1;
+  if (clipylo<0) clipylo=0;
+  if (clipyhi>=height) clipyhi=height-1;
 }
 void gxdcirc (gadouble x, gadouble y, gadouble r, gaint flg) {
 }

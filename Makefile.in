@@ -80,24 +80,23 @@ host_triplet = @host@
 subdir = .
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
-	$(top_srcdir)/etc/mkinstalldirs INSTALL etc/compile \
+	$(top_srcdir)/etc/mkinstalldirs ChangeLog INSTALL etc/compile \
 	etc/config.guess etc/config.sub etc/install-sh etc/missing \
 	etc/mkinstalldirs etc/ltmain.sh $(top_srcdir)/etc/config.guess \
 	$(top_srcdir)/etc/config.sub $(top_srcdir)/etc/install-sh \
 	$(top_srcdir)/etc/ltmain.sh $(top_srcdir)/etc/missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/Xaw.m4 \
-	$(top_srcdir)/m4/ax_lib_readline.m4 $(top_srcdir)/m4/cairo.m4 \
-	$(top_srcdir)/m4/gadap.m4 $(top_srcdir)/m4/gd.m4 \
-	$(top_srcdir)/m4/geotiff.m4 $(top_srcdir)/m4/grib2.m4 \
-	$(top_srcdir)/m4/gui.m4 $(top_srcdir)/m4/hdf4.m4 \
-	$(top_srcdir)/m4/hdf5.m4 $(top_srcdir)/m4/libsx.m4 \
-	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
-	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
-	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/m4/netcdf.m4 \
-	$(top_srcdir)/m4/netcdf_header.m4 $(top_srcdir)/m4/pkg.m4 \
-	$(top_srcdir)/m4/shapelib.m4 $(top_srcdir)/m4/udunits.m4 \
-	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/ax_lib_readline.m4 \
+	$(top_srcdir)/m4/cairo.m4 $(top_srcdir)/m4/gadap.m4 \
+	$(top_srcdir)/m4/gd.m4 $(top_srcdir)/m4/geotiff.m4 \
+	$(top_srcdir)/m4/grib2.m4 $(top_srcdir)/m4/hdf4.m4 \
+	$(top_srcdir)/m4/hdf5.m4 $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/m4/netcdf.m4 $(top_srcdir)/m4/netcdf_header.m4 \
+	$(top_srcdir)/m4/pkg.m4 $(top_srcdir)/m4/shapelib.m4 \
+	$(top_srcdir)/m4/udunits.m4 $(top_srcdir)/acinclude.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
@@ -226,6 +225,7 @@ CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DLLTOOL = @DLLTOOL@
+DLOPEN_LIBS = @DLOPEN_LIBS@
 DSYMUTIL = @DSYMUTIL@
 DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
@@ -236,7 +236,6 @@ EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 G2_LIBS = @G2_LIBS@
 GADAP_LIBS = @GADAP_LIBS@
-GA_LIBSX_LIBS = @GA_LIBSX_LIBS@
 GD_CFLAGS = @GD_CFLAGS@
 GD_CONFIG = @GD_CONFIG@
 GD_LIBS = @GD_LIBS@
@@ -304,11 +303,6 @@ UDUNITS2_CFLAGS = @UDUNITS2_CFLAGS@
 UDUNITS2_LDFLAGS = @UDUNITS2_LDFLAGS@
 UDUNITS2_LIBS = @UDUNITS2_LIBS@
 VERSION = @VERSION@
-XAW7_CFLAGS = @XAW7_CFLAGS@
-XAW7_LIBS = @XAW7_LIBS@
-XAW_CFLAGS = @XAW_CFLAGS@
-XAW_LIBS = @XAW_LIBS@
-XAW_XLIBS = @XAW_XLIBS@
 XMKMF = @XMKMF@
 X_CFLAGS = @X_CFLAGS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
@@ -347,10 +341,7 @@ gd_libs = @gd_libs@
 geotiff_inc = @geotiff_inc@
 geotiff_ldflags = @geotiff_ldflags@
 geotiff_libs = @geotiff_libs@
-grads_xlibs = @grads_xlibs@
 grib2_libs = @grib2_libs@
-gui_inc = @gui_inc@
-gui_libs = @gui_libs@
 hdf5_inc = @hdf5_inc@
 hdf5_libs = @hdf5_libs@
 hdf_inc = @hdf_inc@
@@ -401,7 +392,9 @@ ACLOCAL_AMFLAGS = -I m4
 # SUBDIRS lists all directories that make should recurse into 
 #   before processing the current directory
 SUBDIRS = src
-EXTRA_DIST = COPYRIGHT INSTALL
+EXTRA_DIST = COPYRIGHT INSTALL tools/natural_earth_to_grads.py \
+	tools/natural_earth_to_shapefiles.py
+
 BINDISTFILES = COPYRIGHT INSTALL
 DATADISTFILES = data
 DOCDISTFILES = doc

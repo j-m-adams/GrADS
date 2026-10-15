@@ -1,3 +1,3 @@
 from distutils.core import setup, Extension
 setup(name='gradspy', version='1.1',  \
-      ext_modules=[Extension('gradspy', ['gradspy.c'])])
+      ext_modules=[Extension('gradspy', ['gradspy.c', 'ga_dynload.c'])])
